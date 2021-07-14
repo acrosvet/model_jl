@@ -206,7 +206,7 @@ function sir_initiation(;
     speed = 0.002,
     death_rate = 0.044, # from website of WHO
     N = 1000,
-    initial_infected = 5,
+    initial_infected = 1,
     seed = 42,
     βmin = 0.4,
     βmax = 0.8,
