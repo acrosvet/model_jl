@@ -63,6 +63,8 @@ end
     return calfModel
 end
 
+calfModel = initialiseModel()
+
 function model_step!(calfModel)
     #Define the proximity for which infection may occur
     r = calfModel.calfProximityRadius
@@ -132,16 +134,17 @@ fig # display figure
 #Function, extract infected animals and susceptible animals at each timestep
 infected_sensitive(x) = count(i == :IS for i in x)
 susceptible(x) = count(i == :S for i in x)
-simData = [(:status, infected_sensitive), (:status, susceptible)]
+adata = [(:status, infected_sensitive), (:status, susceptible)]
 
-simRun, _ = run!(calfSim, agent_step!, model_step!, 2000; simData)
+simRun, _ = run!(calfSim, agent_step!, model_step!, 2000; adata)
 
 CSV.write("./run1_export.csv", data1)
 
 using CairoMakie
 figure = Figure()
-ax = figure[1, 1] = Axis(figure; ylabel = "Infected")
-l1 = lines!(ax, data1[:, dataname((:status, infected))], color = :orange)
+ax = figure[1, 1] = Axis(figure; ylabel = "Infected Sensitive")
+l1 = lines!(ax, simRun[:, dataname((:status, infected_sensitive))], color = :orange)
+l2 = lines!(ax, simRun[:, dataname((:status, susceptible))], color = :green)
 figure[1, 2] =
-    Legend(figure, [l1], ["r=$r1, beta=$β1", "r=$r2, beta=$β1", "r=$r1, beta=$β2"])
+    Legend(figure, [l1], ["Infected Sensitive"])
 figure
