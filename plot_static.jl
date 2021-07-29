@@ -7,6 +7,10 @@ model_colors(a) =
                         "#ffa500"
                 elseif a.status == :IR
                         "#ff0000"
+                elseif a.status == :RS || a.status == :RR
+                        "#808080"
+                else
+                        "#808000"
                 end
 #a.status == :S ? "#2b2b33" : a.status == :IS ? "#bf2642" : "#338c54"
 
