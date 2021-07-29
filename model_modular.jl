@@ -28,10 +28,11 @@ include("transmit_sensitive.jl")
 include("mortality.jl")
 include("recover.jl")
 include("treatment.jl")
+include("treatment_end.jl")
 
 # Plotting
 
-#include("plot_static.jl")
+include("plot_static.jl")
 
 # Run simulations
 
