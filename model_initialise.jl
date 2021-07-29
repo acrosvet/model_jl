@@ -21,8 +21,10 @@ function initialiseModel(
     treatment = :U,
     days_treated = 0,
     treatment_prob = 0.5/time_resolution,
-    treatment_duration = 5*timestep,
-    since_tx = 0
+    treatment_duration = 5*time_resolution,
+    since_tx = 0,
+    res_carrier = 0.05/time_resolution,
+    sens_carrier = 0.01/time_resolution
 )
 #End header
 #Body
@@ -39,7 +41,9 @@ pathogenProperties = @dict(
     timestep, 
     treatment_prob,
     treatment_duration, 
-    since_tx)# Dictionary of disease properties
+    since_tx,
+    res_carrier,
+    sens_carrier)# Dictionary of disease properties
 
 # Define the model: Agent type, agent space, properties, and type of random seed
 calfModel = ABM(CalfAgent, agentSpace, properties = pathogenProperties, rng = MersenneTwister(seed))

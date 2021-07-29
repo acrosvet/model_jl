@@ -23,12 +23,16 @@ include("agent_update.jl")
 include("transmit_resistant.jl")
 include("transmit_sensitive.jl")
 
+#Carrier state
+include("carrier_state.jl")
+
 # Mortality and recovery
 
 include("mortality.jl")
 include("recover.jl")
 include("treatment.jl")
 include("treatment_end.jl")
+include("treatment_effect.jl")
 
 # Plotting
 
