@@ -4,15 +4,15 @@
 function initialiseModel(
     N = 60, #Default number of animals
     seed = 42, #Random seed
-    calfProximityRadius = 1.0, #Radius for effective contact
+    calfProximityRadius = 0.5, #Radius for effective contact
     mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
     mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
-    movement = 0.5, #Movement in continuous space
+    movement = 0.1, #Movement in continuous space
     βᵣ = 0.3/time_resolution, #Beta (resistant)
-    βₛ = 0.4/time_resolution, #Beta (sensitive)
+    βₛ = 0.6/time_resolution, #Beta (sensitive)
     age = 1*time_resolution, #Initial age
     init_is = 5, # Number initially infected sensitive
-    init_ir = 2, # Number initially infected resistant
+    init_ir = 1, # Number initially infected resistant
     inf_days_is = 0,
     inf_days_ir = 0,
     sponrec_is = 0.05/time_resolution, #chance of spontaneous recovery IS
@@ -20,7 +20,7 @@ function initialiseModel(
     timestep = 1.0, #Set model timestep
     treatment = :U,
     days_treated = 0,
-    treatment_prob = 0.5/time_resolution,
+    treatment_prob = 0.3/time_resolution,
     treatment_duration = 5*time_resolution,
     since_tx = 0,
     res_carrier = 0.05/time_resolution,
