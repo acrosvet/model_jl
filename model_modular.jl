@@ -13,6 +13,7 @@ include("model_initialise.jl")
 
 include("step_function.jl")
 include("agent_step.jl")
+include("periodic_position.jl")
 
 # Updating function
 

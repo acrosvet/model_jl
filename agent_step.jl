@@ -1,5 +1,6 @@
 #Update agent parameters for each time step
 function agent_step!(CalfAgent, calfModel)
+    #periodic_position!(CalfAgent, calfModel) #Constrain position twice daily.
     move_agent!(CalfAgent, calfModel, calfModel.timestep) #Move the agent in space
     treatment!(CalfAgent, calfModel) #Introduce treatment
     treatment_effect!(CalfAgent) #Effect of treatment on transmission.

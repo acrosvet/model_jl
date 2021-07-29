@@ -73,6 +73,7 @@ function initial_velocity(status, movement)
     end
 end
 
+
 #Define the initial state of the system. Attributes for each calf in the system.
 for n in 1:N
     # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
