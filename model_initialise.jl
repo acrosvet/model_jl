@@ -8,7 +8,7 @@ function initialiseModel(
     mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
     mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
     movement = 0.1, #Movement in continuous space
-    βᵣ = 0.3/time_resolution, #Beta (resistant)
+    βᵣ = 0.3/time_resolution, #Beta (resistant) NOT TIME DEPENDENT?!
     βₛ = 0.6/time_resolution, #Beta (sensitive)
     age = 1*time_resolution, #Initial age
     init_is = 5, # Number initially infected sensitive
@@ -30,7 +30,7 @@ function initialiseModel(
 #Body
 
 #Define the agent space. At present, avoid observing pen boundaries.
-agentSpace = ContinuousSpace((10,10), 1; periodic = true)
+agentSpace = ContinuousSpace((10,10), 1; periodic = true) #Relatinship to real space?
 #Specify the disease dynamics  as a Dictionary to be passed to the model
 pathogenProperties = @dict(
     calfProximityRadius,
