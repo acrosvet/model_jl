@@ -23,6 +23,8 @@ include("agent_update.jl")
 
 include("transmit_resistant.jl")
 include("transmit_sensitive.jl")
+include("transmit_carrier_is.jl")
+include("transmit_carrier_ir.jl")
 
 #Carrier state
 include("carrier_state.jl")
@@ -34,6 +36,7 @@ include("recover.jl")
 include("treatment.jl")
 include("treatment_end.jl")
 include("treatment_effect.jl")
+include("retreatment.jl")
 
 # Plotting
 

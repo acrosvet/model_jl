@@ -5,6 +5,7 @@ function agent_step!(CalfAgent, calfModel)
     treatment!(CalfAgent, calfModel) #Introduce treatment
     treatment_effect!(CalfAgent) #Effect of treatment on transmission.
     endTreatment!(CalfAgent, calfModel)
+    retreatment!(CalfAgent, calfModel) #Effect of retreatment
     mortality!(CalfAgent, calfModel) #Introduce mortality
     recover!(CalfAgent, calfModel) # Introduce recovery
     carrierState!(CalfAgent, calfModel) #Introduce a carrier state
