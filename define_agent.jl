@@ -20,3 +20,15 @@ end
 #Define the time resolution initially in hours
 
 const time_resolution = 24
+
+mutable struct BacterialAgent <: AbstractAgent
+    id::Int64
+    pos::NTuple{2, Int}
+    bactostatus::Symbol
+    strain::Int64
+    days_treated::Int
+    age::Int
+end
+
+const time_units = 24
+

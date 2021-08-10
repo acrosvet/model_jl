@@ -1,35 +1,41 @@
-    #include("packages.jl")
+mutable struct BacterialAgent <: AbstractAgent
+    id::Int64
+    pos::NTuple{2, Int}
+    bactostatus::Symbol
+    strain::Int64
+    days_treated::Int
+    age::Int
+end
+
+const time_units = 24
+
+
+
+#include("packages.jl")
     ## Define the agents
-    mutable struct BacterialAgent <: AbstractAgent
-        id::Int64
-        pos::NTuple{2, Int}
-        bactostatus::Symbol
-        strain::Int64
-        days_treated::Int
-        age::Int
-    end
+
 
     ## Define the model
 
-    const time_units = 24
 
 
-    function initialisePopulation(
-
+    function initialiseBacteria(
+        calfModel = calfModel,
+        CalfAgent = CalfAgent,
         nbact = 10000,
         seed = 42,
         bactostatus = :S,
-        strain = 1,
+        strain = 1, 
         nstrains = 4,
-        timestep = 1.0, #Set model timestep
+        timestep = calfModel.timestep, #Set model timestep
         r_strain = rand(1:nstrains),
         fitness = 0, 
         days_treated = 0,
         treatment_start = rand(0:100)*time_units,
-        age = 0,
+        age = CalfAgent.age,
 
     )
-    agentSpace = GridSpace((100, 100); periodic = false)
+    bactoSpace = GridSpace((100, 100); periodic = false)
     #agentSpace = ContinuousSpace((1,1), 1; periodic = true)
 
     properties = @dict(
@@ -46,7 +52,7 @@
         age
     )
 
-    bacterialModel = ABM(BacterialAgent, agentSpace, properties = properties, rng = MersenneTwister(seed))
+    bacterialModel = ABM(BacterialAgent, bactoSpace, properties = properties, rng = MersenneTwister(seed))
 
     # strain fitness
 
@@ -71,7 +77,7 @@
 
     end
 
-    bacterialModel = initialisePopulation()
+    bacterialModel = initialiseBacteria()
 
 
     function plasmid_transfer!(BacterialAgent, bacterialModel)
@@ -121,7 +127,7 @@
 
 
     #Update agent parameters for each timestep  
-    function update_agent!(BacterialAgent)
+    function update_bacteria!(BacterialAgent)
         BacterialAgent.age = BacterialAgent.age + 1
         # Update the time treated
         if BacterialAgent.age ≥ bacterialModel.treatment_start
@@ -134,46 +140,28 @@
     # Define the agent stepping function
     #Update agent parameters for each time step
 
-    function agent_step!(BacterialAgent, bacterialModel)
+    function bacteria_step!(BacterialAgent, bacterialModel)
             #fitness!(BacterialAgent, bacterialModel)
-            update_agent!(BacterialAgent) #Apply the update_agent function
+            update_bacteria!(BacterialAgent) #Apply the update_agent function
             plasmid_transfer!(BacterialAgent, bacterialModel)
             treatment_response!(BacterialAgent, bacterialModel)
 
     end
 
-    bactoSim = initialisePopulation()
+    bactoSim = initialiseBacteria()
 
+#=
     #Function, extract infected animals and susceptible animals at each timestep
     resistant(x) = count(i == :R for i in x)
     sensitive(x) = count(i == :S for i in x)
-    strain_1(x) = count(i == 1 for i in x)
-    strain_2(x) = count(i == 2 for i in x)
-    strain_3(x) = count(i == 3 for i in x)
-    strain_4(x) = count(i == 4 for i in x)
+
     adata = [
     (:bactostatus, resistant),
-    (:bactostatus, sensitive),
-    (:strain, strain_1),
-    (:strain, strain_2),
-    (:strain, strain_3),
-    (:strain, strain_4)
+    (:bactostatus, sensitive)
     ]
 
-    bactoSimRun, _ = run!(bactoSim, agent_step!, 100*time_units; adata)
+    bactoSimRun, _ = run!(bactoSim, agent_step!, calfModel.timestep; adata)
 
-    CSV.write("./bacto_export.csv", bactoSimRun)
-
-    figure = Figure()
-    ax = figure[1, 1] = Axis(figure; ylabel = "Bacterial population")
-    l1 = lines!(ax, bactoSimRun[:, dataname((:bactostatus, sensitive))], color = :green)
-    l3 = lines!(ax, bactoSimRun[:, dataname((:strain, strain_1))], color = :black)
-    l4 = lines!(ax, bactoSimRun[:, dataname((:strain, strain_2))], color = :purple)
-    l5 = lines!(ax, bactoSimRun[:, dataname((:strain, strain_3))], color = :blue)
-    l6 = lines!(ax, bactoSimRun[:, dataname((:strain, strain_4))], color = :teal)
-    l2 = lines!(ax, bactoSimRun[:, dataname((:bactostatus, resistant))], color = :red)
-
-
-
-    figure 
-
+    sensitive = bactoSimRun[:, dataname((:bactostatus, sensitive))]
+    return(sensitive)
+    =#
