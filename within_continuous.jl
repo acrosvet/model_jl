@@ -2,7 +2,8 @@
     ## Define the agents
     mutable struct BacterialAgent <: AbstractAgent
         id::Int64
-        pos::NTuple{2, Int}
+        pos::NTuple{2,Float64}
+        vel::NTuple{2, Float64}
         bactostatus::Symbol
         strain::Int64
         days_treated::Int
@@ -11,10 +12,10 @@
 
     ## Define the model
 
-    const time_units = 1
+    const time_units = 24
 
 
-function initialisePopulation(
+    function initialisePopulation(
 
         nbact = 10000,
         seed = 42,
@@ -29,8 +30,7 @@ function initialisePopulation(
         age = 0,
 
     )
-    agentSpace = GridSpace((100, 100); periodic = false)
-    #agentSpace = ContinuousSpace((1,1), 1; periodic = true)
+    agentSpace = ContinuousSpace((10, 10); periodic = true)
 
     properties = @dict(
         nbact,
@@ -56,35 +56,34 @@ function initialisePopulation(
 
     # Set up the initial parameters
     for n in 1:nbact
+        vel = (0,0)
         r_strain = r_strain
         strain = rand(1:nstrains)
         bactostatus = (strain == r_strain) ? :R : :S
-        pos = (1,1)
+        pos = Tuple(10*rand(calfModel.rng, 2))
         days_treated = days_treated
         treatment_start = treatment_start
         fitness = [bact_fitness() for i in 1:strain]
-        agent = BacterialAgent(n, pos,  bactostatus, strain,  days_treated, age)
-        add_agent_single!(agent, bacterialModel)
+        #agent = BacterialAgent(n, pos,  vel, bactostatus, strain,  days_treated, age)
+        add_agent!(pos, bacterialModel, vel, bactostatus, strain, days_treated, age)
     end
 
         return bacterialModel
 
-end
+    end
 
-bacterialModel = initialisePopulation()
+    bacterialModel = initialisePopulation()
 
 
-    function plasmid_transfer!(BacterialAgent, bacterialModel)
-
-        for neighbor in nearby_agents(BacterialAgent, bacterialModel)
-            if BacterialAgent.bactostatus == :R && neighbor.bactostatus == :S
-                if rand(bacterialModel.rng) < 0.001/time_units
-                    neighbor.bactostatus = BacterialAgent.bactostatus
-                    neighbor.strain = BacterialAgent.strain
-                    
-                end
+    function plasmid_transfer!(a1, a2)
+        count(a.bactostatus == :R for a in (a1,a2)) ≠ 1 && return
+            resistant, sensitive = a1.bactostatus == :R ? (a1, a2) : (a2, a1)
+            if (rand(calfModel.rng) < 0.001/time_resolution) && sensitive.bactostatus == :S
+                sensitive.bactostatus = :R
+                sensitive.strain = bacterialModel.r_strain
+            else
+                sensitive.bactostatus = sensitive.bactostatus
             end
-        end
     end
 
     function treatment_response!(BacterialAgent, bacterialModel)
@@ -111,22 +110,22 @@ bacterialModel = initialisePopulation()
 
     # Define the treatment response function
 
-function response(BacterialAgent)
+    function response(BacterialAgent)
         timevar = (BacterialAgent.days_treated)/time_units
         res = (100*ℯ^(-0.2/timevar))/(1 + ℯ^(-0.2/timevar))
         return res/time_units
-end
+    end
 
     # 
 
 
     #Update agent parameters for each timestep  
-function update_agent!(BacterialAgent)
+    function update_agent!(BacterialAgent)
         BacterialAgent.age = BacterialAgent.age + 1
         # Update the time treated
         if BacterialAgent.age ≥ bacterialModel.treatment_start
             BacterialAgent.days_treated += 1
-end
+        end
 
 
     end
