@@ -2,6 +2,9 @@ using Agents
 using Random
 using DrWatson
 using CSV
+using InteractiveDynamics #Plot and animate ABMs
+using CairoMakie #Backend for video creation
+
 
 # Def - BacterialAgent --------------------------------
 
@@ -10,8 +13,6 @@ using CSV
         pos::NTuple{2, Int}
         status::Symbol
         strain::Int64
-        days_treated::Int
-        age::Int
     end
 
 # ABM - Bacteria ---------------------------------------
@@ -154,7 +155,7 @@ using CSV
             infected, healthy = a1.status == :IR ? (a1, a2) : (a2, a1)
     #If a random number is below the transmssion parameter, infect, provided that the contacted animal is susceptible.
             if (rand(calfModel.rng) < infected.βᵣ) && healthy.status == :S
-                healthy.status = :IR
+                healthy.status = :ER
             else
                 healthy.status = healthy.status
             end
@@ -233,7 +234,7 @@ using CSV
         #IF a random number is greater than βₛ, then we return out of the function
         
         if (rand(calfModel.rng) < rand(calfModel.rng)*infected.βᵣ) && (healthy.status == :S || healthy.status == :RS || healthy.status == :RR)
-                healthy.status = :IR
+                healthy.status = :ER
                 healthy.inf_days_ir = 0
             # Else we set the status of the healthy animal to its existing status
         else
@@ -256,7 +257,7 @@ using CSV
 # Fn - Bacterial dynamics --------------------
 
     function bacto_dyno!(CalfAgent)
-        if CalfAgent.bactopop > 0.5
+        if CalfAgent.bactopop > 0.5 && CalfAgent.status == :ER
             CalfAgent.status = :IR
         else return
         end
@@ -328,7 +329,7 @@ function treatment!(CalfAgent, calfModel)
 
     function bact_agent_step!(BacterialAgent, bacterialModel)
             #fitness!(BacterialAgent, bacterialModel)
-            bact_update_agent!(BacterialAgent) #Apply the update_agent function
+            bact_update_agent!(BacterialAgent, bacterialModel) #Apply the update_agent function
             bact_plasmid_transfer!(BacterialAgent, bacterialModel)
             bact_treatment_response!(BacterialAgent, bacterialModel)
 
@@ -385,12 +386,12 @@ function treatment!(CalfAgent, calfModel)
 
 # Fn - Update Calf Agent ----------------------------------------------    
     function update_agent!(CalfAgent)
-        CalfAgent.age += 1*time_resolution # Increment age by 1 day
+        CalfAgent.age += 1 # Increment age by 1 day
         
         if CalfAgent.treatment == :T 
-            CalfAgent.days_treated += 1*time_resolution
+            CalfAgent.days_treated += 1
         elseif CalfAgent.treatment == :PT
-            CalfAgent.since_tx += 1*time_resolution
+            CalfAgent.since_tx += 1
         end
 
         # Add in bacterial data output
@@ -402,7 +403,7 @@ function treatment!(CalfAgent, calfModel)
         ]
 
         bacterialModel = CalfAgent.submodel
-
+        bacterialModel.properties[:total_status] = CalfAgent.status
         bacterialModel.properties[:days_treated] = CalfAgent.days_treated
         bacterialModel.properties[:age] = CalfAgent.age
 
@@ -449,8 +450,19 @@ adata = [(:status, infected_sensitive),
 
 
 # Run the model 
-simRun, _ = run!(calfSim, agent_step!, model_step!, 10*time_resolution; adata)
+simRun, _ = run!(calfSim, agent_step!, model_step!, 1*time_resolution; adata)
 
 
 # Export to CSV
 CSV.write("./integrated_export.csv", simRun)
+
+figure = Figure()
+ax = figure[1, 1] = Axis(figure; ylabel = "Number of calves")
+l1 = lines!(ax, simRun[:, dataname((:status, infected_sensitive))], color = :orange)
+l2 = lines!(ax, simRun[:, dataname((:status, susceptible))], color = :green)
+l3 = lines!(ax, simRun[:, dataname((:status, infected_resistant))], color = :red)
+l4 = lines!(ax, simRun[:, dataname((:status, recoveries_r))], color = :black)
+l5 = lines!(ax, simRun[:, dataname((:status, recoveries_s))], color = :grey)
+
+
+figure 
