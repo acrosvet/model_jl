@@ -47,7 +47,7 @@ using CairoMakie #Backend for video creation
     #Define model initialisation functions. 
 
     function initialiseModel(
-        N = 10, #Default number of animals
+        N = 60, #Default number of animals
         seed = 42, #Random seed
         calfProximityRadius = 0.5, #Radius for effective contact
         mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
@@ -396,7 +396,7 @@ function treatment!(CalfAgent, calfModel)
 
         # Add in bacterial data output
         resistant(x) = count(i == :R for i in x)
-        sensitive(x) = count(i == :S for i in x)
+        sensitive(x) = count(i == :IS for i in x)
         adata = [
         (:status, resistant),
         (:status, sensitive)
@@ -450,7 +450,7 @@ adata = [(:status, infected_sensitive),
 
 
 # Run the model 
-simRun, _ = run!(calfSim, agent_step!, model_step!, 1*time_resolution; adata)
+simRun, _ = run!(calfSim, agent_step!, model_step!, 100*time_resolution; adata)
 
 
 # Export to CSV

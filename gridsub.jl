@@ -29,7 +29,6 @@ function initialisePopulation(
         timestep,
         r_strain,
         days_treated,
-        #treatment_start,
         total_status,
         fitness,
         age,
@@ -46,12 +45,10 @@ function initialisePopulation(
 
     # Set up the initial parameters
     for n in 1:nbact
-        r_strain = total_status == :S ? 0 : r_strain
+        r_strain = total_status == :IS ? 0 : r_strain
         strain = rand(1:nstrains)
-        status = (strain == r_strain) ? :R : :S
+        status = (strain == r_strain) ? :R : :IS
         pos = (1,1)
-        #days_treated = days_treated
-       # treatment_start = treatment_start
         fitness = [bact_fitness() for i in 1:strain]
         agent = BacterialAgent(n, pos,  status, strain)
         add_agent_single!(agent, bacterialModel)
@@ -61,32 +58,55 @@ function initialisePopulation(
 
 end
 
+# Bacterial population of uninfected animals ----------------------
+
+function uninfected!(BacterialAgent, bacterialModel)
+
+    if bacterialModel.total_status == :S
+        BacterialAgent.status = :S
+    end
+
+end
+
+
 # Transmission of bacteria between individuals -----------------
     
-    function bact_transfer!(BacterialAgent, bacterialModel)
+    function bact_transfer_r!(BacterialAgent, bacterialModel)
         if bacterialModel.total_status == :ER
             bacterialModel.days_exposed += 1
         else return
         end
         
-        if bacterialModel.total_status == :ER && bacterialModel.days_exposed > 1
-            bacterialModel.r_strain = rand(1:bacterialModel.nstrains)    
+        if bacterialModel.total_status == :ER && bacterialModel.days_exposed == 1
+            bacterialModel.r_strain = rand(1:bacterialModel.nstrains) 
+            bacterialModel.strain == bacterialModel.rstrain ? BacterialAgent.status = :R : BacterialAgent.status = :S
         else return
         end
 
-        if bacterialModel.strain == bacterialModel.r_strain
-            BacterialAgent.status = :R
-        else return
-        end
 
     end
 
+    function bact_transfer_s!(BacterialAgent, bacterialModel)
+        if bacterialModel.total_status == :ES
+            bacterialModel.days_exposed += 1
+        else return
+        end
+        
+        if bacterialModel.total_status == :ES && bacterialModel.days_exposed == 1
+            bacterialModel.r_strain = 0
+            BacterialAgent.status == :IS
+            bacterialModel.strain == bacterialModel.rstrain ? BacterialAgent.status = :R : BacterialAgent.status == :IS 
+        else return
+        end
+
+
+    end
 
 
     function bact_plasmid_transfer!(BacterialAgent, bacterialModel)
 
         for neighbor in nearby_agents(BacterialAgent, bacterialModel)
-            if BacterialAgent.status == :R && neighbor.status == :S
+            if BacterialAgent.status == :R && neighbor.status == :IS
                 if rand(bacterialModel.rng) < 1e-6/time_units
                     neighbor.status = BacterialAgent.status
                     neighbor.strain = BacterialAgent.strain
@@ -100,7 +120,7 @@ end
 
         res = bact_response(bacterialModel)/time_units
 
-        if (bacterialModel.days_treated > 0 && BacterialAgent.status == :S)
+        if (bacterialModel.days_treated > 0 && BacterialAgent.status == :IS)
             if res/100 > rand(bacterialModel.rng)
                         BacterialAgent.status = :R
                         BacterialAgent.strain = bacterialModel.r_strain
@@ -138,7 +158,9 @@ end
     #Update agent parameters for each time step
 
     function bact_agent_step!(BacterialAgent, bacterialModel)
-            bact_transfer!(BacterialAgent, bacterialModel)
+            uninfected!(BacterialAgent, bacterialModel)
+            bact_transfer_r!(BacterialAgent, bacterialModel)
+            bact_transfer_s!(BacterialAgent, bacterialModel)
             #fitness!(BacterialAgent, bacterialModel)
             bact_update_agent!(BacterialAgent, bacterialModel) #Apply the update_agent function
             bact_plasmid_transfer!(BacterialAgent, bacterialModel)
@@ -146,24 +168,3 @@ end
 
     end
 
-#=
-
-    resistant(x) = count(i == :R for i in x)
-    sensitive(x) = count(i == :S for i in x)
-    adata = [
-    (:status, resistant),
-    (:status, sensitive)
-    ]
-    bacterialModel = initialisePopulation()
-    bactoSim = initialisePopulation()
-    #=
-    bactostep, _ = run!(bactoSim, bact_agent_step!; adata)
-
-    sense = bactostep[:, dataname((:status, sensitive))][2]
-    res = bactostep[:, dataname((:status, resistant))][2]
-
-    prop_res = res/(sense + res)
-
-    return prop_res
-=#
-=#
