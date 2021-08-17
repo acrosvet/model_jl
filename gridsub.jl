@@ -75,7 +75,7 @@ end
 
     function bact_treatment_response!(BacterialAgent, bacterialModel)
 
-        res = response(BacterialAgent)/time_units
+        res = bact_response(BacterialAgent)/time_units
 
         if (BacterialAgent.days_treated > 0 && BacterialAgent.status == :S)
             if res/100 > rand(bacterialModel.rng)
@@ -120,7 +120,7 @@ end
     # Define the agent stepping function
     #Update agent parameters for each time step
 
-    function bact_agent_step!(BacterialAgent, bacterialModel)
+    function bact_agent_step!(BacterialAgent, bacterialModel, dt)
             #fitness!(BacterialAgent, bacterialModel)
             bact_update_agent!(BacterialAgent) #Apply the update_agent function
             bact_plasmid_transfer!(BacterialAgent, bacterialModel)

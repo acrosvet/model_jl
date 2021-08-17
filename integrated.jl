@@ -324,63 +324,6 @@ function treatment!(CalfAgent, calfModel)
     
     end
 
-# Fn - Bact (plasmid transfer) --------------------------------------------   
-    function bact_plasmid_transfer!(BacterialAgent, bacterialModel)
-
-        for neighbor in nearby_agents(BacterialAgent, bacterialModel)
-            if BacterialAgent.status == :R && neighbor.status == :S
-                if rand(bacterialModel.rng) < 0.001/time_units
-                    neighbor.status = BacterialAgent.status
-                    neighbor.strain = BacterialAgent.strain
-                    
-                end
-            end
-        end
-    end
-
-# Fn - Bact (treatment response) -----------------------------------------    
-    function bact_treatment_response!(BacterialAgent, bacterialModel)
-
-        res = bact_response(BacterialAgent)/time_units
-
-        if (BacterialAgent.days_treated > 0 && BacterialAgent.status == :S)
-            if res/100 > rand(bacterialModel.rng)
-                        BacterialAgent.status = :R
-                        BacterialAgent.strain = bacterialModel.r_strain
-                    end
-    else 
-                    return
-        end
-
-
-
-    end
-
-
-
-
-
-# Fn - Bact (dose response curve) ---------------------------------------
-
-    function bact_response(BacterialAgent)
-        timevar = (BacterialAgent.days_treated)/time_units
-        res = (100*ℯ^(-0.2/timevar))/(1 + ℯ^(-0.2/timevar))
-        return res/time_units
-    end
-
-
-# Fn - Bact (update agent) ------------------------------------------------
-    function bact_update_agent!(BacterialAgent)
-        BacterialAgent.age = BacterialAgent.age + 1
-        # Update the time treated
-        if BacterialAgent.age ≥ bacterialModel.treatment_start
-            BacterialAgent.days_treated += 1
-        end
-
-
-    end
-        
-
 # Fn - Bact (agent step) ----------------------------------
 
     function bact_agent_step!(BacterialAgent, bacterialModel)
@@ -458,7 +401,12 @@ function treatment!(CalfAgent, calfModel)
         (:status, sensitive)
         ]
 
-        bactostep, _ = run!(CalfAgent.submodel, bact_agent_step!; adata)
+        bacterialModel = CalfAgent.submodel
+
+        bacterialModel.properties[:days_treated] = CalfAgent.days_treated
+        bacterialModel.properties[:age] = CalfAgent.age
+
+        bactostep, _ = run!(bacterialModel, bact_agent_step!; adata)
 
         sense = bactostep[:, dataname((:status, sensitive))][2]
         res = bactostep[:, dataname((:status, resistant))][2]
