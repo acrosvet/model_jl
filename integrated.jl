@@ -56,7 +56,6 @@ using CairoMakie #Backend for video creation
         movement = 0.1, #Movement in continuous space
         βᵣ = 0.3/time_resolution, #Beta (resistant) NOT TIME DEPENDENT?!
         βₛ = 0.6/time_resolution, #Beta (sensitive)
-        age = 1*time_resolution, #Initial age
         init_is = 5, # Number initially infected sensitive
         init_ir = 1, # Number initially infected resistant
         inf_days_is = 0,
@@ -74,10 +73,11 @@ using CairoMakie #Backend for video creation
         bactopop = 0.0,
         submodel = initialisePopulation(),
         stage = :C,
-        num_calves = N*0.2,
-        num_weaned = N*0.2,
-        num_heifers = N*0.2,
-        num_lac = N*0.4,
+        calday = 183,
+        num_calves = (calday > 182 && calday < 272) ? N*0.2 : 0,
+        num_weaned = (calday ≥ 272 && calday ≤ 365 ) ? N*0.2 : 0,
+        num_heifers = N*0.3,
+        num_lac = N - num_calves - num_weaned - num_heifers,
     )
     #End header
     #Body
@@ -99,7 +99,11 @@ using CairoMakie #Backend for video creation
         sens_carrier,
         bactopop,
         submodel,
-        stage)# Dictionary of disease properties
+        calday,
+        stage,
+        βᵣ,
+        βₛ,
+        movement, )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties, rng = MersenneTwister(seed))
@@ -383,7 +387,50 @@ function treatment!(AnimalAgent, animalModel)
             transmit_carrier_ir!(a1,a2)
             
         end
+
+        animalModel.calday += 1
+        birth!(animalModel)
     end
+
+
+# Fn - Add new calves -------------------------------------------------------------
+
+function birth!(animalModel)
+
+    function initial_velocity(status, movement)
+        if status == :S
+            sincos(2π*rand(animalModel.rng)) .*movement
+        elseif status == :IS
+            sincos(2π*rand(animalModel.rng)) .*(movement/2)
+        elseif status == :IR
+            sincos(2π*rand(animalModel.rng)) .*(movement/2.5)
+        elseif status == :M
+            (0.0,0.0)
+        end
+    end
+
+    if (animalModel.calday ≥ 182 && animalModel.calday ≤ 272) && rand(animalModel.rng) < 0.5
+
+
+            # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
+            pos = Tuple(10*rand(animalModel.rng, 2))
+            age = 0
+            status = :S
+            βᵣ = animalModel.βᵣ
+            βₛ = animalModel.βₛ
+            days_treated = 0
+            inf_days_is = 0
+            inf_days_ir = 0
+            treatment = :U
+            bactopop = 0.0
+            since_tx = 0
+            submodel = initialisePopulation()
+            vel = initial_velocity(status, animalModel.movement)
+            stage = :C
+            add_agent!(pos, animalModel, vel, age, status, βᵣ, βₛ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage)
+    end
+
+end
 
 # Fn - Animal Agent Step -----------------------------------------------------------    
 
@@ -429,6 +476,7 @@ function treatment!(AnimalAgent, animalModel)
             AnimalAgent.since_tx += 1
         end
 
+        # Change stage over time ------------------------
         if AnimalAgent.age < 60
             AnimalAgent.stage = :C
         elseif AnimalAgent.age ≥ 60 && AnimalAgent.age ≤ 13*30
@@ -438,6 +486,8 @@ function treatment!(AnimalAgent, animalModel)
         elseif AnimalAgent.age > 24*30 
             AnimalAgent.stage = :L
         end
+
+
 
         # Add in bacterial data output
         resistant(x) = count(i == :R for i in x)
@@ -510,7 +560,7 @@ stage(x) = count(i == :W for i in x)
  =#
 
 # Run the model 
-simRun, _ = run!(animalSim, agent_step!, model_step!, 1*time_resolution; adata)
+simRun, _ = run!(animalSim, agent_step!, model_step!, 10*time_resolution; adata)
 
 
 # Export to CSV
