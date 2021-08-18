@@ -1,4 +1,4 @@
-const time_units = 24
+const time_units = 1
 
 
 

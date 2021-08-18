@@ -18,8 +18,8 @@ using CairoMakie #Backend for video creation
 # ABM - Bacteria ---------------------------------------
     include("gridsub.jl")
 
-# Def - CalfAgent --------------------
-    mutable struct CalfAgent <: AbstractAgent
+# Def - AnimalAgent --------------------
+    mutable struct AnimalAgent <: AbstractAgent
         id::Int
         pos::NTuple{2,Float64}
         vel::NTuple{2, Float64}
@@ -34,22 +34,23 @@ using CairoMakie #Backend for video creation
         since_tx::Int
         bactopop::Float64
         submodel::AgentBasedModel
+        stage::Symbol
     end
 
 # Def - time resolution ------------
 
 
-    const time_resolution = 24
+    const time_resolution = 1
     
-# ABM - Calf  --------------------
+# ABM - Animal  --------------------
 
   
     #Define model initialisation functions. 
 
     function initialiseModel(
-        N = 60, #Default number of animals
+        N = 100, #Default number of animals
         seed = 42, #Random seed
-        calfProximityRadius = 0.5, #Radius for effective contact
+        animalProximityRadius = 0.5, #Radius for effective contact
         mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
         mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
         movement = 0.1, #Movement in continuous space
@@ -72,6 +73,11 @@ using CairoMakie #Backend for video creation
         sens_carrier = 0.01/time_resolution, 
         bactopop = 0.0,
         submodel = initialisePopulation(),
+        stage = :C,
+        num_calves = N*0.2,
+        num_weaned = N*0.2,
+        num_heifers = N*0.2,
+        num_lac = N*0.4,
     )
     #End header
     #Body
@@ -80,7 +86,7 @@ using CairoMakie #Backend for video creation
     agentSpace = ContinuousSpace((10,10), 1; periodic = true) #Relatinship to real space?
     #Specify the disease dynamics  as a Dictionary to be passed to the model
     pathogenProperties = @dict(
-        calfProximityRadius,
+        animalProximityRadius,
         mortalityRateSens,
         mortalityRateRes,
         sponrec_ir,
@@ -92,10 +98,38 @@ using CairoMakie #Backend for video creation
         res_carrier,
         sens_carrier,
         bactopop,
-        submodel)# Dictionary of disease properties
+        submodel,
+        stage)# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
-    calfModel = ABM(CalfAgent, agentSpace, properties = pathogenProperties, rng = MersenneTwister(seed))
+    animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties, rng = MersenneTwister(seed))
+    
+    # Set the initial age of the animals
+    function initial_age(n)
+        if n <= num_calves
+            rand(1:60)
+        elseif n > (num_calves + 1) && n <= (num_calves + num_weaned)
+            rand(61:(30*13))
+        elseif n > (num_calves + num_weaned + 1 ) && n <= (num_calves + num_weaned + num_heifers)
+            rand((13*30):(24*30))
+        else n > (num_calves + num_weaned + num_heifers + 1) && n <= (num_calves + num_weaned + num_heifers + num_lac)
+            rand((24*30):(6*365))
+        end
+    end
+
+    # Set the initial lifestage 
+
+    function initial_stage(age)
+        if age < 60
+            :C
+        elseif age ≥ 60 && age ≤ 13*30
+            :W
+        elseif age > 13*30 && age ≤ 24*30
+            :H
+        elseif age > 24*30 
+            :L
+        end
+    end
 
     #Define a function to set initial infected status. This gets supplied to the loop describing the initial system state.
     function initial_status(n, init_ir, init_is)
@@ -112,23 +146,23 @@ using CairoMakie #Backend for video creation
 
     function initial_velocity(status, movement)
         if status == :S
-            sincos(2π*rand(calfModel.rng)) .*movement
+            sincos(2π*rand(animalModel.rng)) .*movement
         elseif status == :IS
-            sincos(2π*rand(calfModel.rng)) .*(movement/2)
+            sincos(2π*rand(animalModel.rng)) .*(movement/2)
         elseif status == :IR
-            sincos(2π*rand(calfModel.rng)) .*(movement/2.5)
+            sincos(2π*rand(animalModel.rng)) .*(movement/2.5)
         elseif status == :M
             (0.0,0.0)
         end
     end
 
 
-    #Define the initial state of the system. Attributes for each calf in the system.
+    #Define the initial state of the system. Attributes for each animal in the system.
     for n in 1:N
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(calfModel.rng, 2))
+        pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is)
-        age = age
+        age = initial_age(n)
         βᵣ = βᵣ
         βₛ = βₛ
         treatment = treatment
@@ -138,23 +172,24 @@ using CairoMakie #Backend for video creation
         bactopop = 0.0
         submodel = submodel
         vel = initial_velocity(status, movement)
-        add_agent!(pos, calfModel, vel, age, status, βᵣ, βₛ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel)
+        stage = initial_stage(age)
+        add_agent!(pos, animalModel, vel, age, status, βᵣ, βₛ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage)
     end
 
-        return calfModel
+        return animalModel
     end
 
 
 
-    calfModel = initialiseModel()
+    animalModel = initialiseModel()
 # Utility functions -------------
 
-# Fn - Transmit resistant (Calf) ------------------------
+# Fn - Transmit resistant (Animal) ------------------------
     function transmit_resistant!(a1,a2)
         count(a.status == :IR for a in (a1, a2)) ≠ 1 && return
             infected, healthy = a1.status == :IR ? (a1, a2) : (a2, a1)
     #If a random number is below the transmssion parameter, infect, provided that the contacted animal is susceptible.
-            if (rand(calfModel.rng) < infected.βᵣ) && healthy.status == :S
+            if (rand(animalModel.rng) < infected.βᵣ*infected.bactopop) && healthy.status == :S
                 healthy.status = :ER
             else
                 healthy.status = healthy.status
@@ -162,7 +197,7 @@ using CairoMakie #Backend for video creation
 
     end
 
-# Fn - Transmit sensitive (Calf) -----------------------    
+# Fn - Transmit sensitive (Animal) -----------------------    
     function transmit_sensitive!(a1,a2)
         # Both calves cannot be infected, if they are, return from the function. It also can't be 0
         count(a.status == :IS for a in (a1, a2)) ≠ 1 && return
@@ -171,7 +206,7 @@ using CairoMakie #Backend for video creation
 
         #IF a random number is greater than βₛ, then we return out of the function
         
-        if (rand(calfModel.rng) < infected.βₛ) && healthy.status == :S
+        if (rand(animalModel.rng) < infected.βₛ*(1-infected.bactopop)) && healthy.status == :S
             healthy.status = :IS
             # Else we set the status of the healthy animal to IS
         else
@@ -179,7 +214,7 @@ using CairoMakie #Backend for video creation
         end
     end
 
-# Fn - Transmit carrier (Calf) ----------------------------    
+# Fn - Transmit carrier (Animal) ----------------------------    
     function transmit_carrier!(a1,a2)
         # Both calves cannot be infected, if they are, return from the function. It also can't be 0
         count(a.status == :CS for a in (a1, a2)) ≠ 1 && return
@@ -188,8 +223,8 @@ using CairoMakie #Backend for video creation
 
         #IF a random number is greater than βₛ, then we return out of the function
         
-        if (rand(calfModel.rng) < rand(calfModel.rng)*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
-            if healthy.treatment == :PT && (rand(calfModel.rng) < rand(calfModel.rng)*infected.βᵣ)
+        if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
+            if healthy.treatment == :PT && (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ)
                 healthy.status = :IR
                 healthy.inf_days_ir = 0
             else
@@ -202,7 +237,7 @@ using CairoMakie #Backend for video creation
         end
     end
 
-# Fn - Transmit carrier (Calf) ---------------------------------------    
+# Fn - Transmit carrier (Animal) ---------------------------------------    
     function transmit_carrier_is!(a1,a2)
         # Both calves cannot be infected, if they are, return from the function. It also can't be 0
         count(a.status == :CS for a in (a1, a2)) ≠ 1 && return
@@ -211,8 +246,8 @@ using CairoMakie #Backend for video creation
 
         #IF a random number is greater than βₛ, then we return out of the function
         
-        if (rand(calfModel.rng) < rand(calfModel.rng)*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
-            if healthy.treatment == :PT && (rand(calfModel.rng) < rand(calfModel.rng)*infected.βᵣ)
+        if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
+            if healthy.treatment == :PT && (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ)
                 healthy.status = :IR
                 healthy.inf_days_ir = 0
             else
@@ -233,7 +268,7 @@ using CairoMakie #Backend for video creation
 
         #IF a random number is greater than βₛ, then we return out of the function
         
-        if (rand(calfModel.rng) < rand(calfModel.rng)*infected.βᵣ) && (healthy.status == :S || healthy.status == :RS || healthy.status == :RR)
+        if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ) && (healthy.status == :S || healthy.status == :RS || healthy.status == :RR)
                 healthy.status = :ER
                 healthy.inf_days_ir = 0
             # Else we set the status of the healthy animal to its existing status
@@ -242,44 +277,44 @@ using CairoMakie #Backend for video creation
         end
     end
 
-# Fn - Treatment effect (Calf) -------------------------    
-    function treatment_effect!(CalfAgent)
+# Fn - Treatment effect (Animal) -------------------------    
+    function treatment_effect!(AnimalAgent)
     # During treatment, sensitive calves become less contagious
-    if CalfAgent.treatment == :T && CalfAgent.status == :IS
-        CalfAgent.βₛ = 0.8(CalfAgent.βₛ)
+    if AnimalAgent.treatment == :T && AnimalAgent.status == :IS
+        AnimalAgent.βₛ = 0.8(AnimalAgent.βₛ)
     # Resistant calves remain unchanged
-    elseif CalfAgent.treatment == :T && CalfAgent.status == :IR
-        CalfAgent.βᵣ = CalfAgent.βᵣ
+    elseif AnimalAgent.treatment == :T && AnimalAgent.status == :IR
+        AnimalAgent.βᵣ = AnimalAgent.βᵣ
     end
 
     end
 
 # Fn - Bacterial dynamics --------------------
 
-    function bacto_dyno!(CalfAgent)
-        if CalfAgent.bactopop > 0.5 && CalfAgent.status == :ER
-            CalfAgent.status = :IR
+    function bacto_dyno!(AnimalAgent)
+        if AnimalAgent.bactopop > 0.5 && AnimalAgent.status == :ER
+            AnimalAgent.status = :IR
         else return
         end
 
     end
 
 # Fn - End of treatment ---------------------------    
-function endTreatment!(CalfAgent, calfModel)
+function endTreatment!(AnimalAgent, animalModel)
     #Define the endpoint of treatment
-            if CalfAgent.treatment != :T && return
-            elseif CalfAgent.days_treated ≥ calfModel.treatment_duration
-                CalfAgent.treatment = :PT
+            if AnimalAgent.treatment != :T && return
+            elseif AnimalAgent.days_treated ≥ animalModel.treatment_duration
+                AnimalAgent.treatment = :PT
             end
     end
 
 # Fn - start of treatment -------------------------    
 
-function treatment!(CalfAgent, calfModel)
+function treatment!(AnimalAgent, animalModel)
         # Assign a treatment status
-        if (CalfAgent.status != :IS && CalfAgent.status != :IR) && return
-        elseif CalfAgent.treatment == :U && (rand(calfModel.rng) < calfModel.treatment_prob)
-            CalfAgent.treatment = :T
+        if (AnimalAgent.status != :IS && AnimalAgent.status != :IR) && return
+        elseif AnimalAgent.treatment == :U && (rand(animalModel.rng) < animalModel.treatment_prob)
+            AnimalAgent.treatment = :T
             
         end
     
@@ -287,40 +322,40 @@ function treatment!(CalfAgent, calfModel)
 
 # Fn - Recovery ------------------------------------------------------    
 
-    function recover!(CalfAgent, calfModel)
-        if (CalfAgent.inf_days_is ≥ 5*time_resolution && CalfAgent.status == :IS) && (rand(calfModel.rng) < calfModel.sponrec_is)
-            CalfAgent.status = :RS
-        elseif CalfAgent.inf_days_ir ≥ 5*time_resolution && CalfAgent.status == :IR && (rand(calfModel.rng) < calfModel.sponrec_ir)
-            CalfAgent.status = :RR
+    function recover!(AnimalAgent, animalModel)
+        if (AnimalAgent.inf_days_is ≥ 5*time_resolution && AnimalAgent.status == :IS) && (rand(animalModel.rng) < animalModel.sponrec_is)
+            AnimalAgent.status = :RS
+        elseif AnimalAgent.inf_days_ir ≥ 5*time_resolution && AnimalAgent.status == :IR && (rand(animalModel.rng) < animalModel.sponrec_ir)
+            AnimalAgent.status = :RR
         end
     end
 
 # Fn - retreatment ----------------------------------------------------------
 
-    function retreatment!(CalfAgent, calfModel)
+    function retreatment!(AnimalAgent, animalModel)
         # Assign a treatment status
-        if (CalfAgent.status == :IS || CalfAgent.status == :IR)
-            if CalfAgent.treatment == :PT && (rand(calfModel.rng) < calfModel.treatment_prob)
-                CalfAgent.treatment == :RT 
+        if (AnimalAgent.status == :IS || AnimalAgent.status == :IR)
+            if AnimalAgent.treatment == :PT && (rand(animalModel.rng) < animalModel.treatment_prob)
+                AnimalAgent.treatment == :RT 
             else
-                CalfAgent.treatment = CalfAgent.treatment
+                AnimalAgent.treatment = AnimalAgent.treatment
             end
         end
 
     end
 
 # Fn - Mortality ------------------------------------------------------------    
-    function mortality!(CalfAgent, calfModel)
-        if CalfAgent.status == :IS && (rand(calfModel.rng) < calfModel.mortalityRateSens)
-        kill_agent!(CalfAgent, calfModel)
+    function mortality!(AnimalAgent, animalModel)
+        if AnimalAgent.status == :IS && (rand(animalModel.rng) < animalModel.mortalityRateSens)
+        kill_agent!(AnimalAgent, animalModel)
         else 
-        CalfAgent.inf_days_is += 1*time_resolution
+        AnimalAgent.inf_days_is += 1*time_resolution
         end
     
-        if CalfAgent.status == :IR && (rand(calfModel.rng) < calfModel.mortalityRateRes)
-            kill_agent!(CalfAgent, calfModel)
+        if AnimalAgent.status == :IR && (rand(animalModel.rng) < animalModel.mortalityRateRes)
+            kill_agent!(AnimalAgent, animalModel)
         else
-            CalfAgent.inf_days_ir += 1*time_resolution
+            AnimalAgent.inf_days_ir += 1*time_resolution
         end
     
     end
@@ -335,13 +370,13 @@ function treatment!(CalfAgent, calfModel)
 
     end
 
-# Fn - Calf Model Step -------------------------------------
+# Fn - Animal Model Step -------------------------------------
 
-    function model_step!(calfModel)
+    function model_step!(animalModel)
         #Define the proximity for which infection may occur
-        r = calfModel.calfProximityRadius
-        for (a1,a2) in interacting_pairs(calfModel, r, :nearest)
-            elastic_collision!(a1, a2) #Collison dynamics for each calf
+        r = animalModel.animalProximityRadius
+        for (a1,a2) in interacting_pairs(animalModel, r, :nearest)
+            elastic_collision!(a1, a2) #Collison dynamics for each animal
             transmit_sensitive!(a1,a2) #Sensitive transmission function
             transmit_resistant!(a1,a2) #Resistant transmission function
             transmit_carrier_is!(a1,a2)
@@ -350,81 +385,105 @@ function treatment!(CalfAgent, calfModel)
         end
     end
 
-# Fn - Calf Agent Step -----------------------------------------------------------    
+# Fn - Animal Agent Step -----------------------------------------------------------    
 
-    function agent_step!(CalfAgent, calfModel)
-        #resist!(CalfAgent)
-        bacto_dyno!(CalfAgent)
-        move_agent!(CalfAgent, calfModel, calfModel.timestep) #Move the agent in space
-        treatment!(CalfAgent, calfModel) #Introduce treatment
-        treatment_effect!(CalfAgent) #Effect of treatment on transmission.
-        endTreatment!(CalfAgent, calfModel)
-        retreatment!(CalfAgent, calfModel) #Effect of retreatment
-        mortality!(CalfAgent, calfModel) #Introduce mortality
-        recover!(CalfAgent, calfModel) # Introduce recovery
-        carrierState!(CalfAgent, calfModel) #Introduce a carrier state
-        update_agent!(CalfAgent) #Apply the update_agent function
+    function agent_step!(AnimalAgent, animalModel)
+        #resist!(AnimalAgent)
+        bacto_dyno!(AnimalAgent)
+        move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
+        treatment!(AnimalAgent, animalModel) #Introduce treatment
+        treatment_effect!(AnimalAgent) #Effect of treatment on transmission.
+        endTreatment!(AnimalAgent, animalModel)
+        retreatment!(AnimalAgent, animalModel) #Effect of retreatment
+        mortality!(AnimalAgent, animalModel) #Introduce mortality
+        recover!(AnimalAgent, animalModel) # Introduce recovery
+        carrierState!(AnimalAgent, animalModel) #Introduce a carrier state
+        update_agent!(AnimalAgent) #Apply the update_agent function
     end
 
 # Fn - Carrier State ---------------------------------------------    
-    function carrierState!(CalfAgent, calfModel)
+    function carrierState!(AnimalAgent, animalModel)
     
         # Some calves enter a carrier state
-        if (CalfAgent.status == :RR || CalfAgent.status == :RS) && CalfAgent.treatment == :PT
-            if rand(calfModel.rng) < calfModel.res_carrier
-                CalfAgent.status = :CR
+        if (AnimalAgent.status == :RR || AnimalAgent.status == :RS) && AnimalAgent.treatment == :PT
+            if rand(animalModel.rng) < animalModel.res_carrier
+                AnimalAgent.status = :CR
             end
         end
 
-        if CalfAgent.status == :RS
-            if rand(calfModel.rng) < calfModel.sens_carrier
-                CalfAgent.status = :CS
+        if AnimalAgent.status == :RS
+            if rand(animalModel.rng) < animalModel.sens_carrier
+                AnimalAgent.status = :CS
             end
         end
     end
 
 
-# Fn - Update Calf Agent ----------------------------------------------    
-    function update_agent!(CalfAgent)
-        CalfAgent.age += 1 # Increment age by 1 day
+# Fn - Update Animal Agent ----------------------------------------------    
+    function update_agent!(AnimalAgent)
+        AnimalAgent.age += 1 # Increment age by 1 day
         
-        if CalfAgent.treatment == :T 
-            CalfAgent.days_treated += 1
-        elseif CalfAgent.treatment == :PT
-            CalfAgent.since_tx += 1
+        if AnimalAgent.treatment == :T 
+            AnimalAgent.days_treated += 1
+        elseif AnimalAgent.treatment == :PT
+            AnimalAgent.since_tx += 1
+        end
+
+        if AnimalAgent.age < 60
+            AnimalAgent.stage = :C
+        elseif AnimalAgent.age ≥ 60 && AnimalAgent.age ≤ 13*30
+            AnimalAgent.stage = :W
+        elseif AnimalAgent.age > 13*30 && AnimalAgent.age ≤ 24*30
+            AnimalAgent.stage = :H
+        elseif AnimalAgent.age > 24*30 
+            AnimalAgent.stage = :L
         end
 
         # Add in bacterial data output
         resistant(x) = count(i == :R for i in x)
         sensitive(x) = count(i == :IS for i in x)
+        susceptible(x) = count(i == :S for i in x)
         adata = [
         (:status, resistant),
-        (:status, sensitive)
+        (:status, sensitive),
+        (:status, susceptible)
         ]
 
-        bacterialModel = CalfAgent.submodel
-        bacterialModel.properties[:total_status] = CalfAgent.status
-        bacterialModel.properties[:days_treated] = CalfAgent.days_treated
-        bacterialModel.properties[:age] = CalfAgent.age
+        bacterialModel = AnimalAgent.submodel
+        bacterialModel.properties[:total_status] = AnimalAgent.status
+        bacterialModel.properties[:days_treated] = AnimalAgent.days_treated
+        bacterialModel.properties[:age] = AnimalAgent.age
 
         bactostep, _ = run!(bacterialModel, bact_agent_step!; adata)
 
         sense = bactostep[:, dataname((:status, sensitive))][2]
         res = bactostep[:, dataname((:status, resistant))][2]
-
+        sus = bactostep[:, dataname((:status, susceptible))][2]
         prop_res = res/(sense + res)
 
-        CalfAgent.bactopop = prop_res
+        AnimalAgent.bactopop = prop_res
 
     end
 
 
-calfSim = initialiseModel()
+animalSim = initialiseModel()
 
 
 # Prepare data -------------------------------
 
-infected_sensitive(x) = count(i == :IS for i in x)
+stage_c(x) = count(i == :C for i in x)
+stage_w(x) = count(i == :W for i in x)
+stage_h(x) = count(i == :H for i in x)
+stage_l(x) = count(i == :L for i in x)
+
+adata = [
+    (:stage, stage_c)
+    (:stage, stage_w)
+    (:stage, stage_h)
+    (:stage, stage_l)
+]
+
+#= infected_sensitive(x) = count(i == :IS for i in x)
 susceptible(x) = count(i == :S for i in x)
 infected_resistant(x) = count(i == :IR for i in x)
 recoveries_r(x) = count(i == :RR for i in x)
@@ -435,8 +494,9 @@ finished(x) = count(i == :PT for i in x)
 carrier_is(x) = count(i == :CS for i in x)
 carrier_ir(x) = count(i == :CR for i in x)
 status_p(x) = count(i == :P for i in x)
-
-adata = [(:status, infected_sensitive),
+stage(x) = count(i == :W for i in x)
+ =#
+#= adata = [(:status, infected_sensitive),
  (:status, susceptible),
  (:status, infected_resistant),
  (:status, recoveries_r),
@@ -446,17 +506,17 @@ adata = [(:status, infected_sensitive),
  (:treatment, treatments),
  (:treatment, finished),
  (:treatment, post_treatment),
- (:status, status_p)]
-
+ (:stage, stage)]
+ =#
 
 # Run the model 
-simRun, _ = run!(calfSim, agent_step!, model_step!, 100*time_resolution; adata)
+simRun, _ = run!(animalSim, agent_step!, model_step!, 1*time_resolution; adata)
 
 
 # Export to CSV
 CSV.write("./integrated_export.csv", simRun)
 
-figure = Figure()
+#= figure = Figure()
 ax = figure[1, 1] = Axis(figure; ylabel = "Number of calves")
 l1 = lines!(ax, simRun[:, dataname((:status, infected_sensitive))], color = :orange)
 l2 = lines!(ax, simRun[:, dataname((:status, susceptible))], color = :green)
@@ -465,4 +525,4 @@ l4 = lines!(ax, simRun[:, dataname((:status, recoveries_r))], color = :black)
 l5 = lines!(ax, simRun[:, dataname((:status, recoveries_s))], color = :grey)
 
 
-figure 
+figure  =#
