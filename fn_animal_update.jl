@@ -60,9 +60,9 @@ function update_agent!(AnimalAgent)
 
     bactostep, _ = run!(bacterialModel, bact_agent_step!; adata)
 
-    sense = bactostep[:, dataname((:status, sensitive))][2]
-    res = bactostep[:, dataname((:status, resistant))][2]
-    sus = bactostep[:, dataname((:status, susceptible))][2]
+    sense = bactostep[:,:sensitive_status][2]
+    res = bactostep[:,:resistant_status][2]
+    sus = bactostep[:,:susceptible_status][2]
     prop_res = res/(sense + res)
 
     AnimalAgent.bactopop = prop_res

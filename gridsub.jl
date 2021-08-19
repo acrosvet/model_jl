@@ -16,6 +16,7 @@ function initialisePopulation(
         age = 0,
         total_status = :S,
         days_exposed = 0,
+        rng = MersenneTwister(42)
     )
     agentSpace = GridSpace((100, 100); periodic = false)
     #agentSpace = ContinuousSpace((1,1), 1; periodic = true)
@@ -33,9 +34,10 @@ function initialisePopulation(
         fitness,
         age,
         days_exposed,
+        rng,
     )
 
-    bacterialModel = ABM(BacterialAgent, agentSpace, properties = bactproperties, rng = MersenneTwister(seed))
+    bacterialModel = AgentBasedModel(BacterialAgent, agentSpace, properties = bactproperties)
 
     # strain fitness
 

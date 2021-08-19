@@ -37,6 +37,7 @@
         dim = 0,
         lac = 0,
         days_dry = 0,
+        rng = MersenneTwister(42)
     )
     #End header
     #Body
@@ -62,10 +63,11 @@
         stage,
         βᵣ,
         βₛ,
-        movement, )# Dictionary of disease properties
+        movement, 
+        rng,)# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
-    animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties, rng = MersenneTwister(seed))
+    animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
     
     # Set the initial age of the animals
     function initial_age(n)
@@ -148,11 +150,13 @@
         submodel = submodel
         vel = initial_velocity(status, movement)
         stage = initial_stage(age)
-        dim = initial_dim(stage,calday)
+        dim = initial_dim(stage, calday)
         days_dry = 0
-        add_agent!(pos, animalModel, vel, age, status, βᵣ, βₛ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry)
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry)   
+    
     end
 
         return animalModel
+
     end
 
