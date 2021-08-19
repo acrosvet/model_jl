@@ -31,7 +31,9 @@ function birth!(animalModel)
             submodel = initialisePopulation()
             vel = initial_velocity(status, animalModel.movement)
             stage = :C
-            add_agent!(pos, animalModel, vel, age, status, βᵣ, βₛ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage)
+            dim = 0
+            days_dry = 0
+            add_agent!(pos, animalModel, vel, age, status, βᵣ, βₛ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry)
     end
 
 end

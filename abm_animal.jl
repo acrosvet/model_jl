@@ -34,6 +34,9 @@
         num_weaned = (calday ≥ 272 && calday ≤ 365 ) ? N*0.2 : 0,
         num_heifers = N*0.3,
         num_lac = N - num_calves - num_weaned - num_heifers,
+        dim = 0,
+        lac = 0,
+        days_dry = 0,
     )
     #End header
     #Body
@@ -75,6 +78,18 @@
         else n > (num_calves + num_weaned + num_heifers + 1) && n <= (num_calves + num_weaned + num_heifers + num_lac)
             rand((24*30):(6*365))
         end
+    end
+
+    # Set the initial dim
+
+    function initial_dim(stage, calday)
+    
+        if stage == :L && calday ≥ 182 
+                0
+            else 
+                365 - 182 
+        end
+
     end
 
     # Set the initial lifestage 
@@ -133,7 +148,9 @@
         submodel = submodel
         vel = initial_velocity(status, movement)
         stage = initial_stage(age)
-        add_agent!(pos, animalModel, vel, age, status, βᵣ, βₛ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage)
+        dim = initial_dim(stage,calday)
+        days_dry = 0
+        add_agent!(pos, animalModel, vel, age, status, βᵣ, βₛ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry)
     end
 
         return animalModel

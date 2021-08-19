@@ -14,9 +14,32 @@ function update_agent!(AnimalAgent)
         AnimalAgent.stage = :W
     elseif AnimalAgent.age > 13*30 && AnimalAgent.age ≤ 24*30
         AnimalAgent.stage = :H
-    elseif AnimalAgent.age > 24*30 
-        AnimalAgent.stage = :L
+    elseif AnimalAgent.age > 24*30 && AnimalAgent.stage != :D
+        AnimalAgent.stage = :L 
+    elseif AnimalAgent.stage == :D && AnimalAgent.days_dry > rand(60:90)
+        AnimalAgent.dim = 0
+        AnimalAgent.days_dry = 0
     end
+
+    #Increase dim --------------------
+
+    if AnimalAgent.stage == :L 
+        AnimalAgent.dim += 1
+    else
+        AnimalAgent.dim = AnimalAgent.dim
+    end
+
+    # Dryoff -------------------
+
+    if AnimalAgent.stage == :L && AnimalAgent.dim > (rand(305:400))
+        AnimalAgent.stage = :D
+        AnimalAgent.days_dry += 1
+    else
+        AnimalAgent.stage = AnimalAgent.stage
+    end
+
+
+
 
 
 

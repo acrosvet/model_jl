@@ -25,4 +25,6 @@ mutable struct AnimalAgent <: AbstractAgent
     bactopop::Float64
     submodel::AgentBasedModel
     stage::Symbol
+    dim::Int
+    days_dry::Int
 end

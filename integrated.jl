@@ -65,11 +65,11 @@ animalSim = initialiseModel()
 include("export_prepare_adata.jl")
 
 # Run the model 
-simRun, _ = run!(animalSim, agent_step!, model_step!, 100*time_resolution; adata)
+simRun, _ = run!(animalSim, agent_step!, model_step!, 5*time_resolution; adata)
 
 
 # Export to CSV
 CSV.write("./integrated_export.csv", simRun)
 
 #include("plot_infection.jl")
-include("plot_pop_dynamics.jl")
+#include("plot_pop_dynamics.jl")
