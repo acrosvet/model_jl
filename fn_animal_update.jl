@@ -38,9 +38,20 @@ function update_agent!(AnimalAgent)
         AnimalAgent.stage = AnimalAgent.stage
     end
 
+    if AnimalAgent.stage == :D
+        AnimalAgent.days_dry += 1
+    else
+        return
+    end
 
+    # Calve ----------------------
 
-
+    if AnimalAgent.stage == :D && AnimalAgent.days_dry > (rand(60:90))
+        AnimalAgent.stage = :L
+        AnimalAgent.dim = 0
+    else
+        return
+    end
 
 
     # Add in bacterial data output

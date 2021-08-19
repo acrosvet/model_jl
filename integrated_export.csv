@@ -1,0 +1,7 @@
+step,stage_c_stage,stage_w_stage,stage_h_stage,stage_l_stage,infected_sensitive_status,susceptible_status,infected_resistant_status,recoveries_r_status,recoveries_s_status,carrier_is_status,carrier_ir_status,treatments_treatment,finished_treatment
+0,20,0,29,51,5,94,1,0,0,0,0,0,0
+1,21,0,29,51,6,94,1,0,0,0,0,0,0
+2,21,0,28,52,7,93,1,0,0,0,0,2,0
+3,20,0,28,52,6,93,1,0,0,0,0,3,0
+4,20,1,27,53,8,92,1,0,0,0,0,5,0
+5,20,1,27,53,8,92,1,0,0,0,0,5,0
