@@ -1,6 +1,5 @@
 
     function agent_step!(AnimalAgent, animalModel)
-        #resist!(AnimalAgent)
         bacto_dyno!(AnimalAgent)
         move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
         treatment!(AnimalAgent, animalModel) #Introduce treatment

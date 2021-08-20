@@ -11,4 +11,12 @@ function mortality!(AnimalAgent, animalModel)
         AnimalAgent.inf_days_ir += 1*time_resolution
     end
 
+    # Cull agent -------------------------------
+
+    if AnimalAgent.stage == :L && (0.3/365 > rand(animalModel.rng))
+        kill_agent!(AnimalAgent, animalModel)
+    else
+        return
+    end
+
 end

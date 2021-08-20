@@ -53,6 +53,8 @@ function update_agent!(AnimalAgent)
         return
     end
 
+    
+
 
     # Add in bacterial data output
     resistant(x) = count(i == :R for i in x)

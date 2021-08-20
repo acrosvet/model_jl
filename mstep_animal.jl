@@ -1,5 +1,6 @@
 function model_step!(animalModel)
     #Define the proximity for which infection may occur
+    birth!(animalModel)
     r = animalModel.animalProximityRadius
     for (a1,a2) in interacting_pairs(animalModel, r, :nearest)
         elastic_collision!(a1, a2) #Collison dynamics for each animal
@@ -10,7 +11,15 @@ function model_step!(animalModel)
         
     end
 
+
+    if animalModel.calday > 365
+        animalModel.calday = 0
+    else
+        animalModel.calday = animalModel.calday
+    end
+
     animalModel.calday += 1
-    birth!(animalModel)
+
+    
 end
 

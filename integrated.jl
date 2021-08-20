@@ -4,7 +4,7 @@ include("packages.jl")
 include("agent_types.jl")
 
 # ABM - Bacteria ---------------------------------------
-    include("gridsub.jl")
+    include("gridsub.jl")   
 
 # Def - time resolution ------------
 
@@ -69,7 +69,7 @@ simRun, _ = run!(animalSim, agent_step!, model_step!, 1825*time_resolution; adat
 
 
 # Export to CSV
-CSV.write("./integrated_export.csv", simRun)
+CSV.write("./integrated_export_1825.csv", simRun)
 
 #include("plot_infection.jl")
-#include("plot_pop_dynamics.jl")
+include("plot_pop_dynamics.jl")
