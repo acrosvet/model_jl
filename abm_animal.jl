@@ -4,7 +4,7 @@
     #Define model initialisation functions. 
 
     function initialiseModel(
-        N = 500, #Default number of animals
+        N::Int, #Default number of animals
         seed = 42, #Random seed
         animalProximityRadius = 0.5, #Radius for effective contact
         mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
@@ -46,6 +46,7 @@
     agentSpace = ContinuousSpace((100,100), 1; periodic = true) #Relatinship to real space?
     #Specify the disease dynamics  as a Dictionary to be passed to the model
     pathogenProperties = @dict(
+        N, 
         animalProximityRadius,
         mortalityRateSens,
         mortalityRateRes,

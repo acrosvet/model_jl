@@ -1,7 +1,7 @@
 # Required packages 
-include("packages.jl")
+#include("packages.jl")
 
-include("agent_types.jl")
+#include("agent_types.jl")
 
 # ABM - Bacteria ---------------------------------------
     include("gridsub.jl")   
@@ -9,7 +9,7 @@ include("agent_types.jl")
 # Def - time resolution ------------
 
 
-    const time_resolution = 1
+    #const time_resolution = 1
     
 # Animal ABM
 
@@ -58,18 +58,18 @@ include("fn_animal_carrier.jl")
 # Fn - Update Animal Agent ----------------------------------------------    
 include("fn_animal_update.jl")
 
-animalSim = initialiseModel()
+#animalSim = initialiseModel()
 
 
 # Prepare data -------------------------------
-include("export_prepare_adata.jl")
+#include("export_prepare_adata.jl")
 
 # Run the model 
-simRun, _ = run!(animalSim, agent_step!, model_step!, 1825*time_resolution; adata)
+#simRun, _ = run!(animalSim, agent_step!, model_step!, 1*time_resolution; adata)
 
 
 # Export to CSV
 CSV.write("./integrated_export_1825.csv", simRun)
 
 #include("plot_infection.jl")
-include("plot_pop_dynamics.jl")
+#include("plot_pop_dynamics.jl")
