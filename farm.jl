@@ -498,13 +498,15 @@ end
 
     animals, _ = run!(animalModel, animal_agent_step!, animal_model_step!, 1; adata)
     
-    is_traded(status) = agent -> has_status(agent, status) 
+    has_status(AnimalAgent, stage) = AnimalAgent.stage == stage
+
+    is_traded(stage) = AnimalAgent -> has_status(AnimalAgent, stage) 
     
-    agents = random_agent(submodel, is_traded(:L))
+    agents = random_agent(animalModel, is_traded(:L))
 
     println(agents)
 
- =#
+ #
     #println(stage_c)
 #= 
     if model[trade_partner].status == :S && agent.status == :I
