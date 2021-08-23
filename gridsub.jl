@@ -154,14 +154,14 @@ end
  
      #Update agent parameters for each timestep  
     function bact_update_agent!(BacterialAgent, bacterialModel)
-            BacterialAgent.age += 1
+            bacterialModel.age += 1
     end 
     
     # Define the agent stepping function
     #Update agent parameters for each time step
 
     function bact_agent_step!(BacterialAgent, bacterialModel)
-            uninfected!(BacterialAgent, bacterialModel)
+           # uninfected!(BacterialAgent, bacterialModel)
             bact_transfer_r!(BacterialAgent, bacterialModel)
             bact_transfer_s!(BacterialAgent, bacterialModel)
             #fitness!(BacterialAgent, bacterialModel)

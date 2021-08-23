@@ -21,5 +21,7 @@ function model_step!(animalModel)
     animalModel.calday += 1
 
     
+
+    
 end
 

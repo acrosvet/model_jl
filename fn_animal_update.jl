@@ -53,33 +53,6 @@ function update_agent!(AnimalAgent)
         return
     end
 
-    
 
 
-    # Add in bacterial data output
-    resistant(x) = count(i == :R for i in x)
-    sensitive(x) = count(i == :IS for i in x)
-    susceptible(x) = count(i == :S for i in x)
-    adata = [
-    (:status, resistant),
-    (:status, sensitive),
-    (:status, susceptible)
-    ]
-
-    AnimalAgent.submodel.total_status = AnimalAgent.status
-    AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
-    AnimalAgent.submodel.age = AnimalAgent.age
-#=     bacterialModel = AnimalAgent.submodel
-    bacterialModel.properties[:total_status] = AnimalAgent.status
-    bacterialModel.properties[:days_treated] = AnimalAgent.days_treated
-    bacterialModel.properties[:age] = AnimalAgent.age =#
-
-    bactostep, _ = run!(AnimalAgent.submodel, bact_agent_step!, 1; adata)
-
-    sense = bactostep[:,:sensitive_status][2]
-    res = bactostep[:,:resistant_status][2]
-    sus = bactostep[:,:susceptible_status][2]
-    prop_res = res/(sense + res)
-
-    AnimalAgent.bactopop = prop_res
 end
