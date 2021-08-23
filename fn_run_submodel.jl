@@ -15,7 +15,7 @@
     animalModel.submodel.properties[:days_treated] = AnimalAgent.days_treated
     animalModel.submodel.age = AnimalAgent.age
 
-    bactostep, _ = run!(animalModel[id].submodel, bact_agent_step!; adata)
+    bactostep, _ = run!(animalModel.submodel[id], bact_agent_step!; adata)
 
     sense = bactostep[:,:sensitive_status][2]
     res = bactostep[:,:resistant_status][2]
