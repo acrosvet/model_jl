@@ -498,13 +498,14 @@ end
 
     animals, _ = run!(animalModel, animal_agent_step!, animal_model_step!, 1; adata)
     
-    has_status(AnimalAgent, stage) = AnimalAgent.stage == stage
+    has_stage(AnimalAgent, status) = AnimalAgent.status == status
 
-    is_traded(stage) = AnimalAgent -> has_status(AnimalAgent, stage) 
+    is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
     
-    agents = random_agent(animalModel, is_traded(:L))
+    traded_agent = random_agent(animalModel, is_traded(:IS))
+    
 
-    println(agents)
+    println(traded_agent.bactopop)
 
  #
     #println(stage_c)
@@ -534,4 +535,4 @@ adata = [
     (:status, recovered)
 ]
 
-data, _ = run!(farmModel, farm_agent_step!, 1; adata)
+data, _ = run!(farmModel, farm_agent_step!, 5; adata)

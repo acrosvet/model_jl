@@ -10,4 +10,5 @@
         recover!(AnimalAgent, animalModel) # Introduce recovery
         carrierState!(AnimalAgent, animalModel) #Introduce a carrier state
         update_agent!(AnimalAgent) #Apply the update_agent function
+        println(AnimalAgent.bactopop)
     end

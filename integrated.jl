@@ -1,7 +1,7 @@
 # Required packages 
-#include("packages.jl")
+include("packages.jl")
 
-#include("agent_types.jl")
+include("agent_types.jl")
 
 # ABM - Bacteria ---------------------------------------
     include("gridsub.jl")   
@@ -9,13 +9,13 @@
 # Def - time resolution ------------
 
 
-    #const time_resolution = 1
+const time_resolution = 1
     
 # Animal ABM
 
 include("abm_animal.jl")
 
-animalModel = initialiseModel()
+animalModel = initialiseModel(100)
 # Utility functions -------------
 
 # Animal transmission functions -------
@@ -58,14 +58,14 @@ include("fn_animal_carrier.jl")
 # Fn - Update Animal Agent ----------------------------------------------    
 include("fn_animal_update.jl")
 
-#animalSim = initialiseModel()
+animalSim = initialiseModel(100)
 
 
 # Prepare data -------------------------------
-#include("export_prepare_adata.jl")
+include("export_prepare_adata.jl")
 
 # Run the model 
-#simRun, _ = run!(animalSim, agent_step!, model_step!, 1*time_resolution; adata)
+simRun, _ = run!(animalSim, agent_step!, model_step!, 100*time_resolution; adata)
 
 
 # Export to CSV

@@ -12,9 +12,9 @@ function initialisePopulation(
         timestep = 1.0, #Set model timestep
         r_strain = rand(1:nstrains),
         fitness = 0, 
-        days_treated = 0,
+        days_treated = 0),
         age = 0,
-        total_status = :S,
+        total_status = :ER,
         days_exposed = 0,
         rng = MersenneTwister(42)
     )
@@ -81,7 +81,7 @@ end
         
         if bacterialModel.total_status == :ER && bacterialModel.days_exposed == 1
             bacterialModel.r_strain = rand(1:bacterialModel.nstrains) 
-            bacterialModel.strain == bacterialModel.rstrain ? BacterialAgent.status = :R : BacterialAgent.status = :S
+            bacterialModel.strain == bacterialModel.r_strain ? BacterialAgent.status = :R : BacterialAgent.status = :IS
         else return
         end
 
@@ -97,7 +97,7 @@ end
         if bacterialModel.total_status == :ES && bacterialModel.days_exposed == 1
             bacterialModel.r_strain = 0
             BacterialAgent.status == :IS
-            bacterialModel.strain == bacterialModel.rstrain ? BacterialAgent.status = :R : BacterialAgent.status == :IS 
+            bacterialModel.strain == bacterialModel.r_strain ? BacterialAgent.status = :R : BacterialAgent.status == :IS 
         else return
         end
 
@@ -170,3 +170,17 @@ end
 
     end
 
+
+    # Add in bacterial data output
+    resistant(x) = count(i == :R for i in x)
+    sensitive(x) = count(i == :IS for i in x)
+    susceptible(x) = count(i == :S for i in x)
+    adata = [
+    (:status, resistant),
+    (:status, sensitive),
+    (:status, susceptible)
+    ]
+
+    bacterialModel = initialisePopulation()
+
+    bactostep, _ = run!(bacterialModel, bact_agent_step!, 10; adata)
