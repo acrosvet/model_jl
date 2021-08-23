@@ -12,12 +12,13 @@ function initialisePopulation(
         timestep = 1.0, #Set model timestep
         r_strain = rand(1:nstrains),
         fitness = 0, 
-        days_treated = 0),
+        days_treated = 0,
         age = 0,
         total_status = :ER,
         days_exposed = 0,
         rng = MersenneTwister(42)
     )
+
     agentSpace = GridSpace((100, 100); periodic = false)
     #agentSpace = ContinuousSpace((1,1), 1; periodic = true)
 
@@ -153,7 +154,7 @@ end
  
      #Update agent parameters for each timestep  
     function bact_update_agent!(BacterialAgent, bacterialModel)
-
+            BacterialAgent.age += 1
     end 
     
     # Define the agent stepping function
@@ -171,16 +172,4 @@ end
     end
 
 
-    # Add in bacterial data output
-    resistant(x) = count(i == :R for i in x)
-    sensitive(x) = count(i == :IS for i in x)
-    susceptible(x) = count(i == :S for i in x)
-    adata = [
-    (:status, resistant),
-    (:status, sensitive),
-    (:status, susceptible)
-    ]
 
-    bacterialModel = initialisePopulation()
-
-    bactostep, _ = run!(bacterialModel, bact_agent_step!, 10; adata)
