@@ -65,7 +65,7 @@ animalSim = initialiseModel(100)
 include("export_prepare_adata.jl")
 
 # Run the model 
-simRun, _ = run!(animalSim, agent_step!, model_step!, 1825*time_resolution; adata)
+simRun, _ = run!(animalSim, agent_step!, model_step!, 365*time_resolution; adata)
 
 
 # Export to CSV 

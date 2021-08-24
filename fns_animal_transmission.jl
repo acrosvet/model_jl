@@ -6,6 +6,7 @@ function transmit_resistant!(a1,a2)
 #If a random number is below the transmssion parameter, infect, provided that the contacted animal is susceptible.
         if (rand(animalModel.rng) < infected.βᵣ*infected.bactopop) && healthy.status == :S
             healthy.status = :ER
+            healthy.submodel = infected.submodel
         else
             healthy.status = healthy.status
         end
@@ -22,7 +23,8 @@ function transmit_sensitive!(a1,a2)
     #IF a random number is greater than βₛ, then we return out of the function
     
     if (rand(animalModel.rng) < infected.βₛ*(1-infected.bactopop)) && healthy.status == :S
-        healthy.status = :IS
+        healthy.status = :ES
+        healthy.submodel = infected.submodel
         # Else we set the status of the healthy animal to IS
     else
         healthy.status = healthy.status

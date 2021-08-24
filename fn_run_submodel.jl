@@ -1,26 +1,35 @@
     function run_submodel!(AnimalAgent, animalModel)
     # Add in bacterial data output
-    resistant(x) = count(i == :R for i in x)
-    sensitive(x) = count(i == :IS for i in x)
-    susceptible(x) = count(i == :S for i in x)
-    adata = [
-    (:status, resistant),
-    (:status, sensitive),
-    (:status, susceptible)
-    ]
+
 
     id = AnimalAgent.id
 
     animalModel.submodel.properties[:total_status] = AnimalAgent.status
     animalModel.submodel.properties[:days_treated] = AnimalAgent.days_treated
     animalModel.submodel.age = AnimalAgent.age
+    
+    if haskey(animalModel.agents, id)
+    
 
-    bactostep, _ = run!(animalModel.submodel[id], bact_agent_step!; adata)
+        resistant(x) = count(i == :R for i in x)
+        sensitive(x) = count(i == :IS for i in x)
+        susceptible(x) = count(i == :S for i in x)
+        adata = [
+        (:status, resistant),
+        (:status, sensitive),
+        (:status, susceptible)
+        ]
+    
 
-    sense = bactostep[:,:sensitive_status][2]
-    res = bactostep[:,:resistant_status][2]
-    sus = bactostep[:,:susceptible_status][2]
-    prop_res = res/animalModel.submodel.nbact
+        bactostep, _ = run!(animalModel[id].submodel, bact_agent_step!, 1; adata)
 
-    animalModel.bactopop = prop_res
+        sense = bactostep[:,:sensitive_status][2]
+        res = bactostep[:,:resistant_status][2]
+        sus = bactostep[:,:susceptible_status][2]
+        prop_res = res/(sense + res)
+
+        animalModel[id].bactopop = prop_res
+    else
+        return
+    end
     end
