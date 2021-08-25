@@ -68,21 +68,22 @@ function farm_update_agent!(FarmAgent, farmModel)
         if typeof(traded_agent) == Nothing && return
         else
             push!(farmModel[id].animalModel.sending, traded_agent)
-        end
+        end 
 
     # Trade infection between farms 
 
     trade_partners = node_neighbors(FarmAgent, farmModel)
 
     if typeof(trade_partners) == Nothing && return
+    
     else
         trade_partner = rand(1:length(trade_partners))
         farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
 
-        if length(farmModel[trade_partner].animalModel.receiving) > 0
+        if farmModel[trade_partner].animalModel.receiving != Nothing
 
-        for i in 1:length(farmModel[trade_partner].animalModel.receiving)
-#=             vel = farmModel[trade_partner].animalModel.receiving[i].vel
+        #for i in 1:length(farmModel[trade_partner].animalModel.receiving)
+#=          vel = farmModel[trade_partner].animalModel.receiving[i].vel
             age = farmModel[trade_partner].animalModel.receiving[i].age
             status = farmModel[trade_partner].animalModel.receiving[i].status
             βₛ = farmModel[trade_partner].animalModel.receiving[i].βₛ
@@ -97,15 +98,15 @@ function farm_update_agent!(FarmAgent, farmModel)
             stage = farmModel[trade_partner].animalModel.receiving[i].stage
             dim = farmModel[trade_partner].animalModel.receiving[i].dim
             days_dry = farmModel[trade_partner].animalModel.receiving[i].days_dry =#
-            agent = farmModel[trade_partner].animalModel.receiving[i]
-            add_agent!(agent, farmModel[trade_partner].animalModel)
-            
-        end
-        println(length(farmModel[trade_partner].animalModel.agents))
+           # agent = farmModel[trade_partner].animalModel.receiving[i]
+           ## add_agent!(agent, farmModel[trade_partner].animalModel)
+            println("the loop ran")
+        #end
+        #println(length(farmModel[trade_partner].animalModel.agents))
     else
         return
     end
-    end    
+     end    
 
     
     end
