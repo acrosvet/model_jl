@@ -320,7 +320,7 @@ function transmit_resistant!(a1,a2)
 end
 
 # Fn - Transmit sensitive (Animal) -----------------------    
-function transmit_sensitive!(a1,a2)
+function transmit_sensitive!(a1,a2, animalModel)
     # Both calves cannot be infected, if they are, return from the function. It also can't be 0
     count(a.status == :IS for a in (a1, a2)) ≠ 1 && return
     # Else define a tuple of infected, healthy, depending on whether a1 or a2 is infected. infected will always be the first tuple position.

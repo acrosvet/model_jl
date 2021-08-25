@@ -28,3 +28,15 @@ mutable struct AnimalAgent <: AbstractAgent
     dim::Int
     days_dry::Int
 end
+
+mutable struct FarmAgent <: AbstractAgent
+    id::Int
+    pos::Int
+    status::Symbol #Infection status
+    tradelevel::Int #Trading relationships
+    trades_from::Int
+    trades_to::Int
+    ncows::Int #Number of animals
+    system::Symbol #Calving system
+    animalModel::AgentBasedModel
+end

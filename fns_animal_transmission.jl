@@ -1,6 +1,6 @@
 
 # Fn - Transmit resistant (Animal) ------------------------
-function transmit_resistant!(a1,a2)
+function transmit_resistant!(a1,a2,animalModel)
     count(a.status == :IR for a in (a1, a2)) ≠ 1 && return
         infected, healthy = a1.status == :IR ? (a1, a2) : (a2, a1)
 #If a random number is below the transmssion parameter, infect, provided that the contacted animal is susceptible.
@@ -14,7 +14,7 @@ function transmit_resistant!(a1,a2)
 end
 
 # Fn - Transmit sensitive (Animal) -----------------------    
-function transmit_sensitive!(a1,a2)
+function transmit_sensitive!(a1,a2,animalModel)
     # Both calves cannot be infected, if they are, return from the function. It also can't be 0
     count(a.status == :IS for a in (a1, a2)) ≠ 1 && return
     # Else define a tuple of infected, healthy, depending on whether a1 or a2 is infected. infected will always be the first tuple position.
@@ -32,7 +32,7 @@ function transmit_sensitive!(a1,a2)
 end
 
 # Fn - Transmit carrier (Animal) ----------------------------    
-function transmit_carrier!(a1,a2)
+function transmit_carrier!(a1,a2,animalModel)
     # Both calves cannot be infected, if they are, return from the function. It also can't be 0
     count(a.status == :CS for a in (a1, a2)) ≠ 1 && return
     # Else define a tuple of infected, healthy, depending on whether a1 or a2 is infected. infected will always be the first tuple position.
@@ -55,7 +55,7 @@ function transmit_carrier!(a1,a2)
 end
 
 # Fn - Transmit carrier (Animal) ---------------------------------------    
-function transmit_carrier_is!(a1,a2)
+function transmit_carrier_is!(a1,a2,animalModel)
     # Both calves cannot be infected, if they are, return from the function. It also can't be 0
     count(a.status == :CS for a in (a1, a2)) ≠ 1 && return
     # Else define a tuple of infected, healthy, depending on whether a1 or a2 is infected. infected will always be the first tuple position.
@@ -77,7 +77,7 @@ function transmit_carrier_is!(a1,a2)
     end
 end
 
-function transmit_carrier_ir!(a1,a2)
+function transmit_carrier_ir!(a1,a2,animalModel)
     # Both calves cannot be infected, if they are, return from the function. It also can't be 0
     count(a.status == :CR for a in (a1, a2)) ≠ 1 && return
     # Else define a tuple of infected, healthy, depending on whether a1 or a2 is infected. infected will always be the first tuple position.
