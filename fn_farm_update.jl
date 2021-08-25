@@ -84,7 +84,7 @@ function farm_update_agent!(FarmAgent, farmModel)
         for i in 1:length(farmModel[trade_partner].animalModel.receiving)
             agent = farmModel[trade_partner].animalModel.receiving[i]
             add_agent!(agent, farmModel[trade_partner].animalModel)
-            println("the loop ran")
+           # println("the loop ran")
         end
         #println(length(farmModel[trade_partner].animalModel.agents))
     else
