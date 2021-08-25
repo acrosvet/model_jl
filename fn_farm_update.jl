@@ -45,6 +45,7 @@ function farm_update_agent!(FarmAgent, farmModel)
         
     end
     
+
     
 
         susceptible(x) = count(i == :S for i in x)
@@ -62,11 +63,14 @@ function farm_update_agent!(FarmAgent, farmModel)
     
         is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
         
-        traded_agent = random_agent(animalModel, is_traded(:IS))
+        traded_agent = random_agent(animalModel, is_traded(:IR))
         
-    
-        println(traded_agent.bactopop)
-    
+        if typeof(traded_agent) == Nothing && return
+        else
+            trader_id = traded_agent.id
+            push!(farmModel[id].animalModel.sending, traded_agent)
+            println(farmModel[id].animalModel.sending)
+        end
 
     
     end

@@ -37,7 +37,9 @@
         dim = 0,
         lac = 0,
         days_dry = 0,
-        rng = MersenneTwister(42)
+        rng = MersenneTwister(42), 
+        sending = [],
+        receiving = [],
     )
     #End header
     #Body
@@ -65,7 +67,9 @@
         βᵣ,
         βₛ,
         movement, 
-        rng,)# Dictionary of disease properties
+        rng,
+        sending,
+        receiving,)# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)

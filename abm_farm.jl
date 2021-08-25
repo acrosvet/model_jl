@@ -1,6 +1,6 @@
 
 function initialiseFarms(
-    numfarms = 2,
+    numfarms = 10,
     seed = 42,
     calday = rand(1:365),
     tradelevel = 2,
