@@ -74,34 +74,18 @@ function farm_update_agent!(FarmAgent, farmModel)
 
     trade_partners = node_neighbors(FarmAgent, farmModel)
 
-    if typeof(trade_partners) == Nothing && return
-    
+    if typeof(trade_partners) == Nothing 
+        return
     else
         trade_partner = rand(1:length(trade_partners))
         farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
 
-        if farmModel[trade_partner].animalModel.receiving != Nothing
-
-        #for i in 1:length(farmModel[trade_partner].animalModel.receiving)
-#=          vel = farmModel[trade_partner].animalModel.receiving[i].vel
-            age = farmModel[trade_partner].animalModel.receiving[i].age
-            status = farmModel[trade_partner].animalModel.receiving[i].status
-            βₛ = farmModel[trade_partner].animalModel.receiving[i].βₛ
-            βᵣ = farmModel[trade_partner].animalModel.receiving[i].βᵣ
-            inf_days_is = farmModel[trade_partner].animalModel.receiving[i].inf_days_is
-            inf_days_ir = farmModel[trade_partner].animalModel.receiving[i].inf_days_ir
-            treatment = farmModel[trade_partner].animalModel.receiving[i].treatment
-            days_treated = farmModel[trade_partner].animalModel.receiving[i].days_treated
-            since_tx = farmModel[trade_partner].animalModel.receiving[i].since_tx
-            bactopop = farmModel[trade_partner].animalModel.receiving[i].bactopop
-            submodel = farmModel[trade_partner].animalModel.receiving[i].submodel
-            stage = farmModel[trade_partner].animalModel.receiving[i].stage
-            dim = farmModel[trade_partner].animalModel.receiving[i].dim
-            days_dry = farmModel[trade_partner].animalModel.receiving[i].days_dry =#
-           # agent = farmModel[trade_partner].animalModel.receiving[i]
-           ## add_agent!(agent, farmModel[trade_partner].animalModel)
+    if farmModel[trade_partner].animalModel.receiving != Nothing
+        for i in 1:length(farmModel[trade_partner].animalModel.receiving)
+            agent = farmModel[trade_partner].animalModel.receiving[i]
+            add_agent!(agent, farmModel[trade_partner].animalModel)
             println("the loop ran")
-        #end
+        end
         #println(length(farmModel[trade_partner].animalModel.agents))
     else
         return
