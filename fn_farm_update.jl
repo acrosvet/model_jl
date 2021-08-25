@@ -67,10 +67,40 @@ function farm_update_agent!(FarmAgent, farmModel)
         
         if typeof(traded_agent) == Nothing && return
         else
-            trader_id = traded_agent.id
             push!(farmModel[id].animalModel.sending, traded_agent)
-            println(farmModel[id].animalModel.sending)
         end
+
+    # Trade infection between farms 
+
+    trade_partners = node_neighbors(FarmAgent, farmModel)
+
+    if typeof(trade_partners) == Nothing && return
+    else
+        trade_partner = rand(1:length(trade_partners))
+        farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
+
+        for i in 1:length(farmModel[trade_partner].animalModel.receiving)
+#=             vel = farmModel[trade_partner].animalModel.receiving[i].vel
+            age = farmModel[trade_partner].animalModel.receiving[i].age
+            status = farmModel[trade_partner].animalModel.receiving[i].status
+            βₛ = farmModel[trade_partner].animalModel.receiving[i].βₛ
+            βᵣ = farmModel[trade_partner].animalModel.receiving[i].βᵣ
+            inf_days_is = farmModel[trade_partner].animalModel.receiving[i].inf_days_is
+            inf_days_ir = farmModel[trade_partner].animalModel.receiving[i].inf_days_ir
+            treatment = farmModel[trade_partner].animalModel.receiving[i].treatment
+            days_treated = farmModel[trade_partner].animalModel.receiving[i].days_treated
+            since_tx = farmModel[trade_partner].animalModel.receiving[i].since_tx
+            bactopop = farmModel[trade_partner].animalModel.receiving[i].bactopop
+            submodel = farmModel[trade_partner].animalModel.receiving[i].submodel
+            stage = farmModel[trade_partner].animalModel.receiving[i].stage
+            dim = farmModel[trade_partner].animalModel.receiving[i].dim
+            days_dry = farmModel[trade_partner].animalModel.receiving[i].days_dry =#
+            agent = farmModel[trade_partner].animalModel.receiving[i]
+            add_agent!(agent, farmModel[trade_partner].animalModel)
+            
+        end
+        println(farmModel[trade_partner].animalModel.receiving)
+    end    
 
     
     end
