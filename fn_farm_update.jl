@@ -79,6 +79,8 @@ function farm_update_agent!(FarmAgent, farmModel)
         trade_partner = rand(1:length(trade_partners))
         farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
 
+        if length(farmModel[trade_partner].animalModel.receiving) > 0
+
         for i in 1:length(farmModel[trade_partner].animalModel.receiving)
 #=             vel = farmModel[trade_partner].animalModel.receiving[i].vel
             age = farmModel[trade_partner].animalModel.receiving[i].age
@@ -99,7 +101,10 @@ function farm_update_agent!(FarmAgent, farmModel)
             add_agent!(agent, farmModel[trade_partner].animalModel)
             
         end
-        println(farmModel[trade_partner].animalModel.receiving)
+        println(length(farmModel[trade_partner].animalModel.agents))
+    else
+        return
+    end
     end    
 
     
