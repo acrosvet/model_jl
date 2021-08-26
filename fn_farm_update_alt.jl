@@ -80,6 +80,7 @@ function farm_update_agent!(FarmAgent, farmModel)
                 agent  = farmModel[trade_partner].animalModel.receiving[1]
                 println("Number of agents before")
                 println(length(farmModel[trade_partner].animalModel.agents))
+                agent.id = rand(5000:1000000)
                 add_agent!(agent, farmModel[trade_partner].animalModel)
                 println("Agent sent")
                 println("Number of agents after")
