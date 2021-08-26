@@ -60,53 +60,34 @@ function farm_update_agent!(FarmAgent, farmModel)
         animals, _ = run!(farmModel[id].animalModel, animal_agent_step!, model_step!, 1; adata)
         
         has_stage(AnimalAgent, status) = AnimalAgent.status == status
-    
+        
         is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
         
         traded_agent = random_agent(animalModel, is_traded(:IR))
-        
-        if typeof(traded_agent) == Nothing && return
-        else
-            push!(farmModel[id].animalModel.sending, traded_agent)
-        end 
 
+        println(farmModel.timestep)
+        println(typeof(traded_agent))
+
+        
+        if typeof(traded_agent) == AnimalAgent
+            push!(farmModel[id].animalModel.sending, traded_agent)
+            println("Pushed agent")
+        else
+            return
+        end 
+ 
     # Trade infection between farms 
 
-    trade_partners = node_neighbors(FarmAgent, farmModel)
+   # trade_partners = node_neighbors(FarmAgent, farmModel)
 
-    if typeof(trade_partners) == Nothing 
+#=     if typeof(trade_partners) == Nothing 
         return
     else
-        trade_partner = rand(1:length(trade_partners))
+         trade_partner = rand(1:length(trade_partners))
         farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
-
-    if farmModel[trade_partner].animalModel.receiving != Nothing
-        for i in 1:length(farmModel[trade_partner].animalModel.receiving)
-            agent = farmModel[trade_partner].animalModel.receiving[i]
-            vel = agent.vel
-            age = agent.age
-            status = agent.status
-            βₛ = agent.βₛ
-            βᵣ = agent.βᵣ
-            inf_days_ir = agent.inf_days_ir
-            inf_days_is = agent.inf_days_is
-            treatment = agent.treatment
-            since_tx = agent.since_tx
-            bactopop = agent.bactopop
-            submodel = agent.submodel
-            stage = agent.stage
-            dim = agent.dim
-            days_dry = agent.days_dry
-            add_agent!(farmModel[trade_partner].animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry)   
-           # add_agent!(agent, farmModel[trade_partner].animalModel)
-           # println("the loop ran")
-        end
-        #println(length(farmModel[trade_partner].animalModel.agents))
-    else
-        return
-    end
-     end    
-
+        println(farmModel[trade_partner].animalModel.receiving) 
+    end    
+ =#
     
     end
     

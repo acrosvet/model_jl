@@ -59,7 +59,7 @@ include("abm_farm.jl")
 
 include("astep_farm.jl")
 
-include("fn_farm_update.jl")
+include("fn_farm_update_alt.jl")
 
 include("fn_farm_contact.jl")
 
@@ -73,7 +73,7 @@ adata = [
     (:status, recovered)
 ]
 
-data, _ = run!(farmModel, farm_agent_step!, 10; adata)
+data, _ = run!(farmModel, farm_agent_step!, 5; adata)
 
 # Export to CSV 
 CSV.write("./integrated_export_1825.csv", simRun)
