@@ -72,13 +72,29 @@ function farm_update_agent!(FarmAgent, farmModel)
         if typeof(traded_agent) == AnimalAgent
             push!(farmModel[id].animalModel.sending, traded_agent)
             println("Pushed agent")
+            trade_partners = node_neighbors(FarmAgent, farmModel)
+            trade_partner = rand(1:length(trade_partners))
+            if length(farmModel[id].animalModel.sending) != 0
+                farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
+                println("traded") 
+                agent  = farmModel[trade_partner].animalModel.sending[1]
+                println("Number of agents before")
+                println(length(farmModel[trade_partner].animalModel.agents))
+                add_agent!(agent, farmModel[trade_partner].animalModel)
+                println("Agent sent")
+                println("Number of agents after")
+                println(length(farmModel[trade_partner].animalModel.agents))
+            else
+                return
+            end
         else
-            return
+            println("Didn't push agent")
         end 
  
     # Trade infection between farms 
 
-   # trade_partners = node_neighbors(FarmAgent, farmModel)
+
+ #   println(trade_partners)
 
 #=     if typeof(trade_partners) == Nothing 
         return
