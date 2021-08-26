@@ -77,7 +77,7 @@ function farm_update_agent!(FarmAgent, farmModel)
             if length(farmModel[id].animalModel.sending) != 0
                 farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
                 println("traded") 
-                agent  = farmModel[trade_partner].animalModel.sending[1]
+                agent  = farmModel[trade_partner].animalModel.receiving[1]
                 println("Number of agents before")
                 println(length(farmModel[trade_partner].animalModel.agents))
                 add_agent!(agent, farmModel[trade_partner].animalModel)
