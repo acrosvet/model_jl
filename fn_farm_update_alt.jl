@@ -5,7 +5,7 @@ function farm_update_agent!(FarmAgent, farmModel)
 
 
     function agent_step!(AnimalAgent, animalModel)
-        #move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
+        move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
         treatment!(AnimalAgent, animalModel) #Introduce treatment
         treatment_effect!(AnimalAgent) #Effect of treatment on transmission.
         endTreatment!(AnimalAgent, animalModel)
@@ -49,23 +49,16 @@ function farm_update_agent!(FarmAgent, farmModel)
     
 
     
-#= 
-        susceptible(x) = count(i == :S for i in x)
-        
-        adata = [
-        (:status, susceptible) 
-        ]
-     =#
 
     
     
         run!(farmModel[id].animalModel, agent_step!, model_step!,1)
         
-         has_stage(AnimalAgent, status) = AnimalAgent.status == status
+        #= has_stage(AnimalAgent, status) = AnimalAgent.status == status
         
         is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
         
-        traded_agent = random_agent(animalModel, is_traded(:IR))
+        traded_agent = random_agent(animalModel, is_traded(:S))
 
         println(farmModel.timestep)
         println(typeof(traded_agent))
@@ -83,7 +76,7 @@ function farm_update_agent!(FarmAgent, farmModel)
                 println("Number of agents before")
                 println(length(farmModel[trade_partner].animalModel.agents))
                 agent.id = rand(5000:1000000) # ran number for new agent id 
-                add_agent!(agent, farmModel[trade_partner].animalModel)
+                #add_agent!(agent, farmModel[trade_partner].animalModel)
                 #kill_agent!(agent, farmModel[id].animalModel)
                 println("Agent sent", agent.id)
                 println("Number of agents after")
@@ -95,7 +88,7 @@ function farm_update_agent!(FarmAgent, farmModel)
          else
             println("Didn't push agent")
         end 
- 
+  =#
     # Trade infection between farms 
 
 
