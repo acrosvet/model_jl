@@ -77,10 +77,10 @@ function farm_update_agent!(FarmAgent, farmModel)
             elseif length(farmModel[id].animalModel.sending) != 0
                 farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
                 println("traded") 
-            #=     
                 agent  = farmModel[trade_partner].animalModel.receiving[1]
                 println("Number of agents before")
                 println(length(farmModel[trade_partner].animalModel.agents))
+                #=
                 agent.id = rand(5000:1000000) # ran number for new agent id 
                 #add_agent!(agent, farmModel[trade_partner].animalModel)
                 #kill_agent!(agent, farmModel[id].animalModel)
