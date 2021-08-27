@@ -60,10 +60,12 @@ function farm_update_agent!(FarmAgent, farmModel)
         
         traded_agent = random_agent(farmModel[id].animalModel, is_traded(:S))
 
-        println(traded_agent)
+       # println(traded_agent)
         println(typeof(traded_agent))
 
-        #= 
+
+
+        
         if typeof(traded_agent) == AnimalAgent
             push!(farmModel[id].animalModel.sending, traded_agent)
             println("Pushed agent")
@@ -89,7 +91,7 @@ function farm_update_agent!(FarmAgent, farmModel)
          else
             println("Didn't push agent")
         end 
-  =#
+  
     # Trade infection between farms 
 
 
