@@ -5,7 +5,6 @@ function farm_update_agent!(FarmAgent, farmModel)
 
 
     function agent_step!(AnimalAgent, animalModel)
-        move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
         treatment!(AnimalAgent, animalModel) #Introduce treatment
         treatment_effect!(AnimalAgent) #Effect of treatment on transmission.
         endTreatment!(AnimalAgent, animalModel)
@@ -16,6 +15,8 @@ function farm_update_agent!(FarmAgent, farmModel)
         update_agent!(AnimalAgent) #Apply the update_agent function
         run_submodel!(AnimalAgent, animalModel)
         bacto_dyno!(AnimalAgent)
+        move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
+
 
        
 
@@ -74,7 +75,7 @@ function farm_update_agent!(FarmAgent, farmModel)
             if trade_partner == id 
                 println("EXIT!") 
                 return
-            elseif length(farmModel[id].animalModel.sending) != 0
+            elseif length(farmModel[id].animalModel.sending) != 0 && trade_partner != id
                 farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
                 println("traded") 
                 agent  = farmModel[trade_partner].animalModel.receiving[1]
