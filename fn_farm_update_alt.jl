@@ -83,7 +83,7 @@ function farm_update_agent!(FarmAgent, farmModel)
                 println(length(farmModel[trade_partner].animalModel.agents))
                 agent.id = rand(5000:1000000) # ran number for new agent id 4
                 #push!(agent, farmModel[trade_partner].amimalModel.agents)
-                add_agent!(agent, farmModel[trade_partner].animalModel)
+                #add_agent!(agent, farmModel[trade_partner].animalModel)
                 #=
                 #kill_agent!(agent, farmModel[id].animalModel)
                 println("Agent sent", agent.id)
