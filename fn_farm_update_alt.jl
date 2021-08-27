@@ -54,21 +54,22 @@ function farm_update_agent!(FarmAgent, farmModel)
     
         run!(farmModel[id].animalModel, agent_step!, model_step!,1)
         
-        #= has_stage(AnimalAgent, status) = AnimalAgent.status == status
+        has_stage(AnimalAgent, status) = AnimalAgent.status == status
         
         is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
         
-        traded_agent = random_agent(animalModel, is_traded(:S))
+        traded_agent = random_agent(farmModel[id].animalModel, is_traded(:S))
 
         println(farmModel.timestep)
         println(typeof(traded_agent))
 
-         
+        #= 
         if typeof(traded_agent) == AnimalAgent
             push!(farmModel[id].animalModel.sending, traded_agent)
             println("Pushed agent")
             trade_partners = node_neighbors(FarmAgent, farmModel)
             trade_partner = rand(1:length(trade_partners))
+            if trade_partner == id && return
              if length(farmModel[id].animalModel.sending) != 0
                 farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
                 println("traded") 
