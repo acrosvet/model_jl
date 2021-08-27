@@ -73,7 +73,7 @@ adata = [
     (:status, recovered)
 ]
 
-data, _ = run!(farmModel, farm_agent_step!, 5; adata)
+data, _ = run!(farmModel, farm_agent_step!, 2; adata)
 
 # Export to CSV 
 CSV.write("./integrated_export_1825.csv", simRun)

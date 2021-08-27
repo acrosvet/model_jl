@@ -60,7 +60,7 @@ function farm_update_agent!(FarmAgent, farmModel)
         
         traded_agent = random_agent(farmModel[id].animalModel, is_traded(:S))
 
-        println(farmModel.timestep)
+        println(traded_agent)
         println(typeof(traded_agent))
 
         #= 
