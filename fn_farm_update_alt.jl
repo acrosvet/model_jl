@@ -71,7 +71,7 @@ function farm_update_agent!(FarmAgent, farmModel)
             println("Pushed agent")
             trade_partners = node_neighbors(FarmAgent, farmModel)
             trade_partner = rand(1:length(trade_partners))
-            if trade_partner == id && return
+            if trade_partner == id println("EXIT!") && return
              if length(farmModel[id].animalModel.sending) != 0
                 farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
                 println("traded") 
@@ -107,4 +107,4 @@ function farm_update_agent!(FarmAgent, farmModel)
  =#
     
     end
-    
+end
