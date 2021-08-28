@@ -43,7 +43,26 @@ function farm_update_agent!(FarmAgent, farmModel)
         end
     
         animalModel.calday += 1
+        
+
+    has_stage(AnimalAgent, status) = AnimalAgent.status == status
+        
+    is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
     
+    traded_agent = random_agent(animalModel, is_traded(:S))
+
+   # println(traded_agent)
+    println(typeof(traded_agent))
+
+    animalModel.sending = []
+
+    push!(animalModel.sending, traded_agent)
+
+    println(length(animalModel.sending))
+
+    kill_agent!(traded_agent.id, animalModel)
+    
+
         
         
     end
@@ -56,7 +75,7 @@ function farm_update_agent!(FarmAgent, farmModel)
         run!(farmModel[id].animalModel, agent_step!, model_step!,1)
         
        
-
+#= 
 
 
         
@@ -89,7 +108,7 @@ function farm_update_agent!(FarmAgent, farmModel)
          else
             println("Didn't push agent")
         end 
-  
+ =#  
     # Trade infection between farms 
 
 
