@@ -55,14 +55,7 @@ function farm_update_agent!(FarmAgent, farmModel)
     
         run!(farmModel[id].animalModel, agent_step!, model_step!,1)
         
-        has_stage(AnimalAgent, status) = AnimalAgent.status == status
-        
-        is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
-        
-        traded_agent = random_agent(farmModel[id].animalModel, is_traded(:S))
-
-       # println(traded_agent)
-        println(typeof(traded_agent))
+       
 
 
 

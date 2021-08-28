@@ -57,6 +57,7 @@ include("fn_animal_carrier.jl")
 
 # Fn - Update Animal Agent ----------------------------------------------    
 include("fn_animal_update.jl")
+include("fn_run_submodel.jl")
 
 animalSim = initialiseModel(100)
 
@@ -65,7 +66,7 @@ animalSim = initialiseModel(100)
 include("export_prepare_adata.jl")
 
 # Run the model 
-simRun, _ = run!(animalSim, agent_step!, model_step!, 365*time_resolution; adata)
+simRun, _ = run!(animalSim, agent_step!, model_step!, 2*time_resolution; adata)
 
 
 # Export to CSV 
