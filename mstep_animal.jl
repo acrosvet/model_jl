@@ -63,4 +63,4 @@ function model_step!(animalModel)
 
 
 end
-
+end
