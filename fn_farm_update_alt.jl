@@ -68,8 +68,7 @@ function model_step!(animalModel)
                 kill_agent!(traded_agent, animalModel)
            end 
         end        
-    println("Agents before")
-    println(length(animalModel.agents))
+
 
     # Add agents from the receiving container if this is not null
     if length(animalModel.receiving) != 0
@@ -79,16 +78,12 @@ function model_step!(animalModel)
             while true
                 haskey(animalModel.agents, id)
                 id = rand(1500:5000)
-                return println("new id")
-                return println(id)
                 break
             end
             agent.id = id 
             add_agent!(agent, animalModel)
         end
-    end
-    println("Agents after")
-    println(length(animalModel.agents))
+end
 
 end
 
@@ -97,9 +92,9 @@ end
         trade_partners = node_neighbors(FarmAgent, farmModel)
         trade_partner = rand(1:length(trade_partners))
         if trade_partner == id 
-            println("EXIT!") 
+            #println("EXIT!") 
         elseif length(farmModel[id].animalModel.sending) != 0 && trade_partner != id
             farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
-            println("traded") 
+           # println("traded") 
         end
 end
