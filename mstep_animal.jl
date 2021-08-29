@@ -29,21 +29,20 @@ function model_step!(animalModel)
     animalModel.sending = []
 
 
+
     for animal in 1:num_traded
             
         traded_agent = random_agent(animalModel, is_traded(:S))
 
         push!(animalModel.sending, traded_agent)
 
-        if haskey(animalModel.agents, traded_agent) == true
+       if haskey(animalModel.agents, traded_agent) == true
 
             kill_agent!(traded_agent, animalModel)
-        else
-            return
-        end
+        end 
     end        
 
-    println(length(animalModel.sending))
+println(length(animalModel.sending))
 
 end
 
