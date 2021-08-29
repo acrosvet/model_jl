@@ -75,13 +75,14 @@ function model_step!(animalModel)
         for i in 1:length(animalModel.receiving)
             agent = animalModel.receiving[i]
             id = rand(1500:5000)
-            while true
+#=             while true
                 haskey(animalModel.agents, id)
                 id = rand(1500:5000)
                 break
-            end
-            agent.id = id 
-            add_agent!(agent, animalModel)
+            end =#
+            #agent.id = id 
+            println(id)
+            #add_agent!(agent, animalModel)
         end
 end
 
