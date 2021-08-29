@@ -39,7 +39,7 @@ function model_step!(animalModel)
        if haskey(animalModel.agents, traded_agent) == true
 
             kill_agent!(traded_agent, animalModel)
-        end 
+       end 
     end        
 
 println(length(animalModel.sending))

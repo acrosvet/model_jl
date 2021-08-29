@@ -15,7 +15,7 @@ function farm_update_agent!(FarmAgent, farmModel)
         update_agent!(AnimalAgent) #Apply the update_agent function
         run_submodel!(AnimalAgent, animalModel)
         bacto_dyno!(AnimalAgent)
-        move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
+        #move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
 
 
        
@@ -45,26 +45,39 @@ function farm_update_agent!(FarmAgent, farmModel)
         animalModel.calday += 1
         
 
-    has_stage(AnimalAgent, status) = AnimalAgent.status == status
+        has_stage(AnimalAgent, status) = AnimalAgent.status == status
         
-    is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
+        is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
     
-    traded_agent = random_agent(animalModel, is_traded(:S))
-
-   # println(traded_agent)
-    println(typeof(traded_agent))
-
-    animalModel.sending = []
-
-    push!(animalModel.sending, traded_agent)
-
+        num_traded = rand(1:24)
+    
+        animalModel.sending = []
+    
+    
+    
+        for animal in 1:num_traded
+                
+            traded_agent = random_agent(animalModel, is_traded(:S))
+    
+            push!(animalModel.sending, traded_agent)
+    
+           if haskey(animalModel.agents, traded_agent) == true
+    
+                kill_agent!(traded_agent, animalModel)
+           end 
+        end        
+    
     println(length(animalModel.sending))
 
-    kill_agent!(traded_agent.id, animalModel)
-    
+    if length(animalModel.receiving) != 0
+        for i in 1:length(animalModel.receiving)
+            agent = animalModel.receiving[i]
+            add_agent!(agent, animalModel)
+        end
+    end
 
         
-        
+
     end
     
 
@@ -74,7 +87,14 @@ function farm_update_agent!(FarmAgent, farmModel)
     
         run!(farmModel[id].animalModel, agent_step!, model_step!,1)
         
-       
+        trade_partners = node_neighbors(FarmAgent, farmModel)
+        trade_partner = rand(1:length(trade_partners))
+        if trade_partner == id 
+            println("EXIT!") 
+        elseif length(farmModel[id].animalModel.sending) != 0 && trade_partner != id
+            farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
+            println("traded") 
+        end
 #= 
 
 
