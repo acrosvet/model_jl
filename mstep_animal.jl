@@ -20,29 +20,47 @@ function model_step!(animalModel)
 
     animalModel.calday += 1
 
-    has_stage(AnimalAgent, status) = AnimalAgent.status == status
+        # Determine what animals can be traded
+        has_stage(AnimalAgent, status) = AnimalAgent.status == status
         
-    is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
+        is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
+        
+        # Select a number to be traded
+        num_traded = rand(1:24)
+        
+        # Clear the to trade list from last step
+        animalModel.sending = []
+    
+    
+        # Put agents in the sending container according to number
+        for animal in 1:num_traded
+                
+            traded_agent = random_agent(animalModel, is_traded(:S))
+    
+            push!(animalModel.sending, traded_agent)
+    
+           if haskey(animalModel.agents, traded_agent) == true
+    
+                kill_agent!(traded_agent, animalModel)
+           end 
+        end        
 
-    num_traded = rand(1:24)
 
-    animalModel.sending = []
+    # Add agents from the receiving container if this is not null
+    if length(animalModel.receiving) != 0
+        for i in 1:length(animalModel.receiving)
+            agent = animalModel.receiving[i]
+            newid = rand(1500:5000)
+            while true
+                haskey(animalModel.agents, newid)
+                newid = rand(1500:5000)
+                break
+            end
+            agent.id = newid 
+            println(newid)
+            add_agent!(agent, animalModel)
+        end
 
-
-
-    for animal in 1:num_traded
-            
-        traded_agent = random_agent(animalModel, is_traded(:S))
-
-        push!(animalModel.sending, traded_agent)
-
-       if haskey(animalModel.agents, traded_agent) == true
-
-            kill_agent!(traded_agent, animalModel)
-       end 
-    end        
-
-println(length(animalModel.sending))
 
 end
 

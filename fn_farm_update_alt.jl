@@ -88,9 +88,9 @@ function model_step!(animalModel)
 end
 
 end
-
         run!(animalModel, agent_step!, model_step!,1)
-        
+        println(length(farmModel[id].animalModel.agents))
+        println(length(animalModel.agents))
 #=         trade_partners = node_neighbors(FarmAgent, farmModel)
         trade_partner = rand(1:length(trade_partners))
         if trade_partner == id 
