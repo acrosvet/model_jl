@@ -84,18 +84,19 @@ function model_step!(animalModel)
             println(newid)
             add_agent!(agent, animalModel)
         end
-end
 
 end
 
-        run!(farmModel[id].animalModel, agent_step!, model_step!,1)
+end
+
+        run!(animalModel, agent_step!, model_step!,1)
         
-        trade_partners = node_neighbors(FarmAgent, farmModel)
+#=         trade_partners = node_neighbors(FarmAgent, farmModel)
         trade_partner = rand(1:length(trade_partners))
         if trade_partner == id 
             #println("EXIT!") 
         elseif length(farmModel[id].animalModel.sending) != 0 && trade_partner != id
             farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
            # println("traded") 
-        end
+        end =#
 end
