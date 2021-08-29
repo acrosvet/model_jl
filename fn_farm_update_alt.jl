@@ -68,8 +68,8 @@ function farm_update_agent!(FarmAgent, farmModel)
                 kill_agent!(traded_agent, animalModel)
            end 
         end        
-    println("Receiving before")
-    println(length(animalModel.receiving))
+    println("Agents before")
+    println(length(animalModel.agents))
 
     # Add agents from the receiving container if this is not null
     if length(animalModel.receiving) != 0
@@ -79,8 +79,8 @@ function farm_update_agent!(FarmAgent, farmModel)
         end
     end
 
-    println("Receiving after")
-    println(length(animalModel.receiving))
+    println("Agents after")
+    println(length(animalModel.agents))
 
     
 
