@@ -44,17 +44,19 @@ function farm_update_agent!(FarmAgent, farmModel)
     
         animalModel.calday += 1
         
-
+        # Determine what animals can be traded
         has_stage(AnimalAgent, status) = AnimalAgent.status == status
         
         is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
-    
+        
+        # Select a number to be traded
         num_traded = rand(1:24)
-    
+        
+        # Clear the to trade list from last step
         animalModel.sending = []
     
     
-    
+        # Put agents in the sending container according to number
         for animal in 1:num_traded
                 
             traded_agent = random_agent(animalModel, is_traded(:S))
@@ -66,9 +68,10 @@ function farm_update_agent!(FarmAgent, farmModel)
                 kill_agent!(traded_agent, animalModel)
            end 
         end        
-    
-    println(length(animalModel.sending))
+    println("Receiving before")
+    println(length(animalModel.receiving))
 
+    # Add agents from the receiving container if this is not null
     if length(animalModel.receiving) != 0
         for i in 1:length(animalModel.receiving)
             agent = animalModel.receiving[i]
@@ -76,7 +79,10 @@ function farm_update_agent!(FarmAgent, farmModel)
         end
     end
 
-        
+    println("Receiving after")
+    println(length(animalModel.receiving))
+
+    
 
     end
     
