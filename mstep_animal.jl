@@ -23,20 +23,24 @@ function model_step!(animalModel)
     has_stage(AnimalAgent, status) = AnimalAgent.status == status
         
     is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
-    
-    traded_agent = random_agent(animalModel, is_traded(:S))
 
-   # println(traded_agent)
-    println(typeof(traded_agent))
+    num_traded = rand(1:24)
 
-    animalModel.sending = []
+    for animal in 1:num_traded
+            
+        traded_agent = random_agent(animalModel, is_traded(:S))
 
-    push!(animalModel.sending, traded_agent)
+    # println(traded_agent)
+        println(typeof(traded_agent))
 
-    println(length(animalModel.sending))
+        animalModel.sending = []
 
-    kill_agent!(traded_agent.id, animalModel)
-    
+        push!(animalModel.sending, traded_agent)
+
+        println(length(animalModel.sending))
+
+        kill_agent!(traded_agent.id, animalModel)
+    end        
 
     
 end
