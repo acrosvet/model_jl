@@ -75,6 +75,10 @@ function farm_update_agent!(FarmAgent, farmModel)
     if length(animalModel.receiving) != 0
         for i in 1:length(animalModel.receiving)
             agent = animalModel.receiving[i]
+            while haskey(animalModel.agents, id) == false
+                id = rand(1500:5000)
+            end
+            agent.id = id
             add_agent!(agent, animalModel)
         end
     end
