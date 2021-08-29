@@ -76,8 +76,8 @@ function model_step!(animalModel)
             agent = animalModel.receiving[i]
             newid = rand(1500:5000)
             while true
-                haskey(animalModel.agents, id)
-                id = rand(1500:5000)
+                haskey(animalModel.agents, newid)
+                newid = rand(1500:5000)
                 break
             end
             agent.id = newid 
