@@ -15,7 +15,7 @@ function farm_update_agent!(FarmAgent, farmModel)
         update_agent!(AnimalAgent) #Apply the update_agent function
         run_submodel!(AnimalAgent, animalModel)
         bacto_dyno!(AnimalAgent)
-        move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
+       # move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
 
 
        
@@ -93,9 +93,9 @@ end
 #=         trade_partners = node_neighbors(FarmAgent, farmModel)
         trade_partner = rand(1:length(trade_partners))
         if trade_partner == id 
-            #println("EXIT!") 
-        elseif length(farmModel[id].animalModel.sending) != 0 && trade_partner != id
-            farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
+            println("EXIT!") 
+        elseif length(animalModel.sending) != 0 && trade_partner != id
+            farmModel[trade_partner].animalModel.receiving = animalModel.sending
            # println("traded") 
-        end =#
+        end  =#
 end
