@@ -22,7 +22,7 @@ function farm_update_agent!(FarmAgent, farmModel)
 
     end
 
-    function model_step!(animalModel)
+function model_step!(animalModel)
         
         #Define the proximity for which infection may occur
         birth!(animalModel)
@@ -75,26 +75,23 @@ function farm_update_agent!(FarmAgent, farmModel)
     if length(animalModel.receiving) != 0
         for i in 1:length(animalModel.receiving)
             agent = animalModel.receiving[i]
-            while haskey(animalModel.agents, id) == false
+            id = rand(1500:5000)
+            while true
+                haskey(animalModel.agents, id)
                 id = rand(1500:5000)
+                return println("new id")
+                return println(id)
+                break
             end
-            agent.id = id
+            agent.id = id 
             add_agent!(agent, animalModel)
         end
     end
-
     println("Agents after")
     println(length(animalModel.agents))
 
-    
+end
 
-    end
-    
-
-    
-
-    
-    
         run!(farmModel[id].animalModel, agent_step!, model_step!,1)
         
         trade_partners = node_neighbors(FarmAgent, farmModel)
@@ -105,52 +102,4 @@ function farm_update_agent!(FarmAgent, farmModel)
             farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
             println("traded") 
         end
-#= 
-
-
-        
-        if typeof(traded_agent) == AnimalAgent
-            push!(farmModel[id].animalModel.sending, traded_agent)
-            println("Pushed agent")
-            trade_partners = node_neighbors(FarmAgent, farmModel)
-            trade_partner = rand(1:length(trade_partners))
-            if trade_partner == id 
-                println("EXIT!") 
-                return
-            elseif length(farmModel[id].animalModel.sending) != 0 && trade_partner != id
-                farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
-                println("traded") 
-                agent  = farmModel[trade_partner].animalModel.receiving[1]
-                println("Number of agents before")
-                println(length(farmModel[trade_partner].animalModel.agents))
-                #agent.id = rand(5000:1000000) # ran number for new agent id 4
-                #push!(agent, farmModel[trade_partner].amimalModel.agents)
-                #add_agent!(agent, farmModel[trade_partner].animalModel)
-                #=
-                #kill_agent!(agent, farmModel[id].animalModel)
-                println("Agent sent", agent.id)
-                println("Number of agents after")
-                println(trade_partner)
-                println(length(farmModel[trade_partner].animalModel.agents)) =#
-            else
-                return
-            end
-         else
-            println("Didn't push agent")
-        end 
- =#  
-    # Trade infection between farms 
-
-
- #   println(trade_partners)
-
-#=     if typeof(trade_partners) == Nothing 
-        return
-    else
-         trade_partner = rand(1:length(trade_partners))
-        farmModel[trade_partner].animalModel.receiving = farmModel[id].animalModel.sending
-        println(farmModel[trade_partner].animalModel.receiving) 
-    end    
- =#
-    
-    end
+end
