@@ -59,7 +59,7 @@ include("abm_farm.jl")
 
 include("astep_farm.jl")
 
-include("fn_farm_update_alt.jl")
+include("fn_farm_update_alt2.jl")
 
 include("fn_farm_contact.jl")
 
