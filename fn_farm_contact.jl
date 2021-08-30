@@ -18,6 +18,6 @@ function contact!(FarmAgent, farmModel)
     
         farmModel[trade_partner].trades_to = FarmAgent.trades_from
 
-        println(FarmAgent.trades_to)
+        #println(FarmAgent.trades_to)
         
 end
