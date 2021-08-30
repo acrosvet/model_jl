@@ -48,5 +48,4 @@ function farm_step!(FarmAgent, farmModel)
     
 end
 
-
 step!(farmModel, farm_step!, 3)
