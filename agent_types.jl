@@ -34,8 +34,8 @@ mutable struct FarmAgent <: AbstractAgent
     pos::Int
     status::Symbol #Infection status
     tradelevel::Int #Trading relationships
-    trades_from::Int
-    trades_to::Int
+    trades_from::Vector
+    trades_to::Vector
     ncows::Int #Number of animals
     system::Symbol #Calving system
     animalModel::AgentBasedModel
