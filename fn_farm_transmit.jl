@@ -7,7 +7,7 @@ if length(FarmAgent.trades_to) != 0
     for i in 1:length(FarmAgent.trades_to)
         agent = FarmAgent.trades_to[i]
         println(agent)
-        #add_agent!(FarmAgent.animalModel, FarmAgent.trades_to[i])
+        add_agent!(agent, FarmAgent.animalModel)
         println("This worked")
     end
 end
