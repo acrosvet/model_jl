@@ -1,6 +1,6 @@
 
     function agent_step!(AnimalAgent, animalModel)
-        move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
+        #move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
         treatment!(AnimalAgent, animalModel) #Introduce treatment
         treatment_effect!(AnimalAgent) #Effect of treatment on transmission.
         endTreatment!(AnimalAgent, animalModel)
