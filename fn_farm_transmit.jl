@@ -11,7 +11,7 @@ if length(FarmAgent.trades_to) != 0
         agent.id = newid
         agent.pos = Tuple(10*rand(FarmAgent.animalModel.rng, 2))
         #Works until the second timestep
-        add_agent!(agent, FarmAgent.animalModel)
+        #add_agent!(agent, FarmAgent.animalModel)
         println("This worked")
     end
 end
