@@ -9,3 +9,5 @@ if length(FarmAgent.trades_to) != 0
         println("This worked")
     end
 end
+
+end
