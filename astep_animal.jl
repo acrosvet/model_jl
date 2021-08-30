@@ -11,6 +11,5 @@
         update_agent!(AnimalAgent) #Apply the update_agent function
         run_submodel!(AnimalAgent, animalModel)
         bacto_dyno!(AnimalAgent)
-        #daytrader!(FarmAgent, animalModel)
 
     end
