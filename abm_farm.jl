@@ -36,7 +36,7 @@ for farm in 1:numfarms
     trades_to = 0
     animalModel = initialiseModel(ncows)
     #submodel = submodel
-    add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel)
+    add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel, daytraders)
     
 end
 
