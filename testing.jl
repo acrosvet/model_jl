@@ -34,7 +34,7 @@ function farm_step!(FarmAgent, farmModel)
 
         #println(farmModel[trade_partner].trades_to)
 
-    step!(animalModel, agent_step!, model_step!, 1)
+    step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
     
     farm_id = FarmAgent.id
     num_agents = length(FarmAgent.animalModel.agents)
