@@ -5,7 +5,7 @@ function initialiseFarms(
     calday = rand(1:365),
     tradelevel = 2,
     timestep = 1,
-    daytraders = {},
+    daytraders = @dict(),
 )
 
 
