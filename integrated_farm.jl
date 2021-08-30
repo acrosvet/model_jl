@@ -65,6 +65,8 @@ include("fn_farm_contact.jl")
 
 include("fn_run_submodel.jl")
 
+include("fn_farm_transmit.jl")
+
 infected(x) = count(i == :I for i in x)
 recovered(x) = count(i == :S for i in x)
 
