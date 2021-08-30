@@ -14,8 +14,10 @@ function contact!(FarmAgent, farmModel)
             break
         end
 
+        FarmAgent.trades_from = FarmAgent.animalModel.sending
     
+        farmModel[trade_partner].trades_to = FarmAgent.trades_from
 
-        println(FarmAgent.animalModel.sending)
+        println(FarmAgent.trades_to)
         
 end
