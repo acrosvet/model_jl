@@ -13,4 +13,9 @@ function contact!(FarmAgent, farmModel)
             trade_partner = rand(1:length(trade_partners))
             break
         end
+
+    
+
+        println(FarmAgent.animalModel.sending)
+        
 end
