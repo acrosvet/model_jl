@@ -67,21 +67,10 @@ function model_step!(animalModel)
         end
     end
 
-    # Add agents from the receiving container if this is not null
-#=     if length(animalModel.receiving) != 0
-        for i in 1:length(animalModel.receiving)
-            agent = animalModel.receiving[i]
-            newid = rand(1500:5000)
-            while true
-                haskey(animalModel.agents, newid)
-                newid = rand(1500:5000)
-                break
-            end
-            agent.id = newid 
-            println(newid)
-            add_agent!(agent, animalModel)
+#=     if length(animalModel.sending) != 0
+        for i in 1:length(animalModel.sending)
+            kill_agent!(animalModel.sending[i], animalModel)
         end
+    end
  =#
-
-#end
 end
