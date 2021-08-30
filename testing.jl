@@ -32,16 +32,21 @@ function farm_step!(FarmAgent, farmModel)
     
         farmModel[trade_partner].trades_to = FarmAgent.trades_from
 
+        FarmAgent.animalModel.receiving = FarmAgent.trades_to
+
         #println(farmModel[trade_partner].trades_to)
 
     step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
     
     farm_id = FarmAgent.id
     num_agents = length(FarmAgent.animalModel.agents)
-
+    
+    number_received = length(FarmAgent.animalModel.receiving)
+    
+    #println("The number of animals received by farm $farm_id is $number_received")
     println("The number of animals in $farm_id is $num_agents ")
     
 end
 
 
-step!(farmModel, farm_step!, 10)
+step!(farmModel, farm_step!, 3)
