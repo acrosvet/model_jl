@@ -1,6 +1,6 @@
 function model_step!(animalModel)
     #Define the proximity for which infection may occur
-    birth!(animalModel)
+    #birth!(animalModel)
     r = animalModel.animalProximityRadius
     for (a1,a2) in interacting_pairs(animalModel, r, :nearest)
         elastic_collision!(a1, a2) #Collison dynamics for each animal

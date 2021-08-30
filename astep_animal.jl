@@ -5,7 +5,7 @@
         treatment_effect!(AnimalAgent) #Effect of treatment on transmission.
         endTreatment!(AnimalAgent, animalModel)
         retreatment!(AnimalAgent, animalModel) #Effect of retreatment
-        mortality!(AnimalAgent, animalModel) #Introduce mortality
+        #mortality!(AnimalAgent, animalModel) #Introduce mortality
         recover!(AnimalAgent, animalModel) # Introduce recovery
         carrierState!(AnimalAgent, animalModel) #Introduce a carrier state
         update_agent!(AnimalAgent) #Apply the update_agent function
@@ -13,3 +13,4 @@
         bacto_dyno!(AnimalAgent)
 
     end
+ 
