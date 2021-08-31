@@ -33,7 +33,8 @@ function birth!(animalModel)
             stage = :C
             dim = 0
             days_dry = 0
-            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry)    
+            trade_status = false
+            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)    
         end
 
 end
