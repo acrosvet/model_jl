@@ -28,6 +28,9 @@ function daytrader!(FarmAgent, animalModel)
         # Select a random agent from the eligible list of agents
        traded_agent = random_agent(animalModel, is_traded(:S))
 
+       if typeof(traded_agent) == Nothing
+        break
+       end
        #Push that to the sending field in the animalModel
        push!(animalModel.sending, traded_agent)
 
