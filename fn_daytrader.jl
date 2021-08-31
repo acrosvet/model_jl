@@ -10,7 +10,7 @@ function daytrader!(FarmAgent, animalModel)
    
 
    # Determine what animals can be traded based on an assigned status
-   has_stage(AnimalAgent, status) = AnimalAgent.status == status
+   has_stage(AnimalAgent, status) = AnimalAgent.trade_status == status
    
    #Primitive function, decide to trade based on status
    is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
@@ -26,7 +26,7 @@ function daytrader!(FarmAgent, animalModel)
    for animal in 1:num_traded
         
         # Select a random agent from the eligible list of agents
-       traded_agent = random_agent(animalModel, is_traded(:S))
+       traded_agent = random_agent(animalModel, is_traded(true))
 
        # Break the function if the pushed agent doesn't exist.
        if typeof(traded_agent) == Nothing
