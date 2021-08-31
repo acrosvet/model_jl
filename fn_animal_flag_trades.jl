@@ -22,5 +22,5 @@ function flag_trades!(AnimalAgent, animalModel)
         AnimalAgent.trade_status = false
     end
 
-    println(AnimalAgent.trade_status)
+    #println(AnimalAgent.trade_status)
 end
