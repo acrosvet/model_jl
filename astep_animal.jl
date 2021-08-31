@@ -11,6 +11,7 @@
         update_agent!(AnimalAgent) #Apply the update_agent function
         run_submodel!(AnimalAgent, animalModel) #Run the bacterial submodel
         bacto_dyno!(AnimalAgent) #Determine the overall bacterial dynamics for an animal
+        flag_trades!(AnimalAgent, animalModel)
 
     end
  
