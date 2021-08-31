@@ -1,44 +1,69 @@
+# Required packages 
+include("packages.jl")
 
+include("agent_types.jl")
 
-farmModel = initialiseFarms()
+# ABM - Bacteria ---------------------------------------
+include("gridsub.jl")   
 
+# Def - time resolution ------------
 
-
-function farm_step!(FarmAgent, farmModel)
-
-    animalModel = FarmAgent.animalModel
-
-    farmno = FarmAgent.id
-
-        trade_partners = node_neighbors(FarmAgent, farmModel)
-
-       #println(trade_partners)
-        
-        trade_partner = rand(1:length(trade_partners))
-
-        while trade_partner == farmno
-            trade_partner = rand(1:length(trade_partners))
-            break
-        end
-
-        FarmAgent.trades_from = FarmAgent.animalModel.sending
+const time_resolution = 1
     
-        farmModel[trade_partner].trades_to = FarmAgent.trades_from
+# Animal ABM
 
-        FarmAgent.animalModel.receiving = FarmAgent.trades_to
+include("abm_animal.jl")
 
-        #println(farmModel[trade_partner].trades_to)
+# Animal transmission functions -------
 
-    step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
-    
-    farm_id = FarmAgent.id
-    num_agents = length(FarmAgent.animalModel.agents)
-    
-    number_received = length(FarmAgent.animalModel.receiving)
-    
-    #println("The number of animals received by farm $farm_id is $number_received")
-    println("The number of animals in $farm_id is $num_agents ")
-    
-end
+include("fns_animal_transmission.jl")
+
+# Animal treatment -------------
+
+include("fns_animal_treatment.jl")
+
+# Bacterial dynamics --------------
+
+include("fn_bacteria_dynamics.jl")
+
+# Animal recovery -----------------
+
+include("fn_animal_recovery.jl")
+
+# Fn - Mortality ------------------------------------------------------------    
+
+include("fn_animal_mortality.jl")
+
+# Fn - Bact (agent step) ----------------------------------
+
+include("astep_bacteria.jl")
+
+# Fn - Animal Model Step -------------------------------------
+
+include("mstep_animal.jl")
+
+# Fn - Add new calves -------------------------------------------------------------
+include("fn_animal_birth.jl")
+
+# Fn - Animal Agent Step -----------------------------------------------------------    
+include("astep_animal.jl")
+
+# Fn - Carrier State ---------------------------------------------    
+include("fn_animal_carrier.jl")
+
+# Fn - Update Animal Agent ----------------------------------------------    
+include("fn_animal_update.jl")
+
+include("abm_farm.jl")
+
+include("fn_farm_contact.jl")
+
+include("fn_run_submodel.jl")
+
+include("fn_farm_transmit.jl")
+
+include("fn_daytrader.jl")
+
+include("mstep_farm.jl")
 
 step!(farmModel, farm_step!, 10)
