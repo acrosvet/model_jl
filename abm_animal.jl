@@ -10,7 +10,7 @@
         mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
         mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
         movement = 0.1, #Movement in continuous space
-        βᵣ = 0.3/time_resolution, #Beta (resistant) NOT TIME DEPENDENT?!
+        βᵣ = 0.3/time_resolution, #Beta (resistant) 
         βₛ = 0.6/time_resolution, #Beta (sensitive)
         init_is = 5, # Number initially infected sensitive
         init_ir = 1, # Number initially infected resistant
@@ -157,7 +157,8 @@
         stage = initial_stage(age)
         dim = initial_dim(stage, calday)
         days_dry = 0
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry)   
+        trade_status = false
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)   
     
     end
 
