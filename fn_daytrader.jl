@@ -28,15 +28,12 @@ function daytrader!(FarmAgent, animalModel)
         # Select a random agent from the eligible list of agents
        traded_agent = random_agent(animalModel, is_traded(:S))
 
+       # Break the function if the pushed agent doesn't exist.
        if typeof(traded_agent) == Nothing
         break
        end
        #Push that to the sending field in the animalModel
        push!(animalModel.sending, traded_agent)
-
-        println(typeof(traded_agent))
-       println(traded_agent)
-
 
        # If that agent is present in the list of agents, remove it from the sending farm.
       if haskey(animalModel.agents, traded_agent.id) == true
