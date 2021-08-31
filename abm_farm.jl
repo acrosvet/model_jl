@@ -5,7 +5,7 @@ function initialiseFarms(
     calday = rand(1:365),
     tradelevel = 2,
     timestep = 1,
-    daytraders = @dict(),
+   # daytraders = @dict(),
 )
 
 
@@ -36,7 +36,7 @@ for farm in 1:numfarms
     trades_to = []
     animalModel = initialiseModel(ncows)
     #submodel = submodel
-    add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel, daytraders)
+    add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel)
     
 end
 
