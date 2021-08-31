@@ -1,8 +1,18 @@
+"""
+ daytrader!(FarmAgent, animalModel)
+
+ * Selects animals to trade from the animalModel of a FarmAgent to the animalModel of another FarmAgent
+
+
+"""
 function daytrader!(FarmAgent, animalModel)
-    
-   # Determine what animals can be traded
+
+   
+
+   # Determine what animals can be traded based on an assigned status
    has_stage(AnimalAgent, status) = AnimalAgent.status == status
-        
+   
+   #Primitive function, decide to trade based on status
    is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
    
    # Select a number to be traded
@@ -14,11 +24,18 @@ function daytrader!(FarmAgent, animalModel)
 
    # Put agents in the sending container according to number
    for animal in 1:num_traded
-           
+        
+        # Select a random agent from the eligible list of agents
        traded_agent = random_agent(animalModel, is_traded(:S))
 
+       #Push that to the sending field in the animalModel
        push!(animalModel.sending, traded_agent)
 
+        println(typeof(traded_agent))
+       println(traded_agent)
+
+
+       # If that agent is present in the list of agents, remove it from the sending farm.
       if haskey(animalModel.agents, traded_agent.id) == true
 
            kill_agent!(traded_agent, animalModel)
