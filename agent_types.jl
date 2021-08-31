@@ -27,6 +27,7 @@ mutable struct AnimalAgent <: AbstractAgent
     stage::Symbol
     dim::Int
     days_dry::Int
+    trade_status::Bool
 end
 
 mutable struct FarmAgent <: AbstractAgent
