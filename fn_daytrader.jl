@@ -61,7 +61,8 @@ if length(animalModel.receiving) != 0
            since_tx = animalModel.receiving[i].since_tx
            dim = animalModel.receiving[i].dim
            days_dry = animalModel.receiving[i].days_dry
-           add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry)   
+           trade_stauts = animalModel.receiving[i].trade_status
+           add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)   
    end
 end
 
