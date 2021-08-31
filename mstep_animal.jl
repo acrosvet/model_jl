@@ -39,9 +39,10 @@ function model_step!(animalModel)
     
             push!(animalModel.sending, traded_agent)
     
-           if haskey(animalModel.agents, traded_agent) == true
+           if haskey(animalModel.agents, traded_agent.id) == true
     
                 kill_agent!(traded_agent, animalModel)
+                println("Agent removed")
            end 
         end        
 
