@@ -27,11 +27,14 @@ function farm_step!(FarmAgent, farmModel)
 
             num_trades_to = abs(FarmAgent.animalModel.tradeable_stock)
 
+            agents_to_remove = []
+
             for i in 1:num_trades_to
                 if length(FarmAgent.animalModel.sending) != 0
                     push!(farmModel[trade_partner].animalModel.receiving, FarmAgent.animalModel.sending[i]) 
                     println("Agent traded to destination herd")
-
+                    push!(agents_to_remove, FarmAgent.animalModel.sending[i])
+                    println("Sent to purge list")
                 else
                     println("Send list empty")
                 end
