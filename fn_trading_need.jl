@@ -8,7 +8,7 @@ function trading_need!(animalModel)
 
     current_size = length(animalModel.agents)
 
-    optimal_heifers = 0.3*optimal_size
+    optimal_heifers = Int(floor(0.3*optimal_size))
 
     optimal_weaned = 0.3*optimal_size
    
@@ -28,7 +28,11 @@ function trading_need!(animalModel)
 
     heifers_needed = optimal_heifers - current_heifers
 
-    println("Differenec between optimal and the current number is $heifers_needed")
+    println("The current herd size is $current_size")
+    println("The optimal herd size is $optimal_size")
+    println("The optimal number of heifers is $optimal_heifers")
+    println("The current number of heifers is $current_heifers")
+    println("Difference between optimal and the current number is $heifers_needed")
 
 
 end
