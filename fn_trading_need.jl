@@ -36,7 +36,19 @@ function trading_need!(animalModel)
     tradeable_calves = optimal_calves - current_calves
     tradeable_lactating = optimal_lactating - current_lactating
 
-    
+    animalModel.tradeable_calves = tradeable_calves
+    animalModel.tradeable_heifers = tradeable_heifers
+    animalModel.tradeable_lactating = tradeable_lactating
+    animalModel.tradeable_weaned = tradeable_weaned
+
+    println("Tradeable calves")
+    println(animalModel.tradeable_calves)
+    println("Tradeable heifers")
+    println(animalModel.tradeable_heifers)
+    println("Tradeable lactating")
+    println(animalModel.tradeable_lactating)
+    println("Tradeable weaned")
+    println(animalModel.tradeable_weaned)
 
 #= 
     println("The current herd size is $current_size")
