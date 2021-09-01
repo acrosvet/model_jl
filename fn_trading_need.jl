@@ -41,6 +41,9 @@ function trading_need!(animalModel)
     animalModel.tradeable_lactating = tradeable_lactating
     animalModel.tradeable_weaned = tradeable_weaned
 
+    println("tradeable lactating is:")
+    println(animalModel.tradeable_lactating)
+
 #=     println("Tradeable calves")
     println(animalModel.tradeable_calves)
     println("Tradeable heifers")
