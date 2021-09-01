@@ -60,7 +60,7 @@ include("fn_farm_contact.jl")
 
 include("fn_run_submodel.jl")
 
-include("fn_farm_transmit.jl")
+#include("fn_farm_transmit.jl")
 
 include("fn_daytrader.jl")
 
