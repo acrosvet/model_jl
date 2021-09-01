@@ -20,9 +20,6 @@ function model_step!(animalModel)
     #Introduce open population with animals born into the model
     birth!(animalModel)
 
-    #Determine trading need
-
-    trading_need!(animalModel)
 
     #Define the proximity for which infection may occur
 
@@ -50,4 +47,7 @@ function model_step!(animalModel)
     # Trade animals between farms using the daytrader function
     daytrader!(FarmAgent, animalModel)
 
+    #Determine trading need
+
+    trading_need!(animalModel)
 end
