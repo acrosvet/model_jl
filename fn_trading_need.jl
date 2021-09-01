@@ -14,7 +14,7 @@ function trading_need!(animalModel)
 
     optimal_calves = Int(floor(0.2*optimal_size))
 
-    optimal_milkers = optimal_size - optimal_calves - optimal_heifers - optimal_weaned
+    optimal_lactating = optimal_size - optimal_calves - optimal_heifers - optimal_weaned
    
     function current_stock(animalModel, stage)
         counter = 0
@@ -31,13 +31,19 @@ function trading_need!(animalModel)
     current_heifers = current_stock(animalModel, :H)
     current_lactating = current_stock(animalModel, :L)
 
-    heifers_needed = optimal_heifers - current_heifers
+    tradeable_heifers = optimal_heifers - current_heifers
+    tradeable_weaned = optimal_weaned - current_weaned
+    tradeable_calves = optimal_calves - current_calves
+    tradeable_lactating = optimal_lactating - current_lactating
 
+    
+
+#= 
     println("The current herd size is $current_size")
     println("The optimal herd size is $optimal_size")
     println("The optimal number of heifers is $optimal_heifers")
     println("The current number of heifers is $current_heifers")
     println("Difference between optimal and the current number is $heifers_needed")
-
+ =#
 
 end
