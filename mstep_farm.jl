@@ -16,21 +16,23 @@ function farm_step!(FarmAgent, farmModel)
         end
 
         println("Farm number $farmno can trade")
-        println(FarmAgent.animalModel.tradeable_stock)
+        println(FarmAgent.animalModel.tradeable_heifers)
         println("Farm number $trade_partner can trade")
-        println(farmModel[trade_partner].animalModel.tradeable_stock)
-
-        if FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animalModel.tradeable_stock > 0
+        println(farmModel[trade_partner].animalModel.tradeable_heifers)
+        
+        agents_to_remove = []
+        
+        if FarmAgent.animalModel.tradeable_heifers < 0 && farmModel[trade_partner].animalModel.tradeable_heifers > 0
             println("let's trade!")
 
             FarmAgent.trades_from = FarmAgent.animalModel.sending
 
-            num_trades_to = abs(FarmAgent.animalModel.tradeable_stock) ≤ length(FarmAgent.animalModel.sending) ? abs(FarmAgent.animalModel.tradeable_stock) : length(FarmAgent.animalModel.sending)
+            num_trades_to = abs(FarmAgent.animalModel.tradeable_heifers) ≤ length(FarmAgent.animalModel.sending) ? abs(FarmAgent.animalModel.tradeable_heifers) : length(FarmAgent.animalModel.sending)
 
 
             println("Number of trades to is $num_trades_to")
 
-            agents_to_remove = []
+   
 
             for i in 1:num_trades_to
                 if length(FarmAgent.animalModel.sending) != 0
@@ -46,7 +48,14 @@ function farm_step!(FarmAgent, farmModel)
             println(length(farmModel[trade_partner].animalModel.receiving))
         end
 
+# Remove the traded agents
+        for i in 1:length(agents_to_remove)
+            if haskey(animalModel.agents, agents_to_remove[i].id) == true
 
+            kill_agent!(agents_to_remove[i].id, animalModel)
+            println("Traded agent removed from source farm")
+            end  
+        end
 #=         FarmAgent.trades_from = FarmAgent.animalModel.sending
     
         farmModel[trade_partner].trades_to = FarmAgent.trades_from
