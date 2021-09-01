@@ -44,6 +44,7 @@
         tradeable_calves = 0,
         tradeable_lactating = 0,
         tradeable_weaned = 0,
+        tradeable_stock = 0,
     )
     #End header
     #Body
@@ -78,7 +79,8 @@
         tradeable_calves,
         tradeable_heifers,
         tradeable_lactating,
-        tradeable_weaned,)# Dictionary of disease properties
+        tradeable_weaned,
+        tradeable_stock,)# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
