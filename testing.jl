@@ -70,4 +70,6 @@ include("fn_animal_flag_trades.jl")
 
 include("fn_trading_need.jl")
 
+include("fn_current_heifers.jl")
+
 step!(farmModel, farm_step!, 5)
