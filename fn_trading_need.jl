@@ -10,12 +10,16 @@ function trading_need!(animalModel)
 
     optimal_heifers = Int(floor(0.3*optimal_size))
 
-    optimal_weaned = 0.3*optimal_size
+    optimal_weaned = Int(floor(0.2*optimal_size))
+
+    optimal_calves = Int(floor(0.2*optimal_size))
+
+    optimal_milkers = optimal_size - optimal_calves - optimal_heifers - optimal_weaned
    
-    function current_heifers(animalModel)
+    function current_stock(animalModel, stage)
         counter = 0
         for i in 1:length(animalModel.agents)
-            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :H
+            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == stage
                 counter += 1
             end
         end
@@ -23,8 +27,43 @@ function trading_need!(animalModel)
 
     end
 
+    function current_weaned(animalModel)
+        counter = 0
+        for i in 1:length(animalModel.agents)
+            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :W
+                counter += 1
+            end
+        end
+        return counter
 
-    current_heifers = current_heifers(animalModel)
+    end
+
+    function current_calves(animalModel)
+        counter = 0
+        for i in 1:length(animalModel.agents)
+            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :C
+                counter += 1
+            end
+        end
+        return counter
+
+    end
+
+    function current_lactating(animalModel)
+        counter = 0
+        for i in 1:length(animalModel.agents)
+            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :L
+                counter += 1
+            end
+        end
+        return counter
+
+    end
+
+    current_weaned = current_stock(animalModel, :W)
+    current_calves = current_stock(animalModel, :C)
+    current_heifers = current_stock(animalModel, :H)
+    current_lactating = current_stock(animalModel, :L)
 
     heifers_needed = optimal_heifers - current_heifers
 
