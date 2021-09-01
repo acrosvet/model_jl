@@ -32,5 +32,6 @@ function farm_step!(FarmAgent, farmModel)
     
     #println("The number of animals received by farm $farm_id is $number_received")
     println("The number of animals in $farm_id is $num_agents ")
+
     
 end
