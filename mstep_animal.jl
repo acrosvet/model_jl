@@ -45,7 +45,7 @@ function model_step!(animalModel)
     animalModel.calday += 1
 
     # Trade animals between farms using the daytrader function
-    #daytrader!(FarmAgent, animalModel)
+    daytrader!(FarmAgent, animalModel)
 
     #Determine trading need
 
