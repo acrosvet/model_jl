@@ -9,9 +9,9 @@ function daytrader!(FarmAgent, animalModel)
 
    # Determine if a farm needs agents traded to it:
 
-   if animalModel.tradeable_lactating < 0
+   if animalModel.tradeable_stock < 0
       println("Has cows!")
-   elseif animalModel.tradeable_lactating > 0 
+   elseif animalModel.tradeable_stock > 0 
       println("Needs cows!")
    end 
 
