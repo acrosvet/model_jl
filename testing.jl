@@ -74,4 +74,4 @@ include("fn_current_heifers.jl")
 
 include("fn_current_weaned.jl")
 
-step!(farmModel, farm_step!, 5)
+step!(farmModel, farm_step!, 2)
