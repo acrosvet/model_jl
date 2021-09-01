@@ -69,7 +69,8 @@
         movement, 
         rng,
         sending,
-        receiving,)# Dictionary of disease properties
+        receiving,
+        herd_size = N,)# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
