@@ -14,7 +14,7 @@ function trading_need!(animalModel)
 
     optimal_calves = Int(floor(0.2*optimal_size))
 
-    optimal_lactating = optimal_size - optimal_calves - optimal_heifers - optimal_weaned
+    optimal_lactating = Int(floor(0.5*(optimal_size - optimal_calves - optimal_heifers - optimal_weaned)))
    
     function current_stock(animalModel, stage)
         counter = 0
