@@ -5,17 +5,18 @@ function contact!(FarmAgent, farmModel)
 
         trade_partners = node_neighbors(FarmAgent, farmModel)
 
-       # println(trade_partners)
+       println(trade_partners)
         
         trade_partner = rand(1:length(trade_partners))
+        
+        println(FarmAgent.animalModel.tradeable_stock)
+        println(farmModel[trade_partner].animalModel.tradeable_stock)
 
         while trade_partner == farmno
             trade_partner = rand(1:length(trade_partners))
             break
         end
 
-        println(FarmAgent.animalModel.tradeable_stock)
-        println(farmModel[trade_partner].animalModel.tradeable_stock)
 
         if FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animalModel.tradeable_stock > 0
             println("let's trade!")
