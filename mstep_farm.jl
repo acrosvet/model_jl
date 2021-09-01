@@ -15,17 +15,42 @@ function farm_step!(FarmAgent, farmModel)
             break
         end
 
+        println("Farm number $farmno can trade")
+        println(FarmAgent.animalModel.tradeable_stock)
+        println("Farm number $trade_partner can trade")
+        println(farmModel[trade_partner].animalModel.tradeable_stock)
+
         if FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animalModel.tradeable_stock > 0
             println("let's trade!")
+
+            FarmAgent.trades_from = FarmAgent.animalModel.sending
+
+            num_trades_to = abs(FarmAgent.animalModel.tradeable_stock)
+
+            for i in 1:num_trades_to
+                if length(FarmAgent.animalModel.sending) != 0
+                    push!(farmModel[trade_partner].animalModel.receiving, FarmAgent.animalModel.sending[i]) 
+                    println("Agent traded to destination herd")
+                    if haskey(animalModel.agents, FarmAgent.animalModel.sending[i].id) == true
+
+                        kill_agent!(FarmAgent.animalModel.sending[i].id, animalModel)
+                        println("Traded agent removed from source herd")
+                   end 
+                else
+                    println("Send list empty")
+                end
+            end
+
+            println(length(farmModel[trade_partner].animalModel.receiving))
         end
 
 
-        FarmAgent.trades_from = FarmAgent.animalModel.sending
+#=         FarmAgent.trades_from = FarmAgent.animalModel.sending
     
         farmModel[trade_partner].trades_to = FarmAgent.trades_from
 
         FarmAgent.animalModel.receiving = FarmAgent.trades_to
-
+ =#
         #println(farmModel[trade_partner].trades_to)
 
     step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
