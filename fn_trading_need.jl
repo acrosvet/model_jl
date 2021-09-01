@@ -24,7 +24,7 @@ function trading_need!(animalModel)
 
     current_heifers = current_heifers(animalModel)
 
-    println(current_heifers)
+    println("The current number of heifers is $current_heifers")
 
 
 end
