@@ -58,4 +58,5 @@ function trading_need!(animalModel)
     println("Difference between optimal and the current number is $heifers_needed")
  =#
 
+
 end
