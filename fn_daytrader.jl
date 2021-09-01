@@ -45,7 +45,7 @@ function daytrader!(FarmAgent, animalModel)
       if haskey(animalModel.agents, traded_agent.id) == true
 
            kill_agent!(traded_agent, animalModel)
-           println("Agent removed")
+           #println("Agent removed")
       end 
    end        
 
