@@ -11,10 +11,24 @@ function trading_need!(animalModel)
     optimal_heifers = 0.3*optimal_size
 
     optimal_weaned = 0.3*optimal_size
+   
+    function current_heifers(animalModel)
+        counter = 0
+        for i in 1:length(animalModel.agents)
+            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :H
+                counter += 1
+            end
+        end
+        return counter
+
+    end
+
 
     current_heifers = current_heifers(animalModel)
 
-    println("The current number of heifers is $current_heifers")
+    heifers_needed = optimal_heifers - current_heifers
+
+    println("Differenec between optimal and the current number is $heifers_needed")
 
 
 end
