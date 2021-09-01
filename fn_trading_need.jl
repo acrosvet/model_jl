@@ -26,40 +26,6 @@ function trading_need!(animalModel)
         return counter
 
     end
-
-    function current_weaned(animalModel)
-        counter = 0
-        for i in 1:length(animalModel.agents)
-            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :W
-                counter += 1
-            end
-        end
-        return counter
-
-    end
-
-    function current_calves(animalModel)
-        counter = 0
-        for i in 1:length(animalModel.agents)
-            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :C
-                counter += 1
-            end
-        end
-        return counter
-
-    end
-
-    function current_lactating(animalModel)
-        counter = 0
-        for i in 1:length(animalModel.agents)
-            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :L
-                counter += 1
-            end
-        end
-        return counter
-
-    end
-
     current_weaned = current_stock(animalModel, :W)
     current_calves = current_stock(animalModel, :C)
     current_heifers = current_stock(animalModel, :H)
