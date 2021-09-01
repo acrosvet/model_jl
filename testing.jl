@@ -72,4 +72,6 @@ include("fn_trading_need.jl")
 
 include("fn_current_heifers.jl")
 
+include("fn_current_weaned.jl")
+
 step!(farmModel, farm_step!, 5)
