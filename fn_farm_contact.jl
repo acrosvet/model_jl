@@ -14,6 +14,13 @@ function contact!(FarmAgent, farmModel)
             break
         end
 
+        println(FarmAgent.animalModel.tradeable_stock)
+        println(farmModel[trade_partner].animalModel.tradeable_stock)
+
+        if FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animalModel.tradeable_stock > 0
+            println("let's trade!")
+        end
+
         FarmAgent.trades_from = FarmAgent.animalModel.sending
     
         farmModel[trade_partner].trades_to = FarmAgent.trades_from
