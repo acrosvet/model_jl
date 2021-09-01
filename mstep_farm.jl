@@ -19,7 +19,8 @@ function farm_step!(FarmAgent, farmModel)
         println(FarmAgent.animalModel.tradeable_heifers)
         println("Farm number $trade_partner can trade")
         println(farmModel[trade_partner].animalModel.tradeable_heifers)
-        
+        println("The length of the sending vector is")
+        println(length(FarmAgent.animalModel.sending))        
         agents_to_remove = []
         
         if FarmAgent.animalModel.tradeable_heifers < 0 && farmModel[trade_partner].animalModel.tradeable_heifers > 0
