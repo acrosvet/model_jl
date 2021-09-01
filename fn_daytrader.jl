@@ -9,11 +9,6 @@ function daytrader!(FarmAgent, animalModel)
 
    # Determine if a farm needs agents traded to it:
 
-   if animalModel.tradeable_stock < 0
-      println("Has cows!")
-   elseif animalModel.tradeable_stock > 0 
-      println("Needs cows!")
-   end 
 
    # Determine what animals can be traded based on an assigned status
    has_stage(AnimalAgent, status) = AnimalAgent.trade_status == status
@@ -22,7 +17,7 @@ function daytrader!(FarmAgent, animalModel)
    is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
    
    # Select a number to be traded
-   num_traded = rand(1:24)
+   num_traded = abs(animalModel.tradeable_stock)
    
    # Clear the to trade list from last step
    animalModel.sending = []
