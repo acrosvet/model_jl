@@ -40,6 +40,10 @@
         rng = MersenneTwister(42), 
         sending = [],
         receiving = [],
+        tradeable_heifers = 0,
+        tradeable_calves = 0,
+        tradeable_lactating = 0,
+        tradeable_weaned = 0,
     )
     #End header
     #Body
@@ -70,7 +74,11 @@
         rng,
         sending,
         receiving,
-        herd_size = N,)# Dictionary of disease properties
+        herd_size = N,
+        tradeable_calves,
+        tradeable_heifers,
+        tradeable_lactating,
+        tradeable_weaned,)# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
