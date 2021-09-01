@@ -37,11 +37,11 @@ function daytrader!(FarmAgent, animalModel)
        push!(animalModel.sending, traded_agent)
 
        # If that agent is present in the list of agents, remove it from the sending farm.
-      if haskey(animalModel.agents, traded_agent.id) == true
+#=       if haskey(animalModel.agents, traded_agent.id) == true
 
            kill_agent!(traded_agent, animalModel)
            #println("Agent removed")
-      end 
+      end  =#
    end        
 
 if length(animalModel.receiving) != 0
