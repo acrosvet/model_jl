@@ -31,11 +31,7 @@ function farm_step!(FarmAgent, farmModel)
                 if length(FarmAgent.animalModel.sending) != 0
                     push!(farmModel[trade_partner].animalModel.receiving, FarmAgent.animalModel.sending[i]) 
                     println("Agent traded to destination herd")
-                    if haskey(animalModel.agents, FarmAgent.animalModel.sending[i].id) == true
 
-                        kill_agent!(FarmAgent.animalModel.sending[i].id, animalModel)
-                        println("Traded agent removed from source herd")
-                   end 
                 else
                     println("Send list empty")
                 end
