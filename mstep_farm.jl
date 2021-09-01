@@ -25,7 +25,14 @@ function farm_step!(FarmAgent, farmModel)
 
             FarmAgent.trades_from = FarmAgent.animalModel.sending
 
-            num_trades_to = abs(FarmAgent.animalModel.tradeable_stock)
+            # Can't send more agents than the farm has to send
+            if abs(FarmAgent.animalModel.tradeable_stock) ≤ length(FarmAgent.animalModel.sending)
+               num_trades_to = abs(FarmAgent.animalModel.tradeable_stock)
+            else
+                num_trades_to = length(FarmAgent.animalModel.sending)
+            end
+
+            println("Number of trades to is $num_trades_to")
 
             agents_to_remove = []
 
