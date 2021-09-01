@@ -7,3 +7,4 @@ using CairoMakie #Backend for video creationusing SimpleWeightedGraphs: SimpleWe
 using SparseArrays: findnz                        # for social network connections
 using LightGraphs
 using Distributions
+using DataFrames
