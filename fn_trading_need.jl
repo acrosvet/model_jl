@@ -15,7 +15,7 @@ function trading_need!(animalModel)
     function current_heifers(animalModel)
         counter = 0
         for i in 1:length(animalModel.agents)
-            if animalModel.agents[i].stage == :H
+            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == :H
                 counter += 1
             end
         end
