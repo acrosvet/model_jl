@@ -24,5 +24,7 @@ function trading_need!(animalModel)
 
     current_heifers = current_heifers(animalModel)
 
+    println(current_heifers)
+
 
 end
