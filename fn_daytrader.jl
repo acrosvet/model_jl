@@ -36,12 +36,7 @@ function daytrader!(FarmAgent, animalModel)
        #Push that to the sending field in the animalModel
        push!(animalModel.sending, traded_agent)
 
-       # If that agent is present in the list of agents, remove it from the sending farm.
-#=       if haskey(animalModel.agents, traded_agent.id) == true
 
-           kill_agent!(traded_agent, animalModel)
-           #println("Agent removed")
-      end  =#
    end        
 
 if length(animalModel.receiving) != 0
@@ -67,12 +62,13 @@ if length(animalModel.receiving) != 0
            println("Agent added")
    end
 
-   println("The length of the receiving vector is:")
-   println(length(animalModel.receiving))
-   animalModel.receiving = []
-   println("The length of the receiving vector is:")
-   println(length(animalModel.receiving))
 
 end
+
+println("The length of the receiving vector is:")
+println(length(animalModel.receiving))
+animalModel.receiving = []
+println("The length of the receiving vector is:")
+println(length(animalModel.receiving))
 
 end
