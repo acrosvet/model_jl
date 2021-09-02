@@ -41,7 +41,7 @@ function daytrader!(FarmAgent, animalModel)
 
 # Create a vector, received stock, which tracks the animals that have been added to the farm
 
-received_stock = Dict[]
+received_stock = []
 
 # If there are animals waiting in the receiving vector, then we iteratively add those to the animalModel
 if length(animalModel.receiving) != 0
@@ -70,17 +70,20 @@ if length(animalModel.receiving) != 0
 end
 # Remove the received animals from the receiving container
 
-if length(received_stock) != 0
-   for i in 1:length(received_stock)
-      # Pop the agent from the receiving list
-      pop!(animalModel.receiving, received_stock[i])
-   end
+
+while length(received_stock) != 0
+   pop!(received_stock)
+   pop!(animalModel.receiving)
 end
 
-println("The length of the receiving vector is:")
-println(length(animalModel.receiving))
+# The vector of interest is:
+#println(received_stock)
+
+
+#println("The length of the receiving vector is:")
+#println(length(animalModel.receiving))
 #animalModel.receiving = []
-println("The length of the receiving vector is:")
-println(length(animalModel.receiving))
+#println("The length of the receiving vector is:")
+#println(length(animalModel.receiving))
 
 end
