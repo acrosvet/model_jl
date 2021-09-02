@@ -81,7 +81,7 @@ function farm_step!(FarmAgent, farmModel)
                 if length(heifers_to_send) != 0
                     #Push the ith animal in the sending list to the receiving container in the receiving farm
                     push!(farmModel[trade_partner].animalModel.receiving, heifers_to_send[i]) 
-                    println("Heifer traded to destination herd")
+                    write(io, "Heifer traded to destination herd")
                     #Push the sent animal to the list of animals to be removed
                     push!(agents_to_remove, heifers_to_send[i])
                     write(io, "Heifer sent to purge list")
@@ -96,7 +96,7 @@ function farm_step!(FarmAgent, farmModel)
 # Trade lactating  ----------------------------------------
 
 if FarmAgent.animalModel.tradeable_lactating < 0 && farmModel[trade_partner].animalModel.tradeable_lactating > 0
-    write(io,"let's trade heifers!")
+    write(io,"let's trade lactating cows!")
 
     FarmAgent.trades_from = FarmAgent.animalModel.sending
 
@@ -141,7 +141,7 @@ end
 # Trade weaned ----------------------------------------
 
 if FarmAgent.animalModel.tradeable_weaned < 0 && farmModel[trade_partner].animalModel.tradeable_weaned > 0
-    println("let's trade weaned!")
+    write(io,"let's trade weaned!")
 
     FarmAgent.trades_from = FarmAgent.animalModel.sending
 
@@ -172,9 +172,9 @@ if FarmAgent.animalModel.tradeable_weaned < 0 && farmModel[trade_partner].animal
     for i in 1:num_trades_to
         if length(weaned_to_send) != 0
             push!(farmModel[trade_partner].animalModel.receiving, weaned_to_send[i]) 
-            println("Heifer traded to destination herd")
+            write(io, "Weaned traded to destination herd")
             push!(agents_to_remove, weaned_to_send[i])
-            println("Heifer sent to purge list")
+            write(io,"Weaned sent to purge list")
         else
 #                   println("No weaned to send")
         end
@@ -190,7 +190,7 @@ end
             if haskey(animalModel.agents, agents_to_remove[i].id) == true
             # Kill theagent
             kill_agent!(agents_to_remove[i].id, animalModel)
-            println("Traded agent removed from source farm")
+            write(io, "Traded agent removed from source farm")
             end  
         end
 
