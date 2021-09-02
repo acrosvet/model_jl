@@ -15,12 +15,22 @@ function farm_step!(FarmAgent, farmModel)
             break
         end
 
-    #    println("Farm number $farmno can trade")
-    #   println(FarmAgent.animalModel.tradeable_heifers)
-    #    println("Farm number $trade_partner can trade")
-    #    println(farmModel[trade_partner].animalModel.tradeable_heifers)
-    #    println("The length of the sending vector is")
-    #    println(length(FarmAgent.animalModel.sending))        
+        println("Farm number $farmno can trade")
+        println(FarmAgent.animalModel.tradeable_heifers)
+        println("Heifers")
+        println(FarmAgent.animalModel.tradeable_lactating)
+        println("Cows")
+        println(FarmAgent.animalModel.tradeable_weaned)
+        println("weaned")
+        println("Farm number $trade_partner can trade")
+        println(farmModel[trade_partner].animalModel.tradeable_heifers)
+        println("Heifers")
+        println(farmModel[trade_partner].animalModel.tradeable_lactating)
+        println("Cows")
+        println(farmModel[trade_partner].animalModel.tradeable_weaned)
+        println("weaned")
+        println("The length of the sending vector is")
+        println(length(FarmAgent.animalModel.sending))        
         agents_to_remove = []
         
 # Trade heifers ----------------------------------------
