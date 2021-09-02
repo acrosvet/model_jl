@@ -78,8 +78,10 @@ function farm_step!(FarmAgent, farmModel)
 
             for i in 1:num_trades_to
                 if length(heifers_to_send) != 0
+                    #Push the ith animal in the sending list to the receiving container in the receiving farm
                     push!(farmModel[trade_partner].animalModel.receiving, heifers_to_send[i]) 
                     println("Heifer traded to destination herd")
+                    #Push the sent animal to the list of animals to be removed
                     push!(agents_to_remove, heifers_to_send[i])
                     println("Heifer sent to purge list")
                 else
@@ -183,16 +185,19 @@ end
 
 # Remove the traded agents
         for i in 1:length(agents_to_remove)
+            # Make sure they are in the agent list
             if haskey(animalModel.agents, agents_to_remove[i].id) == true
-
+            # Kill theagent
             kill_agent!(agents_to_remove[i].id, animalModel)
             println("Traded agent removed from source farm")
             end  
         end
 
 
+# Step the model one step through time        
     step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
     
+    # Return the number of agents in the model at this timestep
     farm_id = FarmAgent.id
     num_agents = length(FarmAgent.animalModel.agents)
     
