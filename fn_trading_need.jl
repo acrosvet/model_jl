@@ -31,6 +31,7 @@ function trading_need!(animalModel)
     current_heifers = current_stock(animalModel, :H)
     current_lactating = current_stock(animalModel, :L)
 
+
     tradeable_heifers = optimal_heifers - current_heifers
     tradeable_weaned = optimal_weaned - current_weaned
     tradeable_calves = optimal_calves - current_calves
