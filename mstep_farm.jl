@@ -1,6 +1,6 @@
 function farm_step!(FarmAgent, farmModel)
     
-    io = open("output.txt", "w")
+    io = open("output.txt", "a")
    
     animalModel = FarmAgent.animalModel
 
