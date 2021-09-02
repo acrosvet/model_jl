@@ -18,38 +18,43 @@ function farm_step!(FarmAgent, farmModel)
             break
         end
 
-        println("Farm number $farmno can trade")
+        println("Sending farm number $farmno can trade")
         println(FarmAgent.animalModel.tradeable_heifers)
         println("Heifers")
         println(FarmAgent.animalModel.tradeable_lactating)
         println("Cows")
         println(FarmAgent.animalModel.tradeable_weaned)
         println("weaned")
-        println("Farm number $trade_partner can trade")
+        println("Receiving farm number $trade_partner can trade")
         println(farmModel[trade_partner].animalModel.tradeable_heifers)
         println("Heifers")
         println(farmModel[trade_partner].animalModel.tradeable_lactating)
         println("Cows")
         println(farmModel[trade_partner].animalModel.tradeable_weaned)
         println("weaned")
-        println("The length of the sending vector is")
+        println("The length of the sending vector in the sending farm is:")
         println(length(FarmAgent.animalModel.sending))        
         agents_to_remove = []
         
 # Trade heifers ----------------------------------------
 
+        # If the farm has surplus animals, and the trading partner needs heifers
         if FarmAgent.animalModel.tradeable_heifers < 0 && farmModel[trade_partner].animalModel.tradeable_heifers > 0
             println("let's trade heifers!")
 
-            FarmAgent.trades_from = FarmAgent.animalModel.sending
+            #FarmAgent.trades_from = FarmAgent.animalModel.sending
 
+            # Create an empty vector of heifers to send to the destination
             heifers_to_send = []
 
+            # If there isn't anything to send, quit
             if FarmAgent.animalModel.sending == 0
    #             println("No agents to send")
             else
+                #If not, then select the required stock class to send based on the number of animals avaialble
                 for i in 1:length(FarmAgent.animalModel.sending)
                     if FarmAgent.animalModel.sending[i].stage == :H
+                        #Push each agent to the sending vector
                         push!(heifers_to_send, FarmAgent.animalModel.sending[i])
                     else
   #                      println("No heifers to send")
@@ -60,8 +65,12 @@ function farm_step!(FarmAgent, farmModel)
  #           println("The candidate number of heifers to send is ")
  #           println(length(heifers_to_send))
 
-            num_trades_to = abs(FarmAgent.animalModel.tradeable_heifers) ≤ length(heifers_to_send) ? abs(FarmAgent.animalModel.tradeable_heifers) : length(heifers_to_send)
+            # Only send as many heifers as there are avaiable.
+            num_trades_from = abs(FarmAgent.animalModel.tradeable_heifers) ≤ length(heifers_to_send) ? abs(FarmAgent.animalModel.tradeable_heifers) : length(heifers_to_send)
+            
+            #Make sure that the farm does not get more than required
 
+            num_trades_to = num_trades_from ≥ abs(farmModel[trade_partner].animalModel.tradeable_heifers) ? abs(farmModel[trade_partner].animalModel.tradeable_heifers) : num_trades_from
 
 #            println("Number of trades to is $num_trades_to")
 
@@ -190,7 +199,7 @@ end
     number_received = println(length(farmModel[trade_partner].animalModel.receiving))
 
     println("The number of animals received by farm $farm_id is $number_received")
-    println("The number of animals in $farm_id is $num_agents ")
+    println("The number of animals in farm $farm_id is $num_agents ")
 
     
 end
