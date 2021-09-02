@@ -39,6 +39,11 @@ function daytrader!(FarmAgent, animalModel)
 
    end        
 
+# Create a vector, received stock, which tracks the animals that have been added to the farm
+
+received_stock = []
+
+# If there are animals waiting in the receiving vector, then we iteratively add those to the animalModel
 if length(animalModel.receiving) != 0
    for i in 1:length(animalModel.receiving)
            pos = Tuple(10*rand(animalModel.rng, 2))
@@ -59,15 +64,23 @@ if length(animalModel.receiving) != 0
            days_dry = animalModel.receiving[i].days_dry
            trade_status = animalModel.receiving[i].trade_status
            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)   
+           push!(received_stock, animalModel.receiving[i])
            println("Agent added")
    end
 
+# Remove the received animals from the receiving container
+
+if length(received_stock) != 0
+   for i in 1:length(received_stock)
+      # Pop the agent from the receiving list
+      pop!(animalModel.receiving, received_stock[i])
+end
 
 end
 
 println("The length of the receiving vector is:")
 println(length(animalModel.receiving))
-animalModel.receiving = []
+#animalModel.receiving = []
 println("The length of the receiving vector is:")
 println(length(animalModel.receiving))
 
