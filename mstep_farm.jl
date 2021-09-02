@@ -206,6 +206,6 @@ end
 
     write(io,"The number of animals received by farm $trade_partner is $number_received")
     write(io,"The number of animals in farm $farm_id is $num_agents ")
-
+    close(io)
     
 end
