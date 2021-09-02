@@ -15,12 +15,12 @@ function farm_step!(FarmAgent, farmModel)
             break
         end
 
-        println("Farm number $farmno can trade")
-        println(FarmAgent.animalModel.tradeable_heifers)
-        println("Farm number $trade_partner can trade")
-        println(farmModel[trade_partner].animalModel.tradeable_heifers)
-        println("The length of the sending vector is")
-        println(length(FarmAgent.animalModel.sending))        
+    #    println("Farm number $farmno can trade")
+    #   println(FarmAgent.animalModel.tradeable_heifers)
+    #    println("Farm number $trade_partner can trade")
+    #    println(farmModel[trade_partner].animalModel.tradeable_heifers)
+    #    println("The length of the sending vector is")
+    #    println(length(FarmAgent.animalModel.sending))        
         agents_to_remove = []
         
         if FarmAgent.animalModel.tradeable_heifers < 0 && farmModel[trade_partner].animalModel.tradeable_heifers > 0
@@ -31,24 +31,24 @@ function farm_step!(FarmAgent, farmModel)
             heifers_to_send = []
 
             if FarmAgent.animalModel.sending == 0
-                println("No agents to send")
+   #             println("No agents to send")
             else
                 for i in 1:length(FarmAgent.animalModel.sending)
                     if FarmAgent.animalModel.sending[i].stage == :H
                         push!(heifers_to_send, FarmAgent.animalModel.sending[i])
                     else
-                        println("No heifers to send")
+  #                      println("No heifers to send")
                     end
                 end
             end
 
-            println("The number of heifers to send is ")
-            println(length(heifers_to_send))
+ #           println("The candidate number of heifers to send is ")
+ #           println(length(heifers_to_send))
 
             num_trades_to = abs(FarmAgent.animalModel.tradeable_heifers) ≤ length(heifers_to_send) ? abs(FarmAgent.animalModel.tradeable_heifers) : length(heifers_to_send)
 
 
-            println("Number of trades to is $num_trades_to")
+#            println("Number of trades to is $num_trades_to")
 
    
 
@@ -59,11 +59,11 @@ function farm_step!(FarmAgent, farmModel)
                     push!(agents_to_remove, heifers_to_send[i])
                     println("Heifer sent to purge list")
                 else
-                    println("No heifers to send")
+ #                   println("No heifers to send")
                 end
             end
-
-            println(length(farmModel[trade_partner].animalModel.receiving))
+#            println("This many heifers were sent:")
+#            println(length(farmModel[trade_partner].animalModel.receiving))
         end
 
 # Remove the traded agents
