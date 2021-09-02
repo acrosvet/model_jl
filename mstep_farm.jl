@@ -1,5 +1,6 @@
 function farm_step!(FarmAgent, farmModel)
-
+    
+    io = open("output.txt", "w")
    
     animalModel = FarmAgent.animalModel
 
@@ -40,7 +41,7 @@ function farm_step!(FarmAgent, farmModel)
 
         # If the farm has surplus animals, and the trading partner needs heifers
         if FarmAgent.animalModel.tradeable_heifers < 0 && farmModel[trade_partner].animalModel.tradeable_heifers > 0
-            println("let's trade heifers!")
+            write(io, "let's trade heifers!")
 
             #FarmAgent.trades_from = FarmAgent.animalModel.sending
 
@@ -83,7 +84,7 @@ function farm_step!(FarmAgent, farmModel)
                     println("Heifer traded to destination herd")
                     #Push the sent animal to the list of animals to be removed
                     push!(agents_to_remove, heifers_to_send[i])
-                    println("Heifer sent to purge list")
+                    write(io, "Heifer sent to purge list")
                 else
  #                   println("No heifers to send")
                 end
@@ -95,7 +96,7 @@ function farm_step!(FarmAgent, farmModel)
 # Trade lactating  ----------------------------------------
 
 if FarmAgent.animalModel.tradeable_lactating < 0 && farmModel[trade_partner].animalModel.tradeable_lactating > 0
-    println("let's trade heifers!")
+    write(io,"let's trade heifers!")
 
     FarmAgent.trades_from = FarmAgent.animalModel.sending
 
@@ -126,9 +127,9 @@ if FarmAgent.animalModel.tradeable_lactating < 0 && farmModel[trade_partner].ani
     for i in 1:num_trades_to
         if length(lactating_to_send) != 0
             push!(farmModel[trade_partner].animalModel.receiving, lactating_to_send[i]) 
-            println("Lactating cow traded to destination herd")
+            write(io,"Lactating cow traded to destination herd")
             push!(agents_to_remove, lactating_to_send[i])
-            println("Lactating cow sent to purge list")
+            write(io,"Lactating cow sent to purge list")
         else
 #                   println("No heifers to send")
         end
@@ -203,8 +204,8 @@ end
     
     number_received = length(farmModel[trade_partner].animalModel.receiving)
 
-    println("The number of animals received by farm $trade_partner is $number_received")
-    println("The number of animals in farm $farm_id is $num_agents ")
+    write(io,"The number of animals received by farm $trade_partner is $number_received")
+    write(io,"The number of animals in farm $farm_id is $num_agents ")
 
     
 end
