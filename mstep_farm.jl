@@ -18,7 +18,7 @@ function farm_step!(FarmAgent, farmModel)
             break
         end
 
-        println("Sending farm number $farmno can trade")
+#=         println("Sending farm number $farmno can trade")
         println(FarmAgent.animalModel.tradeable_heifers)
         println("Heifers")
         println(FarmAgent.animalModel.tradeable_lactating)
@@ -33,7 +33,7 @@ function farm_step!(FarmAgent, farmModel)
         println(farmModel[trade_partner].animalModel.tradeable_weaned)
         println("weaned")
         println("The length of the sending vector in the sending farm is:")
-        println(length(FarmAgent.animalModel.sending))        
+        println(length(FarmAgent.animalModel.sending))   =#      
         agents_to_remove = []
         
 # Trade heifers ----------------------------------------
