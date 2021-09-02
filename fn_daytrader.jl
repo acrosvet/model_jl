@@ -6,7 +6,7 @@
 
 """
 function daytrader!(FarmAgent, animalModel)
-
+   io = open("output.txt", "w")
    # Determine if a farm needs agents traded to it:
 
 
@@ -65,7 +65,7 @@ if length(animalModel.receiving) != 0
            trade_status = animalModel.receiving[i].trade_status
            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)   
            push!(received_stock, animalModel.receiving[i])
-           println("Agent added")
+           write(io,"Agent added")
    end
 end
 # Remove the received animals from the receiving container
@@ -86,4 +86,5 @@ end
 #println("The length of the receiving vector is:")
 #println(length(animalModel.receiving))
 
+close(io)
 end
