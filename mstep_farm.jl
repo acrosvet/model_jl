@@ -1,8 +1,9 @@
 function farm_step!(FarmAgent, farmModel)
 
-    animalModel.receiving = []
-
+   
     animalModel = FarmAgent.animalModel
+    
+     animalModel.receiving = []
 
     farmno = FarmAgent.id
 
