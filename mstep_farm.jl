@@ -187,7 +187,7 @@ end
     farm_id = FarmAgent.id
     num_agents = length(FarmAgent.animalModel.agents)
     
-    number_received = length(FarmAgent.animalModel.receiving)
+    number_received = println(length(farmModel[trade_partner].animalModel.receiving))
 
     println("The number of animals received by farm $farm_id is $number_received")
     println("The number of animals in $farm_id is $num_agents ")
