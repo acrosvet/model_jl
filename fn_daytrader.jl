@@ -65,7 +65,7 @@ if length(animalModel.receiving) != 0
            trade_status = animalModel.receiving[i].trade_status
            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)   
            push!(received_stock, animalModel.receiving[i])
-           write(io,"Agent added")
+           write(io,"Agent added\n")
    end
 end
 # Remove the received animals from the receiving container
