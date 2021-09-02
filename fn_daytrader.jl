@@ -16,15 +16,15 @@ function daytrader!(FarmAgent, animalModel)
    #Primitive function, decide to trade based on status
    is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
    
-#=    # Select a number to be traded
+    # Select a number to be traded
    num_traded = abs(animalModel.tradeable_stock)
-   =#
+   
    # Clear the to trade list from last step
    animalModel.sending = [] 
 
 
    # Put agents in the sending container according to number
-   for animal in 1:length(animalModel.agents)
+   for animal in 1:abs(animalModel.tradeable_stock)
         
         # Select a random agent from the eligible list of agents
        traded_agent = random_agent(animalModel, is_traded(true))
