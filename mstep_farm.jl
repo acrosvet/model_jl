@@ -3,10 +3,10 @@ function farm_step!(FarmAgent, farmModel)
 
     io = open("output.txt", "a")
     
-    step = time_resolution +=1
+
 
     write(io, "==========================================================")
-    write(io, "Model step $step")
+    write(io, "Model step")
     write(io, "==========================================================")
 
     animalModel = FarmAgent.animalModel
