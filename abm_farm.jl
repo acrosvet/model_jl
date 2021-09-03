@@ -30,7 +30,7 @@ for farm in 1:numfarms
     id +=1
     status = farm % 2 == 0 ? :S : :I
     tradelevel = rand(1:5)
-    ncows = rand(80:100)
+    ncows = rand(150:220)
     system = :Spring
     trades_from = []
     trades_to = []
