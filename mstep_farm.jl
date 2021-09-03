@@ -122,9 +122,9 @@ if FarmAgent.animalModel.tradeable_lactating < 0 && farmModel[trade_partner].ani
     end
 
 #           println("The candidate number of heifers to send is ")
-#           println(length(heifers_to_send))
+#           println(length(lactating_to_send))
 
-    num_trades_to = abs(FarmAgent.animalModel.tradeable_lactating) ≤ length(heifers_to_send) ? abs(FarmAgent.animalModel.tradeable_lactating) : length(lactating_to_send)
+    num_trades_to = abs(FarmAgent.animalModel.tradeable_lactating) ≤ length(lactating_to_send) ? abs(FarmAgent.animalModel.tradeable_lactating) : length(lactating_to_send)
 
 
 #            println("Number of trades to is $num_trades_to")
