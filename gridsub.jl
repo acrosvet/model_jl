@@ -4,7 +4,7 @@ const time_units = 1
 
 function initialisePopulation(
 
-        nbact = 10000,
+        nbact = 100,
         seed = 42,
         status = :S,
         strain = 1,
@@ -42,8 +42,13 @@ function initialisePopulation(
 
     # strain fitness
 
-    function bact_fitness()
-        rand(2:7)/10
+    function bact_fitness(status)
+
+        if status == :R
+            1 - rand(Distributions.Beta(4,20),1)[1]
+        elseif status == :IS
+            1 - rand(Distributions.Beta(1,20),1)[1]
+        end
     end
 
     # Set up the initial parameters
@@ -52,14 +57,14 @@ function initialisePopulation(
         strain = rand(1:nstrains)
         status = (strain == r_strain) ? :R : :IS
         pos = (1,1)
-        fitness = [bact_fitness() for i in 1:strain]
+        fitness = [bact_fitness(status) for i in 1:strain]
         agent = BacterialAgent(n, pos,  status, strain)
         add_agent_single!(agent, bacterialModel)
     end
 
         return bacterialModel
 
-end
+    end
 
 # Bacterial population of uninfected animals ----------------------
 
@@ -71,7 +76,20 @@ function uninfected!(BacterialAgent, bacterialModel)
 
 end
 
+function infected_sensitive!(BacterialAgent, bacterialModel)
 
+    if bacterialModel.total_status == :IS
+        for i in 1:bacterialModel.strains
+            if i % 2 == 0
+                BacterialAgent.status = :IS 
+            else
+                BacterialAgent.status = :S
+            end
+        end
+    end
+
+end
+ 
 # Transmission of bacteria between individuals -----------------
     
     function bact_transfer_r!(BacterialAgent, bacterialModel)
@@ -172,4 +190,7 @@ end
     end
 
 
+bactoMod = initialisePopulation()
+
+step!(bactoMod, bact_agent_step!,1)
 
