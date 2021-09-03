@@ -113,7 +113,7 @@ if FarmAgent.animalModel.tradeable_lactating < 0 && farmModel[trade_partner].ani
 #             println("No agents to send")
     else
         for i in 1:length(FarmAgent.animalModel.sending)
-            if FarmAgent.animalModel.sending[i].stage == :L | FarmAgent.animalModel.sending[i].stage == :D
+            if FarmAgent.animalModel.sending[i].stage == :L || FarmAgent.animalModel.sending[i].stage == :D
                 push!(lactating_to_send, FarmAgent.animalModel.sending[i])
             else
 #                      println("No lactating to send")
