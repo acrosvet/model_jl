@@ -76,6 +76,10 @@ while length(received_stock) != 0
    pop!(animalModel.receiving)
 end
 
+if length(received_stock) == 0
+   write(io, "Receiving vector cleared \n")
+end
+
 # The vector of interest is:
 #println(received_stock)
 
