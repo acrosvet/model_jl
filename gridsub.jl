@@ -4,19 +4,19 @@ const time_units = 1
 
 function initialisePopulation(
 
-        nbact = 10000,
         seed = 42,
-        status = :S,
-        strain = 1,
-        nstrains = 4,
-        timestep = 1.0, #Set model timestep
+        nstrains = rand(4:10),
         r_strain = rand(1:nstrains),
-        days_treated = 0,
-        age = 0,
-        total_status = :IR,
-        days_exposed = 0,
-        strain_status = :S,
-        rng = MersenneTwister(42)
+        status = :S,
+        rng = MersenneTwister(42);
+        nbact::Int64,
+        total_status::Symbol,
+        timestep::Float64,
+        days_treated::Int = 0,
+        age::Int = 0,
+        days_exposed::Int = 0,
+
+
     )
 
     agentSpace = GridSpace((100, 100); periodic = false)
@@ -26,9 +26,7 @@ function initialisePopulation(
         nbact,
         seed,
         status,
-        strain_status,
         nstrains,
-        strain,
         timestep,
         r_strain,
         days_treated,
@@ -45,6 +43,7 @@ function initialisePopulation(
     r_strain = total_status != :IR ? 0 : r_strain
     println(r_strain)
 
+    strain = 1
 
     function fn_strain_status!(nstrains, r_strain)
         strain_statuses = []
@@ -92,10 +91,11 @@ function initialisePopulation(
         BactNo = 0,
         ResistantStrain = 0,
         bactStrain = 0,
-        StrainStatus = 0
+        StrainStatus = 0,
+        BactStatus = 0,
     )
 
-    output = open("bactinit.csv","a")
+    output = open("./export/bactinit.csv","a")
     CSV.write(output, header, delim = ";", append = true, header = true)
     close(output)
 
@@ -106,6 +106,7 @@ function initialisePopulation(
         pos = (1,1)
         strain_status = strain_statuses[strain]
         fitness = bact_fitnesses[strain]
+        status = strain_status
         agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
         add_agent_single!(agent, bacterialModel)
         df = DataFrame(
@@ -114,9 +115,10 @@ function initialisePopulation(
             ResistantStrain = r_strain,
             bactStrain = strain,
             StrainStatus = strain_status,
-            StrainFitness = fitness
+            StrainFitness = fitness,
+            BactStatus = status
         )
-        output = open("bactinit.csv","a")
+        output = open("./export/bactinit.csv","a")
         CSV.write(output, df, delim = ";", append = true)
         close(output)
     end
@@ -130,10 +132,25 @@ function initialisePopulation(
 function uninfected!(BacterialAgent, bacterialModel)
 
     if bacterialModel.total_status == :S
-        BacterialAgent.status = :S
+        for _ in 1:nstrains
+            BacteralAgent.strain_status = :S
+            BacterialAgent.status = BacterialAgent.strain_status
+        end
     end
 
 end
+
+# Movement from exposed to infected  -----------------
+
+function exposed_infected!(bacterialModel)
+    if bacterialModel.total_status == :ES && (bacterialModel.days_exposed ≥ rand(Poisson(4)))
+        bacterialModel.total_status = :IS
+    elseif bacterialModel.total_status == :ER && (bacterialModel.days_exposed ≥ rand(Poisson(4)))
+        bacteriaModel.total_status = :IR
+    end
+end
+
+
 
 function infected_sensitive!(BacterialAgent, bacterialModel)
 
@@ -246,10 +263,31 @@ end
             bact_plasmid_transfer!(BacterialAgent, bacterialModel)
             bact_treatment_response!(BacterialAgent, bacterialModel)
 
+            header = DataFrame(
+                AgentId = 0,
+                AgentStatus = 0,
+                ModelStep = 0
+            )
+
+            output = open("./export/bact_agent_step.csv","a")
+            CSV.write(output, header, delim = ";", append = true, header = true)
+            close(output)
+
+            df = DataFrame(
+               AgentID = BacterialAgent.id,
+                AgentStatus = BacterialAgent.status,
+                ModelStep = bacterialModel.age
+            )
+
+            output = open("./export/bact_agent_step.csv","a")
+            CSV.write(output, df, delim = ";", append = true)
+            close(output)
+
+
     end
 
 
-bactoMod = initialisePopulation()
+bactoMod = initialisePopulation(nbact = 10000, total_status = :IR, timestep = 1.0)
 
-#step!(bactoMod, bact_agent_step!,1)
+step!(bactoMod, bact_agent_step!,10)
 
