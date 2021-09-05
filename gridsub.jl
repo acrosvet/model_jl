@@ -95,10 +95,10 @@ function initialisePopulation(
         BactStatus = 0,
     )
 
-    output = open("./export/bactinit.csv","a")
+#=     output = open("./export/bactinit.csv","a")
     CSV.write(output, header, delim = ";", append = true, header = true)
     close(output)
-
+ =#
 
     # Set up the initial parameters
     for n in 1:nbact
@@ -118,9 +118,9 @@ function initialisePopulation(
             StrainFitness = fitness,
             BactStatus = status
         )
-        output = open("./export/bactinit.csv","a")
+#=         output = open("./export/bactinit.csv","a")
         CSV.write(output, df, delim = ";", append = true)
-        close(output)
+        close(output) =#
     end
 
         return bacterialModel
@@ -263,13 +263,13 @@ end
             bact_plasmid_transfer!(BacterialAgent, bacterialModel)
             bact_treatment_response!(BacterialAgent, bacterialModel)
 
-            header = DataFrame(
+#=             header = DataFrame(
                 AgentId = 0,
                 AgentStatus = 0,
                 ModelStep = 0
             )
-
-            output = open("./export/bact_agent_step.csv","a")
+ =#
+#=             output = open("./export/bact_agent_step.csv","a")
             CSV.write(output, header, delim = ";", append = true, header = true)
             close(output)
 
@@ -282,7 +282,7 @@ end
             output = open("./export/bact_agent_step.csv","a")
             CSV.write(output, df, delim = ";", append = true)
             close(output)
-
+ =#
 
     end
 
