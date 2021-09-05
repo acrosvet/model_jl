@@ -35,6 +35,8 @@
         animalProximityRadius = 0.5, #Radius for effective contact
         mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
         mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
+        βᵣ,
+        βₛ,
         sponrec_ir,
         sponrec_is,
         timestep, 
