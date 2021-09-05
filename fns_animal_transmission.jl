@@ -8,6 +8,7 @@ function transmit_resistant!(a1,a2,animalModel)
             healthy.status = :ER
             healthy.submodel = infected.submodel
             healthy.submodel.total_status = healthy.status
+            healthy.days_exposed += 1*time_resolution
         else
             healthy.status = healthy.status
         end
@@ -27,6 +28,7 @@ function transmit_sensitive!(a1,a2,animalModel)
         healthy.status = :ES
         healthy.submodel = infected.submodel
         healthy.submodel.total_status = healthy.status
+        healthy.days_exposed += 1*time_resolution
                 # Else we set the status of the healthy animal to IS
     else
         healthy.status = healthy.status
