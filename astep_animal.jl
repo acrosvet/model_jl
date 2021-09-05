@@ -1,6 +1,7 @@
 
     function agent_step!(AnimalAgent, animalModel)
         move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
+        exposed_to_infectious!(AnimalAgent) # Transition exposed animals to infectiousness
         treatment!(AnimalAgent, animalModel) #Introduce treatment
         treatment_effect!(AnimalAgent) #Effect of treatment on transmission.
         endTreatment!(AnimalAgent, animalModel) #End treatment
