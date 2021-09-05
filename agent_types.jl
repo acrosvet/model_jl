@@ -6,6 +6,7 @@ mutable struct BacterialAgent <: AbstractAgent
     status::Symbol
     strain::Int64
     strain_status::Symbol
+    fitness::Float64
 end
 
 
