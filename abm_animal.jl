@@ -15,6 +15,7 @@
         timestep = 1.0, #Set model timestep
         res_carrier = 0.05/time_resolution,
         sens_carrier = 0.01/time_resolution, 
+        culling_rate = 0.3/time_resolution,
         calday = 183,
         num_calves = (calday > 182 && calday < 272) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
         num_weaned = (calday ≥ 272 && calday ≤ 365 ) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
@@ -48,6 +49,7 @@
         sens_carrier,
         calday,
         rng,
+        culling_rate,
         herd_size = N,
         sending = [], # Agent sending container
         receiving = [], # Agent receiving container
