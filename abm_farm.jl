@@ -34,8 +34,11 @@ for farm in 1:numfarms
     system = :Spring
     trades_from = []
     trades_to = []
-    animalModel = initialiseModel(ncows)
-    #submodel = submodel
+    animalModel = initialiseModel(
+        ncows,
+        treatment_prob = rand(0.3:0.01:0.8)/time_resolution,
+        treatment_duration = rand(3:5)*time_resolution
+        )
     add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel)
     
 end
