@@ -5,7 +5,7 @@
 
     function initialiseModel(
         N::Int, #Default number of animals
-        seed = 42, #Random seed
+ #       seed = 42, #Random seed
         animalProximityRadius = 0.5, #Radius for effective contact
         mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
         mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
@@ -26,16 +26,16 @@
         since_tx = 0,
         res_carrier = 0.05/time_resolution,
         sens_carrier = 0.01/time_resolution, 
-        bactopop = 0.0,
-        stage = :C,
+#        bactopop = 0.0,
+#        stage = :C,
         calday = 183,
         num_calves = (calday > 182 && calday < 272) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
         num_weaned = (calday ≥ 272 && calday ≤ 365 ) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
         num_heifers = Int(floor(N*0.3*rand(0.8:0.05:1.2))),
         num_lac = N - num_calves - num_weaned - num_heifers,
-        dim = 0,
-        lac = 0,
-        days_dry = 0,
+#        dim = 0,
+#        lac = 0,
+#        days_dry = 0,
         rng = MersenneTwister(42), 
         sending = [],
         receiving = [],
@@ -157,7 +157,7 @@
         treatment_duration = treatment_duration
         bactopop = 0.0
         submodel = initialisePopulation(
-            nbact = 10000,
+            nbact = 100,
             total_status = status,
             timestep = timestep,
             days_treated = 0,
