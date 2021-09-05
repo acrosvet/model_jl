@@ -1,4 +1,4 @@
-tmp = initialiseModel(100)
+tmp = initialiseModel(50)
 
 
 header = DataFrame(
