@@ -5,9 +5,6 @@
 
     function initialiseModel(
         N::Int, #Default number of animals
-        animalProximityRadius = 0.5, #Radius for effective contact
-        mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
-        mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
         movement = 0.1, #Movement in continuous space
         βᵣ = 0.3/time_resolution, #Beta (resistant) 
         βₛ = 0.6/time_resolution, #Beta (sensitive)
@@ -26,13 +23,7 @@
         num_heifers = Int(floor(N*0.3*rand(0.8:0.05:1.2))),
         num_lac = N - num_calves - num_weaned - num_heifers,
         rng = MersenneTwister(42), #Random seed 
-        sending = [], # Agent sending container
-        receiving = [], # Agent receiving container
-        tradeable_heifers = 0, #Initial number of tradeable heifers
-        tradeable_calves = 0, # Ibid, calves
-        tradeable_lactating = 0, # Ibid, lactating
-        tradeable_weaned = 0, # Ibid, weand
-        tradeable_stock = 0, # Ibid, all stock
+
     )
     #End header
     #Body
@@ -42,9 +33,9 @@
     #Specify the disease dynamics  as a Dictionary to be passed to the model
     pathogenProperties = @dict(
         N, 
-        animalProximityRadius,
-        mortalityRateSens,
-        mortalityRateRes,
+        animalProximityRadius = 0.5, #Radius for effective contact
+        mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
+        mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
         sponrec_ir,
         sponrec_is,
         timestep, 
@@ -54,14 +45,15 @@
         sens_carrier,
         calday,
         rng,
-        sending,
-        receiving,
         herd_size = N,
-        tradeable_calves,
-        tradeable_heifers,
-        tradeable_lactating,
-        tradeable_weaned,
-        tradeable_stock,)# Dictionary of disease properties
+        sending = [], # Agent sending container
+        receiving = [], # Agent receiving container
+        tradeable_heifers = 0, #Initial number of tradeable heifers
+        tradeable_calves = 0, # Ibid, calves
+        tradeable_lactating = 0, # Ibid, lactating
+        tradeable_weaned = 0, # Ibid, weand
+        tradeable_stock = 0, # Ibid, all stock
+ )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
