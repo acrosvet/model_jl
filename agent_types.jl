@@ -19,8 +19,9 @@ mutable struct AnimalAgent <: AbstractAgent
     status::Symbol
     βₛ::Float64
     βᵣ::Float64
-    inf_days_is::Int
-    inf_days_ir::Int
+    inf_days::Int
+#    inf_days_is::Int
+#    inf_days_ir::Int
     days_exposed::Int
     days_carrier::Int
     treatment::Symbol
