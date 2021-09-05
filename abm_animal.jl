@@ -5,7 +5,6 @@
 
     function initialiseModel(
         N::Int, #Default number of animals
-
         movement = 0.1, #Movement in continuous space
         βᵣ = 0.3/time_resolution, #Beta (resistant) 
         βₛ = 0.6/time_resolution, #Beta (sensitive)
