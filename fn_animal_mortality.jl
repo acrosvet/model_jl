@@ -10,7 +10,7 @@ function mortality!(AnimalAgent, animalModel)
     # Cull agent -------------------------------
 
     # Cull cows that have been in the herd for too long at a 30% replacement rate
-    if AnimalAgent.stage == :L && (0.3/365 > rand())
+    if (AnimalAgent.stage == :L && AnimalAgent.age ≥ 365*4) && (animalModel.culling_rate/365 > rand())
         kill_agent!(AnimalAgent, animalModel)
     end
 
