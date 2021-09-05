@@ -66,10 +66,10 @@ function transmit_carrier!(a1,a2,animalModel)
     if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
         if healthy.treatment == :PT && (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ)
             healthy.status = :IR
-            healthy.inf_days_ir = 0
+            healthy.inf_days = 0
         else
             healthy.status = :IS
-            healthy.inf_days_is = 0
+            healthy.inf_days = 0
         end
         # Else we set the status of the healthy animal to its existing status
     else
@@ -89,10 +89,10 @@ function transmit_carrier_is!(a1,a2,animalModel)
     if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
         if healthy.treatment == :PT && (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ)
             healthy.status = :IR
-            healthy.inf_days_ir = 0
+            healthy.inf_days = 0
         else
             healthy.status = :IS
-            healthy.inf_days_is = 0
+            healthy.inf_days = 0
         end
         # Else we set the status of the healthy animal to its existing status
     else
@@ -110,7 +110,7 @@ function transmit_carrier_ir!(a1,a2,animalModel)
     
     if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ) && (healthy.status == :S || healthy.status == :RS || healthy.status == :RR)
             healthy.status = :ER
-            healthy.inf_days_ir = 0
+            healthy.inf_days = 0
         # Else we set the status of the healthy animal to its existing status
     else
         healthy.status = healthy.status
