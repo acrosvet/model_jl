@@ -50,4 +50,6 @@ function model_step!(animalModel)
     #Determine trading need
 
     trading_need!(animalModel)
+
+    
 end
