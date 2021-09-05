@@ -4,18 +4,18 @@ const time_units = 1
 
 function initialisePopulation(
 
-        nbact = 100,
+        nbact = 10000,
         seed = 42,
         status = :S,
         strain = 1,
         nstrains = 4,
         timestep = 1.0, #Set model timestep
         r_strain = rand(1:nstrains),
-        fitness = 0, 
         days_treated = 0,
         age = 0,
-        total_status = :ER,
+        total_status = :IR,
         days_exposed = 0,
+        strain_status = :S,
         rng = MersenneTwister(42)
     )
 
@@ -26,13 +26,13 @@ function initialisePopulation(
         nbact,
         seed,
         status,
+        strain_status,
         nstrains,
         strain,
         timestep,
         r_strain,
         days_treated,
         total_status,
-        fitness,
         age,
         days_exposed,
         rng,
@@ -42,24 +42,79 @@ function initialisePopulation(
 
     # strain fitness
 
-    function bact_fitness(status)
+    r_strain = total_status != :IR ? 0 : r_strain
+    println(r_strain)
 
-        if status == :R
-            1 - rand(Distributions.Beta(4,20),1)[1]
-        elseif status == :IS
-            1 - rand(Distributions.Beta(1,20),1)[1]
+
+    function fn_strain_status!(nstrains, rstrain)
+        strain_statuses = []
+        for i in 1:nstrains
+            if i != rstrain
+               strain_status = :S
+               push!(strain_statuses, strain_status)
+            else
+                strain_status = :R
+                push!(strain_statuses, strain_status)
+            end
+        end
+        return strain_statuses
+    end
+
+    println(strain_statuses)
+
+    strain_status = (strain == r_strain) ? :R : :IS
+
+
+
+    function fn_strain_fitness!(strain_statuses, nstrains)
+        bact_fitnesses = []
+        for i in 1:nstrains
+        strain_status = strain_statuses[i]
+        if strain_status == :R
+           fitness =  1 - rand(Distributions.Beta(4,20),1)[1]
+           push!(bact_fitnesses, fitness)
+        else
+            fitness  = 1 - rand(Distributions.Beta(1,20),1)[1]
+            push!(bact_fitnesses, fitness)
         end
     end
+    return bact_fitnesses
+    end
+
+    bact_fitnesses = fn_strain_fitness!(strain_statuses, nstrains)
+
+    println(bact_fitnesses)
+
+    header = DataFrame(
+        BactNo = 0,
+        ResistantStrain = 0,
+        bactStrain = 0,
+        StrainStatus = 0
+    )
+
+    output = open("bactinit.csv","a")
+    CSV.write(output, header, delim = ";", append = true, header = true)
+    close(output)
+
 
     # Set up the initial parameters
     for n in 1:nbact
-        r_strain = total_status == :IS ? 0 : r_strain
         strain = rand(1:nstrains)
-        status = (strain == r_strain) ? :R : :IS
         pos = (1,1)
-        fitness = [bact_fitness(status) for i in 1:strain]
-        agent = BacterialAgent(n, pos,  status, strain)
+        #strain_fitness = bact_fitnesses[strain]
+        agent = BacterialAgent(n, pos,  status, strain, strain_status)
         add_agent_single!(agent, bacterialModel)
+        df = DataFrame(
+            BactNo = n,
+            #BactPos = pos,
+            ResistantStrain = r_strain,
+            bactStrain = strain,
+            StrainStatus = strain_status#,
+            #StrainFitness = strain_fitness
+        )
+        output = open("bactinit.csv","a")
+        CSV.write(output, df, delim = ";", append = true)
+        close(output)
     end
 
         return bacterialModel
@@ -192,5 +247,5 @@ end
 
 bactoMod = initialisePopulation()
 
-step!(bactoMod, bact_agent_step!,1)
+#step!(bactoMod, bact_agent_step!,1)
 
