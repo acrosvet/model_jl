@@ -4,7 +4,7 @@ function transmit_resistant!(a1,a2,animalModel)
     count(a.status == :IR for a in (a1, a2)) ≠ 1 && return
         infected, healthy = a1.status == :IR ? (a1, a2) : (a2, a1)
 #If a random number is below the transmssion parameter, infect, provided that the contacted animal is susceptible.
-        if (rand(animalModel.rng) < infected.βᵣ*infected.bactopop) && healthy.status == :S
+        if (rand() < infected.βᵣ*infected.bactopop) && healthy.status == :S
             healthy.status = :ER
             healthy.submodel = infected.submodel
             healthy.submodel.total_status = healthy.status
@@ -24,7 +24,7 @@ function transmit_sensitive!(a1,a2,animalModel)
 
     #IF a random number is greater than βₛ, then we return out of the function
     
-    if (rand(animalModel.rng) < infected.βₛ*(1-infected.bactopop)) && healthy.status == :S
+    if (rand() < infected.βₛ*(1-infected.bactopop)) && healthy.status == :S
         healthy.status = :ES
         healthy.submodel = infected.submodel
         healthy.submodel.total_status = healthy.status
@@ -43,7 +43,7 @@ function exposed_to_infectious!(AnimalAgent)
         AnimalAgent.status = :IS
         AnimalAgent.submodel.total_status = AnimalAgent.status
         AnimalAgent.inf_days += 1*time_resolution
-    elseif AnimalAgent.status == :ER
+    elseif AnimalAgent.status == :ER && (AnimalAgent.days_exposed ≥ rand(Poisson(3)))
         AnimalAgent.status = :IR
         AnimalAgent.submodel.total_status = AnimalAgent.status
         AnimalAgent.inf_days += 1*time_resolution
@@ -63,8 +63,8 @@ function transmit_carrier!(a1,a2,animalModel)
 
     #IF a random number is greater than βₛ, then we return out of the function
     
-    if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
-        if healthy.treatment == :PT && (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ)
+    if (rand() < rand()*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
+        if healthy.treatment == :PT && (rand() < rand()*infected.βᵣ)
             healthy.status = :IR
             healthy.inf_days = 0
         else
@@ -86,8 +86,8 @@ function transmit_carrier_is!(a1,a2,animalModel)
 
     #IF a random number is greater than βₛ, then we return out of the function
     
-    if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
-        if healthy.treatment == :PT && (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ)
+    if (rand() < rand()*infected.βₛ) && (healthy.status == :S || healthy.status == :RS)
+        if healthy.treatment == :PT && (rand() < rand()*infected.βᵣ)
             healthy.status = :IR
             healthy.inf_days = 0
         else
@@ -108,7 +108,7 @@ function transmit_carrier_ir!(a1,a2,animalModel)
 
     #IF a random number is greater than βₛ, then we return out of the function
     
-    if (rand(animalModel.rng) < rand(animalModel.rng)*infected.βᵣ) && (healthy.status == :S || healthy.status == :RS || healthy.status == :RR)
+    if (rand() < rand()*infected.βᵣ) && (healthy.status == :S || healthy.status == :RS || healthy.status == :RR)
             healthy.status = :ER
             healthy.inf_days = 0
         # Else we set the status of the healthy animal to its existing status
@@ -123,7 +123,7 @@ end
 function retreatment!(AnimalAgent, animalModel)
     # Assign a treatment status
     if (AnimalAgent.status == :IS || AnimalAgent.status == :IR)
-        if AnimalAgent.treatment == :PT && (rand(animalModel.rng) < animalModel.treatment_prob)
+        if AnimalAgent.treatment == :PT && (rand() < animalModel.treatment_prob)
             AnimalAgent.treatment == :RT 
         else
             AnimalAgent.treatment = AnimalAgent.treatment
