@@ -136,8 +136,8 @@
         treatment_duration = treatment_duration #Passed argument
         bactopop = 0.0
         since_tx = 0 # Default 0 
-        inf_days_is = 0
-        inf_days_ir = 0
+        inf_days = 0
+       # inf_days_ir = 0
         submodel = initialisePopulation(
             nbact = 100,
             total_status = status,
@@ -153,7 +153,7 @@
         days_exposed = 0 # Default 0 
         days_carrier = 0 # Default 0 
         trade_status = false
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)
     
     end
 
