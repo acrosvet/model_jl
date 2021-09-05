@@ -1,4 +1,10 @@
+"""
 
+agent_step!(AnimalAgent, animalModel)
+
+Step AnimalAgents through time
+
+"""
     function agent_step!(AnimalAgent, animalModel)
         move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
         exposed_to_infectious!(AnimalAgent) # Transition exposed animals to infectiousness
