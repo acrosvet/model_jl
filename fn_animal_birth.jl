@@ -24,13 +24,14 @@ function birth!(animalModel)
             βₛ = animalModel.βₛ
             days_treated = 0
             inf_days = 0
+            days_exposed = 0
             treatment = :U
             bactopop = 0.0
             since_tx = 0
             submodel = initialisePopulation(
                 nbact = 100,
                 total_status = status,
-                timestep = timestep,
+                timestep = animalModel.timestep,
                 days_treated = 0,
                 age = age,
                 days_exposed = 0
