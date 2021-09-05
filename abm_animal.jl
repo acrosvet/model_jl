@@ -27,7 +27,6 @@
         res_carrier = 0.05/time_resolution,
         sens_carrier = 0.01/time_resolution, 
         bactopop = 0.0,
-        submodel = initialisePopulation(),
         stage = :C,
         calday = 183,
         num_calves = (calday > 182 && calday < 272) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
@@ -66,7 +65,6 @@
         res_carrier,
         sens_carrier,
         bactopop,
-        submodel,
         calday,
         stage,
         βᵣ,
@@ -163,7 +161,14 @@
         days_treated = days_treated
         treatment_duration = treatment_duration
         bactopop = 0.0
-        submodel = submodel
+        submodel = initialisePopulation(
+            nbact = 10000,
+            total_status = status,
+            timestep = timestep,
+            days_treated = 0,
+            age = age,
+            days_exposed = 0
+        )
         vel = initial_velocity(status, movement)
         stage = initial_stage(age)
         dim = initial_dim(stage, calday)
