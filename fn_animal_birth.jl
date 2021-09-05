@@ -25,6 +25,7 @@ function birth!(animalModel)
             days_treated = 0
             inf_days = 0
             days_exposed = 0
+            days_carrier = 0
             treatment = :U
             bactopop = 0.0
             since_tx = 0
