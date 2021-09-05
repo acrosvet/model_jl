@@ -7,6 +7,7 @@ function transmit_resistant!(a1,a2,animalModel)
         if (rand(animalModel.rng) < infected.βᵣ*infected.bactopop) && healthy.status == :S
             healthy.status = :ER
             healthy.submodel = infected.submodel
+            healthy.submodel.total_status = healthy.status
         else
             healthy.status = healthy.status
         end
@@ -23,13 +24,16 @@ function transmit_sensitive!(a1,a2,animalModel)
     #IF a random number is greater than βₛ, then we return out of the function
     
     if (rand(animalModel.rng) < infected.βₛ*(1-infected.bactopop)) && healthy.status == :S
-        healthy.total_status = :ES
+        healthy.status = :ES
         healthy.submodel = infected.submodel
-        # Else we set the status of the healthy animal to IS
+        healthy.submodel.total_status = healthy.status
+                # Else we set the status of the healthy animal to IS
     else
         healthy.status = healthy.status
     end
 end
+
+
 
 # Fn - Transmit carrier (Animal) ----------------------------    
 function transmit_carrier!(a1,a2,animalModel)
@@ -108,3 +112,4 @@ function retreatment!(AnimalAgent, animalModel)
     end
 
 end
+
