@@ -140,17 +140,17 @@ function uninfected!(BacterialAgent, bacterialModel)
 
 end
 
-# Movement from exposed to infected  -----------------
+#= # Movement from exposed to infected  -----------------
 
 function exposed_infected!(bacterialModel)
+    bacterialModel.days_exposed += 1
     if bacterialModel.total_status == :ES && (bacterialModel.days_exposed ≥ rand(Poisson(4)))
         bacterialModel.total_status = :IS
     elseif bacterialModel.total_status == :ER && (bacterialModel.days_exposed ≥ rand(Poisson(4)))
         bacteriaModel.total_status = :IR
     end
 end
-
-
+ =#
 
 function infected_sensitive!(BacterialAgent, bacterialModel)
 
