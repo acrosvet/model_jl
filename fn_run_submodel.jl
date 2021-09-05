@@ -4,9 +4,9 @@
 
     id = AnimalAgent.id
 
-    animalModel.submodel.properties[:total_status] = AnimalAgent.status
-    animalModel.submodel.properties[:days_treated] = AnimalAgent.days_treated
-    animalModel.submodel.age = AnimalAgent.age
+    AnimalAgent.submodel.properties[:total_status] = AnimalAgent.status
+    AnimalAgent.submodel.properties[:days_treated] = AnimalAgent.days_treated
+    AnimalAgent.submodel.age = AnimalAgent.age
     
     if haskey(animalModel.agents, id)
     
