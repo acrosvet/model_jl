@@ -8,3 +8,6 @@ Animal Model
 
 1) Days infected incrementing by 2
 2) Bactopop not updating
+3) Days infected is not resetting
+4) Animals are not changing states
+5) The calendar is randomly resetting
