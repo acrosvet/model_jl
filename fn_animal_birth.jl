@@ -27,7 +27,14 @@ function birth!(animalModel)
             treatment = :U
             bactopop = 0.0
             since_tx = 0
-            submodel = initialisePopulation()
+            submodel = initialisePopulation(
+                nbact = 100,
+                total_status = status,
+                timestep = timestep,
+                days_treated = 0,
+                age = age,
+                days_exposed = 0
+            )
             vel = initial_velocity(status, animalModel.movement)
             stage = :C
             dim = 0
