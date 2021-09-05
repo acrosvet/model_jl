@@ -4223,3 +4223,5 @@ The number of animals in farm 4 is 201
 Model step==========================================================
 The number of animals received by farm 4 is 0
 The number of animals in farm 2 is 179 
+==========================================================
+Model step==========================================================
