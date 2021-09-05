@@ -5,6 +5,7 @@ mutable struct BacterialAgent <: AbstractAgent
     pos::NTuple{2, Int}
     status::Symbol
     strain::Int64
+    strain_status::Symbol
 end
 
 
