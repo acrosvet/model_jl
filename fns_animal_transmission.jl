@@ -33,19 +33,23 @@ function transmit_sensitive!(a1,a2,animalModel)
     else
         healthy.status = healthy.status
     end
+    println("Days exposed is:")
+    println(healthy.days_exposed)
 end
 
 function exposed_to_infectious!(AnimalAgent)
 # If the number of days infected exceeds an infectious duration from a Poisson distribution with λ = 3, then the animal becomes infectious
     if AnimalAgent.status == :ES && (AnimalAgent.days_exposed ≥ rand(Poisson(3)))
         AnimalAgent.status = :IS
-        healthy.submodel.total_status = AnimalAgent.status
-        healthy.inf_days += 1*time_resolution
+        AnimalAgent.submodel.total_status = AnimalAgent.status
+        AnimalAgent.inf_days += 1*time_resolution
     elseif AnimalAgent.status == :ER
         AnimalAgent.status = :IR
-        healthy.submodel.total_status = AnimalAgent.status
-        healthy.inf_days += 1*time_resolution
+        AnimalAgent.submodel.total_status = AnimalAgent.status
+        AnimalAgent.inf_days += 1*time_resolution
     end
+    println("Days infected is: ")
+    println(AnimalAgent.inf_days)
 end
 
 
