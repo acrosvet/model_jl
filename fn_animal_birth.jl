@@ -15,7 +15,7 @@ function birth!(animalModel)
 
     if (animalModel.calday ≥ 182 && animalModel.calday ≤ 272) && (rand(animalModel.rng) < 0.5)
 
-
+            
             # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
             pos = Tuple(10*rand(animalModel.rng, 2))
             age = 0
