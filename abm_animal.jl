@@ -37,6 +37,8 @@
         mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
         βᵣ,
         βₛ,
+        movement,
+        timestep,
         sponrec_ir,
         sponrec_is,
         timestep, 
