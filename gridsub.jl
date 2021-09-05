@@ -46,10 +46,10 @@ function initialisePopulation(
     println(r_strain)
 
 
-    function fn_strain_status!(nstrains, rstrain)
+    function fn_strain_status!(nstrains, r_strain)
         strain_statuses = []
         for i in 1:nstrains
-            if i != rstrain
+            if i != r_strain
                strain_status = :S
                push!(strain_statuses, strain_status)
             else
@@ -59,6 +59,9 @@ function initialisePopulation(
         end
         return strain_statuses
     end
+
+
+    strain_statuses = fn_strain_status!(nstrains, r_strain)
 
     println(strain_statuses)
 
@@ -101,16 +104,17 @@ function initialisePopulation(
     for n in 1:nbact
         strain = rand(1:nstrains)
         pos = (1,1)
-        #strain_fitness = bact_fitnesses[strain]
-        agent = BacterialAgent(n, pos,  status, strain, strain_status)
+        strain_status = strain_statuses[strain]
+        fitness = bact_fitnesses[strain]
+        agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
         add_agent_single!(agent, bacterialModel)
         df = DataFrame(
             BactNo = n,
             #BactPos = pos,
             ResistantStrain = r_strain,
             bactStrain = strain,
-            StrainStatus = strain_status#,
-            #StrainFitness = strain_fitness
+            StrainStatus = strain_status,
+            StrainFitness = fitness
         )
         output = open("bactinit.csv","a")
         CSV.write(output, df, delim = ";", append = true)
