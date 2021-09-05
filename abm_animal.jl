@@ -4,6 +4,8 @@
     #Define model initialisation functions. 
 
     function initialiseModel(
+        N::Int, #Default number of animals
+
         movement = 0.1, #Movement in continuous space
         βᵣ = 0.3/time_resolution, #Beta (resistant) 
         βₛ = 0.6/time_resolution, #Beta (sensitive)
@@ -20,9 +22,8 @@
         num_heifers = Int(floor(N*0.3*rand(0.8:0.05:1.2))),
         num_lac = N - num_calves - num_weaned - num_heifers,
         rng = MersenneTwister(42); #Random seed 
-        N::Int, #Default number of animals
-        treatment_prob = 0.3/time_resolution,
-        treatment_duration = 5*time_resolution,
+        treatment_prob::Float64 = 0.3/time_resolution,
+        treatment_duration::Int = 5*time_resolution,
     )
     #End header
     #Body
