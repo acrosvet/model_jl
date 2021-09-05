@@ -21,6 +21,8 @@ mutable struct AnimalAgent <: AbstractAgent
     βᵣ::Float64
     inf_days_is::Int
     inf_days_ir::Int
+    days_exposed::Int
+    days_carrier::Int
     treatment::Symbol
     days_treated::Int
     since_tx::Int
