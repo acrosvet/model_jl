@@ -23,8 +23,7 @@ function birth!(animalModel)
             βᵣ = animalModel.βᵣ
             βₛ = animalModel.βₛ
             days_treated = 0
-            inf_days_is = 0
-            inf_days_ir = 0
+            inf_days = 0
             treatment = :U
             bactopop = 0.0
             since_tx = 0
@@ -34,7 +33,8 @@ function birth!(animalModel)
             dim = 0
             days_dry = 0
             trade_status = false
-            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)    
+            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)
+            #add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)    
         end
 
 end
