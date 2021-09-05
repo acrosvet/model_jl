@@ -5,7 +5,6 @@
 
     function initialiseModel(
         N::Int, #Default number of animals
- #       seed = 42, #Random seed
         animalProximityRadius = 0.5, #Radius for effective contact
         mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
         mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
@@ -14,28 +13,18 @@
         βₛ = 0.6/time_resolution, #Beta (sensitive)
         init_is = 5, # Number initially infected sensitive
         init_ir = 1, # Number initially infected resistant
- #       inf_days_is = 0, #Number of days infected sensitive
- #       inf_days_ir = 0, #Number of days infected resistant
         sponrec_is = 0.05/time_resolution, #chance of spontaneous recovery IS
         sponrec_ir = 0.04/time_resolution,  #chance of spontaneous recovery IR
         timestep = 1.0, #Set model timestep
-#        treatment = :U, #Animal treatment status
-#        days_treated = 0,
         treatment_prob = 0.3/time_resolution,
         treatment_duration = 5*time_resolution,
-#        since_tx = 0,
         res_carrier = 0.05/time_resolution,
         sens_carrier = 0.01/time_resolution, 
-#        bactopop = 0.0,
-#        stage = :C,
         calday = 183,
         num_calves = (calday > 182 && calday < 272) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
         num_weaned = (calday ≥ 272 && calday ≤ 365 ) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
         num_heifers = Int(floor(N*0.3*rand(0.8:0.05:1.2))),
         num_lac = N - num_calves - num_weaned - num_heifers,
-#        dim = 0,
-#        lac = 0,
-#        days_dry = 0,
         rng = MersenneTwister(42), #Random seed 
         sending = [], # Agent sending container
         receiving = [], # Agent receiving container
@@ -61,7 +50,6 @@
         timestep, 
         treatment_prob,
         treatment_duration, 
-        #since_tx,
         res_carrier,
         sens_carrier,
         calday,
