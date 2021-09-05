@@ -74,6 +74,7 @@ include("fn_current_heifers.jl")
 
 include("fn_current_weaned.jl")
 
+include("export_animal_data.jl")
 
 step!(farmModel, farm_step!, 10) 
 
