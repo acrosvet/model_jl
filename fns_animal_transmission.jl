@@ -23,7 +23,7 @@ function transmit_sensitive!(a1,a2,animalModel)
     #IF a random number is greater than βₛ, then we return out of the function
     
     if (rand(animalModel.rng) < infected.βₛ*(1-infected.bactopop)) && healthy.status == :S
-        healthy.status = :ES
+        healthy.total_status = :ES
         healthy.submodel = infected.submodel
         # Else we set the status of the healthy animal to IS
     else
