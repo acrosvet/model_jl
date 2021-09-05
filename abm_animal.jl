@@ -14,16 +14,16 @@
         βₛ = 0.6/time_resolution, #Beta (sensitive)
         init_is = 5, # Number initially infected sensitive
         init_ir = 1, # Number initially infected resistant
-        inf_days_is = 0,
-        inf_days_ir = 0,
+ #       inf_days_is = 0, #Number of days infected sensitive
+ #       inf_days_ir = 0, #Number of days infected resistant
         sponrec_is = 0.05/time_resolution, #chance of spontaneous recovery IS
         sponrec_ir = 0.04/time_resolution,  #chance of spontaneous recovery IR
         timestep = 1.0, #Set model timestep
-        treatment = :U,
-        days_treated = 0,
+#        treatment = :U, #Animal treatment status
+#        days_treated = 0,
         treatment_prob = 0.3/time_resolution,
         treatment_duration = 5*time_resolution,
-        since_tx = 0,
+#        since_tx = 0,
         res_carrier = 0.05/time_resolution,
         sens_carrier = 0.01/time_resolution, 
 #        bactopop = 0.0,
@@ -36,14 +36,14 @@
 #        dim = 0,
 #        lac = 0,
 #        days_dry = 0,
-        rng = MersenneTwister(42), 
-        sending = [],
-        receiving = [],
-        tradeable_heifers = 0,
-        tradeable_calves = 0,
-        tradeable_lactating = 0,
-        tradeable_weaned = 0,
-        tradeable_stock = 0,
+        rng = MersenneTwister(42), #Random seed 
+        sending = [], # Agent sending container
+        receiving = [], # Agent receiving container
+        tradeable_heifers = 0, #Initial number of tradeable heifers
+        tradeable_calves = 0, # Ibid, calves
+        tradeable_lactating = 0, # Ibid, lactating
+        tradeable_weaned = 0, # Ibid, weand
+        tradeable_stock = 0, # Ibid, all stock
     )
     #End header
     #Body
@@ -61,7 +61,7 @@
         timestep, 
         treatment_prob,
         treatment_duration, 
-        since_tx,
+        #since_tx,
         res_carrier,
         sens_carrier,
         calday,
@@ -147,15 +147,18 @@
     for n in 1:N
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
-        status = initial_status(n, init_ir, init_is)
-        age = initial_age(n)
-        βᵣ = βᵣ
+        status = initial_status(n, init_ir, init_is) # Defined using initial status function
+        age = initial_age(n) # Defined using initial age function
+        βᵣ = βᵣ 
         βₛ = βₛ
-        treatment = treatment
+        treatment = :U #Default agent is untreated
         treatment_prob = treatment_prob
-        days_treated = days_treated
-        treatment_duration = treatment_duration
+        days_treated = 0 # Default is not treated
+        treatment_duration = treatment_duration #Passed argument
         bactopop = 0.0
+        since_tx = 0 # Default 0 
+        inf_days_is = 0
+        inf_days_ir = 0
         submodel = initialisePopulation(
             nbact = 100,
             total_status = status,
@@ -164,12 +167,12 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement)
-        stage = initial_stage(age)
-        dim = initial_dim(stage, calday)
-        days_dry = 0
-        days_exposed = 0
-        days_carrier = 0
+        vel = initial_velocity(status, movement) #Defined using initial velocity fn
+        stage = initial_stage(age) # Defined using initial stage fn
+        dim = initial_dim(stage, calday) # Defined using initial dim fn
+        days_dry = 0 # Default 0
+        days_exposed = 0 # Default 0 
+        days_carrier = 0 # Default 0 
         trade_status = false
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)
     
