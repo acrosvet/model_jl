@@ -1,22 +1,17 @@
 function mortality!(AnimalAgent, animalModel)
-    if AnimalAgent.status == :IS && (rand(animalModel.rng) < animalModel.mortalityRateSens)
-    kill_agent!(AnimalAgent, animalModel)
-    else 
-    AnimalAgent.inf_days += 1*time_resolution
-    end
-
-    if AnimalAgent.status == :IR && (rand(animalModel.rng) < animalModel.mortalityRateRes)
+    # If an animal is infected sensitive, cull if it is eligible to be culled
+    if AnimalAgent.status == :IS && (rand() < animalModel.mortalityRateSens)
         kill_agent!(AnimalAgent, animalModel)
-    else
-        AnimalAgent.inf_days += 1*time_resolution
+    # The same for animals infected with resistant bacteria, according to that mortality rate
+    elseif AnimalAgent.status == :IR && (rand() < animalModel.mortalityRateRes)
+        kill_agent!(AnimalAgent, animalModel)
     end
 
     # Cull agent -------------------------------
 
-    if AnimalAgent.stage == :L && (0.3/365 > rand(animalModel.rng))
+    # Cull cows that have been in the herd for too long at a 30% replacement rate
+    if AnimalAgent.stage == :L && (0.3/365 > rand())
         kill_agent!(AnimalAgent, animalModel)
-    else
-        return
     end
 
 end
