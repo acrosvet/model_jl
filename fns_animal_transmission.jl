@@ -40,11 +40,11 @@ function exposed_to_infectious!(AnimalAgent)
     if AnimalAgent.status == :ES && (AnimalAgent.days_exposed ≥ rand(Poisson(3)))
         AnimalAgent.status = :IS
         healthy.submodel.total_status = AnimalAgent.status
-        healthy.inf_days += 1
+        healthy.inf_days += 1*time_resolution
     elseif AnimalAgent.status == :ER
         AnimalAgent.status = :IR
         healthy.submodel.total_status = AnimalAgent.status
-        healthy.inf_days += 1
+        healthy.inf_days += 1*time_resolution
     end
 end
 
