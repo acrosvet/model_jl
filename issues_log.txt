@@ -11,3 +11,5 @@ Animal Model
 3) Days infected is not resetting
 4) Animals are not changing states
 5) The calendar is randomly resetting
+6) Everything has a number of days infected
+7) Need to add replacement rate to model
