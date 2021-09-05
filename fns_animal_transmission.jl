@@ -48,8 +48,6 @@ function exposed_to_infectious!(AnimalAgent)
         AnimalAgent.submodel.total_status = AnimalAgent.status
        # AnimalAgent.inf_days += 1*time_resolution
     end
-    println("Days infected is: ")
-    println(AnimalAgent.inf_days)
 end
 
 
