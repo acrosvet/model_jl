@@ -4,7 +4,6 @@
     #Define model initialisation functions. 
 
     function initialiseModel(
-        N::Int, #Default number of animals
         movement = 0.1, #Movement in continuous space
         βᵣ = 0.3/time_resolution, #Beta (resistant) 
         βₛ = 0.6/time_resolution, #Beta (sensitive)
@@ -13,8 +12,6 @@
         sponrec_is = 0.05/time_resolution, #chance of spontaneous recovery IS
         sponrec_ir = 0.04/time_resolution,  #chance of spontaneous recovery IR
         timestep = 1.0, #Set model timestep
-        treatment_prob = 0.3/time_resolution,
-        treatment_duration = 5*time_resolution,
         res_carrier = 0.05/time_resolution,
         sens_carrier = 0.01/time_resolution, 
         calday = 183,
@@ -22,8 +19,10 @@
         num_weaned = (calday ≥ 272 && calday ≤ 365 ) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
         num_heifers = Int(floor(N*0.3*rand(0.8:0.05:1.2))),
         num_lac = N - num_calves - num_weaned - num_heifers,
-        rng = MersenneTwister(42), #Random seed 
-
+        rng = MersenneTwister(42); #Random seed 
+        N::Int, #Default number of animals
+        treatment_prob = 0.3/time_resolution,
+        treatment_duration = 5*time_resolution,
     )
     #End header
     #Body
