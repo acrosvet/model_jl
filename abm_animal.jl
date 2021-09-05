@@ -5,7 +5,6 @@
 
     function initialiseModel(
         N::Int, #Default number of animals
-        seed = 42, #Random seed
         animalProximityRadius = 0.5, #Radius for effective contact
         mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
         mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
@@ -154,8 +153,6 @@
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is)
         age = initial_age(n)
-        βᵣ = βᵣ
-        βₛ = βₛ
         treatment = treatment
         treatment_prob = treatment_prob
         days_treated = days_treated
@@ -176,8 +173,7 @@
         days_exposed = 0
         days_carrier = 0
         trade_status = false
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)
-        #add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, days_exposed, days_carrier)   
+        add_agent!(pos, animalModel, vel, age, status, inf_days_is, inf_days_ir, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)
     
     end
 
