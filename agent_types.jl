@@ -33,7 +33,6 @@ mutable struct AnimalAgent <: AbstractAgent
     dim::Int
     days_dry::Int
     trade_status::Bool
-    weaning_date::Int
 end
 
 mutable struct FarmAgent <: AbstractAgent
