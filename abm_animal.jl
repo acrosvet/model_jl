@@ -16,11 +16,11 @@
         res_carrier = 0.05/time_resolution,
         sens_carrier = 0.01/time_resolution, 
         culling_rate = 0.3/time_resolution,
-        calday = 1,
+        calday = 365,
         model_year = 0,
-        num_calves = (calday > 182 && calday < 272) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
-        num_weaned = (calday ≥ 272 && calday ≤ 365 ) ? Int(floor(N*0.2*rand(0.8:0.05:1.2))) : 0,
-        num_heifers = Int(floor(N*0.3*rand(0.8:0.05:1.2))),
+        num_calves =  Int(floor(N*0.2*rand(0.8:0.05:1.2))),
+        num_weaned =  0,
+        num_heifers = Int(floor(N*0.2*rand(0.8:0.05:1.2))),
         num_lac = N - num_calves - num_weaned - num_heifers,
         rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3/time_resolution,
@@ -70,39 +70,34 @@
     # Set the initial age of the animals
     function initial_age(n)
         if n <= num_calves
-            rand(1:60)
-        elseif n > (num_calves + 1) && n <= (num_calves + num_weaned)
-            rand(61:(30*13))
+            rand(truncated(Poisson(112), 49, 109))
         elseif n > (num_calves + num_weaned + 1 ) && n <= (num_calves + num_weaned + num_heifers)
-            rand((13*30):(24*30))
+            rand(truncated(Poisson(477), 414, 474))   
         else n > (num_calves + num_weaned + num_heifers + 1) && n <= (num_calves + num_weaned + num_heifers + num_lac)
-            rand((24*30):(6*365))
+            rand(truncated(Poisson(24*30),(24*30), (24*30 + 63)))
         end
     end
 
     # Set the initial dim
 
-    function initial_dim(stage, calday)
+    function initial_dim(stage)
     
-        if stage == :L && calday ≥ 182 
-                0
-            else 
-                365 - 182 
+        if stage == :L 
+            rand(truncated(Poisson(112), 49, 109))
         end
 
     end
 
     # Set the initial lifestage 
 
-    function initial_stage(age)
-        if age < 60
+    function initial_stage(n)
+        if n <= num_calves
             :C
-        elseif age ≥ 60 && age ≤ 13*30
-            :W
-        elseif age > 13*30 && age ≤ 24*30
-            :H
-        elseif age > 24*30 
+        elseif n > (num_calves + num_weaned + 1 ) && n <= (num_calves + num_weaned + num_heifers)
+            :H  
+        else n > (num_calves + num_weaned + num_heifers + 1) && n <= (num_calves + num_weaned + num_heifers + num_lac)
             :L
+        end
         end
     end
 
@@ -157,7 +152,7 @@
             days_exposed = 0
         )
         vel = initial_velocity(status, movement) #Defined using initial velocity fn
-        stage = initial_stage(age) # Defined using initial stage fn
+        stage = initial_stage(n) # Defined using initial stage fn
         dim = initial_dim(stage, calday) # Defined using initial dim fn
         days_dry = 0 # Default 0
         days_exposed = 0 # Default 0 
