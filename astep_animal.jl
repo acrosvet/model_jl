@@ -6,7 +6,7 @@ Step AnimalAgents through time
 
 """
     function agent_step!(AnimalAgent, animalModel)
-        move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
+        #= move_agent!(AnimalAgent, animalModel, animalModel.timestep) #Move the agent in space
         exposed_to_infectious!(AnimalAgent) # Transition exposed animals to infectiousness
         treatment!(AnimalAgent, animalModel) #Introduce treatment
         treatment_effect!(AnimalAgent) #Effect of treatment on transmission.
@@ -15,10 +15,10 @@ Step AnimalAgents through time
         recover!(AnimalAgent, animalModel) # Introduce recovery
         carrierState!(AnimalAgent, animalModel) #Introduce a carrier state
         run_submodel!(AnimalAgent, animalModel) #Run the bacterial submodel
-        bacto_dyno!(AnimalAgent) #Determine the overall bacterial dynamics for an animal
+        bacto_dyno!(AnimalAgent) #Determine the overall bacterial dynamics for an animal =#
         mortality!(AnimalAgent, animalModel) #Introduce mortality
         update_agent!(AnimalAgent, animalModel) #Apply the update_agent function
-        flag_trades!(AnimalAgent, animalModel)
+        #flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
 
 
