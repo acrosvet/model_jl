@@ -14,7 +14,7 @@ function update_agent!(AnimalAgent, animalModel)
     end
 
     # Wean 
-    if AnimalAgent.stage == :C && (AnimalAgent.age == rand(truncated(Poisson(60), 55, 70)))
+    if AnimalAgent.stage == :C && (AnimalAgent.age ≥ rand(truncated(Poisson(60), 55, 70)))
         AnimalAgent.stage = :W
         id = AnimalAgent.id
         day = animalModel.calday
