@@ -13,6 +13,8 @@ function birth!(animalModel)
         end
     end
 
+    calf_counter = 0
+
     if (animalModel.calday ≥ 182 && animalModel.calday ≤ 272) && (rand(animalModel.rng) < 0.5)
 
             
@@ -43,7 +45,9 @@ function birth!(animalModel)
             days_dry = 0
             trade_status = false
             add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)
+            calf_counter += 1
             println("Calf born!")
+            println("$calf_counter calves born")
         end
 
 end
