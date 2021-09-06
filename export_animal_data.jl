@@ -15,7 +15,8 @@ data = DataFrame(
     DaysDry = AnimalAgent.days_dry,
     TradeStatus = AnimalAgent.trade_status,
     AnimalBactoPop = AnimalAgent.bactopop,
-    ModelYear = animalModel.model_year
+    ModelYear = animalModel.model_year,
+    AnimalAge = AnimalAgent.age
 )
 
 
