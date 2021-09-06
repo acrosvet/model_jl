@@ -17,6 +17,7 @@ data = DataFrame(
     AnimalBactoPop = AnimalAgent.bactopop,
     ModelYear = animalModel.model_year,
     AnimalAge = AnimalAgent.age
+    AgentType = AnimalAgent.agenttype
 )
 
 
