@@ -154,7 +154,7 @@
         )
         vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = initial_stage(n) # Defined using initial stage fn
-        dim = initial_dim(stage, calday) # Defined using initial dim fn
+        dim = initial_dim(stage) # Defined using initial dim fn
         days_dry = 0 # Default 0
         days_exposed = 0 # Default 0 
         days_carrier = 0 # Default 0 
