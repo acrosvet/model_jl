@@ -9,7 +9,8 @@ Animal Model
 1) Days infected incrementing by 2
 2) Bactopop not updating
 3) Days infected is not resetting
-4) Animals are not changing states
+4) Animals are not changing states (F)
 5) The calendar is randomly resetting
 6) Everything has a number of days infected
-7) Need to add replacement rate to model
+7) Need to add replacement rate to model (F)
+8) Population size is expanding
