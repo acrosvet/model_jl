@@ -13,7 +13,8 @@ data = DataFrame(
     DaysSinceTreatment = AnimalAgent.since_tx,
     DaysDry = AnimalAgent.days_dry,
     TradeStatus = AnimalAgent.trade_status,
-    AnimalBactoPop = AnimalAgent.bactopop
+    AnimalBactoPop = AnimalAgent.bactopop,
+    ModelYear = animalModel.model_year
 )
 
 output = open("./export/animal_model_run.csv","a")
