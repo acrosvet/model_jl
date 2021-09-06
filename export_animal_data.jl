@@ -17,7 +17,9 @@ data = DataFrame(
     ModelYear = animalModel.model_year
 )
 
-output = open("./export/animal_model_run.csv","a")
+farm_id = animalModel.farm_id
+
+output = open("./export/farm_$farm_id-animal_model_run.csv","a")
     CSV.write(output, data, delim = ";", append = true, header = false)
     close(output)
 
