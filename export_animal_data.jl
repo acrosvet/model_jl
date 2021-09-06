@@ -20,7 +20,7 @@ data = DataFrame(
 
 
 output = open("./export/animal_model_run.csv","a")
-    CSV.write(output, data, delim = ";", append = true, header = false)
+    CSV.write(output, data, delim = ",", append = true, header = false)
     close(output)
 
 end
