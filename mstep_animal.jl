@@ -17,9 +17,6 @@ model_step!(animalModel)
 
 """
 function model_step!(animalModel)
-    #Introduce open population with animals born into the model
-    #birth!(animalModel)
-
 
     #Define the proximity for which infection may occur
 
