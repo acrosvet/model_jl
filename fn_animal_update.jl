@@ -17,14 +17,16 @@ function update_agent!(AnimalAgent, animalModel)
     if AnimalAgent.stage == :C && (AnimalAgent.age == rand(truncated(Poisson(60), 55, 70)))
         AnimalAgent.stage = :W
         id = AnimalAgent.id
-        println("Weaning $id !")
+        day = animalModel.calday
+        println("Weaning $id on day $day !")
     end
 
     # Weaned to heifer
     if AnimalAgent.stage == :W && (AnimalAgent.age == rand(truncated(Poisson(13*30), 13*30, (13*30 + 9*7))))
         AnimalAgent.stage = :H
         id = AnimalAgent.id
-        println("Joining $id !")
+        day = animalModel.calday
+        println("Joining $id on day $day !")
         
     end
 
