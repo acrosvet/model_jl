@@ -39,15 +39,11 @@ function update_agent!(AnimalAgent, animalModel)
 
     if AnimalAgent.stage == :L 
         AnimalAgent.dim += 1
-    else
-        AnimalAgent.dim = AnimalAgent.dim
     end
 
     # Increment days dry ---------------------
     if AnimalAgent.stage == :D
         AnimalAgent.days_dry += 1
-    else
-        return
     end
 
 
