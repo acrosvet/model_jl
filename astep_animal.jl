@@ -12,12 +12,12 @@ Step AnimalAgents through time
         treatment_effect!(AnimalAgent) #Effect of treatment on transmission.
         endTreatment!(AnimalAgent, animalModel) #End treatment
         retreatment!(AnimalAgent, animalModel) #Effect of retreatment
-        mortality!(AnimalAgent, animalModel) #Introduce mortality
         recover!(AnimalAgent, animalModel) # Introduce recovery
         carrierState!(AnimalAgent, animalModel) #Introduce a carrier state
-        update_agent!(AnimalAgent, animalModel) #Apply the update_agent function
         run_submodel!(AnimalAgent, animalModel) #Run the bacterial submodel
         bacto_dyno!(AnimalAgent) #Determine the overall bacterial dynamics for an animal
+        mortality!(AnimalAgent, animalModel) #Introduce mortality
+        update_agent!(AnimalAgent, animalModel) #Apply the update_agent function
         flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
 
