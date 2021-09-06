@@ -1,4 +1,4 @@
-function update_agent!(AnimalAgent)
+function update_agent!(AnimalAgent, animalModel)
     AnimalAgent.age += 1 # Increment age by 1 day
     
     if AnimalAgent.treatment == :T 
@@ -12,8 +12,11 @@ function update_agent!(AnimalAgent)
         AnimalAgent.stage = :C
     elseif AnimalAgent.age ≥ 60 && AnimalAgent.age ≤ 13*30
         AnimalAgent.stage = :W
-    elseif AnimalAgent.age > 13*30 && AnimalAgent.age ≤ 24*30
+    elseif AnimalAgent.age > 13*30 && AnimalAgent.age < 24*30
         AnimalAgent.stage = :H
+    elseif AnimalAgent.stage == :H && (AnimalAgent.age == rand(truncated(Poisson(24*30),(24*30), (24*30 + 63)))
+        AnimalAgent.stage == :L
+        fn_animal_birth!(animalModel)
     elseif AnimalAgent.age > 24*30 && AnimalAgent.stage != :D
         AnimalAgent.stage = :L 
     elseif AnimalAgent.stage == :D && AnimalAgent.days_dry > rand(60:90)
