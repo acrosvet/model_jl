@@ -25,6 +25,7 @@
         rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3/time_resolution,
         treatment_duration::Int = 5*time_resolution,
+        farm_id::Int = 1
     )
     #End header
     #Body
@@ -60,6 +61,7 @@
         tradeable_lactating = 0, # Ibid, lactating
         tradeable_weaned = 0, # Ibid, weand
         tradeable_stock = 0, # Ibid, all stock
+        farm_id,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
