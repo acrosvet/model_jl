@@ -47,6 +47,6 @@ function birth!(animalModel)
             calf_counter += 1
             println("Calf born!")
             println("$calf_counter calves born")
-        end
+
 
 end
