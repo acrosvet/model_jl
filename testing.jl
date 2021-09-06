@@ -76,5 +76,5 @@ include("fn_current_weaned.jl")
 
 include("export_animal_data.jl")
 
-step!(farmModel, farm_step!, 10) 
+#step!(farmModel, farm_step!, 10) 
 
