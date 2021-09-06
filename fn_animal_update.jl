@@ -23,7 +23,7 @@ function update_agent!(AnimalAgent, animalModel)
     end
 
     # Weaned to heifer
-    if AnimalAgent.stage == :W && (AnimalAgent.age == rand(truncated(Poisson(13*30), 13*30, (13*30 + 9*7))))
+    if AnimalAgent.stage == :W && (AnimalAgent.age ≥ rand(truncated(Poisson(13*30), 13*30, (13*30 + 9*7))))
         AnimalAgent.stage = :H
         id = AnimalAgent.id
         day = animalModel.calday
@@ -32,21 +32,29 @@ function update_agent!(AnimalAgent, animalModel)
         
     end
 
-    # Calve heifer to lactating and create calf
-    if AnimalAgent.stage == :H && (AnimalAgent.age == rand(truncated(Poisson(24*30),(24*30), (24*30 + 63))))
+     # Calve heifer to lactating and create calf
+    if AnimalAgent.stage == :H && (AnimalAgent.age ≥ rand(truncated(Poisson(24*30),(24*30), (24*30 + 63))))
         AnimalAgent.stage = :L
         AnimalAgent.dim = 0
+        id = AnimalAgent.id
+        day = animalModel.calday
+        age = AnimalAgent.age
+        println("Calving $id at age $age on day $day")
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
             #birth!(animalModel)
         end
-    end
+    end 
     
 
     # Calve dry cow and create calf
     if AnimalAgent.stage == :D && (AnimalAgent.days_dry > rand(truncated(Poisson(75), 60, 90)))
         AnimalAgent.stage = :L
         AnimalAgent.dim = 0
+        id = AnimalAgent.id
+        day = animalModel.calday
+        age = AnimalAgent.age
+        println("Calving $id at age $age on day $day")
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
            # birth!(animalModel)
