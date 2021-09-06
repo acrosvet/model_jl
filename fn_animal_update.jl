@@ -11,26 +11,47 @@ function update_agent!(AnimalAgent, animalModel)
     # Calves 
     if AnimalAgent.age < 60 && AnimalAgent.stage != :W
         AnimalAgent.stage = :C
+    end
+
     # Wean 
-    elseif AnimalAgent.stage == :C &&  (AnimalAgent.age == rand(truncated(Poisson(60), 55, 70)))
+    if AnimalAgent.stage == :C && (AnimalAgent.age == rand(truncated(Poisson(60), 55, 70)))
         AnimalAgent.stage = :W
-    elseif AnimalAgent.stage == :W && (AnimalAgent.age == rand(truncated(Poisson(13*30), 13*30, (13*30 + 9*7))))
+        id = AnimalAgent.id
+        println("Weaning $id !")
+    end
+
+    # Weaned to heifer
+    if AnimalAgent.stage == :W && (AnimalAgent.age == rand(truncated(Poisson(13*30), 13*30, (13*30 + 9*7))))
         AnimalAgent.stage = :H
-    elseif AnimalAgent.stage == :H && (AnimalAgent.age == rand(truncated(Poisson(24*30),(24*30), (24*30 + 63))))
+        id = AnimalAgent.id
+        println("Joining $id !")
+        
+    end
+
+    # Calve heifer to lactating and create calf
+    if AnimalAgent.stage == :H && (AnimalAgent.age == rand(truncated(Poisson(24*30),(24*30), (24*30 + 63))))
         AnimalAgent.stage = :L
         AnimalAgent.dim = 0
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
             birth!(animalModel)
         end
-    elseif AnimalAgent.stage == :D && (AnimalAgent.days_dry > rand(truncated(Poisson(75), 60, 90)))
+    end
+    
+
+    # Calve dry cow and create calf
+    if AnimalAgent.stage == :D && (AnimalAgent.days_dry > rand(truncated(Poisson(75), 60, 90)))
         AnimalAgent.stage = :L
         AnimalAgent.dim = 0
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
             birth!(animalModel)
         end
-    elseif AnimalAgent.stage == :L && (AnimalAgent.dim > rand(truncated(Poisson(320), 300, 400)))
+    end
+
+
+    # Dry off lactating cow 
+    if AnimalAgent.stage == :L && (AnimalAgent.dim > rand(truncated(Poisson(320), 300, 400)))
         AnimalAgent.stage = :D
         AnimalAgent.days_dry = 0
     end
