@@ -36,7 +36,7 @@ function model_step!(animalModel)
     end
 
     # Reset the number of days for each year at the start of a new year
-    if animalModel.calday > 365
+    if animalModel.calday > 364
         animalModel.calday = 0
     else
         animalModel.calday = animalModel.calday
