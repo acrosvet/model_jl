@@ -18,7 +18,8 @@ function update_agent!(AnimalAgent, animalModel)
         AnimalAgent.stage = :W
         id = AnimalAgent.id
         day = animalModel.calday
-        println("Weaning $id on day $day !")
+        age = AnimalAgent.age
+        println("Weaning $id  at age $age on day $day !")
     end
 
     # Weaned to heifer
@@ -26,7 +27,8 @@ function update_agent!(AnimalAgent, animalModel)
         AnimalAgent.stage = :H
         id = AnimalAgent.id
         day = animalModel.calday
-        println("Joining $id on day $day !")
+        age = AnimalAgent.age
+        println("Joining $id at age $age on day $day !")
         
     end
 
@@ -36,7 +38,7 @@ function update_agent!(AnimalAgent, animalModel)
         AnimalAgent.dim = 0
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
-            birth!(animalModel)
+            #birth!(animalModel)
         end
     end
     
@@ -47,7 +49,7 @@ function update_agent!(AnimalAgent, animalModel)
         AnimalAgent.dim = 0
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
-            birth!(animalModel)
+           # birth!(animalModel)
         end
     end
 
