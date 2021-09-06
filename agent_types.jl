@@ -20,8 +20,6 @@ mutable struct AnimalAgent <: AbstractAgent
     βₛ::Float64
     βᵣ::Float64
     inf_days::Int
-#    inf_days_is::Int
-#    inf_days_ir::Int
     days_exposed::Int
     days_carrier::Int
     treatment::Symbol
@@ -34,6 +32,7 @@ mutable struct AnimalAgent <: AbstractAgent
     days_dry::Int
     trade_status::Bool
     agenttype::Symbol
+    lactation::Int
 end
 
 mutable struct FarmAgent <: AbstractAgent
