@@ -18,8 +18,8 @@
         culling_rate = 0.3/time_resolution,
         calday = 365,
         model_year = 0,
-        num_calves =  Int(floor(N*0.2*rand(0.8:0.05:1.2))),
-        num_weaned =  0,
+        num_calves =  0,
+        num_weaned =  Int(floor(N*0.2*rand(0.8:0.05:1.2))),
         num_heifers = Int(floor(N*0.2*rand(0.8:0.05:1.2))),
         num_lac = N - num_calves - num_weaned - num_heifers,
         rng = MersenneTwister(42); #Random seed 
@@ -71,9 +71,11 @@
     function initial_age(n)
         if n <= num_calves
             rand(truncated(Poisson(112), 49, 109))
-        elseif n > (num_calves + num_weaned + 1 ) && n <= (num_calves + num_weaned + num_heifers)
+        elseif (n > (num_calves + 1)) && (n <= (num_calves + num_weaned))
+            rand(truncated(Poisson(112), 49, 109))
+        elseif (n > (num_calves + num_weaned + 1 )) && (n <= (num_calves + num_weaned + num_heifers))
             rand(truncated(Poisson(477), 414, 474))   
-        else n > (num_calves + num_weaned + num_heifers + 1) && n <= (num_calves + num_weaned + num_heifers + num_lac)
+        else (n > (num_calves + num_weaned + num_heifers + 1)) && (n <= (num_calves + num_weaned + num_heifers + num_lac))
             rand(truncated(Poisson(24*30),(24*30), (24*30 + 63)))
         end
     end
@@ -96,6 +98,8 @@
         
         if n <= num_calves
             :C
+        elseif (n > (num_calves + 1)) && (n <= (num_calves + num_weaned))
+            :W
         elseif n > (num_calves + num_weaned + 1 ) && n <= (num_calves + num_weaned + num_heifers)
             :H  
         else n > (num_calves + num_weaned + num_heifers + 1) && n <= (num_calves + num_weaned + num_heifers + num_lac)
