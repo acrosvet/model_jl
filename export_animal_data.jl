@@ -1,6 +1,7 @@
 function export_animal_data!(AnimalAgent, animalModel)
 
 data = DataFrame(
+    FarmID = animalModel.farm_id,
     Day = animalModel.calday,
     AnimalID = AnimalAgent.id,
     AnimalStatus = AnimalAgent.status,
@@ -17,9 +18,8 @@ data = DataFrame(
     ModelYear = animalModel.model_year
 )
 
-farm_id = animalModel.farm_id
 
-output = open("./export/farm_$farm_id-animal_model_run.csv","a")
+output = open("./export/animal_model_run.csv","a")
     CSV.write(output, data, delim = ";", append = true, header = false)
     close(output)
 
