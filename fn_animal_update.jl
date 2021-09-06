@@ -8,23 +8,28 @@ function update_agent!(AnimalAgent, animalModel)
     end
 
     # Change stage over time ------------------------
-    if AnimalAgent.age < 60
+    # Calves 
+    if AnimalAgent.age < 60 && AnimalAgent.stage != :W
         AnimalAgent.stage = :C
-    elseif AnimalAgent.age ≥ 60 && AnimalAgent.age ≤ 13*30
+    # Wean 
+    elseif AnimalAgent.stage == :C &&  (AnimalAgent.age == rand(truncated(Poisson(60), 55, 70)))
         AnimalAgent.stage = :W
-    elseif AnimalAgent.age > 13*30 && AnimalAgent.age < 24*30
+    elseif AnimalAgent.stage == :W && (AnimalAgent.age == rand(truncated(Poisson(13*30), 13*30, (13*30 + 9*7))))
         AnimalAgent.stage = :H
-    elseif AnimalAgent.stage == :H && (AnimalAgent.age == rand(truncated(Poisson(24*30),(24*30), (24*30 + 63)))
-        AnimalAgent.stage == :L
-        fn_animal_birth!(animalModel)
-    elseif AnimalAgent.age > 24*30 && AnimalAgent.stage != :D
-        AnimalAgent.stage = :L 
-    elseif AnimalAgent.stage == :D && AnimalAgent.days_dry > rand(60:90)
+    elseif AnimalAgent.stage == :H && (AnimalAgent.age == rand(truncated(Poisson(24*30),(24*30), (24*30 + 63))))
+        AnimalAgent.stage = :L
         AnimalAgent.dim = 0
+        fn_animal_birth!(animalModel)
+    elseif AnimalAgent.stage == :D && (AnimalAgent.days_dry > rand(truncated(Poisson(75), 60, 90)))
+        AnimalAgent.stage = :L
+        AnimalAgent.dim = 0
+        fn_animal_birth!(animalModel)
+    elseif AnimalAgent.stage == :L && (AnimalAgent.dim > rand(truncated(Poisson(320), 300, 400)))
+        AnimalAgent.stage = :D
         AnimalAgent.days_dry = 0
     end
 
-    #Increase dim --------------------
+    #Increment days in milk (dim) --------------------
 
     if AnimalAgent.stage == :L 
         AnimalAgent.dim += 1
@@ -32,30 +37,12 @@ function update_agent!(AnimalAgent, animalModel)
         AnimalAgent.dim = AnimalAgent.dim
     end
 
-    # Dryoff -------------------
-
-    if AnimalAgent.stage == :L && AnimalAgent.dim > (rand(305:400))
-        AnimalAgent.stage = :D
-        AnimalAgent.days_dry += 1
-    else
-        AnimalAgent.stage = AnimalAgent.stage
-    end
-
+    # Increment days dry ---------------------
     if AnimalAgent.stage == :D
         AnimalAgent.days_dry += 1
     else
         return
     end
-
-    # Calve ----------------------
-
-    if AnimalAgent.stage == :D && AnimalAgent.days_dry > (rand(60:90))
-        AnimalAgent.stage = :L
-        AnimalAgent.dim = 0
-    else
-        return
-    end
-
 
 
 end
