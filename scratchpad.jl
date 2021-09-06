@@ -17,7 +17,9 @@ header = DataFrame(
     TradeStatus = 0,
     AnimalBactoPop = 0,
     ModelYear = 0,
-    AnimalAge = 0
+    AnimalAge = 0,
+    AgentType = 0,
+    DIM = 0
 )
 
 output = open("./export/animal_model_run.csv","w")
