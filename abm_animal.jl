@@ -84,6 +84,8 @@
     
         if stage == :L 
             rand(truncated(Poisson(112), 49, 109))
+        else
+            0
         end
 
     end
