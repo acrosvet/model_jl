@@ -91,6 +91,7 @@
     # Set the initial lifestage 
 
     function initial_stage(n)
+        
         if n <= num_calves
             :C
         elseif n > (num_calves + num_weaned + 1 ) && n <= (num_calves + num_weaned + num_heifers)
@@ -98,7 +99,7 @@
         else n > (num_calves + num_weaned + num_heifers + 1) && n <= (num_calves + num_weaned + num_heifers + num_lac)
             :L
         end
-        end
+        
     end
 
     #Define a function to set initial infected status. This gets supplied to the loop describing the initial system state.
