@@ -42,7 +42,7 @@ function update_agent!(AnimalAgent, animalModel)
         println("Calving $id at age $age on day $day")
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
-            #birth!(animalModel)
+            birth!(animalModel)
         end
     end 
     
@@ -57,7 +57,7 @@ function update_agent!(AnimalAgent, animalModel)
         println("Calving $id at age $age on day $day")
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
-           # birth!(animalModel)
+           birth!(animalModel)
         end
     end
 
