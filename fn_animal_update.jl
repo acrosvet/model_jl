@@ -19,11 +19,11 @@ function update_agent!(AnimalAgent, animalModel)
     elseif AnimalAgent.stage == :H && (AnimalAgent.age == rand(truncated(Poisson(24*30),(24*30), (24*30 + 63))))
         AnimalAgent.stage = :L
         AnimalAgent.dim = 0
-        fn_animal_birth!(animalModel)
+        birth!(animalModel)
     elseif AnimalAgent.stage == :D && (AnimalAgent.days_dry > rand(truncated(Poisson(75), 60, 90)))
         AnimalAgent.stage = :L
         AnimalAgent.dim = 0
-        fn_animal_birth!(animalModel)
+        birth!(animalModel)
     elseif AnimalAgent.stage == :L && (AnimalAgent.dim > rand(truncated(Poisson(320), 300, 400)))
         AnimalAgent.stage = :D
         AnimalAgent.days_dry = 0
