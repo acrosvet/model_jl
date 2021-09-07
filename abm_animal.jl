@@ -86,7 +86,7 @@
     function initial_dim(stage)
     
         if stage == :L 
-            rand(truncated(Poisson(112), 49, 109))
+            rand(truncated(Poisson(112), 49, 125))
         else
             0
         end
@@ -134,23 +134,23 @@
         end
     end
 
-    function initial_pregstat(stage, age, dim)
+function initial_pregstat(stage, age, dim)
 
         if stage == :H 
             lambda = 13*30 + 21
             lower = 13*30 + 21
             upper = 13*30 + 120
-            if age ≥ rand(truncated(Poisson(lambda),lower, upper))
-                if rand(animalModel.rng) > 0.5
-                    return :P
-                end    
+            if age ≥ rand(truncated(Poisson(lambda),lower, upper)) && rand(animalModel.rng) > 0.5
+                return :P
+            else
+                return :E
             end
         elseif stage == :L && dim >= rand(truncated(Poisson(142),110, 215))
             return :P
         else
             return :E
         end
-    end
+end
 
 
     #Define the initial state of the system. Attributes for each animal in the system.
@@ -187,6 +187,7 @@
         trade_status = false
         lactation = stage == :L ? 1 : 0
         pregstat = initial_pregstat(stage, age, dim)
+        println(pregstat)
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat)
     
     end
