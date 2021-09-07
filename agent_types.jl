@@ -33,6 +33,7 @@ mutable struct AnimalAgent <: AbstractAgent
     trade_status::Bool
     agenttype::Symbol
     lactation::Int
+    pregstat::Symbol
 end
 
 mutable struct FarmAgent <: AbstractAgent
