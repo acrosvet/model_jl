@@ -15,7 +15,7 @@ function mortality!(AnimalAgent, animalModel)
         println("Cow culled!")
     end
 
-    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 150)
+    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 155)
         if rand(animalModel.rng) > 0.5
             kill_agent!(AnimalAgent, animalModel)
             println("Infertility cull!")
