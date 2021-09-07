@@ -11,14 +11,14 @@ function mortality!(AnimalAgent, animalModel)
 
     # Cull cows ------------------------------------
     if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(8*365)), 2*365, 9*365)))
-        kill_agent!(AnimalAgent, animalModel)
-        println("Cow culled!")
+        push!(animalModel.deaths, AnimalAgent)
+        println("Sent to container")
     end
 
     if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 158)
         if rand(animalModel.rng) > 0.5
-            kill_agent!(AnimalAgent, animalModel)
-            println("Infertility cull!")
+            push!(animalModel.deaths, AnimalAgent)
+            println("Sent to container")
         end
     end
 
