@@ -9,10 +9,15 @@ function mortality!(AnimalAgent, animalModel)
  =#
     # Cull agent -------------------------------
 
-    # Cull cows that have been in the herd for too long at a 30% replacement rate
-    if AnimalAgent.stage == :L && (AnimalAgent.age ≥ rand(truncated(Poisson(floor(10*365)), 2*365, 10*365)))
+    # Cull cows ------------------------------------
+    if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(7.5*365)), 2*365, 8*365)))
         kill_agent!(AnimalAgent, animalModel)
         println("Cow culled!")
+    end
+
+    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 160)
+        kill_agent!(AnimalAgent, animalModel)
+        println("Infertility cull!")
     end
 
 end
