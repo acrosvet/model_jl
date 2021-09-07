@@ -15,14 +15,14 @@ function mortality!(AnimalAgent, animalModel)
         println("Cow culled!")
     end
 
-    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 160)
+    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 158)
         kill_agent!(AnimalAgent, animalModel)
         println("Infertility cull!")
     end
 
     # cull heifers
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
-        if AnimalAgent.age ≥ (13*30 + 200)
+        if AnimalAgent.age ≥ (13*30 + 84)
             kill_agent!(AnimalAgent, animalModel)
             println("Heifer cull")
         end
