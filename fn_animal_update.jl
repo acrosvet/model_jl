@@ -7,6 +7,13 @@ function update_agent!(AnimalAgent, animalModel)
         AnimalAgent.since_tx += 1
     end
 
+    # Cull cows ------------------------------------
+    if AnimalAgent.stage == :L && (AnimalAgent.age ≥ rand(truncated(Poisson(floor(10*365)), 2*365, 10*365)))
+        kill_agent!(AnimalAgent, animalModel)
+        println("Cow culled!")
+    end
+
+
     # Change stage over time ------------------------
     # Calves 
     if AnimalAgent.age < 60 && AnimalAgent.stage != :W
