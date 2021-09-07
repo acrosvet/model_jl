@@ -43,6 +43,16 @@ function update_agent!(AnimalAgent, animalModel)
         
     end
 
+    # Heifer pregnant
+    if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
+        lambda = 13*30 + 42
+        lower = 13*30 + 21
+        upper = 13*30 + 84
+        if AnimalAgent.age == rand(truncated(Poisson(lambda),lower, upper))
+            AnimalAgent.pregstat = :P
+        end
+    end
+
      # Calve heifer to lactating and create calf
     if AnimalAgent.stage == :H && (AnimalAgent.age ≥ rand(truncated(Poisson(24*30),(24*30), (24*30 + 63))))
         AnimalAgent.stage = :L
