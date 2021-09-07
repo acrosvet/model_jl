@@ -12,10 +12,8 @@ function update_agent!(AnimalAgent, animalModel)
 
     # Make cows pregnant
 
-    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ rand(truncated(Poisson(142),110, 194)))
-        if rand(animalModel.rng) > 0.5
+    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim == rand(truncated(Poisson(142),110, 194)))
             AnimalAgent.pregstat = :P
-        end
     end
 
 
