@@ -140,7 +140,7 @@ function initial_pregstat(stage, age, dim)
             lambda = 13*30 + 21
             lower = 13*30 + 21
             upper = 13*30 + 120
-            if age ≥ rand(truncated(Poisson(lambda),lower, upper)) && rand(animalModel.rng) > 0.5
+            if age ≥ rand(truncated(Poisson(lambda),lower, upper)) 
                 return :P
             else
                 return :E
