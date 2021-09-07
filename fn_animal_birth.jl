@@ -44,7 +44,8 @@ function birth!(animalModel)
             days_dry = 0
             trade_status = false
             agenttype = :Born
-            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype)
+            lactation = 0
+            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation)
             calf_counter += 1
             println("Calf born!")
             println("$calf_counter calves born")
