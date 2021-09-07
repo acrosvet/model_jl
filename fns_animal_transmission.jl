@@ -33,8 +33,8 @@ function transmit_sensitive!(a1,a2,animalModel)
     else
         healthy.status = healthy.status
     end
-    println("Days exposed is:")
-    println(healthy.days_exposed)
+    #println("Days exposed is:")
+    #println(healthy.days_exposed)
 end
 
 function exposed_to_infectious!(AnimalAgent)
