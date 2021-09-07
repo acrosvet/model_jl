@@ -77,7 +77,7 @@
             rand(truncated(Poisson(477), 414, 474))   
         else (n > (num_calves + num_weaned + num_heifers + 1)) && (n <= (num_calves + num_weaned + num_heifers + num_lac))
            # rand(truncated(Poisson(floor(8*365)), 2*365, 8*365))
-            rand(truncated(Poisson(4*365),(2*365), (8*365)))
+            rand(truncated(Poisson(5*365),(2*365), (8*365)))
         end
     end
 
