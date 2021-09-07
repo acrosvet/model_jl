@@ -45,7 +45,7 @@ function update_agent!(AnimalAgent, animalModel)
 
     # Heifer pregnant
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
-        lambda = 13*30 + 42
+        lambda = 13*30 + 21
         lower = 13*30 + 21
         upper = 13*30 + 84
         if AnimalAgent.age == rand(truncated(Poisson(lambda),lower, upper))
