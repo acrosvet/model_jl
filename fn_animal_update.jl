@@ -7,10 +7,19 @@ function update_agent!(AnimalAgent, animalModel)
         AnimalAgent.since_tx += 1
     end
 
+    # Make cows pregnant
+
+    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ rand(truncated(Poisson(110),80+21, 111+12*7)))
+        AnimalAgent.pregstat = :P
+    end
+
     # Cull cows ------------------------------------
     if AnimalAgent.stage == :L && (AnimalAgent.age ≥ rand(truncated(Poisson(floor(10*365)), 2*365, 10*365)))
         kill_agent!(AnimalAgent, animalModel)
         println("Cow culled!")
+    elseif (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 120)
+        kill_agent!(AnimalAgent, animalModel)
+        println("Infertility cull!")
     end
 
 
