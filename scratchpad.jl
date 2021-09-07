@@ -19,7 +19,8 @@ header = DataFrame(
     ModelYear = 0,
     AnimalAge = 0,
     AgentType = 0,
-    DIM = 0
+    DIM = 0,
+    PregStat = 0
 )
 
 output = open("./export/animal_model_run.csv","w")
