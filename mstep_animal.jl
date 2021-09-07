@@ -49,5 +49,7 @@ function model_step!(animalModel)
 
     trading_need!(animalModel)
 
+    births_deaths!(animalModel)
+
     
 end
