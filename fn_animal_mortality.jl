@@ -10,7 +10,7 @@ function mortality!(AnimalAgent, animalModel)
     # Cull agent -------------------------------
 
     # Cull cows ------------------------------------
-    if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(7.5*365)), 2*365, 9*365)))
+    if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(8*365)), 2*365, 9*365)))
         kill_agent!(AnimalAgent, animalModel)
         println("Cow culled!")
     end
