@@ -19,8 +19,8 @@
         calday = 365,
         model_year = 0,
         num_calves =  0,
-        num_weaned =  Int(floor(N*0.125*rand(0.8:0.05:1.2))),
-        num_heifers = Int(floor(N*0.125*rand(0.8:0.05:1.2))),
+        num_weaned =  Int(floor(N*0.125*rand(0.9:0.05:1.1))),
+        num_heifers = Int(floor(N*0.125*rand(0.9:0.05:1.1))),
         num_lac = N - num_calves - num_weaned - num_heifers,
         rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3/time_resolution,
