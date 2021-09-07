@@ -70,13 +70,14 @@
     # Set the initial age of the animals
     function initial_age(n)
         if n <= num_calves
-            rand(truncated(Poisson(112), 49, 109))
+            #rand(truncated(Poisson(112), 49, 109))
         elseif (n > (num_calves + 1)) && (n <= (num_calves + num_weaned))
             rand(truncated(Poisson(112), 49, 109))
         elseif (n > (num_calves + num_weaned + 1 )) && (n <= (num_calves + num_weaned + num_heifers))
             rand(truncated(Poisson(477), 414, 474))   
         else (n > (num_calves + num_weaned + num_heifers + 1)) && (n <= (num_calves + num_weaned + num_heifers + num_lac))
-            rand(truncated(Poisson(24*30),(24*30), (24*30 + 63)))
+           # rand(truncated(Poisson(floor(8*365)), 2*365, 8*365))
+            rand(truncated(Poisson(4*365),(2*365), (8*365)))
         end
     end
 
