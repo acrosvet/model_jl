@@ -7,6 +7,7 @@ function births_deaths!(animalModel)
             
             for i in 1:length(animalModel.births)
                 kill_agent!(animalModel.deaths[i], animalModel)
+                println("Agent culled")
             end
 
             animalModel.deaths = []
