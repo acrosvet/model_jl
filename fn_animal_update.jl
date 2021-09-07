@@ -16,14 +16,6 @@ function update_agent!(AnimalAgent, animalModel)
         AnimalAgent.pregstat = :P
     end
 
-    # Cull cows ------------------------------------
-    if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(6*365)), 2*365, 8*365)))
-        kill_agent!(AnimalAgent, animalModel)
-        println("Cow culled!")
-    elseif (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 160)
-        kill_agent!(AnimalAgent, animalModel)
-        println("Infertility cull!")
-    end
 
 
     # Change stage over time ------------------------
