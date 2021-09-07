@@ -1,6 +1,6 @@
 function births_deaths!(animalModel)
 
-    if animalModel.calday != psc + 305
+    if animalModel.calday != animalModel.psc + 305
         return
     else
     
