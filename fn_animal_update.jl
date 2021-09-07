@@ -54,7 +54,7 @@ function update_agent!(AnimalAgent, animalModel)
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
             birth!(animalModel)
-            animalModel.birth += 1
+            animalModel.births += 1
             # adds minimal agents
         end
     end 
@@ -69,7 +69,7 @@ function update_agent!(AnimalAgent, animalModel)
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
            birth!(animalModel)
-           animalModel.birth += 1
+           animalModel.births += 1
            # This adds many agents
         end
     end
