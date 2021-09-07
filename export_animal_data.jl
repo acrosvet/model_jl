@@ -18,7 +18,8 @@ data = DataFrame(
     ModelYear = animalModel.model_year,
     AnimalAge = AnimalAgent.age,
     AgentType = AnimalAgent.agenttype,
-    DIM = AnimalAgent.dim
+    DIM = AnimalAgent.dim,
+    PregStat = AnimalAgent.pregstat
 )
 
 
