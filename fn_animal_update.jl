@@ -47,9 +47,11 @@ function update_agent!(AnimalAgent, animalModel)
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
         lambda = 13*30 + 21
         lower = 13*30 + 21
-        upper = 13*30 + 84
-        if AnimalAgent.age == rand(truncated(Poisson(lambda),lower, upper))
-            AnimalAgent.pregstat = :P
+        upper = 13*30 + 120
+        if AnimalAgent.age ≥ rand(truncated(Poisson(lambda),lower, upper))
+            if rand(animalModel.rng) > 0.5
+                AnimalAgent.pregstat = :P
+            end    
         end
     end
 
