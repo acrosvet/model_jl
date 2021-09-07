@@ -22,7 +22,7 @@ function mortality!(AnimalAgent, animalModel)
 
     # cull heifers
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
-        if AnimalAgent.age ≥ (13*30 + 84)
+        if AnimalAgent.age ≥ (13*30 + 200)
             kill_agent!(AnimalAgent, animalModel)
             println("Heifer cull")
         end
