@@ -287,7 +287,7 @@ end
     end
 
 
-bactoMod = initialisePopulation(nbact = 10000, total_status = :IR, timestep = 1.0)
+#bactoMod = initialisePopulation(nbact = 10000, total_status = :IR, timestep = 1.0)
 
-step!(bactoMod, bact_agent_step!,10)
+#step!(bactoMod, bact_agent_step!,10)
 
