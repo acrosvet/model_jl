@@ -1,4 +1,7 @@
 function update_agent!(AnimalAgent, animalModel)
+
+   # println(rand(animalModel.rng))
+
     AnimalAgent.age += 1 # Increment age by 1 day
     
     if AnimalAgent.treatment == :T 
@@ -9,15 +12,15 @@ function update_agent!(AnimalAgent, animalModel)
 
     # Make cows pregnant
 
-    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ rand(truncated(Poisson(110),80+21, 111+12*7)))
+    if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ rand(truncated(Poisson(142),110, 194)))
         AnimalAgent.pregstat = :P
     end
 
     # Cull cows ------------------------------------
-    if AnimalAgent.stage == :L && (AnimalAgent.age ≥ rand(truncated(Poisson(floor(10*365)), 2*365, 10*365)))
+    if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(6*365)), 2*365, 8*365)))
         kill_agent!(AnimalAgent, animalModel)
         println("Cow culled!")
-    elseif (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 120)
+    elseif (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 160)
         kill_agent!(AnimalAgent, animalModel)
         println("Infertility cull!")
     end
@@ -35,7 +38,7 @@ function update_agent!(AnimalAgent, animalModel)
         id = AnimalAgent.id
         day = animalModel.calday
         age = AnimalAgent.age
-        println("Weaning $id  at age $age on day $day !")
+        #println("Weaning $id  at age $age on day $day !")
     end
 
     # Weaned to heifer
@@ -44,13 +47,14 @@ function update_agent!(AnimalAgent, animalModel)
         id = AnimalAgent.id
         day = animalModel.calday
         age = AnimalAgent.age
-        println("Joining $id at age $age on day $day !")
+        #println("Joining $id at age $age on day $day !")
         
     end
 
      # Calve heifer to lactating and create calf
     if AnimalAgent.stage == :H && (AnimalAgent.age ≥ rand(truncated(Poisson(24*30),(24*30), (24*30 + 63))))
         AnimalAgent.stage = :L
+        AnimalAgent.pregstat = :E
         AnimalAgent.dim = 0
         id = AnimalAgent.id
         day = animalModel.calday
@@ -59,6 +63,7 @@ function update_agent!(AnimalAgent, animalModel)
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
             birth!(animalModel)
+            # adds minimal agents
         end
     end 
     
@@ -66,14 +71,16 @@ function update_agent!(AnimalAgent, animalModel)
     # Calve dry cow and create calf
     if AnimalAgent.stage == :D && (AnimalAgent.days_dry > rand(truncated(Poisson(75), 60, 90)))
         AnimalAgent.stage = :L
+        AnimalAgent.pregstat = :E
         AnimalAgent.dim = 0
         id = AnimalAgent.id
         day = animalModel.calday
         age = AnimalAgent.age
-        println("Calving $id at age $age on day $day")
+        #println("Calving $id at age $age on day $day")
         # Only 50% of the calves born will be retained
         if rand(animalModel.rng) > 0.5
            birth!(animalModel)
+           # This adds many agents
         end
     end
 
