@@ -41,7 +41,7 @@ function initialisePopulation(
     # strain fitness
 
     r_strain = total_status != :IR ? 0 : r_strain
-    println(r_strain)
+    #println(r_strain)
 
     strain = 1
 
@@ -62,7 +62,7 @@ function initialisePopulation(
 
     strain_statuses = fn_strain_status!(nstrains, r_strain)
 
-    println(strain_statuses)
+    #println(strain_statuses)
 
     strain_status = (strain == r_strain) ? :R : :IS
 
@@ -85,7 +85,7 @@ function initialisePopulation(
 
     bact_fitnesses = fn_strain_fitness!(strain_statuses, nstrains)
 
-    println(bact_fitnesses)
+    #println(bact_fitnesses)
 
     header = DataFrame(
         BactNo = 0,
