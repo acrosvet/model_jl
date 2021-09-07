@@ -30,7 +30,7 @@ function update_agent!(AnimalAgent, animalModel)
     end
 
     # Weaned to heifer
-    if AnimalAgent.stage == :W && (AnimalAgent.age ≥ rand(truncated(Poisson(13*30), 13*30, (13*30 + 9*7))))
+    if AnimalAgent.stage == :W && (AnimalAgent.age == 13*30
         AnimalAgent.stage = :H
     end
 
