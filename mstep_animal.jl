@@ -20,7 +20,7 @@ function model_step!(animalModel)
 
     #Define the proximity for which infection may occur
 
-    r = animalModel.animalProximityRadius
+#=     r = animalModel.animalProximityRadius
 
     # Set up interactions and transmission events between animal agents using billiard ball dynamics
     for (a1,a2) in interacting_pairs(animalModel, r, :nearest)
@@ -30,7 +30,7 @@ function model_step!(animalModel)
         transmit_carrier_is!(a1,a2, animalModel) #Transmit carrier states (sensitive)
         transmit_carrier_ir!(a1,a2, animalModel) #Transmit carrier states (resistant)
         
-    end
+    end =#
 
         # Increment the date by one day
 
