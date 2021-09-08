@@ -18,14 +18,7 @@
         culling_rate = 0.3/time_resolution,
         calday = 365,
         model_year = 1,
-        #num_calves =  0,
-        num_weaned = 0,
-        #num_weaned =  Int(floor(N*0.125)),
-        num_heifers = 0,
-        #num_heifers = Int(floor(N*0.125)),
-        num_calves = 0,
         num_lac = N, 
-        #num_lac = N - num_calves - num_weaned - num_heifers,
         rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3/time_resolution,
         treatment_duration::Int = 5*time_resolution,
@@ -68,54 +61,14 @@
         tradeable_stock = 0, # Ibid, all stock
         farm_id,
         num_lac,
-        num_heifers,
         step,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
-    
-    # Set the initial age of the animals
-    function initial_age(n)
-        if n <= num_calves
-            rand(truncated(Poisson(30), 0, 65))
-        elseif (n > (num_calves + 1)) && (n <= (num_calves + num_weaned))
-            rand(truncated(Poisson(112), 49, 109))
-        elseif (n > (num_calves + num_weaned + 1 )) && (n <= (num_calves + num_weaned + num_heifers))
-            rand(truncated(Poisson(477), 414, 474))   
-        else (n > (num_calves + num_weaned + num_heifers + 1)) && (n <= (num_calves + num_weaned + num_heifers + num_lac))
-           # rand(truncated(Poisson(floor(8*365)), 2*365, 8*365))
-            rand(truncated(Poisson(5*365),(2*365), (8*365)))
-        end
-    end
 
     # Set the initial dim
 
-    function initial_dim(stage)
-    
-        if stage == :L 
-            rand(truncated(Poisson(112), 49, 125))
-        else
-            0
-        end
-
-    end
-
-    # Set the initial lifestage 
-
-    function initial_stage(n)
-        
-        if n <= num_calves
-            :C
-        elseif (n > (num_calves + 1)) && (n <= (num_calves + num_weaned))
-            :W
-        elseif n > (num_calves + num_weaned + 1 ) && n <= (num_calves + num_weaned + num_heifers)
-            :H  
-        else n > (num_calves + num_weaned + num_heifers + 1) && n <= (num_calves + num_weaned + num_heifers + num_lac)
-            :L
-        end
-        
-    end
 
     #Define a function to set initial infected status. This gets supplied to the loop describing the initial system state.
     function initial_status(n, init_ir, init_is)
@@ -142,23 +95,7 @@
         end
     end
 
-function initial_pregstat(stage, age, dim)
 
-        if stage == :H 
-            lambda = 13*30 + 21
-            lower = 13*30 + 21
-            upper = 13*30 + 120
-            if age ≥ rand(truncated(Poisson(lambda),lower, upper)) 
-                return :P
-            else
-                return :E
-            end
-        elseif stage == :L && dim >= rand(truncated(Poisson(142),110, 215))
-            return :P
-        else
-            return :E
-        end
-end
 
 
     #Define the initial state of the system. Attributes for each animal in the system.
