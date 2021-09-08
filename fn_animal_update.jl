@@ -37,8 +37,8 @@ function update_agent!(AnimalAgent, animalModel)
     # Heifer pregnant
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
         lambda = 13*30 + 21
-        lower = 13*30 + 21
-        upper = 13*30 + 120
+        lower = 13*30 + 42
+        upper = 13*30 + 84
         if AnimalAgent.age ≥ rand(truncated(Poisson(lambda),lower, upper))
             if rand(animalModel.rng) > 0.5
                 AnimalAgent.pregstat = :P
@@ -61,14 +61,19 @@ function update_agent!(AnimalAgent, animalModel)
 
     # Calve dry cow and create calf
     if AnimalAgent.stage == :D && (AnimalAgent.days_dry > rand(truncated(Poisson(75), 60, 90)))
-        AnimalAgent.stage = :L
-        AnimalAgent.pregstat = :E
-        AnimalAgent.dim = 0
-        #println("Calving $id at age $age on day $day")
-        # Only 50% of the calves born will be retained
-        if rand(animalModel.rng) > 0.5
-           birth!(animalModel)
-           # This adds many agents
+        if AnimalAgent.pregstat == :P
+            AnimalAgent.stage = :L
+            AnimalAgent.pregstat = :E
+            AnimalAgent.dim = 0
+            #println("Calving $id at age $age on day $day")
+            # Only 50% of the calves born will be retained
+            if rand(animalModel.rng) > 0.5
+            birth!(animalModel)
+            # This adds many agents
+            end
+        elseif AnimalAgent.pregstat == :E
+            kill_agent!(AnimalAgent, animalModel)
+            println("Culled empty dry")
         end
     end
 
