@@ -44,7 +44,7 @@ function mortality!(AnimalAgent, animalModel)
 
 
 
-    current_heifers = floor(current_lactating*12.5)
+    current_heifers = Int(floor((current_lactating*12.5) * (rand(0.9:0.05:1.1))))
 
     # cull heifers
     if AnimalAgent.stage == :H 
