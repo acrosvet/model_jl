@@ -62,7 +62,7 @@
         tradeable_weaned = 0, # Ibid, weand
         tradeable_stock = 0, # Ibid, all stock
         farm_id,
-        current_lac = 0,
+        num_lac,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
