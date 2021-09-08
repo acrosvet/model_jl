@@ -44,17 +44,18 @@ function mortality!(AnimalAgent, animalModel)
 
 
 
-    current_heifers = current_stock(animalModel, :L)
+    current_heifers = Int(floor((animalModel.num_lac*0.125) * (rand(0.9:0.05:1.1))))
     
+    optimal_heifers = Int(floor(0.125*animalModel.num_lac))
 
     # cull heifers
     if AnimalAgent.stage == :H 
-        if AnimalAgent.age == 516 && current_heifers > Int(floor((animalModel.num_lac*12.5) * (rand(0.9:0.05:1.1))))
+        if AnimalAgent.age == 516 && current_heifers > optimal_heifers
                 if AnimalAgent.pregstat == :E
                     kill_agent!(AnimalAgent, animalModel)
                     println("Empty Heifer cull")
                 end
-        elseif (current_heifers > Int(floor((animalModel.num_lac*12.5) * (rand(0.9:0.05:1.1))))) && AnimalAgent.age > 516
+        elseif (current_heifers > optimal_heifers && AnimalAgent.age > 516)
             kill_agent!(AnimalAgent, animalModel)
             println("Surplus Heifer cull")
         end
