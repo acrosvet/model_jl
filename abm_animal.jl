@@ -63,6 +63,7 @@
         tradeable_stock = 0, # Ibid, all stock
         farm_id,
         num_lac,
+        num_heifers,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
