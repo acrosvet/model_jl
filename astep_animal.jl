@@ -20,6 +20,7 @@ Step AnimalAgents through time
         advance_pregnancy!(AnimalAgent)
         heat!(AnimalAgent)
         calving!(AnimalAgent)
+        joining!(AnimalAgent, animalModel)
         update_agent!(AnimalAgent) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
