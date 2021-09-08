@@ -41,6 +41,7 @@ function model_step!(animalModel)
     end
     # Increment the year by one day
     animalModel.calday += 1
+    animalModel.step +=1
 
     # Trade animals between farms using the daytrader function
     daytrader!(FarmAgent, animalModel)
@@ -49,7 +50,6 @@ function model_step!(animalModel)
 
     trading_need!(animalModel)
 
-   # births_deaths!(animalModel)
 
     
 end
