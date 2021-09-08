@@ -99,7 +99,6 @@
 
 
 
-
     #Define the initial state of the system. Attributes for each animal in the system.
     for n in 1:N
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
@@ -134,7 +133,8 @@
         trade_status = false
         lactation = round(age/365) - 1
         pregstat = :P
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat)
+        dic = rand(truncated(Poisson(272), 199, 290))
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic)
     
     end
 
