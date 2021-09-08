@@ -133,7 +133,7 @@
         trade_status = false
         lactation = round(age/365) - 1
         pregstat = :P
-        dic = rand(truncated(Poisson(272), 199, 290))
+        dic = rand(animalModel.rng, truncated(Poisson(247), 199, 290)) #Gives a 63% ICR for this rng
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic)
     
     end
