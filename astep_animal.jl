@@ -19,7 +19,7 @@ Step AnimalAgents through time
         #mortality!(AnimalAgent, animalModel) #Introduce mortality
         advance_pregnancy!(AnimalAgent)
         heat!(AnimalAgent)
-        calving!(AnimalAgent)
+        calving!(AnimalAgent, animalModel)
         joining!(AnimalAgent, animalModel)
         update_agent!(AnimalAgent) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)
