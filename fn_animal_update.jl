@@ -1,4 +1,4 @@
-function update_agent!(AnimalAgent, animalModel)
+function update_agent!(AnimalAgent)
 
    # println(rand(animalModel.rng))
 
