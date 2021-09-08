@@ -32,6 +32,19 @@ function model_step!(animalModel)
         
     end
 
+    # Increment psc
+
+    if Year(animalModel.date) > Year(animalModel.psc)
+        animalModel.psc += Year(1)
+    end
+
+    # Increment msd 
+
+    if Year(animalModel.date) > Year(animalModel.msd)
+        animalModel.msd += Year(1)
+    end
+    
+
     # Increment the date by one day
 
     animalModel.date += Day(1)
