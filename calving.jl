@@ -11,7 +11,7 @@ After calving:
 * Increment the lactation number
 
 """
-function calving!(AnimalAgent)
+function calving!(AnimalAgent, animalModel)
 
     if AnimalAgent.dic ≥ 283 
         AnimalAgent.pregstat = :E
