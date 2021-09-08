@@ -18,10 +18,14 @@
         culling_rate = 0.3/time_resolution,
         calday = 365,
         model_year = 0,
-        num_calves =  0,
-        num_weaned =  Int(floor(N*0.125)),
-        num_heifers = Int(floor(N*0.125)),
-        num_lac = N - num_calves - num_weaned - num_heifers,
+        #num_calves =  0,
+        num_weaned = 0,
+        #num_weaned =  Int(floor(N*0.125)),
+        num_heifers = 0,
+        #num_heifers = Int(floor(N*0.125)),
+        num_calves = 0,
+        num_lac = N, 
+        #num_lac = N - num_calves - num_weaned - num_heifers,
         rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3/time_resolution,
         treatment_duration::Int = 5*time_resolution,
@@ -72,7 +76,7 @@
     # Set the initial age of the animals
     function initial_age(n)
         if n <= num_calves
-            #rand(truncated(Poisson(112), 49, 109))
+            rand(truncated(Poisson(30), 0, 65))
         elseif (n > (num_calves + 1)) && (n <= (num_calves + num_weaned))
             rand(truncated(Poisson(112), 49, 109))
         elseif (n > (num_calves + num_weaned + 1 )) && (n <= (num_calves + num_weaned + num_heifers))
