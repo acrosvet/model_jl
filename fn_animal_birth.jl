@@ -13,13 +13,11 @@ function birth!(animalModel)
         end
     end
 
-    calf_counter = 0
 
-   
             
             # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
             pos = Tuple(10*rand(animalModel.rng, 2))
-            age = 0
+            age = 1
             status = :S
             βᵣ = animalModel.βᵣ
             βₛ = animalModel.βₛ
@@ -46,7 +44,10 @@ function birth!(animalModel)
             agenttype = :Born
             lactation = 0
             pregstat = :E
-            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat)
+            dic = 0
+            heat = false
+            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat)
+            #add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat)
             calf_counter += 1
             println("Calf born!")
             #println("$calf_counter calves born")
