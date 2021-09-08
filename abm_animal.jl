@@ -17,7 +17,7 @@
         sens_carrier = 0.01/time_resolution, 
         culling_rate = 0.3/time_resolution,
         calday = 365,
-        model_year = 0,
+        model_year = 1,
         #num_calves =  0,
         num_weaned = 0,
         #num_weaned =  Int(floor(N*0.125)),
@@ -29,7 +29,8 @@
         rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3/time_resolution,
         treatment_duration::Int = 5*time_resolution,
-        farm_id::Int = 1
+        farm_id::Int = 1,
+        step::Int = 0
     )
     #End header
     #Body
@@ -68,6 +69,7 @@
         farm_id,
         num_lac,
         num_heifers,
+        step,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
