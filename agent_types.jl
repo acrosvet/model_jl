@@ -12,28 +12,29 @@ end
 
 # Def - AnimalAgent --------------------
 mutable struct AnimalAgent <: AbstractAgent
-    id::Int
-    pos::NTuple{2,Float64}
-    vel::NTuple{2, Float64}
-    age::Int
-    status::Symbol
-    βₛ::Float64
-    βᵣ::Float64
-    inf_days::Int
-    days_exposed::Int
-    days_carrier::Int
-    treatment::Symbol
-    days_treated::Int
-    since_tx::Int
-    bactopop::Float64
-    submodel::AgentBasedModel
-    stage::Symbol
-    dim::Int
-    days_dry::Int
-    trade_status::Bool
+    id::Int # Animal ID
+    pos::NTuple{2,Float64} # Position, interaction dynamics
+    vel::NTuple{2, Float64} # Velocity, interaction dynamics
+    age::Int # Animal age
+    status::Symbol # Infection status
+    βₛ::Float64 # Transmission coefficient (sensitive)
+    βᵣ::Float64 # Transmission coefficient (resistant)
+    inf_days::Int # Days infected with any strain
+    days_exposed::Int # Days exposed
+    days_carrier::Int # Days of carrier status
+    treatment::Symbol # Treated or not
+    days_treated::Int # Days treated
+    since_tx::Int # Days since treatment
+    bactopop::Float64 # Bacterial population
+    submodel::AgentBasedModel #Bacterial model
+    stage::Symbol # Life stage
+    dim::Int # Days in milk
+    days_dry::Int #Number of days dry
+    trade_status::Bool #Trading eligibility
     agenttype::Symbol
-    lactation::Int
-    pregstat::Symbol
+    lactation::Int # Lactation number
+    pregstat::Symbol # Pregnancy status
+    dic::Int # Days in calf
 end
 
 mutable struct FarmAgent <: AbstractAgent
