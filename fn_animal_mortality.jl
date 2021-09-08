@@ -44,9 +44,9 @@ function mortality!(AnimalAgent, animalModel)
 
 
 
-    current_heifers = Int(floor((animalModel.num_lac*0.125) * (rand(0.9:0.05:1.1))))
+    current_heifers = current_stock(animalModel, :H)
     
-    optimal_heifers = Int(floor(0.125*animalModel.num_lac))
+    optimal_heifers = Int(floor((animalModel.num_lac*0.125) * (rand(0.9:0.05:1.1))))
 
     # cull heifers
     if AnimalAgent.stage == :H 
