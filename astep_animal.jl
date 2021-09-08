@@ -18,7 +18,7 @@ Step AnimalAgents through time
         bacto_dyno!(AnimalAgent) #Determine the overall bacterial dynamics for an animal =#
         #mortality!(AnimalAgent, animalModel) #Introduce mortality
         calving!(AnimalAgent)
-        update_agent!(AnimalAgent, animalModel) #Apply the update_agent function
+        update_agent!(AnimalAgent) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
 
