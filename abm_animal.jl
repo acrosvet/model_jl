@@ -16,14 +16,13 @@
         res_carrier = 0.05/time_resolution,
         sens_carrier = 0.01/time_resolution, 
         culling_rate = 0.3/time_resolution,
-        calday = 365,
-        model_year = 1,
         num_lac = N, 
         rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3/time_resolution,
         treatment_duration::Int = 5*time_resolution,
         farm_id::Int = 1,
-        step::Int = 0
+        step::Int = 1,
+        date::Date = Date(2021, 7, 1)
     )
     #End header
     #Body
@@ -47,8 +46,6 @@
         treatment_duration, 
         res_carrier,
         sens_carrier,
-        calday,
-        model_year,
         rng,
         culling_rate,
         herd_size = N,
@@ -62,6 +59,7 @@
         farm_id,
         num_lac,
         step,
+        date,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
@@ -124,7 +122,7 @@
             days_exposed = 0
         )
         vel = initial_velocity(status, movement) #Defined using initial velocity fn
-        stage = initial_stage(n) # Defined using initial stage fn
+        stage = :L
         dim = initial_dim(stage) # Defined using initial dim fn
         days_dry = 0 # Default 0
         days_exposed = 0 # Default 0 
