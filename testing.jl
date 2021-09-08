@@ -73,7 +73,7 @@ include("fn_trading_need.jl")
 include("calving.jl")
 include("joining.jl")
 include("heat.jl")
-
+include("advance_pregnancy.jl")
 
 include("export_animal_data.jl")
 
