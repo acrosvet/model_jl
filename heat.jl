@@ -9,6 +9,8 @@ function heat!(AnimalAgent)
 if AnimalAgent.pregstat == :E
     if AnimalAgent.dim % 21 == 0
         AnimalAgent.heat = true
+    else
+        AnimalAgent.heat = false
     end
 end
 
