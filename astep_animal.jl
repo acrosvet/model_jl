@@ -16,7 +16,8 @@ Step AnimalAgents through time
         carrierState!(AnimalAgent, animalModel) #Introduce a carrier state
         run_submodel!(AnimalAgent, animalModel) #Run the bacterial submodel
         bacto_dyno!(AnimalAgent) #Determine the overall bacterial dynamics for an animal =#
-        mortality!(AnimalAgent, animalModel) #Introduce mortality
+        #mortality!(AnimalAgent, animalModel) #Introduce mortality
+        calving!(AnimalAgent)
         update_agent!(AnimalAgent, animalModel) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
