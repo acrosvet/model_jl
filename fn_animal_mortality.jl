@@ -26,7 +26,7 @@ function mortality!(AnimalAgent, animalModel)
 
     if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 280)
         
-        if current_lactating > Int(floor(animalModel.num_lac*rand(MersenneTwister(animalModel.model_year), 0.9:0.05:1.1)))
+        if current_lactating > animalModel.num_lac
             #if rand(animalModel.rng) > 0.5
                 kill_agent!(AnimalAgent, animalModel)
                 println("Infertility cull!")
@@ -36,7 +36,7 @@ function mortality!(AnimalAgent, animalModel)
 
     # Cull cows ------------------------------------
     if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(8*365)), 2*365, 9*365))) 
-        if current_lactating ≥ Int(floor(animalModel.num_lac*rand(MersenneTwister(animalModel.model_year),0.9:0.05:1.1))) && AnimalAgent.dim ≥ 280
+        if current_lactating ≥ animalModel.num_lac && AnimalAgent.dim ≥ 280
             kill_agent!(AnimalAgent, animalModel)
             println("Cow culled!")
         end
@@ -44,18 +44,16 @@ function mortality!(AnimalAgent, animalModel)
 
 
 
-    current_heifers = current_stock(animalModel, :H)
-    
-    optimal_heifers = Int(floor((animalModel.num_lac*0.125) * (rand(0.9:0.05:1.1))))
+    current_heifers = floor(current_lactating*12.5)
 
     # cull heifers
     if AnimalAgent.stage == :H 
-        if AnimalAgent.age == 516 && current_heifers > optimal_heifers
+        if AnimalAgent.age == 516 && current_heifers > animalModel.num_heifers
                 if AnimalAgent.pregstat == :E
                     kill_agent!(AnimalAgent, animalModel)
                     println("Empty Heifer cull")
                 end
-        elseif (current_heifers > optimal_heifers && AnimalAgent.age > 516)
+        elseif (current_heifers > animalModel.num_heifers) && AnimalAgent.age > 516
             kill_agent!(AnimalAgent, animalModel)
             println("Surplus Heifer cull")
         end
