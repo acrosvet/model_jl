@@ -26,7 +26,7 @@ function mortality!(AnimalAgent, animalModel)
 
     if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 280)
         
-        if current_lactating > animalModel.num_lac
+        if current_lactating > Int(floor(animalModel.num_lac*rand(0.9:0.05:1.1)))
             #if rand(animalModel.rng) > 0.5
                 kill_agent!(AnimalAgent, animalModel)
                 println("Infertility cull!")
@@ -36,7 +36,7 @@ function mortality!(AnimalAgent, animalModel)
 
     # Cull cows ------------------------------------
     if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(8*365)), 2*365, 9*365))) 
-        if current_lactating ≥ animalModel.num_lac && AnimalAgent.dim ≥ 280
+        if current_lactating ≥ Int(floor(animalModel.num_lac*rand(0.9:0.05:1.1))) && AnimalAgent.dim ≥ 280
             kill_agent!(AnimalAgent, animalModel)
             println("Cow culled!")
         end
