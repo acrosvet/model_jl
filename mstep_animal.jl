@@ -32,6 +32,14 @@ function model_step!(animalModel)
         
     end
 
+        # Increment the date by one day
+
+        animalModel.date += Day(1)
+
+        # Increment the model step
+        animalModel.step +=1
+    
+
     # Increment psc
 
     if Year(animalModel.date) > Year(animalModel.psc)
@@ -45,12 +53,6 @@ function model_step!(animalModel)
     end
     
 
-    # Increment the date by one day
-
-    animalModel.date += Day(1)
-
-    # Increment the model step
-    animalModel.step +=1
 
     # Trade animals between farms using the daytrader function
     #daytrader!(FarmAgent, animalModel)
