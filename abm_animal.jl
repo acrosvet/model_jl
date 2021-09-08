@@ -6,23 +6,25 @@
     function initialiseModel(
         N::Int, #Default number of animals
         movement = 0.1, #Movement in continuous space
-        βᵣ = 0.3/time_resolution, #Beta (resistant) 
-        βₛ = 0.6/time_resolution, #Beta (sensitive)
+        βᵣ = 0.3, #Beta (resistant) 
+        βₛ = 0.6, #Beta (sensitive)
         init_is = 5, # Number initially infected sensitive
         init_ir = 1, # Number initially infected resistant
-        sponrec_is = 0.05/time_resolution, #chance of spontaneous recovery IS
-        sponrec_ir = 0.04/time_resolution,  #chance of spontaneous recovery IR
+        sponrec_is = 0.05, #chance of spontaneous recovery IS
+        sponrec_ir = 0.04,  #chance of spontaneous recovery IR
         timestep = 1.0, #Set model timestep
-        res_carrier = 0.05/time_resolution,
-        sens_carrier = 0.01/time_resolution, 
-        culling_rate = 0.3/time_resolution,
+        res_carrier = 0.05,
+        sens_carrier = 0.01, 
+        culling_rate = 0.3,
         num_lac = N, 
         rng = MersenneTwister(42); #Random seed 
-        treatment_prob::Float64 = 0.3/time_resolution,
-        treatment_duration::Int = 5*time_resolution,
+        treatment_prob::Float64 = 0.3,
+        treatment_duration::Int = 5,
         farm_id::Int = 1,
         step::Int = 1,
-        date::Date = Date(2021, 7, 1)
+        date::Date = Date(2021, 7, 3), #Model start date
+        psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
+        msd::Date = Date(2021, 9, 24) #Mating Start Date
     )
     #End header
     #Body
@@ -33,8 +35,8 @@
     pathogenProperties = @dict(
         N, 
         animalProximityRadius = 0.5, #Radius for effective contact
-        mortalityRateSens = 0.01/time_resolution, #Mort. (sensitive)
-        mortalityRateRes = 0.015/time_resolution, #Mort. (resistant)
+        mortalityRateSens = 0.01, #Mort. (sensitive)
+        mortalityRateRes = 0.015, #Mort. (resistant)
         βᵣ,
         βₛ,
         movement,
@@ -60,6 +62,8 @@
         num_lac,
         step,
         date,
+        psc,
+        msd,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
