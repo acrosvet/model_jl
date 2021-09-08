@@ -70,6 +70,10 @@ include("fn_animal_flag_trades.jl")
 
 include("fn_trading_need.jl")
 
+include("calving.jl")
+include("joining.jl")
+include("heat.jl")
+
 
 include("export_animal_data.jl")
 
