@@ -17,7 +17,8 @@ function calving!(AnimalAgent)
         AnimalAgent.pregstat = :E
         AnimalAgent.dic = 0
         AnimalAgent.stage = :L
-        AnimalAgent.dim = 0
+        AnimalAgent.dim = 1
         AnimalAgent.lactation += 1
+        birth!(animalModel)
     end
 end
