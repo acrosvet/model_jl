@@ -21,8 +21,8 @@ data = DataFrame(
     DIM = AnimalAgent.dim,
     PregStat = AnimalAgent.pregstat,
     dic = AnimalAgent.dic,
-    psc = AnimalAgent.psc,
-    msd = AnimalAgent.msd,
+    psc = animalModel.psc,
+    msd = animalModel.msd,
 )
 
 
