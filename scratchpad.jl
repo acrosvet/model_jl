@@ -4,7 +4,6 @@ tmp = initialiseModel(50)
 header = DataFrame(
     ModelStep = 0,
     FarmID = 0,
-    Day = 0,
     AnimalID = 0,
     AnimalStatus = 0,
     AnimalStage = 0,
