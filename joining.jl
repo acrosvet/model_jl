@@ -16,7 +16,7 @@ function joining!(AnimalAgent, animalModel)
         end
     end
 
-    if animalModel.date ≥ animalModel.msd && animalModel.date ≤ animalModel.msd + Day(12*7) # End mating at 12 weeks
+    if animalModel.date ≥ animalModel.msd && animalModel.date ≤ (animalModel.msd + Day(12*7)) # End mating at 12 weeks
             if AnimalAgent.dim ≥ 42 && AnimalAgent.heat == true
                 if rand(animalModel.rng) > heat_detection_efficiency(animalModel) # Allow for a 90% chance of detecting heat in the first service
                     if rand(animalModel.rng) > 0.5 # and a 50% chance of conception
