@@ -43,17 +43,17 @@ function mortality!(AnimalAgent, animalModel)
     end 
 
 
-
-    current_heifers = floor(current_lactating*12.5)
+    optimal_heifers = floor(current_lactating*12.5)
+    current_heifers = current_stock(animalModel, :H)
 
     # cull heifers
     if AnimalAgent.stage == :H 
-        if AnimalAgent.age == 516 && current_heifers > animalModel.num_heifers
+        if AnimalAgent.age == 516 && current_heifers > optimal_heifers
                 if AnimalAgent.pregstat == :E
                     kill_agent!(AnimalAgent, animalModel)
                     println("Empty Heifer cull")
                 end
-        elseif (current_heifers > animalModel.num_heifers) && AnimalAgent.age > 516
+        elseif (current_heifers > optimal_heifers) && AnimalAgent.age > 516
             kill_agent!(AnimalAgent, animalModel)
             println("Surplus Heifer cull")
         end
