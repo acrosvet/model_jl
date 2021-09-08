@@ -21,8 +21,8 @@ function mortality!(AnimalAgent, animalModel)
     end
 
     current_lactating = current_stock(animalModel, :L)
-    println(animalModel.num_lac)
-    println(current_lactating)
+#=     println(animalModel.num_lac)
+    println(current_lactating) =#
 
     # Cull cows ------------------------------------
     if (AnimalAgent.age ≥ rand(truncated(Poisson(floor(8*365)), 2*365, 9*365))) 
@@ -30,7 +30,7 @@ function mortality!(AnimalAgent, animalModel)
             kill_agent!(AnimalAgent, animalModel)
             println("Cow culled!")
         end
-    end
+    end 
 
     if (AnimalAgent.stage == :L && AnimalAgent.pregstat == :E) && (AnimalAgent.dim ≥ 280)
         
@@ -51,7 +51,7 @@ function mortality!(AnimalAgent, animalModel)
                     kill_agent!(AnimalAgent, animalModel)
                     println("Heifer cull")
                 end
-        elseif current_heifers > animalModel.num_heifers && AnimalAge > 516
+        elseif (current_heifers > animalModel.num_heifers) && AnimalAgent.age > 516
             kill_agent!(AnimalAgent, animalModel)
             println("Heifer cull")
         end
