@@ -45,10 +45,12 @@ function mortality!(AnimalAgent, animalModel)
     current_heifers = current_stock(animalModel, :H)
 
     # cull heifers
-    if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
+    if AnimalAgent.stage == :H 
         if AnimalAgent.age == 516 && current_heifers > animalModel.num_heifers
-                kill_agent!(AnimalAgent, animalModel)
-                println("Heifer cull")
+                if AnimalAgent.pregstat == :E
+                    kill_agent!(AnimalAgent, animalModel)
+                    println("Heifer cull")
+                end
         elseif current_heifers > animalModel.num_heifers && AnimalAge > 516
             kill_agent!(AnimalAgent, animalModel)
             println("Heifer cull")
