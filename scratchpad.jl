@@ -2,6 +2,7 @@ tmp = initialiseModel(50)
 
 
 header = DataFrame(
+    Day = 0,
     ModelStep = 0,
     FarmID = 0,
     AnimalID = 0,
@@ -16,7 +17,6 @@ header = DataFrame(
     DaysDry = 0,
     TradeStatus = 0,
     AnimalBactoPop = 0,
-    ModelYear = 0,
     AnimalAge = 0,
     AgentType = 0,
     DIM = 0,
