@@ -22,7 +22,7 @@
         treatment_duration::Int = 5,
         farm_id::Int = 1,
         step::Int = 1,
-        date::Date = Date(2021, 7, 3), #Model start date
+        date::Date = Date(2021, 7, 2), #Model start date
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
         msd::Date = Date(2021, 9, 24) #Mating Start Date
     )
@@ -105,7 +105,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = initial_age(n) # Defined using initial age function
+        age = rand(truncated(Poisson(5*365),(2*365), (8*365))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -126,15 +126,14 @@
             days_exposed = 0
         )
         vel = initial_velocity(status, movement) #Defined using initial velocity fn
-        stage = :L
-        dim = initial_dim(stage) # Defined using initial dim fn
+        stage = :D
+        dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
         days_exposed = 0 # Default 0 
         days_carrier = 0 # Default 0 
         trade_status = false
-        lactation = stage == :L ? 1 : 0
-        pregstat = initial_pregstat(stage, age, dim)
-        println(pregstat)
+        lactation = round(age/365) - 1
+        pregstat = :P
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat)
     
     end
