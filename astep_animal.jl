@@ -17,6 +17,7 @@ Step AnimalAgents through time
         run_submodel!(AnimalAgent, animalModel) #Run the bacterial submodel
         bacto_dyno!(AnimalAgent) #Determine the overall bacterial dynamics for an animal =#
         #mortality!(AnimalAgent, animalModel) #Introduce mortality
+        advance_pregnancy!(AnimalAgent)
         calving!(AnimalAgent)
         update_agent!(AnimalAgent) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)
