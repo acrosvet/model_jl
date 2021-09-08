@@ -20,7 +20,10 @@ data = DataFrame(
     AnimalAge = AnimalAgent.age,
     AgentType = AnimalAgent.agenttype,
     DIM = AnimalAgent.dim,
-    PregStat = AnimalAgent.pregstat
+    PregStat = AnimalAgent.pregstat,
+    dic = AnimalAgent.dic,
+    psc = AnimalAgent.psc,
+    msd = AnimalAgent.msd,
 )
 
 
