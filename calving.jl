@@ -12,6 +12,7 @@ After calving:
 
 """
 function calving!(AnimalAgent)
+
     if AnimalAgent.dic == 283 + rand(-14:1:14)
         AnimalAgent.pregstat = :E
         AnimalAgent.dic = 0
