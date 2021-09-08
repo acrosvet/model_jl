@@ -54,7 +54,7 @@ include("fn_animal_carrier.jl")
 # Fn - Update Animal Agent ----------------------------------------------    
 include("fn_animal_update.jl")
 
-include("abm_farm.jl")
+#include("abm_farm.jl")
 
 include("fn_farm_contact.jl")
 
@@ -70,13 +70,10 @@ include("fn_animal_flag_trades.jl")
 
 include("fn_trading_need.jl")
 
-include("fn_current_heifers.jl")
-
-include("fn_current_weaned.jl")
 
 include("export_animal_data.jl")
 
-#include("births_deaths.jl")
+
 
 #step!(farmModel, farm_step!, 10) 
 
