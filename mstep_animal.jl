@@ -32,19 +32,15 @@ function model_step!(animalModel)
         
     end
 
-    # Reset the number of days for each year at the start of a new year
-    if animalModel.calday > 364
-        animalModel.calday = 0
-        animalModel.model_year += 1
-    else
-        animalModel.calday = animalModel.calday
-    end
-    # Increment the year by one day
-    animalModel.calday += 1
+    # Increment the date by one day
+
+    animalModel.date += Day(1)
+
+    # Increment the model step
     animalModel.step +=1
 
     # Trade animals between farms using the daytrader function
-    daytrader!(FarmAgent, animalModel)
+    #daytrader!(FarmAgent, animalModel)
 
     #Determine trading need
 
