@@ -2,6 +2,7 @@ tmp = initialiseModel(50)
 
 
 header = DataFrame(
+    ModelStep = 0,
     FarmID = 0,
     Day = 0,
     AnimalID = 0,
@@ -27,4 +28,4 @@ output = open("./export/animal_model_run.csv","w")
     CSV.write(output, header, delim = ",", append = true, header = true)
     close(output)
 
-run!(tmp, agent_step!, model_step!, 365*5)
+run!(tmp, agent_step!, model_step!, 365*25)
