@@ -16,7 +16,7 @@ function joining!(AnimalAgent, animalModel)
         end
     end
 
-    if animalModel.Date ≥ animalModel.msd
+    if animalModel.date ≥ animalModel.msd
             if AnimalAgent.dim ≥ 42 && AnimalAgent.heat == true
                 if rand(animalModel.rng) > heat_detection_efficiency(animalModel) # Allow for a 90% chance of detecting heat in the first service
                     if rand(animalModel.rng) > 0.5 # and a 50% chance of conception
