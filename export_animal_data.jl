@@ -1,6 +1,7 @@
 function export_animal_data!(AnimalAgent, animalModel)
 
 data = DataFrame(
+    ModelStep = animalModel.step,
     FarmID = animalModel.farm_id,
     Day = animalModel.calday,
     AnimalID = AnimalAgent.id,
