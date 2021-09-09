@@ -31,7 +31,7 @@ end
 current_lactating = current_stock(animalModel, :L)
     
 if current_lactating > animalModel.num_lac && AnimalAgent.dim ≥ 280
-    if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 9*365))
+    if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 7*365))
         kill_agent!(AnimalAgent, animalModel)
         println("Age cull")
     end
