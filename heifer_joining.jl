@@ -28,18 +28,11 @@ function heifer_joining!(AnimalAgent, animalModel)
 
     end
 
-if animalModel.date ≥ (animalModel.msd + Day(15*7))
-    if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
+if AnimalAgent.stage == :H && AnimalAgent.age ≥ 550
+    if  AnimalAgent.pregstat == :E
         kill_agent(AnimalAgent, animalModel)
         println("Culled empty heifer")
     end
 end
-
-#= if AnimalAgent.stage == :H && AnimalAgent.age >= 700
-    if AnimalAgent.pregstat == :E
-        kill_agent!(AnimalAgent, animalModel)
-        println("Empty heifer cull")
-    end
-end =#
 
 end
