@@ -30,4 +30,4 @@ output = open("./export/animal_model_run.csv","w")
     CSV.write(output, header, delim = ",", append = true, header = true)
     close(output)
 
-run!(tmp, agent_step!, model_step!, 365*2)
+run!(tmp, agent_step!, model_step!, 365*5)
