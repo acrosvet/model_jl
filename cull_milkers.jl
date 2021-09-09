@@ -38,7 +38,7 @@ if current_lactating > animalModel.num_lac && AnimalAgent.dim ≥ 280
 end
 
 if current_lactating > animalModel.num_lac
-    if AnimalAgent.dim >= 280 && AnimalAgent.dic < 275
+    if AnimalAgent.dim >= 280 && AnimalAgent.dic < 200
         if haskey(animalModel.agents, AnimalAgent.id)
             kill_agent!(AnimalAgent, animalModel)
             println("Fertility cull")
