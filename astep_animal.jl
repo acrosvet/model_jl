@@ -21,6 +21,7 @@ Step AnimalAgents through time
         heat!(AnimalAgent)
         calving!(AnimalAgent, animalModel)
         joining!(AnimalAgent, animalModel)
+        wean!(AnimalAgent)
         update_agent!(AnimalAgent) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
