@@ -74,6 +74,9 @@ include("calving.jl")
 include("joining.jl")
 include("heat.jl")
 include("advance_pregnancy.jl")
+include("wean.jl")
+include("heifer.jl")
+include("heifer_joining.jl")
 
 include("export_animal_data.jl")
 
