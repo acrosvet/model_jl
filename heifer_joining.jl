@@ -15,7 +15,8 @@ function heifer_joining!(AnimalAgent, animalModel)
                     AnimalAgent.pregstat = :P
                     AnimalAgent.dic = 1
                     AnimalAgent.stage = :DH
-                    println("Heifer joined")
+                    age = AnimalAgent.age
+                    println("Heifer joined at age $age")
                 #end
             end
         end   
