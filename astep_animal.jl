@@ -26,6 +26,7 @@ Step AnimalAgents through time
         heifer!(AnimalAgent, animalModel)
         heifer_joining!(AnimalAgent, animalModel)
         cull_milkers!(AnimalAgent, animalModel)
+        dryoff!(AnimalAgent)
         update_agent!(AnimalAgent) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
