@@ -7,8 +7,17 @@
 
 function cull_milkers!(AnimalAgent, animalModel)
 
+if AnimalAgent.stage == :D && AnimalAgent.pregstat == :E
+    kill_agent!(AnimalAgent, animalModel)
+    println("Culled empty dry")
+end
+
+if AnimalAgent.dic >= 320
+    kill_agent!(AnimalAgent, animalModel)
+    println("Slipped, cull")
+end
     
-    if AnimalAgent.stage == :L && AnimalAgent.dim ≥ 280
+#=     if AnimalAgent.stage == :L && AnimalAgent.dim ≥ 280
         if AnimalAgent.pregstat == :E
                 kill_agent!(AnimalAgent, animalModel)
                 println("Fertility cull")
@@ -20,5 +29,5 @@ function cull_milkers!(AnimalAgent, animalModel)
             end =#
         end
     end    
-
+ =#
 end
