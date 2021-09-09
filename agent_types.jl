@@ -36,6 +36,7 @@ mutable struct AnimalAgent <: AbstractAgent
     pregstat::Symbol # Pregnancy status
     dic::Int # Days in calf
     heat::Bool
+    sex::Symbol
 end
 
 mutable struct FarmAgent <: AbstractAgent
