@@ -20,6 +20,7 @@ Step AnimalAgents through time
         advance_pregnancy!(AnimalAgent)
         heat!(AnimalAgent)
         calving!(AnimalAgent, animalModel)
+        bobby_cull!(AnimalAgent, animalModel)
         joining!(AnimalAgent, animalModel)
         wean!(AnimalAgent, animalModel)
         heifer!(AnimalAgent, animalModel)
