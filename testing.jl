@@ -77,6 +77,8 @@ include("advance_pregnancy.jl")
 include("wean.jl")
 include("heifer.jl")
 include("heifer_joining.jl")
+include("bobby_cull.jl")
+include("cull_milkers.jl")
 
 include("export_animal_data.jl")
 
