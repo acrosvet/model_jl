@@ -30,7 +30,7 @@ function heifer_joining!(AnimalAgent, animalModel)
 
 if AnimalAgent.stage == :H && AnimalAgent.age ≥ 550
     if  AnimalAgent.pregstat == :E
-        kill_agent(AnimalAgent, animalModel)
+        kill_agent!(AnimalAgent, animalModel)
         println("Culled empty heifer")
     end
 end
