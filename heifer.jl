@@ -7,8 +7,8 @@
 
 function heifer!(AnimalAgent, animalModel)
 
-    if AnimalAgent.age ≥ 13*(365/12)
-        AnimalAgent.status = :H
+    if AnimalAgent.age ≥ 13*(365/12) && AnimalAgent.status == :C
+        AnimalAgent.stage = :H
     end
 
 
