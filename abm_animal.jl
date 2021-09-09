@@ -13,15 +13,15 @@
         sponrec_is = 0.05, #chance of spontaneous recovery IS
         sponrec_ir = 0.04,  #chance of spontaneous recovery IR
         timestep = 1.0, #Set model timestep
-        res_carrier = 0.05,
-        sens_carrier = 0.01, 
-        culling_rate = 0.3,
-        num_lac = N, 
+        res_carrier = 0.05, #Probability of becoming a resistant carrier
+        sens_carrier = 0.01, #Probability of becoming a sensitive carrier
+        culling_rate = 0.3, #Culling rate
+        num_lac = N, #Initial number of lactating cows
         rng = MersenneTwister(42); #Random seed 
-        treatment_prob::Float64 = 0.3,
-        treatment_duration::Int = 5,
-        farm_id::Int = 1,
-        step::Int = 1,
+        treatment_prob::Float64 = 0.3, #Treatment probability, passed from farmModel
+        treatment_duration::Int = 5, #Treatment duration, passed from farmModel
+        farm_id::Int = 1, #Farm ID (from FarmModel)
+        step::Int = 1, #Model step
         date::Date = Date(2021, 7, 2), #Model start date
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
         msd::Date = Date(2021, 9, 24) #Mating Start Date
@@ -31,6 +31,7 @@
 
     #Define the agent space. At present, avoid observing pen boundaries.
     agentSpace = ContinuousSpace((100,100), 1; periodic = true) #Relatinship to real space?
+    
     #Specify the disease dynamics  as a Dictionary to be passed to the model
     pathogenProperties = @dict(
         N, 
@@ -125,17 +126,17 @@
             days_exposed = 0
         )
         vel = initial_velocity(status, movement) #Defined using initial velocity fn
-        stage = :D
+        stage = :D #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
         days_exposed = 0 # Default 0 
         days_carrier = 0 # Default 0 
-        trade_status = false
-        lactation = round(age/365) - 1
-        pregstat = :P
+        trade_status = false #Eligibility for trading 
+        lactation = round(age/365) - 1 #Lactation number
+        pregstat = :P #Initial pregnancy status
         dic = rand(animalModel.rng, truncated(Poisson(247), 199, 290)) #Gives a 63% ICR for this rng
-        heat = false
-        sex = :F
+        heat = false #If animal is in oestrus
+        sex = :F #Sex of initial animals (always F)
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
     
     end
