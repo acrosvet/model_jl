@@ -7,10 +7,9 @@
 
 function heifer!(AnimalAgent, animalModel)
 
-    if AnimalAgent.status == :W
-        if animalModel.date ≥ (animalModel.msd - Day(21))
-            AnimalAgent.status = :H
-        end
+    if AnimalAgent.age ≥ 13*(365/12)
+        AnimalAgent.status = :H
     end
+
 
 end
