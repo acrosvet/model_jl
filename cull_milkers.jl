@@ -36,6 +36,15 @@ if current_lactating > animalModel.num_lac && AnimalAgent.dim ≥ 280
         println("Age cull")
     end
 end
+
+if current_lactating > animalModel.num_lac
+    if AnimalAgent.dim >= 280 && AnimalAgent.dic < 275
+        if haskey(animalModel.agents, AnimalAgent.id)
+            kill_agent!(AnimalAgent, animalModel)
+            println("Fertility cull")
+        end
+    end
+end
 #=     if AnimalAgent.stage == :L && AnimalAgent.dim ≥ 280
         if AnimalAgent.pregstat == :E
                 kill_agent!(AnimalAgent, animalModel)
