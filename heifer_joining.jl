@@ -14,5 +14,6 @@ function heifer_joining!(AnimalAgent, animalModel)
                     animal.dic = 1
                 end
             end   
+        end
     end
 end
