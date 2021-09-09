@@ -20,7 +20,8 @@ function joining!(AnimalAgent, animalModel)
             if AnimalAgent.dim ≥ 42 && AnimalAgent.heat == true
                 if rand(animalModel.rng) > heat_detection_efficiency(animalModel) # Allow for a 90% chance of detecting heat in the first service
                     if rand(animalModel.rng) > 0.5 # and a 50% chance of conception
-                        AnimalAgent.pregstat = :P                    
+                        AnimalAgent.pregstat = :P 
+                        AnimalAgent.dic = 1                   
                     end
                 end
             end   
