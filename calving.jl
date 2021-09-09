@@ -14,11 +14,15 @@ After calving:
 function calving!(AnimalAgent, animalModel)
 
     if AnimalAgent.dic == 283  && AnimalAgent.stage != :L
+        if AnimalAgent.stage == :H
+            println("Heifer calved")
+        end
         AnimalAgent.pregstat = :E
         AnimalAgent.dic = 0
         AnimalAgent.stage = :L
         AnimalAgent.dim = 1
         AnimalAgent.lactation += 1
         birth!(animalModel)
+        
     end
 end
