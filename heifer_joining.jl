@@ -16,6 +16,11 @@ function heifer_joining!(AnimalAgent, animalModel)
                     AnimalAgent.dic = 1
                     AnimalAgent.stage = :DH
                     age = AnimalAgent.age
+                    date = animalModel.date
+                    msd = animalModel.msd
+                    evala = (Dates.value(animalModel.date - (animalModel.msd - Day(21))))
+                    println("Expression evaluates to $evala")
+                    println("Date is $date and msd is $msd")
                     println("Heifer joined at age $age")
                 #end
             end
