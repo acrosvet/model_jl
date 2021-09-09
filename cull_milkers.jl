@@ -15,8 +15,10 @@ if AnimalAgent.stage == :L && AnimalAgent.dim ≥ 280
         end
     
     elseif AnimalAgent.age ≥ rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 9*365)) && AnimalAgent.dim ≥ 280
-        kill_agent!(AnimalAgent, animalModel)
-        println("Age cull")
+        if rand(animalModel.rng) > 0.5
+            kill_agent!(AnimalAgent, animalModel)
+            println("Age cull")
+        end
     end
 end    
 
