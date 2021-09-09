@@ -13,7 +13,7 @@ After calving:
 """
 function calving!(AnimalAgent, animalModel)
 
-    if AnimalAgent.dic ≥ 283 && AnimalAgent.stage != :L
+    if AnimalAgent.dic == 283  && AnimalAgent.stage != :L
         AnimalAgent.pregstat = :E
         AnimalAgent.dic = 0
         AnimalAgent.stage = :L
