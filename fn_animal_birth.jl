@@ -46,7 +46,7 @@ function birth!(animalModel)
             pregstat = :E
             dic = 0
             heat = false
-            sex = rand(animalModel.rng) > 0.5 ? :F : M
+            sex = rand(animalModel.rng) > 0.5 ? :F : :M
             add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
             #add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat)
             println("Calf born!")
