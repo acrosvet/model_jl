@@ -7,6 +7,7 @@
 
 function cull_milkers!(AnimalAgent, animalModel)
 
+    
     if AnimalAgent.stage == :L && AnimalAgent.dim ≥ 280
         if AnimalAgent.pregstat == :E
                 kill_agent!(AnimalAgent, animalModel)
