@@ -17,10 +17,10 @@ function heifer_joining!(AnimalAgent, animalModel)
                     println("Heifer joined")
                 end
             end   
+        elseif  animalModel.date > (animalModel.msd + Day(15*7)) && AnimalAgent.pregstat == :E
+            kill_agent!(AnimalAgent, animalModel)
+            println("Empty heifer cull")
         end
-    elseif  animalModel.date > (animalModel.msd + Day(15*7)) && AnimalAgent.pregstat == :E
-        kill_agent!(AnimalAgent, animalModel)
-        println("Empty heifer cull")
     end
-    
+  
 end
