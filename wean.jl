@@ -1,7 +1,8 @@
 """
-**wean!(AnimalAgent)***
+**wean!(AnimalAgent)** \n
 
 * Wean animal agents to weaned status
+* Between 55 and 70 days if status is calf
 
 """
 function wean!(AnimalAgent)
