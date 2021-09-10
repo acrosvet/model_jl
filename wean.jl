@@ -8,7 +8,13 @@
 function wean!(AnimalAgent, animalModel)
     if AnimalAgent.stage == :C
         if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Poisson(60), 55, 70))
-            AnimalAgent.stage = :W
+            
+            if rand(animalModel.rng) < 0.3
+                AnimalAgent.stage = :W
+            else
+                kill_agent!(AnimalAgent, animalModel)
+                println("Surplus")
+            end
         end
     end
 end

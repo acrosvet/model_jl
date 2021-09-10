@@ -19,14 +19,13 @@ Step AnimalAgents through time
         #mortality!(AnimalAgent, animalModel) #Introduce mortality
         cull_milkers!(AnimalAgent, animalModel)
         advance_pregnancy!(AnimalAgent)
-        heat!(AnimalAgent)
+        #heat!(AnimalAgent)
         calving!(AnimalAgent, animalModel)
         bobby_cull!(AnimalAgent, animalModel)
         joining!(AnimalAgent, animalModel)
         wean!(AnimalAgent, animalModel)
         heifer!(AnimalAgent, animalModel)
         heifer_joining!(AnimalAgent, animalModel)
-        
         dryoff!(AnimalAgent, animalModel)
         update_agent!(AnimalAgent) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)

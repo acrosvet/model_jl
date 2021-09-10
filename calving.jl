@@ -13,7 +13,7 @@ After calving:
 """
 function calving!(AnimalAgent, animalModel)
 
-    if AnimalAgent.dic == 283  && AnimalAgent.stage != :L
+    if AnimalAgent.dic == 283
         if AnimalAgent.stage == :DH
            println("Heifer calved")
         end
