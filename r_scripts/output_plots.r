@@ -3,21 +3,28 @@ source("./r_scripts/libraries.r")
 # Import the model run from the animalModel
 run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/animal_model_run.csv")
 
+
 tmp = run %>% filter(DIM == 280)
+
+run %>%
+  select(ModelStep, Day, CurrentLac)
+
+  max(run$CurrentLac)
 
 # Generate a ploot of population dynamics over time
 run %>% 
   filter(AnimalStage != 0) %>% 
-  group_by(ModelStep, AnimalStage) %>% 
+  mutate(Day = lubridate::ymd(Day)) %>%
+  group_by(Day, AnimalStage) %>% 
   summarise(count = n()) %>% 
   pivot_wider(names_from = AnimalStage, values_from = count) %>% 
   plot_ly() %>% 
-  add_trace(x = ~ModelStep, y = ~L, type = 'bar', name = 'L') %>% 
-  add_trace(x = ~ModelStep, y = ~D, type = 'bar', name = 'D') %>% 
-  add_trace(x = ~ModelStep, y = ~C, type = 'bar', name = 'C') %>%
-  add_trace(x = ~ModelStep, y = ~H, type = 'bar', name = 'H') %>%
-  add_trace(x = ~ModelStep, y = ~DH, type = 'bar', name = 'DH') %>%
-  add_trace(x = ~ModelStep, y = ~D, type = 'bar', name = 'W') %>%
+  add_trace(x = ~Day, y = ~L, type = 'bar', name = 'L') %>% 
+  add_trace(x = ~Day, y = ~D, type = 'bar', name = 'D') %>% 
+  add_trace(x = ~Day, y = ~C, type = 'bar', name = 'C') %>%
+  add_trace(x = ~Day, y = ~H, type = 'bar', name = 'H') %>%
+  add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'DH') %>%
+  add_trace(x = ~Day, y = ~W, type = 'bar', name = 'W') %>%
   layout(barmode = 'stack')
 
   run %>% 

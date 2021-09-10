@@ -24,10 +24,13 @@ header = DataFrame(
     dic = 0,
     psc = 0,
     msd = 0,
+    CurrentLac = 0,
 )
 
 output = open("./export/animal_model_run.csv","w")
     CSV.write(output, header, delim = ",", append = true, header = true)
     close(output)
 
-run!(tmp, agent_step!, model_step!, 365*5)
+run!(tmp, agent_step!, model_step!, 365*25)
+
+step!(tmp, agent_step!, model_step!)

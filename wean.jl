@@ -14,7 +14,7 @@ function wean!(AnimalAgent, animalModel)
             else
                 kill_agent!(AnimalAgent, animalModel)
                 println("Surplus")
-            end
+            end 
         end
     end
 end

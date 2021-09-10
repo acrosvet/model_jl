@@ -23,6 +23,7 @@ data = DataFrame(
     dic = AnimalAgent.dic,
     psc = animalModel.psc,
     msd = animalModel.msd,
+    CurrentLac = animalModel.current_lac,
 )
 
 

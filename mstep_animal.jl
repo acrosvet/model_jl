@@ -52,17 +52,6 @@ function model_step!(animalModel)
         animalModel.msd += Year(1)
     end
     
-    function current_stock(animalModel, stage)
-        counter = 0
-        for i in 1:length(animalModel.agents)
-            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == stage
-                counter += 1
-            end
-        end
-        return counter
-
-    end
-
 #=     current_lactating = current_stock(animalModel, :L)
 
     while current_lactating > animalModel.num_lac
@@ -93,6 +82,7 @@ function model_step!(animalModel)
     #Determine trading need
 
     #trading_need!(animalModel)
+
 
 
     
