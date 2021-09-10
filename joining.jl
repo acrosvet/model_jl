@@ -7,7 +7,7 @@
 
 """
 function joining!(AnimalAgent, animalModel)
-
+#= 
     function heat_detection_efficiency(animalModel)
         if animalModel.date ≤ (animalModel.msd + Day(21))
             0.1 # 90% chance in the first few weeks of mating
@@ -25,6 +25,13 @@ if AnimalAgent.pregstat == :E
                     end
                 end
             end   
+    end
+end =#
+
+if AnimalAgent.pregstat == :E && animalModel.date == animalModel.psc
+    if rand(animalModel.rng) < 0.85
+        AnimalAgent.pregstat = :P
+        AnimalAgent.dic = rand(animalModel.rng, truncated(Poisson(247), 199, 290))
     end
 end
 end
