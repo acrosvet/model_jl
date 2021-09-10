@@ -38,14 +38,14 @@ current_lactating = current_stock(animalModel, :L)
         end
     end
 end  =#
-
+#= 
  if current_lactating > animalModel.num_lac 
     if AnimalAgent.age in rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 7*365), 1000)
         kill_agent!(AnimalAgent, animalModel)
         println("Age cull")
     end
 end 
-
+ =#
  #println(current_lactating)
 
 
