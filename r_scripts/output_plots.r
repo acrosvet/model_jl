@@ -4,6 +4,7 @@ source("./r_scripts/libraries.r")
 run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/animal_model_run.csv")
 
 
+
 tmp = run %>% filter(DIM == 280)
 
 run %>%
