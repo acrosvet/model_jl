@@ -28,10 +28,10 @@ if AnimalAgent.pregstat == :E
     end
 end =#
 
-if AnimalAgent.pregstat == :E && animalModel.date == animalModel.psc
+if AnimalAgent.pregstat == :E && (animalModel.date == (animalModel.msd + Month(3)))
     if rand(animalModel.rng) < 0.85
         AnimalAgent.pregstat = :P
-        AnimalAgent.dic = rand(animalModel.rng, truncated(Poisson(247), 199, 290))
+        AnimalAgent.dic = rand(animalModel.rng, truncated(Poisson(63), 1, 84))
     end
 end
 end

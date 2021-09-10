@@ -6,7 +6,15 @@
 """
 
 function heifer_joining!(AnimalAgent, animalModel)
-    
+
+
+#=     if animalModel.date == animalModel.psc && AnimalAgent.stage == :H
+        if (AnimalAgent.age - 365) < 42
+                kill_agent!(AnimalAgent, animalModel)
+                println("Surplus cull")
+        end
+    end =#
+
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
         if animalModel.date == (animalModel.msd + Day(6*7))
             if rand(animalModel.rng) < 0.89
@@ -17,6 +25,8 @@ function heifer_joining!(AnimalAgent, animalModel)
             end
         end
     end
+
+
 
 #=     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
         if (animalModel.date ≥ (animalModel.msd - Day(21))) && (animalModel.date ≤ (animalModel.msd + Day(9*7)))
@@ -40,6 +50,7 @@ function heifer_joining!(AnimalAgent, animalModel)
     end
 
      =#
+
 
 if AnimalAgent.stage == :H && AnimalAgent.age ≥ 550
     if  AnimalAgent.pregstat == :E

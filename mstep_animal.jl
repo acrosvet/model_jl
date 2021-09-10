@@ -52,7 +52,40 @@ function model_step!(animalModel)
         animalModel.msd += Year(1)
     end
     
+    function current_stock(animalModel, stage)
+        counter = 0
+        for i in 1:length(animalModel.agents)
+            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == stage
+                counter += 1
+            end
+        end
+        return counter
 
+    end
+
+#=     current_lactating = current_stock(animalModel, :L)
+
+    while current_lactating > animalModel.num_lac
+        for i in 1:length(animalModel.agents)
+            if animalModel[i].age in rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 7*365), 100)
+                if haskey(animalModel, animalModel[i].id)
+                    kill_agent!(animalModel[i], animalModel)
+                    println("Age cull")
+                end
+            end
+        end
+    end
+
+    while current_lactating > animalModel.num_lac
+        for i in 1:length(animalModel.agents)
+            if (animalModel[i].stage == :L && animalModel[i].dim > 280) && animalModel[i].dic < 175
+                if haskey(animalModel, animalModel[i].id)
+                    kill_agent!(animalModel[i], animalModel)
+                    println("Fert cull")
+                end
+            end
+        end
+    end =#
 
     # Trade animals between farms using the daytrader function
     #daytrader!(FarmAgent, animalModel)

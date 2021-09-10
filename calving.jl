@@ -22,7 +22,9 @@ function calving!(AnimalAgent, animalModel)
         AnimalAgent.stage = :L
         AnimalAgent.dim = 1
         AnimalAgent.lactation += 1
-        birth!(animalModel)
+        if animalModel.date <= (animalModel.psc + Day(42))
+            birth!(animalModel)
+        end
         
     end
 end
