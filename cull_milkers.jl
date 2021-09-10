@@ -20,14 +20,12 @@ function cull_milkers!(AnimalAgent, animalModel)
 
   #  num_agents = length(animalModel.agents)
 #println("The number of agents is $num_agents")
-
-if AnimalAgent.stage == :D && AnimalAgent.pregstat == :E
+    if AnimalAgent.stage == :D && AnimalAgent.pregstat == :E
     if haskey(animalModel.agents, AnimalAgent.id)
     kill_agent!(AnimalAgent, animalModel)
     println("Culled empty dry")
     end
 end
-
 if AnimalAgent.dic >= 320
     if haskey(animalModel.agents, AnimalAgent.id)
     kill_agent!(AnimalAgent, animalModel)
@@ -53,7 +51,7 @@ animalModel.current_lac = current_lactating
 end 
 
 if animalModel.current_lac > animalModel.num_lac
-    if AnimalAgent.stage == :L && AnimalAgent.dim ≥ 280
+    if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
         if haskey(animalModel.agents, AnimalAgent.id)
             kill_agent!(AnimalAgent, animalModel)
             println("Fertility cull")
