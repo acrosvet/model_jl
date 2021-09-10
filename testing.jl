@@ -13,6 +13,7 @@ const time_resolution = 1
 # Animal ABM
 
 include("abm_animal.jl")
+include("abm_animal_seasonal.jl")
 
 # Animal transmission functions -------
 
