@@ -1,5 +1,5 @@
 
-function birth!(animalModel)
+function birth!(AnimalAgent, animalModel)
 
     function initial_velocity(status, movement)
         if status == :S
@@ -47,7 +47,8 @@ function birth!(animalModel)
             dic = 0
             heat = false
             sex = rand(animalModel.rng) > 0.5 ? :F : :M
-            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
+            calving_season = AnimalAgent.calving_season
+            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
             #add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat)
             println("Calf born!")
             #println("$calf_counter calves born")
