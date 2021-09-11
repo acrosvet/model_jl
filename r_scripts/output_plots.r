@@ -1,5 +1,6 @@
 
 source("./r_scripts/libraries.r")
+library(lubridate)
 # Import the model run from the animalModel
 run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/animal_model_run.csv")
 
@@ -13,8 +14,8 @@ run %>%
   max(run$CurrentLac)
 
 # Generate a ploot of population dynamics over time
-run %>% 
-  filter(AnimalStage != 0) %>% 
+run %>%  
+  filter(AnimalStage != "L") %>% 
   mutate(Day = lubridate::ymd(Day)) %>%
   group_by(Day, AnimalStage) %>% 
   summarise(count = n()) %>% 
@@ -27,6 +28,20 @@ run %>%
   add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'DH') %>%
   add_trace(x = ~Day, y = ~W, type = 'bar', name = 'W') %>%
   layout(barmode = 'stack')
+
+# Repro dynamics --------------------------
+
+run %>%
+  filter(Day != 0) %>%
+  filter(AnimalStage == "L") %>%
+  mutate(Day = lubridate::ymd(Day)) %>%
+  mutate(msd = lubridate::ymd(msd)) %>%
+  filter(Day == (msd %m+% weeks(6))) %>%
+  group_by(Day, PregStat) %>%
+  summarise(count = n()) %>%
+  pivot_wider(names_from = PregStat, values_from = count)
+  mutate(six_wk = msd +)
+  group_by(AnimalStage, )
 
   run %>% 
   filter(AnimalStage != 0) %>% 
