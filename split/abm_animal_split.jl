@@ -75,7 +75,9 @@
         msd,
         msd_2, 
         current_lac = 0,
-        system
+        system,
+        lac_spring = 0,
+        lac_autumn = 0,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
