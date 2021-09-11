@@ -38,7 +38,10 @@ run %>%
   filter(Day == (msd %m+% weeks(13))) %>%
   group_by(Day, PregStat) %>%
   summarise(count = n()) %>%
-  pivot_wider(names_from = PregStat, values_from = count)
+  pivot_wider(names_from = PregStat, values_from = count) %>%
+  mutate(empty_rate = 100*(E/(E+P))) %>%
+  plot_ly() %>%
+  add_trace(x = ~Day, y = ~empty_rate)
 
 
 # Calving pattern ------------------------------
@@ -133,46 +136,20 @@ calved_psc_12 <- run %>%
   mutate(across(where(is.numeric), ~replace_na(.x, 0))) %>%
   mutate(calved = 100*(L / (L + D + DH)))
 
-  run %>% 
+
+# Inspect in calf rates  -------------------------
+six_icr = run %>% 
   filter(AnimalStage != 0) %>% 
-  group_by(ModelStep, AnimalStage) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = AnimalStage, values_from = count) %>% 
-  plot_ly() %>% 
-  add_trace(x = ~ModelStep, y = ~H, type = 'bar', name = 'H') %>% 
-  add_trace(x = ~ModelStep, y = ~DH, type = 'bar', name = 'DH') %>% 
-  layout(barmode = 'stack')
-
-  run %>% 
-    mutate(Day = lubridate::ymd(Day)) %>%
-    filter(AnimalStage != 0) %>% 
-    group_by(Day, PregStat) %>% 
-    summarise(count = n()) %>% 
-    pivot_wider(names_from = PregStat, values_from = count) %>% 
-    plot_ly() %>% 
-    add_trace(x = ~Day, y = ~E, type = 'bar', name = 'E') %>% 
-    add_trace(x = ~Day, y = ~P, type = 'bar', name = 'P') %>% 
-    layout(barmode = 'stack')
-
-
-      run %>% 
-        mutate(Day = lubridate::ymd(Day)) %>%
-        filter(AnimalStage != 0) %>% 
-        group_by(Day, AnimalStage) %>% 
-        summarise(count = n()) %>% 
-        pivot_wider(names_from = AnimalStage, values_from = count) %>% 
-        plot_ly() %>% 
-        add_trace(x = ~Day, y = ~H, type = 'bar', name = 'H') %>% 
-        add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'DH') %>% 
-        layout(barmode = 'stack')
-
-# Inspect in calf rates  
-icr = run %>% 
-  filter(AnimalStage != 0) %>% 
-  group_by(ModelStep, AnimalStage) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = AnimalStage, values_from = count) %>% 
-  mutate(per_calved = 100*(L/(D+L)))
+  mutate(Day = lubridate::ymd(Day)) %>%
+  mutate(eom = lubridate::ymd(msd) %m+% weeks(13)) %>%
+  filter(Day == eom) %>%
+  filter(AnimalStage == "L") %>%
+  mutate(dic = dic - 47) %>%
+  mutate(PregStat = ifelse(dic > 0, "P", "E")) %>%
+  group_by(Day, PregStat) %>%
+  summarise(count = n()) %>%
+  pivot_wider(names_from = PregStat, values_from = count) %>%
+  mutate(icr = 100*(P/(E+P)))
 
 # Calving by msd
 
