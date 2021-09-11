@@ -23,6 +23,7 @@
         treatment_prob::Float64 = 0.3, #Treatment probability, passed from farmModel
         treatment_duration::Int = 5, #Treatment duration, passed from farmModel
         farm_id::Int = 1, #Farm ID (from FarmModel)
+        system::Symbol = :Split,
         step::Int = 1, #Model step
         date::Date = Date(2021, 7, 2), #Model start date
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
@@ -74,6 +75,7 @@
         msd,
         msd_2, 
         current_lac = 0,
+        system
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
