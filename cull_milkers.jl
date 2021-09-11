@@ -7,18 +7,7 @@
 
 function cull_milkers!(AnimalAgent, animalModel)
 
-#=     function current_stock(animalModel, stage)
-        counter = 0
-        for i in 1:length(animalModel.agents)
-            if (haskey(animalModel.agents, i) == true) && animalModel.agents[i].stage == stage
-                counter += 1
-            end
-        end
-        return counter
 
-    end =#
-
-  #  num_agents = length(animalModel.agents)
 #println("The number of agents is $num_agents")
     if AnimalAgent.stage == :D && AnimalAgent.pregstat == :E
     if haskey(animalModel.agents, AnimalAgent.id)
@@ -33,7 +22,7 @@ if AnimalAgent.dic >= 320
     end
 end
 
-#animalModel.current_lac =  current_stock(animalModel, :L)
+
 
 container = [a.stage == :L for a in allagents(animalModel)]
 current_lactating = sum(container)
