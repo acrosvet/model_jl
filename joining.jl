@@ -16,7 +16,6 @@ if AnimalAgent.calving_season == :Spring
     end
 end
 
-if animalModel.system == :Split
     if AnimalAgent.calving_season == :Autumn
         if (AnimalAgent.pregstat == :E && AnimalAgent.stage == :L) && (animalModel.date == (animalModel.msd_2 + Month(3)))
             if rand(animalModel.rng) < 0.85
@@ -25,7 +24,7 @@ if animalModel.system == :Split
             end
         end
     end
-end
+
 
 end
 
