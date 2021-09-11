@@ -46,12 +46,19 @@ function model_step!(animalModel)
         animalModel.psc += Year(1)
     end
 
+    if Year(animalModel.date) > Year(animalModel.psc_2)
+        animalModel.psc_2 += Year(1)
+    end
+
     # Increment msd 
 
     if Year(animalModel.date) > Year(animalModel.msd)
         animalModel.msd += Year(1)
     end
     
+    if Year(animalModel.date) > Year(animalModel.msd_2)
+        animalModel.msd_2 += Year(1)
+    end
 #=     current_lactating = current_stock(animalModel, :L)
 
     while current_lactating > animalModel.num_lac
