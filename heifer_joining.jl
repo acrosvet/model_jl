@@ -17,7 +17,16 @@ function heifer_joining!(AnimalAgent, animalModel)
         end
     end
 
-
+if animalModel.system == :Split
+    if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
+        if animalModel.date == (animalModel.msd_2 + Day(6*7))
+                AnimalAgent.pregstat = :P
+                AnimalAgent.stage = :DH
+                AnimalAgent.dic = rand(truncated(Poisson(42), 0, 63))
+                println("Heifer joined")
+        end
+    end
+end
 
 
 if AnimalAgent.stage == :H && AnimalAgent.age ≥ 550
