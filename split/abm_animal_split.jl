@@ -27,8 +27,8 @@
         step::Int = 1, #Model step
         date::Date = Date(2021, 7, 2), #Model start date
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
-        msd::Date = Date(2021, 9, 24) #Mating Start Date
-        psc_2::Date = (psc - Month(4)) #Second calving
+        msd::Date = Date(2021, 9, 24), #Mating Start Date
+        psc_2::Date = (psc - Month(4)), #Second calving
         msd_2::Date = (msd - Month(4)) #Second joining
     )
     #End header
@@ -148,7 +148,8 @@
         dic = rand(animalModel.rng, truncated(Poisson(247), 199, 290)) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
+        calving_season = :Spring
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
 
@@ -190,7 +191,8 @@
         dic = rand(animalModel.rng, truncated(Poisson(272), 199, 290)) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
+        calving_season = :Spring
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
 
@@ -231,7 +233,8 @@
         dic = 0
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
+        calving_season = :Spring
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
 
@@ -274,7 +277,8 @@
         dic = 0
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
+        calving_season = :Autumn
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
 
@@ -312,11 +316,12 @@
         days_carrier = 0 # Default 0 
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
-        pregstat = :E #Initial pregnancy status
-        dic = 0 #Gives a 63% ICR for this rng
+        pregstat = :P #Initial pregnancy status
+        dic = rand(animalModel.rng, truncated(Poisson(152), 79, 170)) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
+        calving_season = :Autumn
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
 
@@ -357,7 +362,8 @@
         dic = 0
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
+        calving_season = :Autumn
+        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
         return animalModel
