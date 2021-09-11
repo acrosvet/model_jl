@@ -7,7 +7,7 @@
 
 function heifer_joining!(AnimalAgent, animalModel)
 
-
+if AnimalAgent.calving_season == :Spring
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
         if animalModel.date == (animalModel.msd + Day(6*7))
                 AnimalAgent.pregstat = :P
@@ -16,8 +16,9 @@ function heifer_joining!(AnimalAgent, animalModel)
                 println("Heifer joined")
         end
     end
+end
 
-if animalModel.system == :Split
+if AnimalAgent.calving_season == :Autumn
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
         if animalModel.date == (animalModel.msd_2 + Day(6*7))
                 AnimalAgent.pregstat = :P
