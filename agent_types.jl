@@ -37,6 +37,7 @@ mutable struct AnimalAgent <: AbstractAgent
     dic::Int # Days in calf
     heat::Bool
     sex::Symbol
+    calving_season::Symbol
 end
 
 mutable struct FarmAgent <: AbstractAgent
