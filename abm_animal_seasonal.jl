@@ -138,7 +138,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Poisson(247), 199, 290)) #Gives a 63% ICR for this rng
+        dic = rand(animalModel.rng, truncated(Poisson(240), 199, 290)) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
@@ -180,7 +180,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Poisson(272), 199, 290)) #Gives a 63% ICR for this rng
+        dic = rand(animalModel.rng, truncated(Poisson(260), 199, 290)) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex)
