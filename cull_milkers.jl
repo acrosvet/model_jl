@@ -36,7 +36,7 @@ end
 #animalModel.current_lac =  current_stock(animalModel, :L)
 
 container = [a.stage == :L for a in allagents(animalModel)]
-current_lactating = floor(sum(container) * rand(animalModel.rng, 0.9:0.05:1.1))
+current_lactating = sum(container)
 
 animalModel.current_lac = current_lactating
 
