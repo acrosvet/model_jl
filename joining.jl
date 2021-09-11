@@ -31,7 +31,7 @@ end =#
 if (AnimalAgent.pregstat == :E && AnimalAgent.stage == :L) && (animalModel.date == (animalModel.msd + Month(3)))
     if rand(animalModel.rng) < 0.85
         AnimalAgent.pregstat = :P
-        AnimalAgent.dic = rand(animalModel.rng, truncated(Poisson(42), 1, 84))
+        AnimalAgent.dic = rand(animalModel.rng, truncated(Poisson(63), 1, 84))
     end
 end
 end
