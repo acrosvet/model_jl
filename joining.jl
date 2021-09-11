@@ -14,5 +14,15 @@ if (AnimalAgent.pregstat == :E && AnimalAgent.stage == :L) && (animalModel.date 
         AnimalAgent.dic = rand(animalModel.rng, truncated(Poisson(63), 1, 84))
     end
 end
+
+if animalModel.system == :Split
+    if (AnimalAgent.pregstat == :E && AnimalAgent.stage == :L) && (animalModel.date == (animalModel.msd_2 + Month(3)))
+        if rand(animalModel.rng) < 0.85
+            AnimalAgent.pregstat = :P
+            AnimalAgent.dic = rand(animalModel.rng, truncated(Poisson(63), 1, 84))
+        end
+    end
+end
+
 end
 
