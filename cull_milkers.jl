@@ -59,21 +59,5 @@ if animalModel.current_lac > animalModel.num_lac
     end
 end 
 
- #println(current_lactating)
 
-
- 
-#=     if AnimalAgent.stage == :L && AnimalAgent.dim ≥ 280
-        if AnimalAgent.pregstat == :E
-                kill_agent!(AnimalAgent, animalModel)
-                println("Fertility cull")
-        
-    #=     elseif AnimalAgent.age ≥ rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 9*365)) && AnimalAgent.dim ≥ 280
-            if rand(animalModel.rng) > 0.5
-                kill_agent!(AnimalAgent, animalModel)
-                println("Age cull")
-            end =#
-        end
-    end    
- =#
 end
