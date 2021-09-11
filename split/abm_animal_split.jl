@@ -76,8 +76,8 @@
         msd_2, 
         current_lac = 0,
         system,
-        lac_spring = 0,
-        lac_autumn = 0,
+        lac_spring = floor((N - num_heifers)*0.6),
+        lac_autumn = floor((N - num_heifers)*0.4),
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
