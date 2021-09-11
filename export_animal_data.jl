@@ -26,9 +26,13 @@ data = DataFrame(
     CurrentLac = animalModel.current_lac,
 )
 
-
-output = open("./export/animal_model_run.csv","a")
+if animalModel.system == :Seasonal
+output = open("./export/seasonal_model_run.csv","a")
     CSV.write(output, data, delim = ",", append = true, header = false)
     close(output)
-
+elseif animalModel.system == :Split
+    output = open("./export/split_model_run.csv","a")
+    CSV.write(output, data, delim = ",", append = true, header = false)
+    close(output)
+end
 end
