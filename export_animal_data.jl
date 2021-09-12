@@ -24,6 +24,7 @@ data = DataFrame(
     psc = animalModel.psc,
     msd = animalModel.msd,
     CurrentLac = animalModel.current_lac,
+    CalvingSeason = AnimalAgent.calving_season
 )
 
 if animalModel.system == :Seasonal

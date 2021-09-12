@@ -25,6 +25,7 @@ header = DataFrame(
     psc = 0,
     msd = 0,
     CurrentLac = 0,
+    CalvingSeason = 0
 )
 
 output = open("./export/split_model_run.csv","w")

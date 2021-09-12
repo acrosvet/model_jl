@@ -5,7 +5,7 @@ function dryoff!(AnimalAgent, animalModel)
 
     if AnimalAgent.dim ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(305), 290, 330)))) && AnimalAgent.agenttype != :CO
         if AnimalAgent.pregstat == :E
-            if rand(animalModel.rng) > 0.4 && AnimalAgent.dim < 500
+            if rand(animalModel.rng) > 0.8 && AnimalAgent.dim < 330
                 if AnimalAgent.calving_season == :Spring
                     AnimalAgent.calving_season = :Autumn
                     AnimalAgent.agenttype = :CO

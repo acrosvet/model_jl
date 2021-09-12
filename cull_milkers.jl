@@ -17,17 +17,17 @@ current_autumn = sum(current_autumn)
 
 
 #println("The number of agents is $num_agents")
-    if AnimalAgent.stage == :D && AnimalAgent.pregstat == :E
+if AnimalAgent.stage == :D && AnimalAgent.pregstat == :E
     if haskey(animalModel.agents, AnimalAgent.id)
-    kill_agent!(AnimalAgent, animalModel)
-    println("Culled empty dry")
+        kill_agent!(AnimalAgent, animalModel)
+        println("Culled empty dry")
     end
 end
 
 if AnimalAgent.dic >= 320
     if haskey(animalModel.agents, AnimalAgent.id)
-    kill_agent!(AnimalAgent, animalModel)
-    println("Slipped, cull")
+        kill_agent!(AnimalAgent, animalModel)
+        println("Slipped, cull")
     end
 end
 
@@ -36,14 +36,16 @@ end
 
 container = [a.stage == :L for a in allagents(animalModel)]
 current_lactating = sum(container)
-    animalModel.current_lac = current_lactating
+
+animalModel.current_lac = current_lactating
+
 if current_lactating > animalModel.num_lac 
-    if AnimalAgent.calving_season == :Spring && AnimalAgent.dim > 280
+    if AnimalAgent.calving_season == :Spring 
         if current_spring > animalModel.lac_spring
             if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
                 if haskey(animalModel.agents, AnimalAgent.id)
-                kill_agent!(AnimalAgent, animalModel)
-                println("Age cull")
+                    kill_agent!(AnimalAgent, animalModel)
+                    println("Age cull")
                 end
             end
         end 
@@ -62,18 +64,18 @@ if current_lactating > animalModel.num_lac
         end 
     end
     ################################
-    if AnimalAgent.calving_season == :Autumn && AnimalAgent.dim > 280
+    if AnimalAgent.calving_season == :Autumn 
         if current_autumn > animalModel.lac_autumn
             if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
                 if haskey(animalModel.agents, AnimalAgent.id)
-                kill_agent!(AnimalAgent, animalModel)
-                println("Age cull")
+                    kill_agent!(AnimalAgent, animalModel)
+                    println("Age cull")
                 end
             end
         end 
     end
 
-    if AnimalAgent.calving_season == :Autumn && AnimalAgent.dim > 280
+    if AnimalAgent.calving_season == :Autumn
         if current_autumn > animalModel.lac_autumn
             if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
                 if AnimalAgent.agenttype != :CO

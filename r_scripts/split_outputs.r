@@ -15,6 +15,7 @@ run %>%
 
 # Generate a ploot of population dynamics over time
 run %>%  
+ # filter(CalvingSeason == "Spring") %>%
   mutate(Day = lubridate::ymd(Day)) %>%
   group_by(Day, AnimalStage) %>% 
   summarise(count = n()) %>% 
@@ -26,8 +27,30 @@ run %>%
   add_trace(x = ~Day, y = ~H, type = 'bar', name = 'H') %>%
   add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'DH') %>%
   add_trace(x = ~Day, y = ~W, type = 'bar', name = 'W') %>%
-  layout(barmode = 'stack')
+  layout(barmode = 'stack', title = "Spring")
 
+
+# Generate a ploot of population dynamics over time
+run %>%  
+  filter(CalvingSeason == "Autumn") %>%
+  mutate(Day = lubridate::ymd(Day)) %>%
+  group_by(Day, AnimalStage) %>% 
+  summarise(count = n()) %>% 
+  pivot_wider(names_from = AnimalStage, values_from = count) %>% 
+  plot_ly() %>% 
+  add_trace(x = ~Day, y = ~L, type = 'bar', name = 'L') %>% 
+  add_trace(x = ~Day, y = ~D, type = 'bar', name = 'D') %>% 
+  add_trace(x = ~Day, y = ~C, type = 'bar', name = 'C') %>%
+  add_trace(x = ~Day, y = ~H, type = 'bar', name = 'H') %>%
+  add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'DH') %>%
+  add_trace(x = ~Day, y = ~W, type = 'bar', name = 'W') %>%
+  layout(barmode = 'stack', title = "Autumn")
+
+tmp = run %>%
+        filter(Day == "2021-12-05") %>%
+        filter(CalvingSeason == "Autumn") %>%
+        filter(AnimalStage == "L")
+tmp
 # Not in calf rate --------------------------
 
 run %>%
