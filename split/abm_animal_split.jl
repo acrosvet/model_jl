@@ -147,7 +147,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Rayleigh(262), 199, 283)) #Gives a 63% ICR for this rng
+        dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(262), 199, 283)))) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
@@ -190,7 +190,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Rayleigh(272), 199, 283)) #Gives a 63% ICR for this rng
+        dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(272), 199, 283)))) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
@@ -269,7 +269,7 @@
         )
         vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :L #Initial stage
-        dim = rand(animalModel.rng, truncated(Rayleigh(100), 37, 121)) # Defined using initial dim fn
+        dim = Int(floor(rand(animalModel.rng, truncated(Rayleigh(100), 37, 121)))) # Defined using initial dim fn
         days_dry = 0 # Default 0
         days_exposed = 0 # Default 0 
         days_carrier = 0 # Default 0 
@@ -319,7 +319,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Rayleigh(152), 79, 170)) #Gives a 63% ICR for this rng
+        dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(152), 79, 170)))) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Autumn

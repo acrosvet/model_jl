@@ -140,7 +140,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Rayleigh(240), 199, 290)) #Gives a 63% ICR for this rng
+        dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 290)))) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
@@ -183,7 +183,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Rayleigh(260), 199, 290)) #Gives a 63% ICR for this rng
+        dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(260), 199, 290)))) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
