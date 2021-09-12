@@ -12,6 +12,7 @@ if AnimalAgent.calving_season == :Spring
         if rand(animalModel.rng) < 0.85
             AnimalAgent.pregstat = :P
             AnimalAgent.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+            AnimalAgent.agentype = :Joined
         end
     end
 end
@@ -21,6 +22,7 @@ end
             if rand(animalModel.rng) < 0.85
                 AnimalAgent.pregstat = :P
                 AnimalAgent.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+                AnimalAgent.agentype = :Joined
             end
         end
     end
