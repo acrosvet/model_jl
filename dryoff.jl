@@ -24,11 +24,7 @@ function dryoff!(AnimalAgent, animalModel)
         end
     end
 
-    if AnimalAgent.agenttype == :CO
-        if AnimalAgent.dim > 330
-            AnimalAgent.agenttype = :COR
-        end
-    end
+
 
         
 end
