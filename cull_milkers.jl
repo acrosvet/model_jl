@@ -9,9 +9,11 @@ function cull_milkers!(AnimalAgent, animalModel)
 
 current_spring = [a.stage == :L && a.calving_season == :Spring for a in allagents(animalModel)]
 current_spring = sum(current_spring)
+animalModel.current_spring = current_spring
 
 current_autumn = [a.stage == :L && a.calving_season == :Autumn for a in allagents(animalModel)]
 current_autumn = sum(current_autumn)
+animalModel.current_autumn = current_autumn
 
 
 
