@@ -7,7 +7,7 @@
 """
 function wean!(AnimalAgent, animalModel)
     if AnimalAgent.stage == :C
-        if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Poisson(60), 55, 70))
+        if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))
             
             if rand(animalModel.rng) < 0.5
                 AnimalAgent.stage = :W

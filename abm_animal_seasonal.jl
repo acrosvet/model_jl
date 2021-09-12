@@ -111,7 +111,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Poisson(5*365),(2*365), (8*365))) # Defined using initial age function
+        age = rand(truncated(Rayleigh(5*365),(2*365), (8*365))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -140,7 +140,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Poisson(240), 199, 290)) #Gives a 63% ICR for this rng
+        dic = rand(animalModel.rng, truncated(Rayleigh(240), 199, 290)) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
@@ -154,7 +154,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Poisson(2*365),(22*30), (25*30))) # Defined using initial age function
+        age = rand(truncated(Rayleigh(2*365),(22*30), (25*30))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -183,7 +183,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = rand(animalModel.rng, truncated(Poisson(260), 199, 290)) #Gives a 63% ICR for this rng
+        dic = rand(animalModel.rng, truncated(Rayleigh(260), 199, 290)) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
@@ -196,7 +196,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Poisson(365),(295), (385))) # Defined using initial age function
+        age = rand(truncated(Rayleigh(365),(295), (385))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated

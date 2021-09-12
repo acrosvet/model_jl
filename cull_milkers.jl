@@ -37,7 +37,7 @@ current_lactating = sum(container)
 
 if AnimalAgent.calving_season == :Spring
     if current_spring > animalModel.lac_spring
-        if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 7*365))
+        if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))
             if haskey(animalModel.agents, AnimalAgent.id)
             kill_agent!(AnimalAgent, animalModel)
             println("Age cull")
@@ -59,7 +59,7 @@ end
 ################################
 if AnimalAgent.calving_season == :Autumn
     if current_autumn > animalModel.lac_autumn
-        if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 7*365))
+        if AnimalAgent.age ≥ rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))
             if haskey(animalModel.agents, AnimalAgent.id)
             kill_agent!(AnimalAgent, animalModel)
             println("Age cull")
