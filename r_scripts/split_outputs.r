@@ -66,6 +66,19 @@ run %>%
   plot_ly() %>%
   add_trace(x = ~Day, y = ~empty_rate)
 
+# Have a look at the dynamics of the carryover cows
+run %>%  
+  filter(AgentType == "COR") %>%
+  mutate(Day = lubridate::ymd(Day)) %>%
+  group_by(Day, AnimalStage) %>% 
+  summarise(count = n()) %>% 
+  pivot_wider(names_from = AnimalStage, values_from = count) %>% 
+  plot_ly() %>% 
+  add_trace(x = ~Day, y = ~L, type = 'bar', name = 'L') %>% 
+  add_trace(x = ~Day, y = ~D, type = 'bar', name = 'D') %>% 
+  layout(barmode = 'stack', title = "Carryovers")
+
+
 
 # Calving pattern ------------------------------
 

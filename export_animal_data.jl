@@ -26,7 +26,9 @@ data = DataFrame(
     CurrentLac = animalModel.current_lac,
     CalvingSeason = AnimalAgent.calving_season,
     SpringLac = animalModel.lac_spring,
-    AutumnLac = animalModel.lac_autumn
+    CurrentSpring = animalModel.current_spring,
+    AutumnLac = animalModel.lac_autumn,
+    CurrentAutumn = animalModel.current_autumn
 )
 
 if animalModel.system == :Seasonal
