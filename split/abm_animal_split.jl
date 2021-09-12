@@ -118,7 +118,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Rayleigh(5*365),(2*365), (8*365))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -161,7 +161,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Rayleigh(2*365),(22*30), (25*30))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -203,7 +203,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Rayleigh(365),(295), (385))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Rayleigh(365),(295), (385))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -247,7 +247,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Rayleigh(5*365),(2*365), (8*365))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -290,7 +290,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Rayleigh(2*365 - 4*30),(22*30 - 4*30), (25*30 - 4*30))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Rayleigh(2*365 - 4*30),(22*30 - 4*30), (25*30 - 4*30))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -332,7 +332,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = rand(truncated(Rayleigh(365 - 4*30),(295 - 4*30), (385 - 4*30))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Rayleigh(365 - 4*30),(295 - 4*30), (385 - 4*30))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated

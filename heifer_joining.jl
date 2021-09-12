@@ -12,7 +12,7 @@ if AnimalAgent.calving_season == :Spring
         if animalModel.date == (animalModel.msd + Day(6*7))
                 AnimalAgent.pregstat = :P
                 AnimalAgent.stage = :DH
-                AnimalAgent.dic = rand(truncated(Rayleigh(42), 0, 63))
+                AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(42), 0, 63))))
                 println("Heifer joined")
         end
     end
@@ -23,7 +23,7 @@ if AnimalAgent.calving_season == :Autumn
         if animalModel.date == (animalModel.msd_2 + Day(6*7))
                 AnimalAgent.pregstat = :P
                 AnimalAgent.stage = :DH
-                AnimalAgent.dic = rand(truncated(Rayleigh(42), 0, 63))
+                AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(42), 0, 63))))
                 println("Heifer joined")
         end
     end
