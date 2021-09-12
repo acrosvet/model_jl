@@ -17,8 +17,8 @@
         sens_carrier = 0.01, #Probability of becoming a sensitive carrier
         culling_rate = 0.3, #Culling rate
         num_lac = N, #Initial number of lactating cows
-        num_heifers = floor(0.3*N),
-        num_weaned = floor(0.3*N),
+        num_heifers = floor(0.3*N)*0.5,
+        num_weaned = floor(0.3*N)*0.5,
         rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3, #Treatment probability, passed from farmModel
         treatment_duration::Int = 5, #Treatment duration, passed from farmModel
@@ -76,8 +76,8 @@
         msd_2, 
         current_lac = 0,
         system,
-        lac_spring = floor((N - num_heifers)*0.6),
-        lac_autumn = floor((N - num_heifers)*0.4),
+        lac_spring = floor(N*0.5),
+        lac_autumn = floor(N*0.5),
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
@@ -114,7 +114,7 @@
 
 # Calving period one --------------------------------------------------------
     #Define the initial state of the system. Attributes for each animal in the system.
-    for n in 1:floor((N - num_heifers)*0.6)
+    for n in 1:floor(N*0.5)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -157,7 +157,7 @@
 
     # Add the heifers ---------------------------------------------------
 
-    for n in 1:floor(num_heifers*0.6)
+    for n in 1:floor(N*0.5*0.3)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -199,7 +199,7 @@
     end
 
     # Add weaned ---------------------------------------------------------------------------
-    for n in 1:(num_weaned*0.6)
+    for n in 1:floor(N*0.5*0.3)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -243,7 +243,7 @@
 
 # Calving period two --------------------------------------------------------
     #Define the initial state of the system. Attributes for each animal in the system.
-    for n in 1:floor((N - num_heifers)*0.4)
+    for n in 1:floor(N*0.5)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -286,7 +286,7 @@
 
     # Add the heifers ---------------------------------------------------
 
-    for n in 1:floor(num_heifers*0.6)
+    for n in 1:floor(N*0.5*0.3)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -319,7 +319,7 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(152), 79, 170)))) #Gives a 63% ICR for this rng
+        dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(152), 79, 163)))) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Autumn
@@ -328,7 +328,7 @@
     end
 
     # Add weaned ---------------------------------------------------------------------------
-    for n in 1:(num_weaned*0.6)
+    for n in 1:floor(N*0.5*0.3)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
