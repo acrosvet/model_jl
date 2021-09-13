@@ -15,7 +15,7 @@ run %>%
 
 # Generate a ploot of population dynamics over time
 run %>%  
- # filter(CalvingSeason == "Spring") %>%
+ #filter(CalvingSeason == "Spring") %>%
   mutate(Day = lubridate::ymd(Day)) %>%
   group_by(Day, AnimalStage) %>% 
   summarise(count = n()) %>% 

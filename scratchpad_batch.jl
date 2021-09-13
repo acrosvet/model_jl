@@ -1,4 +1,4 @@
-tmp = initialiseBatch(220)
+tmp = initialiseBatch(100)
 
 
 header = DataFrame(
@@ -22,8 +22,8 @@ header = DataFrame(
     DIM = 0,
     PregStat = 0,
     dic = 0,
-    psc = 0,
-    msd = 0,
+    psc_2 = 0,
+    msd_2 = 0,
     CurrentLac = 0,
     CalvingSeason = 0,
     SpringLac = 0,
