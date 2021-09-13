@@ -84,10 +84,11 @@
         msd_4,
         current_lac = 0,
         system,
-        lac_spring = floor(N*0.5),
-        current_spring = 0,
-        lac_autumn = floor(N*0.5),
-        current_autumn = 0,
+        lac_batch = floor(N*0.25),
+        current_b1 = 0,
+        current_b2 = 0,
+        current_b3 = 0,
+        current_b4 = 0,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
