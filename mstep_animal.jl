@@ -50,6 +50,13 @@ function model_step!(animalModel)
         animalModel.psc_2 += Year(1)
     end
 
+    if Year(animalModel.date) > Year(animalModel.psc_3)
+        animalModel.psc_3 += Year(1)
+    end
+
+    if Year(animalModel.date) > Year(animalModel.psc_4)
+        animalModel.psc_4 += Year(1)
+    end
     # Increment msd 
 
     if Year(animalModel.date) > Year(animalModel.msd)
@@ -59,29 +66,14 @@ function model_step!(animalModel)
     if Year(animalModel.date) > Year(animalModel.msd_2)
         animalModel.msd_2 += Year(1)
     end
-#=     current_lactating = current_stock(animalModel, :L)
 
-    while current_lactating > animalModel.num_lac
-        for i in 1:length(animalModel.agents)
-            if animalModel[i].age in rand(animalModel.rng, truncated(Poisson(7*365), 2*365, 7*365), 100)
-                if haskey(animalModel, animalModel[i].id)
-                    kill_agent!(animalModel[i], animalModel)
-                    println("Age cull")
-                end
-            end
-        end
+    if Year(animalModel.date) > Year(animalModel.msd_3)
+        animalModel.msd_3 += Year(1)
     end
 
-    while current_lactating > animalModel.num_lac
-        for i in 1:length(animalModel.agents)
-            if (animalModel[i].stage == :L && animalModel[i].dim > 280) && animalModel[i].dic < 175
-                if haskey(animalModel, animalModel[i].id)
-                    kill_agent!(animalModel[i], animalModel)
-                    println("Fert cull")
-                end
-            end
-        end
-    end =#
+    if Year(animalModel.date) > Year(animalModel.msd_4)
+        animalModel.msd_4 += Year(1)
+    end
 
     # Trade animals between farms using the daytrader function
     #daytrader!(FarmAgent, animalModel)
