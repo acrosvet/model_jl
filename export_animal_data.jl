@@ -39,5 +39,9 @@ elseif animalModel.system == :Split
     output = open("./export/split_model_run.csv","a")
     CSV.write(output, data, delim = ",", append = true, header = false)
     close(output)
+elseif animalModel.system == :Batch
+    output = open("./export/batch_model_run.csv","a")
+    CSV.write(output, data, delim = ",", append = true, header = false)
+    close(output)
 end
 end
