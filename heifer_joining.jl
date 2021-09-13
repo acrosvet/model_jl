@@ -28,7 +28,7 @@ end
 if animalModel.system == :Continuous
 
     if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
-        if AnimalAgent.age == 447 & rand(animalModel.rng) > 0.85
+        if AnimalAgent.age == 447 && rand(animalModel.rng) > 0.85
                 AnimalAgent.pregstat = :P
                 AnimalAgent.stage = :DH
                 AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))

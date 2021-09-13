@@ -32,18 +32,15 @@ run %>%
 
 # Generate a ploot of population dynamics over time
 run %>%  
-  filter(CalvingSeason == "Autumn") %>%
+  #filter(CalvingSeason == "Autumn") %>%
+  filter(AnimalStage == "L") %>%
   mutate(Day = lubridate::ymd(Day)) %>%
-  group_by(Day, AnimalStage) %>% 
+  group_by(Day, CalvingSeason) %>% 
   summarise(count = n()) %>% 
-  pivot_wider(names_from = AnimalStage, values_from = count) %>% 
+  pivot_wider(names_from = CalvingSeason, values_from = count) %>% 
   plot_ly() %>% 
-  add_trace(x = ~Day, y = ~L, type = 'bar', name = 'L') %>% 
-  add_trace(x = ~Day, y = ~D, type = 'bar', name = 'D') %>% 
-  add_trace(x = ~Day, y = ~C, type = 'bar', name = 'C') %>%
-  add_trace(x = ~Day, y = ~H, type = 'bar', name = 'H') %>%
-  add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'DH') %>%
-  add_trace(x = ~Day, y = ~W, type = 'bar', name = 'W') %>%
+  add_trace(x = ~Day, y = ~Autumn, type = 'bar', name = 'A') %>% 
+  add_trace(x = ~Day, y = ~Spring, type = 'bar', name = 'S') %>% 
   layout(barmode = 'stack', title = "Autumn")
 
 tmp = run %>%

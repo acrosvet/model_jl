@@ -41,7 +41,7 @@ function model_step!(animalModel)
     
 
 # Increment psc ---------------------------------------------------
-
+if animalModel.system != :Continuous
     if Year(animalModel.date) > Year(animalModel.psc)
         animalModel.psc += Year(1)
     end
@@ -82,6 +82,7 @@ if animalModel.system == :Batch
     if Year(animalModel.date) > Year(animalModel.msd_4)
         animalModel.msd_4 += Year(1)
     end
+end
 end
     # Trade animals between farms using the daytrader function
     #daytrader!(FarmAgent, animalModel)

@@ -2,7 +2,7 @@
 source("./r_scripts/libraries.r")
 library(lubridate)
 # Import the model run from the animalModel
-run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/seasonal_model_run.csv")
+run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/continuous_model_run.csv")
 
 
 
@@ -15,22 +15,44 @@ run %>%
 
 # Generate a ploot of population dynamics over time
 run %>%  
+ #filter(CalvingSeason == "Spring") %>%
   mutate(Day = lubridate::ymd(Day)) %>%
   group_by(Day, AnimalStage) %>% 
   summarise(count = n()) %>% 
   pivot_wider(names_from = AnimalStage, values_from = count) %>% 
   plot_ly() %>% 
-  add_trace(x = ~Day, y = ~L, type = 'bar', name = 'Milkers') %>% 
-  add_trace(x = ~Day, y = ~D, type = 'bar', name = 'Dry') %>% 
-  add_trace(x = ~Day, y = ~C, type = 'bar', name = 'Calves') %>%
-  add_trace(x = ~Day, y = ~H, type = 'bar', name = 'Heifers') %>%
-  add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'Preg. Heifers') %>%
-  add_trace(x = ~Day, y = ~W, type = 'bar', name = 'Weaned') %>%
-  layout(barmode = 'stack', 
-  title = "Seasonally Calving Farm (Spring)",
-  yaxis = list(title = "Number of animals"),
-  xaxis = list(title = "Date"))
+  add_trace(x = ~Day, y = ~L, type = 'bar', name = 'L') %>% 
+  add_trace(x = ~Day, y = ~D, type = 'bar', name = 'D') %>% 
+  add_trace(x = ~Day, y = ~C, type = 'bar', name = 'C') %>%
+  add_trace(x = ~Day, y = ~H, type = 'bar', name = 'H') %>%
+  add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'DH') %>%
+  add_trace(x = ~Day, y = ~W, type = 'bar', name = 'W') %>%
+  layout(barmode = 'stack', title = "Spring")
 
+
+# Generate a ploot of population dynamics over time
+run %>%  
+  filter(CalvingSeason == "Autumn") %>%
+  mutate(Day = lubridate::ymd(Day)) %>%
+  group_by(Day, AnimalStage) %>% 
+  summarise(count = n()) %>% 
+  pivot_wider(names_from = AnimalStage, values_from = count) %>% 
+  plot_ly() %>% 
+  add_trace(x = ~Day, y = ~L, type = 'bar', name = 'L') %>% 
+  add_trace(x = ~Day, y = ~D, type = 'bar', name = 'D') %>% 
+  add_trace(x = ~Day, y = ~C, type = 'bar', name = 'C') %>%
+  add_trace(x = ~Day, y = ~H, type = 'bar', name = 'H') %>%
+  add_trace(x = ~Day, y = ~DH, type = 'bar', name = 'DH') %>%
+  add_trace(x = ~Day, y = ~W, type = 'bar', name = 'W') %>%
+  layout(barmode = 'stack', title = "Autumn")
+
+
+
+tmp = run %>%
+        filter(Day == "2021-12-05") %>%
+        filter(CalvingSeason == "Autumn") %>%
+        filter(AnimalStage == "L")
+tmp
 # Not in calf rate --------------------------
 
 run %>%
@@ -45,6 +67,19 @@ run %>%
   mutate(empty_rate = 100*(E/(E+P))) %>%
   plot_ly() %>%
   add_trace(x = ~Day, y = ~empty_rate)
+
+# Have a look at the dynamics of the carryover cows
+run %>%  
+  filter(AgentType == "COR") %>%
+  mutate(Day = lubridate::ymd(Day)) %>%
+  group_by(Day, AnimalStage) %>% 
+  summarise(count = n()) %>% 
+  pivot_wider(names_from = AnimalStage, values_from = count) %>% 
+  plot_ly() %>% 
+  add_trace(x = ~Day, y = ~L, type = 'bar', name = 'L') %>% 
+  add_trace(x = ~Day, y = ~D, type = 'bar', name = 'D') %>% 
+  layout(barmode = 'stack', title = "Carryovers")
+
 
 
 # Calving pattern ------------------------------

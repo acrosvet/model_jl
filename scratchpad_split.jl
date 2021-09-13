@@ -1,4 +1,4 @@
-tmp = initialiseSplit(100)
+tmp = initialiseSplit(220)
 
 
 header = DataFrame(

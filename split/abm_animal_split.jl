@@ -159,7 +159,7 @@
 
     # Add the heifers ---------------------------------------------------
 
-    for n in 1:floor(N*0.5*0.3)
+    for n in 1:floor(N*0.5*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -288,7 +288,7 @@
 
     # Add the heifers ---------------------------------------------------
 
-    for n in 1:floor(N*0.5*0.3)
+    for n in 1:floor(N*0.5*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -313,15 +313,15 @@
             days_exposed = 0
         )
         vel = initial_velocity(status, movement) #Defined using initial velocity fn
-        stage = :H #Initial stage
+        stage = :DH #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
         days_exposed = 0 # Default 0 
         days_carrier = 0 # Default 0 
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
-        pregstat = :E #Initial pregnancy status
-        dic= 0
+        pregstat = :P #Initial pregnancy status
+        dic= Int(floor(rand(truncated(Rayleigh(42),(1), (60)))))
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Autumn

@@ -1,4 +1,4 @@
-tmp = initialiseModel(220)
+tmp = initialiseSeasonal(220)
 
 
 header = DataFrame(
@@ -27,7 +27,7 @@ header = DataFrame(
     CurrentLac = 0,
 )
 
-output = open("./export/animal_model_run.csv","w")
+output = open("./export/seasonal_model_run.csv","w")
     CSV.write(output, header, delim = ",", append = true, header = true)
     close(output)
 
