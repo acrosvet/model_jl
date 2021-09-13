@@ -23,7 +23,7 @@
         treatment_prob::Float64 = 0.3, #Treatment probability, passed from farmModel
         treatment_duration::Int = 5, #Treatment duration, passed from farmModel
         farm_id::Int = 1, #Farm ID (from FarmModel)
-        system::Symbol = :Split,
+        system::Symbol = :Batch,
         step::Int = 1, #Model step
         date::Date = Date(2021, 7, 2), #Model start date
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
@@ -284,7 +284,7 @@
         days_carrier = 0 # Default 0 
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
-        pregstat =  rand(animalModel.rng < 0.85) ? :P : :E # 85% in calf
+        pregstat =  rand(animalModel.rng) < 0.85 ? :P : :E # 85% in calf
         dic = pregstat == :P ? Int(floor(rand(animalModel.rng, truncated(Rayleigh(160), 108, 189)))) : 0
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
@@ -412,7 +412,7 @@
         days_carrier = 0 # Default 0 
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
-        pregstat =  rand(animalModel.rng < 0.85) ? :P : :E # 85% in calf
+        pregstat =  rand(animalModel.rng) < 0.85 ? :P : :E # 85% in calf
         dic = pregstat == :P ? Int(floor(rand(animalModel.rng, truncated(Rayleigh(61), 13, 96)))) : 0
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
