@@ -34,6 +34,7 @@ run %>%
 run %>%  
   #filter(CalvingSeason == "Autumn") %>%
   filter(AnimalStage == "L") %>%
+  filter(AgentType != "CO") %>%
   mutate(Day = lubridate::ymd(Day)) %>%
   group_by(Day, CalvingSeason) %>% 
   summarise(count = n()) %>% 

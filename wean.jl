@@ -6,6 +6,7 @@
 
 """
 function wean!(AnimalAgent, animalModel)
+if animalModel.system != :Continuous
     if AnimalAgent.stage == :C
         if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
             
@@ -14,6 +15,15 @@ function wean!(AnimalAgent, animalModel)
             else
                 kill_agent!(AnimalAgent, animalModel)
                 println("Surplus")
+            end 
+        end
+    end
+end
+
+if animalModel.system == :Continuous
+    if AnimalAgent.stage == :C
+        if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
+                AnimalAgent.stage = :W
             end 
         end
     end
