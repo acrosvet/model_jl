@@ -7,7 +7,9 @@
 
 """
 function joining!(AnimalAgent, animalModel)
-if AnimalAgent.calving_season == :Spring
+
+# Seasonal systems ---------------------------------------------------------------
+if animalModel.system == :Seasonal
     if (AnimalAgent.pregstat == :E && AnimalAgent.stage == :L) && (animalModel.date == (animalModel.msd + Month(3)))
         if rand(animalModel.rng) < 0.85
             AnimalAgent.pregstat = :P
@@ -19,6 +21,17 @@ end
 
 # Additional split calving options ---------------------------------
 if animalModel.system == :Split
+
+    if AnimalAgent.calving_season == :Spring
+        if (AnimalAgent.pregstat == :E && AnimalAgent.stage == :L) && (animalModel.date == (animalModel.msd + Month(3)))
+            if rand(animalModel.rng) < 0.85
+                AnimalAgent.pregstat = :P
+                AnimalAgent.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+                AnimalAgent.agenttype = :Joined
+            end
+        end
+    end
+
     if AnimalAgent.calving_season == :B1
         if (AnimalAgent.pregstat == :E && AnimalAgent.stage == :L) && (animalModel.date == (animalModel.msd + Month(3)))
             if rand(animalModel.rng) < 0.85
