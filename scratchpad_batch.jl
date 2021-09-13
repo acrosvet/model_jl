@@ -32,7 +32,7 @@ header = DataFrame(
     CurrentAutumn = 0,
 )
 
-output = open("./export/split_model_run.csv","w")
+output = open("./export/batch_model_run.csv","w")
     CSV.write(output, header, delim = ",", append = true, header = true)
     close(output)
 
