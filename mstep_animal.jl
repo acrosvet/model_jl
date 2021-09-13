@@ -40,16 +40,19 @@ function model_step!(animalModel)
         animalModel.step +=1
     
 
-    # Increment psc
+# Increment psc ---------------------------------------------------
 
     if Year(animalModel.date) > Year(animalModel.psc)
         animalModel.psc += Year(1)
     end
 
+if animalModel.system == :Split
     if Year(animalModel.date) > Year(animalModel.psc_2)
         animalModel.psc_2 += Year(1)
     end
+end
 
+if animalModel.system == :Batch
     if Year(animalModel.date) > Year(animalModel.psc_3)
         animalModel.psc_3 += Year(1)
     end
@@ -57,16 +60,21 @@ function model_step!(animalModel)
     if Year(animalModel.date) > Year(animalModel.psc_4)
         animalModel.psc_4 += Year(1)
     end
-    # Increment msd 
+end
+
+# Increment msd ---------------------------------------------
 
     if Year(animalModel.date) > Year(animalModel.msd)
         animalModel.msd += Year(1)
     end
-    
+
+if animalModel.system == :Split
     if Year(animalModel.date) > Year(animalModel.msd_2)
         animalModel.msd_2 += Year(1)
     end
+end
 
+if animalModel.system == :Batch
     if Year(animalModel.date) > Year(animalModel.msd_3)
         animalModel.msd_3 += Year(1)
     end
@@ -74,7 +82,7 @@ function model_step!(animalModel)
     if Year(animalModel.date) > Year(animalModel.msd_4)
         animalModel.msd_4 += Year(1)
     end
-
+end
     # Trade animals between farms using the daytrader function
     #daytrader!(FarmAgent, animalModel)
 
