@@ -279,14 +279,14 @@
         )
         vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :L #Initial stage
-        dim = Int(floor(rand(animalModel.rng, truncated(Rayleigh(189), 223, 273)))) # Defined using initial dim fn
+        dim = Int(floor(rand(animalModel.rng, truncated(Rayleigh(237), 189, 273)))) # Defined using initial dim fn
         days_dry = 0 # Default 0
         days_exposed = 0 # Default 0 
         days_carrier = 0 # Default 0 
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat =  rand(animalModel.rng) < 0.85 ? :P : :E # 85% in calf
-        dic = pregstat == :P ? Int(floor(rand(animalModel.rng, truncated(Rayleigh(160), 108, 189)))) : 0
+        dic = pregstat == :P ? Int(floor(rand(animalModel.rng, truncated(Rayleigh(153), 85, 188)))) : 0
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B2
@@ -300,7 +300,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = Int(floor(rand(truncated(Rayleigh(569),536, 619)))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Rayleigh(603),553, 638)))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -342,7 +342,7 @@
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = Int(floor(rand(animalModel.rng, truncated(Rayleigh(189), 223, 273)))) # Defined using initial age function
+        age = Int(floor(rand(animalModel.rng, truncated(Rayleigh(237), 189, 273)))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated

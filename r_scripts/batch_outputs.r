@@ -2,7 +2,7 @@
 source("./r_scripts/libraries.r")
 library(lubridate)
 # Import the model run from the animalModel
-run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/split_model_run.csv")
+run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/batch_model_run.csv")
 
 
 
@@ -17,6 +17,9 @@ run %>%
 run %>%  
  #filter(CalvingSeason == "Spring") %>%
   mutate(Day = lubridate::ymd(Day)) %>%
+  mutate(Year = year(Day)) %>%
+  #filter(Year == "2026") %>%
+  filter(CalvingSeason == "B2") %>%
   group_by(Day, AnimalStage) %>% 
   summarise(count = n()) %>% 
   pivot_wider(names_from = AnimalStage, values_from = count) %>% 
@@ -29,6 +32,14 @@ run %>%
   add_trace(x = ~Day, y = ~W, type = 'bar', name = 'W') %>%
   layout(barmode = 'stack', title = "Spring")
 
+# Inspect what is happening with B2
+
+tmp = run %>%
+        filter(CalvingSeason == "B4") %>%
+        filter(AgentType == "Joined")
+        #filter(Day == "2022-03-25")
+
+write_csv(tmp, "./export/B2.csv")
 
 # Generate a ploot of population dynamics over time
 run %>%  
