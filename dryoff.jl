@@ -12,7 +12,7 @@ if animalModel.system == :Split
                     AnimalAgent.calving_season = :Autumn
                     AnimalAgent.agenttype = :CO
                     println("Carried over")
-                elseif AnimalAgent.calving_season == :Autumn && AnimalAgent.dim < 500
+                elseif AnimalAgent.calving_season == :Autumn && AnimalAgent.dim < 330
                     AnimalAgent.calving_season = :Spring
                     println("Carried over")
                     AnimalAgent.agenttype = :CO
@@ -45,15 +45,15 @@ if animalModel.system == :Batch
                     AnimalAgent.calving_season = :B2
                     AnimalAgent.agenttype = :CO
                     println("Carried over")
-                elseif AnimalAgent.calving_season == :B2 && AnimalAgent.dim < 500
+                elseif AnimalAgent.calving_season == :B2 && AnimalAgent.dim < 330
                     AnimalAgent.calving_season = :B3
                     println("Carried over")
                     AnimalAgent.agenttype = :CO
-                elseif AnimalAgent.calving_season == :B3 && AnimalAgent.dim < 500
+                elseif AnimalAgent.calving_season == :B3 && AnimalAgent.dim < 330
                     AnimalAgent.calving_season = :B4
                     println("Carried over")
                     AnimalAgent.agenttype = :CO
-                elseif AnimalAgent.calving_season == :B4 && AnimalAgent.dim < 500
+                elseif AnimalAgent.calving_season == :B4 && AnimalAgent.dim < 330
                     AnimalAgent.calving_season = :B1
                     println("Carried over")
                     AnimalAgent.agenttype = :CO
