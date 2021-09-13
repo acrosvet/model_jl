@@ -85,6 +85,7 @@ include("dryoff.jl")
 include("export_animal_data.jl")
 include("./split/abm_animal_split.jl")
 include("./split/abm_animal_batch.jl")
+include("abm_animal_yearround.jl")
 
 
 #step!(farmModel, farm_step!, 10) 
