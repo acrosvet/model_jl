@@ -19,7 +19,7 @@ run %>%
   mutate(Day = lubridate::ymd(Day)) %>%
   mutate(Year = year(Day)) %>%
   #filter(Year == "2026") %>%
-  filter(CalvingSeason == "B2") %>%
+#  filter(CalvingSeason == "B4") %>%
   group_by(Day, AnimalStage) %>% 
   summarise(count = n()) %>% 
   pivot_wider(names_from = AnimalStage, values_from = count) %>% 

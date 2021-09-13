@@ -27,7 +27,7 @@ if animalModel.system == :Split
     end
 end
 # Spring calving system -------------------------------------------------------------
-if animalModel.system == :Spring
+if animalModel.system == :Spring || animalModel.system == :Continuous
     if AnimalAgent.dim ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(305), 290, 330))))
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1

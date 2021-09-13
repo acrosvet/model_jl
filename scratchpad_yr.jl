@@ -25,14 +25,9 @@ header = DataFrame(
     psc = 0,
     msd = 0,
     CurrentLac = 0,
-    CalvingSeason = 0,
-    SpringLac = 0,
-    CurrentSpring = 0,
-    AutumnLac = 0,
-    CurrentAutumn = 0,
 )
 
-output = open("./export/split_model_run.csv","w")
+output = open("./export/continuous_model_run.csv","w")
     CSV.write(output, header, delim = ",", append = true, header = true)
     close(output)
 

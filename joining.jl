@@ -19,6 +19,22 @@ if animalModel.system == :Seasonal
     end
 end
 
+# Continuous systems ---------------------------------------------------------------
+if animalModel.system == :Continuous
+    if (AnimalAgent.pregstat == :E && AnimalAgent.stage == :L) 
+        if AnimalAgent.dim == 100 && rand(animalModel.rng) < 0.53
+            AnimalAgent.pregstat = :P
+            AnimalAgent.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(50), 1, 58))))
+            AnimalAgent.agenttype = :Joined
+        elseif AnimalAgent.dim == 200 && rand(animalModel.rng) < 0.85
+            AnimalAgent.pregstat = :P
+            AnimalAgent.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(50), 1, 58))))
+            AnimalAgent.agenttype = :Joined
+        end
+    end
+end
+
+
 # Additional split calving options ---------------------------------
 if animalModel.system == :Split
 

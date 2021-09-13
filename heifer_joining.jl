@@ -22,6 +22,23 @@ if animalModel.system == :Seasonal
 
 end
 
+
+#Continuous herds ------------------------------------------------------------
+
+if animalModel.system == :Continuous
+
+    if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
+        if AnimalAgent.age == 447 & rand(animalModel.rng) > 0.85
+                AnimalAgent.pregstat = :P
+                AnimalAgent.stage = :DH
+                AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
+                println("Heifer joined")
+        end
+    end
+
+end
+
+
 # Split herds ---------------------------------------------------------------
 if animalModel.system == :Split
     if AnimalAgent.calving_season == :Spring
@@ -73,7 +90,7 @@ if animalModel.system == :Batch
     # Batch 2 --------------------------------------------------
     if AnimalAgent.calving_season == :B2
         if AnimalAgent.stage == :H && AnimalAgent.pregstat == :E
-            if animalModel.date == (animalModel.msd_2 + Day(6*7))
+            if animalModel.date == (animalModel.msd_2 - Year(1) + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))

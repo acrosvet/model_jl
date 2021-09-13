@@ -57,6 +57,27 @@ if animalModel.system == :Seasonal
     
 end
 
+# Continuous calving systems -------------------------------------------
+
+if animalModel.system == :Continuous
+    if current_lactating > animalModel.num_lac 
+        if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
+            if haskey(animalModel.agents, AnimalAgent.id)
+                kill_agent!(AnimalAgent, animalModel)
+                println("Age cull")
+            end
+        end
+    end
+
+    if current_lactating > animalModel.num_lac 
+        if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 300 && AnimalAgent.dic < 150)
+            if haskey(animalModel.agents, AnimalAgent.id)
+                kill_agent!(AnimalAgent, animalModel)
+                println("Fertility cull")
+            end
+        end
+    end 
+end
 
 # Split calving systems ---------------------------------------------------
     if animalModel.system  == :Split

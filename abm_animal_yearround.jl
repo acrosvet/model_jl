@@ -139,21 +139,21 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = ((dim >= 200) && (rand(animalModel.rng) < 0.85)) ? :P : :E #Initial pregnancy status
-        dic = (pregstat == :P) ? Int(floor(rand(animalModel.rng, truncated(Rayleigh(), (dim - 60), (dim - 42))))) : 0 #Gives a 63% ICR for this rng
+        dic = (pregstat == :P) ? Int(floor(rand(animalModel.rng, truncated(Normal(dim - 50), (dim - 60), (dim - 42))))) : 0 #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        calving_season = :Spring
+        calving_season = :Continuous
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
 
     # Add the heifers ---------------------------------------------------
 
-    for n in 1:num_heifers
+    for n in 1:floor(N*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = Int(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Rayleigh(20*30),(15*30), (25*30))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -182,20 +182,20 @@
         trade_status = false #Eligibility for trading 
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
-        dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(260), 199, 290)))) #Gives a 63% ICR for this rng
+        dic = Int(floor(rand(animalModel.rng, truncated(Normal(142), 0, 283)))) #Gives a 63% ICR for this rng
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        calving_season = :Spring
+        calving_season = :Continuous
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
 
     # Add weaned ---------------------------------------------------------------------------
-    for n in 1:num_weaned
+    for n in 1:floor(N*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
-        age = Int(floor(rand(truncated(Rayleigh(365),(295), (385))))) # Defined using initial age function
+        age = Int(floor(rand(truncated(Normal(365),(155), (365))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
         treatment = :U #Default agent is untreated
@@ -227,11 +227,51 @@
         dic = 0
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
-        calving_season = :Spring
+        calving_season = :Continuous
         add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
     
     end
+  # Add calves ---------------------------------------------------------------------------
+  for n in 1:floor(N*0.25)
+    # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
+    pos = Tuple(10*rand(animalModel.rng, 2))
+    status = initial_status(n, init_ir, init_is) # Defined using initial status function
+    age = Int(floor(rand(truncated(Normal(30),(0), (60))))) # Defined using initial age function
+    βᵣ = βᵣ 
+    βₛ = βₛ
+    treatment = :U #Default agent is untreated
+    treatment_prob = treatment_prob
+    days_treated = 0 # Default is not treated
+    treatment_duration = treatment_duration #Passed argument
+    bactopop = 0.0
+    since_tx = 0 # Default 0 
+    inf_days = 0
+    agenttype = :Initial
+   # inf_days_ir = 0
+    submodel = initialisePopulation(
+        nbact = 100,
+        total_status = status,
+        timestep = timestep,
+        days_treated = 0,
+        age = age,
+        days_exposed = 0
+    )
+    vel = initial_velocity(status, movement) #Defined using initial velocity fn
+    stage = :W #Initial stage
+    dim = 0 # Defined using initial dim fn
+    days_dry = 0 # Default 0
+    days_exposed = 0 # Default 0 
+    days_carrier = 0 # Default 0 
+    trade_status = false #Eligibility for trading 
+    lactation = round(age/365) - 1 #Lactation number
+    pregstat = :E #Initial pregnancy status
+    dic = 0
+    heat = false #If animal is in oestrus
+    sex = :F #Sex of initial animals (always F)
+    calving_season = :Continuous
+    add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
 
+end
         return animalModel
 
     end
