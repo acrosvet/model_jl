@@ -252,7 +252,7 @@
 
 # Calving period two --------------------------------------------------------
     #Define the initial state of the system. Attributes for each animal in the system.
-    for n in 1:floor(N*0.25*0.75)
+    for n in 1:floor(N*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -380,7 +380,7 @@
 
 # Calving period three --------------------------------------------------------
     #Define the initial state of the system. Attributes for each animal in the system.
-    for n in 1:floor(N*0.25*0.25)
+    for n in 1:floor(N*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
@@ -508,7 +508,7 @@
 
 # Calving period four  --------------------------------------------------------
     #Define the initial state of the system. Attributes for each animal in the system.
-    for n in 1:floor(N*0.25*0.25)
+    for n in 1:floor(N*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = Tuple(10*rand(animalModel.rng, 2))
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
