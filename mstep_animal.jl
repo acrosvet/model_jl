@@ -46,7 +46,7 @@ function model_step!(animalModel)
         animalModel.psc += Year(1)
     end
 
-if animalModel.system == :Split
+if animalModel.system == :Split || animalModel.system == :Batch
     if Year(animalModel.date) > Year(animalModel.psc_2)
         animalModel.psc_2 += Year(1)
     end
@@ -68,7 +68,7 @@ end
         animalModel.msd += Year(1)
     end
 
-if animalModel.system == :Split
+if animalModel.system == :Split || animalModel.system == :Batch
     if Year(animalModel.date) > Year(animalModel.msd_2)
         animalModel.msd_2 += Year(1)
     end
