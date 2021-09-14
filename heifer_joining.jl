@@ -9,8 +9,13 @@ function heifer_joining!(AnimalAgent, animalModel)
 
     num_dh = [a.stage == :DH for a in allagents(animalModel)]
     num_dh = sum(num_dh)
-    dh_range = Int(floor(7*√num_dh))
 
+    if num_dh == 0
+        dh_range = 10
+    else
+        dh_range = Int(floor(7*√num_dh))
+    end
+    
 #Seasonal herds ------------------------------------------------------------
 
 if animalModel.system == :Seasonal

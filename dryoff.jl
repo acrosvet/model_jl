@@ -5,8 +5,12 @@ function dryoff!(AnimalAgent, animalModel)
 
     num_dry = [a.stage == :D for a in allagents(animalModel)]
     num_dry = sum(num_dry)
-    dry_range = Int(floor(7*√num_dry))
-
+    if num_dry == 0
+        dry_range == 0
+    else
+        dry_range = Int(floor(7*√num_dry))
+    end
+    
 # Split calving system -----------------------------------------------------------------------------------------------    
 if animalModel.system == :Split
     if AnimalAgent.dim ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(305), 290, 330)))) && AnimalAgent.agenttype != :CO

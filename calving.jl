@@ -15,8 +15,12 @@ function calving!(AnimalAgent, animalModel)
 
     num_calves = [a.stage == :C for a in allagents(animalModel)]
     num_calves = sum(num_calves)
-    calf_range = Int(floor(3*√num_calves))
-
+    if num_calves == 0
+        calf_range = 10
+    else
+        calf_range = Int(floor(3*√num_calves))
+    end 
+    
     if AnimalAgent.dic == 283
         if AnimalAgent.stage == :DH
            println("Heifer calved")

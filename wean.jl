@@ -9,8 +9,13 @@ function wean!(AnimalAgent, animalModel)
 
     num_weaned = [a.stage == :W for a in allagents(animalModel)]
     num_weaned = sum(num_weaned)
-    weaned_range = Int(floor(7*√num_weaned))
 
+    if num_weaned == 0
+        weaned_range = 10
+    else
+        weaned_range = Int(floor(7*√num_weaned))
+    end
+    
 if animalModel.system != :Continuous
     if AnimalAgent.stage == :C
         if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
