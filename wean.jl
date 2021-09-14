@@ -12,7 +12,7 @@ if animalModel.system != :Continuous
             
             if rand(animalModel.rng) < 0.5
                 AnimalAgent.stage = :W
-                AnimalAgent.pos[3] = 2
+                AnimalAgent.pos = (rand(animalModel.rng, 1:100, 2)...,2)
             else
                 kill_agent!(AnimalAgent, animalModel)
                 println("Surplus")
