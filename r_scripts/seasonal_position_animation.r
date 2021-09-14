@@ -11,7 +11,7 @@ plot_ly(pos_data) %>%
   title = "Initial agent positions (batch)")
 
 fig <- pos_data %>%
-slice(1:25000) %>%
+#slice(1:25000) %>%
 filter(step != 0) %>%
   plot_ly(
     x = ~x,
@@ -27,3 +27,25 @@ filter(step != 0) %>%
 fig
 
   htmlwidgets::saveWidget(fig, "./export/Seasonal position animation.html", selfcontained = F, libdir = "lib")
+
+# View agent movements -------------------------------------------------------
+
+# Calves
+
+position_animation <- function(stage){
+pos_data %>%
+  filter(Day != 0) %>%
+  filter(stage == !!stage) %>%
+  plot_ly(
+    x = ~x,
+    y = ~y,
+    type = 'scatter',
+    text = c("\U1F404"),
+    textfont = list(size = 25, color = 'green'),
+    mode = 'text',
+    #marker = list(size = 5),
+    frame = ~Day
+  ) 
+}
+
+position_animation("L")
