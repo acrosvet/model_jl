@@ -12,6 +12,7 @@ if animalModel.system != :Continuous
             
             if rand(animalModel.rng) < 0.5
                 AnimalAgent.stage = :W
+                AnimalAgent.pos[3] = 2
             else
                 kill_agent!(AnimalAgent, animalModel)
                 println("Surplus")
@@ -24,6 +25,7 @@ if animalModel.system == :Continuous
     if AnimalAgent.stage == :C
         if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
                 AnimalAgent.stage = :W
+                AnimalAgent.pos[3] = 2
             end 
         end
     end
