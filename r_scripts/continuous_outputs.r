@@ -3,7 +3,7 @@ source("./r_scripts/libraries.r")
 library(lubridate)
 # Import the model run from the animalModel
 run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/continuous_model_run.csv")
-
+  
 # Generate a ploot of population dynamics over time
 run %>%  
  #filter(CalvingSeason == "Spring") %>%
