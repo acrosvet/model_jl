@@ -23,6 +23,8 @@ if animalModel.system == :Split
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
+            # Add to the dry cow plane
+            AnimalAgent.pos[3] = 6
         end
     end
 end
@@ -32,6 +34,7 @@ if animalModel.system == :Seasonal|| animalModel.system == :Continuous
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
+            AnimalAgent.pos[3] = 6
     end
 end
 
@@ -63,6 +66,7 @@ if animalModel.system == :Batch
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
+            AnimalAgent.pos[3] = 6
             println("Dried off")
         end
     end
