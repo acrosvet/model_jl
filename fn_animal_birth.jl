@@ -1,22 +1,10 @@
 
 function birth!(AnimalAgent, animalModel)
+position_counter = 0
 
-    function initial_velocity(status, movement)
-        if status == :S
-            sincos(2π*rand(animalModel.rng)) .*movement
-        elseif status == :IS
-            sincos(2π*rand(animalModel.rng)) .*(movement/2)
-        elseif status == :IR
-            sincos(2π*rand(animalModel.rng)) .*(movement/2.5)
-        elseif status == :M
-            (0.0,0.0)
-        end
-    end
-
-
-            
+    while position_counter == 0
             # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-            pos = Tuple(10*rand(animalModel.rng, 2))
+            pos = pos = (rand(animalModel.rng, 1:100, 2)..., 1)
             age = 1
             status = :S
             βᵣ = animalModel.βᵣ
@@ -36,7 +24,6 @@ function birth!(AnimalAgent, animalModel)
                 age = age,
                 days_exposed = 0
             )
-            vel = initial_velocity(status, animalModel.movement)
             stage = :C
             dim = 0
             days_dry = 0
@@ -48,10 +35,10 @@ function birth!(AnimalAgent, animalModel)
             heat = false
             sex = rand(animalModel.rng) > 0.5 ? :F : :M
             calving_season = AnimalAgent.calving_season
-            add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-            #add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat)
-            println("$calving_season Calf born!")
-            #println("$calf_counter calves born")
-
-
+            if isempty(pos, animalModel)
+                add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+                println("$calving_season Calf born!")
+                position_counter += 1
+            end
+    end
 end
