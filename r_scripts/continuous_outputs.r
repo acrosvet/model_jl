@@ -4,15 +4,6 @@ library(lubridate)
 # Import the model run from the animalModel
 run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/continuous_model_run.csv")
 
-
-
-tmp = run %>% filter(DIM == 280)
-
-run %>%
-  select(ModelStep, Day, CurrentLac)
-
-  max(run$CurrentLac)
-
 # Generate a ploot of population dynamics over time
 run %>%  
  #filter(CalvingSeason == "Spring") %>%
