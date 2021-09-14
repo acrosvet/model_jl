@@ -31,6 +31,7 @@ if animalModel.system == :Continuous
         if AnimalAgent.age == 447 && rand(animalModel.rng) > 0.85
                 AnimalAgent.pregstat = :P
                 AnimalAgent.stage = :DH
+                AnimalAgent.pos[3] = 4
                 AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                 println("Heifer joined")
         end
@@ -46,6 +47,7 @@ if animalModel.system == :Split
             if animalModel.date == (animalModel.msd + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
+                    AnimalAgent.pos[3] = 4
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     println("Heifer joined")
             end
@@ -57,6 +59,7 @@ if animalModel.system == :Split
             if animalModel.date == (animalModel.msd_2 + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
+                    AnimalAgent.pos[3] = 4
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     println("Heifer joined")
             end
@@ -81,6 +84,7 @@ if animalModel.system == :Batch
             if animalModel.date == (animalModel.msd + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
+                    AnimalAgent.pos[3] = 4
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     println("Heifer joined")
             end
@@ -93,6 +97,7 @@ if animalModel.system == :Batch
             if animalModel.date == (animalModel.msd_2 - Year(1) + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
+                    AnimalAgent.pos[3] = 4
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     println("Heifer joined")
             end
@@ -106,6 +111,7 @@ if animalModel.system == :Batch
             if animalModel.date == (animalModel.msd_3 + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
+                    AnimalAgent.pos[3] = 4
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     println("Heifer joined")
             end
@@ -119,6 +125,7 @@ if animalModel.system == :Batch
             if animalModel.date == (animalModel.msd_4 + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
+                    AnimalAgent.pos[3] = 4
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     println("Heifer joined")
             end
