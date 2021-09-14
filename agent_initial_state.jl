@@ -34,7 +34,7 @@ df = DataFrame(x = x, y = y, z = z)
 
 CSV.write("./export/split_initial_positions.csv", df)
 
-# Seasonal  ------------------------------------
+# Batch  ------------------------------------
 init_pos = initialiseBatch(100)
 
 x = []
@@ -50,5 +50,5 @@ end
 
 df = DataFrame(x = x, y = y, z = z)
 
-CSV.write("./export/seasonal_initial_positions.csv", df)
+CSV.write("./export/batch_initial_positions.csv", df)
 
