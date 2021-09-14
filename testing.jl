@@ -31,10 +31,6 @@
 
         include("fn_animal_recovery.jl")
 
-        # Fn - Mortality ------------------------------------------------------------    
-
-        include("fn_animal_mortality.jl")
-
         # Fn - Bact (agent step) ----------------------------------
 
         include("astep_bacteria.jl")
