@@ -59,3 +59,5 @@ export/Initial Agent Positions (Batch).html
 export/seasonal_positions.csv
 export/Seasonal position animation.html
 export/.~lock.seasonal_positions.csv#
+export/seasonal_initial_positions.csv
+export/Initial Agent Positions (Seasonal).html

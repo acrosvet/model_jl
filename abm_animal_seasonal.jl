@@ -91,11 +91,11 @@
     #Define a function parameter to govern the movement of animals in different states
 
 # Add the lactating cows ---------------------------------------------------
-
+    num_lac = N- num_heifers
     #Define the initial state of the system. Attributes for each animal in the system.
     for n in 1:(N - num_heifers)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = (rand(animalModel.rng, 1:100, 2)..., 5)
+        pos = (rand(animalModel.rng, 1:Int(floor(6*√num_lac)), 2)..., 5)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -138,7 +138,7 @@
 
     for n in 1:num_heifers
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = (rand(animalModel.rng, 1:100, 2)..., 4)
+        pos = (rand(animalModel.rng, 1:Int(floor(7*√num_heifers)), 2)..., 4)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -180,7 +180,7 @@
     # Add weaned ---------------------------------------------------------------------------
     for n in 1:num_weaned
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+        pos = (rand(animalModel.rng, 1:Int(floor(7*√num_weaned)), 2)..., 2)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(365),(295), (385))))) # Defined using initial age function
         βᵣ = βᵣ 

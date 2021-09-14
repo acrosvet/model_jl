@@ -44,6 +44,6 @@ pos_output = open("./export/seasonal_positions.csv","w")
     CSV.write(pos_output, pos_header, delim = ",", append = true, header = true)
 close(pos_output)
 
-run!(tmp, agent_step!, model_step!, 365)
+run!(tmp, agent_step!, model_step!, 365*25)
 
 step!(tmp, agent_step!, model_step!) 

@@ -3,6 +3,10 @@
 """
 function dryoff!(AnimalAgent, animalModel)
 
+    num_dry = [a.stage == :D for a in allagents(animalModel)]
+    num_dry = sum(num_dry)
+    dry_range = Int(floor(7*√num_dry))
+
 # Split calving system -----------------------------------------------------------------------------------------------    
 if animalModel.system == :Split
     if AnimalAgent.dim ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(305), 290, 330)))) && AnimalAgent.agenttype != :CO
@@ -24,9 +28,9 @@ if animalModel.system == :Split
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
             # Add to the dry cow plane
-            pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
             while !isempty(pos, animalModel)
-                pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+                pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
             end
             move_agent!(AnimalAgent, pos, animalModel)
         end
@@ -38,9 +42,9 @@ if animalModel.system == :Seasonal|| animalModel.system == :Continuous
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
-            pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
             while !isempty(pos, animalModel)
-                pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+                pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
             end
             move_agent!(AnimalAgent, pos, animalModel)
     end
@@ -74,9 +78,9 @@ if animalModel.system == :Batch
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
-            pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
             while !isempty(pos, animalModel)
-                pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+                pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
             end
             move_agent!(AnimalAgent, pos, animalModel)
             println("Dried off")

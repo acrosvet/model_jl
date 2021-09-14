@@ -6,7 +6,7 @@ y = []
 z = []
 
 
-for i in 1:length(tpm.agents)
+for i in 1:length(init_pos.agents)
     push!(x, init_pos[i].pos[1])
     push!(y, init_pos[i].pos[2])
     push!(z, init_pos[i].pos[3])

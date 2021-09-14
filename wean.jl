@@ -6,15 +6,20 @@
 
 """
 function wean!(AnimalAgent, animalModel)
+
+    num_weaned = [a.stage == :W for a in allagents(animalModel)]
+    num_weaned = sum(num_weaned)
+    weaned_range = Int(floor(7*√num_weaned))
+
 if animalModel.system != :Continuous
     if AnimalAgent.stage == :C
         if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
             
             if rand(animalModel.rng) < 0.5
                 AnimalAgent.stage = :W
-                pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+                pos = (rand(animalModel.rng, 1:weaned_range, 2)..., 2)
                 while !isempty(pos, animalModel)
-                    pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+                    pos = (rand(animalModel.rng, 1:weaned_range, 2)..., 2)
                 end
                 move_agent!(AnimalAgent, pos, animalModel)
             else
@@ -29,9 +34,9 @@ if animalModel.system == :Continuous
     if AnimalAgent.stage == :C
         if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
                 AnimalAgent.stage = :W
-                pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+                pos = (rand(animalModel.rng, 1:weaned_range, 2)..., 2)
                 while !isempty(pos, animalModel)
-                    pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+                    pos = (rand(animalModel.rng, 1:weaned_range, 2)..., 2)
                 end
                 move_agent!(AnimalAgent, pos, animalModel)
             end 
