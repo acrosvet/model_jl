@@ -233,7 +233,7 @@
     #Define the initial state of the system. Attributes for each animal in the system.
     for n in 1:floor(N*0.5)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = (rand(animalModel.rng, 1:100, 2)..., 5))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 5)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(4*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -340,7 +340,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :W #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
