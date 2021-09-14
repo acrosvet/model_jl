@@ -50,3 +50,4 @@ export/seasonal_model_run.csv
 export/Batch Calving Herds.html
 export/initial_positions.csv
 r_scripts/initial_positions.r
+export/Initial Agent Positions.html
