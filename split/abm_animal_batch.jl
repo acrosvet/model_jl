@@ -582,7 +582,7 @@
     # Add calves ---------------------------------------------------------------------------
     for n in 1:floor(N*0.25*0.5)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+        pos = (rand(animalModel.rng, 1:100, 2)..., 1)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(animalModel.rng, truncated(Rayleigh(55), 7, 90)))) # Defined using initial age function
         βᵣ = βᵣ 
