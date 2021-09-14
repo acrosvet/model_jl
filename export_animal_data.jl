@@ -110,7 +110,7 @@ elseif animalModel.system == :Continuous
             dic = AnimalAgent.dic
     
         )
-end
+end 
 
 # Differetial output by system type -------------------------------------
     if animalModel.system == :Seasonal

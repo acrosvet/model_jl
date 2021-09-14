@@ -33,4 +33,4 @@ output = open("./export/seasonal_model_run.csv","w")
 
 run!(tmp, agent_step!, model_step!, 365*25)
 
-step!(tmp, agent_step!, model_step!)
+step!(tmp, agent_step!, model_step!) 
