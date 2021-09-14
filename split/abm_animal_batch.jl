@@ -39,7 +39,7 @@
     #Body
 
     #Define the agent space. At present, avoid observing pen boundaries.
-    agentSpace = ContinuousSpace((100,100), 1; periodic = true) #Relatinship to real space?
+    agentSpace =  GridSpace((100, 100, 10); periodic = false) 
     
     #Specify the disease dynamics  as a Dictionary to be passed to the model
     pathogenProperties = @dict(
@@ -95,7 +95,7 @@
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
 
 # Utilty functions -------------------------------------------------------
-    # Set the initial dim
+
     #Define a function to set initial infected status. This gets supplied to the loop describing the initial system state.
     function initial_status(n, init_ir, init_is)
         if n ≤ init_is 
@@ -107,26 +107,12 @@
         end
     end
 
-    #Define a function parameter to govern the movement of animals in different states
-
-    function initial_velocity(status, movement)
-        if status == :S
-            sincos(2π*rand(animalModel.rng)) .*movement
-        elseif status == :IS
-            sincos(2π*rand(animalModel.rng)) .*(movement/2)
-        elseif status == :IR
-            sincos(2π*rand(animalModel.rng)) .*(movement/2.5)
-        elseif status == :M
-            (0.0,0.0)
-        end
-    end
-
 
 # Calving period one --------------------------------------------------------
     #Define the initial state of the system. Attributes for each animal in the system.
     for n in 1:floor(N*0.25*0.7)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 6)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -148,7 +134,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :D #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -161,15 +146,16 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B1
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
     # Add the heifers ---------------------------------------------------
 
     for n in 1:floor(N*0.25*0.3)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 4)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -191,7 +177,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :DH #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -204,14 +189,15 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B1
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel,  age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
     # Add weaned ---------------------------------------------------------------------------
     for n in 1:floor(N*0.25*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 2)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(315),(281), (365))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -233,7 +219,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :W #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -246,8 +231,9 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B1
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel,  age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
 
@@ -255,7 +241,7 @@
     #Define the initial state of the system. Attributes for each animal in the system.
     for n in 1:floor(N*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 5)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(4*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -277,7 +263,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :L #Initial stage
         dim = Int(floor(rand(animalModel.rng, truncated(Rayleigh(237), 189, 273)))) # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -290,15 +275,16 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B2
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel,  age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
     # Add the heifers ---------------------------------------------------
 
     for n in 1:floor(N*0.25*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 4)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(603),553, 638)))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -320,7 +306,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :DH #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -333,14 +318,15 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B2
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
     # Add weaned ---------------------------------------------------------------------------
     for n in 1:floor(N*0.25*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 2)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(animalModel.rng, truncated(Rayleigh(237), 189, 273)))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -362,7 +348,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :W #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -375,15 +360,16 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B2
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel,  age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
 # Calving period three --------------------------------------------------------
     #Define the initial state of the system. Attributes for each animal in the system.
     for n in 1:floor(N*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 5)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(4*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -405,7 +391,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :L #Initial stage
         dim = Int(floor(rand(animalModel.rng, truncated(Rayleigh(145), 97, 180)))) # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -418,15 +403,16 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B3
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel,  age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
     # Add the heifers ---------------------------------------------------
 
     for n in 1:floor(N*0.25*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 4)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(511),463, 546)))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -448,7 +434,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :DH #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -461,14 +446,15 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B3
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel,  age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
     # Add weaned ---------------------------------------------------------------------------
     for n in 1:floor(N*0.25*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 2)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(animalModel.rng, truncated(Rayleigh(145), 97, 180)))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -490,7 +476,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :W #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -503,15 +488,16 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B3
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
 # Calving period four  --------------------------------------------------------
     #Define the initial state of the system. Attributes for each animal in the system.
     for n in 1:floor(N*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 5)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(4*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -533,7 +519,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :L #Initial stage
         dim = Int(floor(rand(animalModel.rng, truncated(Rayleigh(55), 7, 90)))) # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -546,15 +531,16 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B4
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
     # Add the heifers ---------------------------------------------------
 
     for n in 1:floor(N*0.25*0.25)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 4)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(420),372, 455)))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -576,7 +562,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :DH #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -589,14 +574,15 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B4
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
     # Add calves ---------------------------------------------------------------------------
     for n in 1:floor(N*0.25*0.5)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-        pos = Tuple(10*rand(animalModel.rng, 2))
+        pos = (rand(animalModel.rng, 1:100, 2)..., 6)
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(animalModel.rng, truncated(Rayleigh(55), 7, 90)))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -618,7 +604,6 @@
             age = age,
             days_exposed = 0
         )
-        vel = initial_velocity(status, movement) #Defined using initial velocity fn
         stage = :C #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -631,8 +616,9 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :B4
-        add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
-    
+        if isempty(pos, animalModel)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season)
+        end
     end
 
 
