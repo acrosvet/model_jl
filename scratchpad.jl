@@ -1,4 +1,4 @@
-tmp = initialiseSeasonal(220)
+tmp = initialiseSeasonal(100)
 
 
 header = DataFrame(
@@ -32,17 +32,18 @@ output = open("./export/seasonal_model_run.csv","w")
     close(output)
 
 pos_header = DataFrame(
+    Day = 0, 
     step = 0,
+    stage = 0,
     x = 0,
     y = 0,
-    z = 0,
-    stage = 0,
+    z = 0
 )
 
 pos_output = open("./export/seasonal_positions.csv","w")
     CSV.write(pos_output, pos_header, delim = ",", append = true, header = true)
 close(pos_output)
 
-run!(tmp, agent_step!, model_step!, 365*25)
+run!(tmp, agent_step!, model_step!, 365)
 
 step!(tmp, agent_step!, model_step!) 

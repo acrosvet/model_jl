@@ -1,6 +1,7 @@
 function export_animal_position!(AnimalAgent, animalModel)
 pos_data = DataFrame(
     step = animalModel.step,
+    Day = animalModel.date,
     stage = AnimalAgent.stage,
     x = AnimalAgent.pos[1],
     y = AnimalAgent.pos[2],
