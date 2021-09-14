@@ -14,7 +14,6 @@ end
 mutable struct AnimalAgent <: AbstractAgent
     id::Int # Animal ID
     pos::Dims{3} # Position, interaction dynamics
-    vel::NTuple{2, Float64} # Velocity, interaction dynamics
     age::Int # Animal age
     status::Symbol # Infection status
     βₛ::Float64 # Transmission coefficient (sensitive)
