@@ -30,7 +30,7 @@ Step AnimalAgents through time
         update_agent!(AnimalAgent) #Apply the update_agent function
         #flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
-        export_animal_position!(AnimalAgent)
+        export_animal_position!(AnimalAgent, animalModel)
 
 
 
