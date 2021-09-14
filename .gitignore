@@ -55,3 +55,4 @@ export/split_initial_positions.csv
 r_scripts/initial_positions.r
 export/Initial Agent Positions (Split).html
 export/batch_initial_positions.csv
+export/Initial Agent Positions (Batch).html
