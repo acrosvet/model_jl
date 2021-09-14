@@ -12,3 +12,21 @@ export/split_model_run.csv
 export/batch_model_run.csv
 export/seasonal_model_run.csv
 export/continuous_model_run.csv
+export/seasonal_model_run.csv
+Seasonally Calving Herds.html
+lib/crosstalk-1.1.1/css/crosstalk.css
+lib/crosstalk-1.1.1/js/crosstalk.js
+lib/crosstalk-1.1.1/js/crosstalk.js.map
+lib/crosstalk-1.1.1/js/crosstalk.min.js
+lib/crosstalk-1.1.1/js/crosstalk.min.js.map
+lib/htmlwidgets-1.5.4/htmlwidgets.js
+lib/jquery-3.5.1/jquery-AUTHORS.txt
+lib/jquery-3.5.1/jquery.js
+lib/jquery-3.5.1/jquery.min.js
+lib/jquery-3.5.1/jquery.min.map
+lib/plotly-binding-4.9.4.1/plotly.js
+lib/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css
+lib/plotly-main-1.57.1/plotly-latest.min.js
+lib/typedarray-0.1/typedarray.min.js
+export/seasonal_model_run.csv
+export/seasonal_model_run.csv
