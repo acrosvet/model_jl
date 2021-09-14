@@ -7,7 +7,10 @@ initial_positions <- initial_positions %>%
                         case_when(
                             z == 5 ~"Milkers",
                             z == 4 ~"Heifers",
-                            z == 2 ~"Weaned"))
+                            z == 2 ~"Weaned",
+                            z == 1 ~"Calves",
+                            z == 3 ~"Heifers",
+                            z == 6 ~"Dry"))
 
 p <- plot_ly(initial_positions) %>%
     add_trace(x=~x, y=~y, z=~z, color = ~label) %>%
