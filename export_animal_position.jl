@@ -1,3 +1,4 @@
+function export_animal_position!(AnimalAgent)
 pos_data = DataFrame(
     stage = AnimalAgent.stage,
     x = AnimalAgent.pos[1],
@@ -7,3 +8,4 @@ pos_data = DataFrame(
 pos_output = open("./export/seasonal_model_run.csv","a")
 CSV.write(pos_output, pos_data, delim = ",", append = true, header = false)
 close(output)
+end

@@ -12,7 +12,11 @@ if animalModel.system != :Continuous
             
             if rand(animalModel.rng) < 0.5
                 AnimalAgent.stage = :W
-                AnimalAgent.pos = (rand(animalModel.rng, 1:100, 2)...,2)
+                pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+                while !isempty(pos, animalModel)
+                    pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+                end
+                move_agent!(AnimalAgent, pos, animalModel)
             else
                 kill_agent!(AnimalAgent, animalModel)
                 println("Surplus")
@@ -25,7 +29,11 @@ if animalModel.system == :Continuous
     if AnimalAgent.stage == :C
         if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
                 AnimalAgent.stage = :W
-                AnimalAgent.pos = (rand(animalModel.rng, 1:100, 2)...,2)
+                pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+                while !isempty(pos, animalModel)
+                    pos = (rand(animalModel.rng, 1:100, 2)..., 2)
+                end
+                move_agent!(AnimalAgent, pos, animalModel)
             end 
         end
     end

@@ -125,8 +125,13 @@ if animalModel.system == :Batch
             if animalModel.date == (animalModel.msd_4 + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
-                    AnimalAgent.pos[3] = 4
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
+                    pos = (rand(animalModel.rng, 1:100, 2)..., 4)
+                    while !isempty(pos, animalModel)
+                        pos = (rand(animalModel.rng, 1:100, 2)..., 4)
+                    end
+                    move_agent!(AnimalAgent, pos, animalModel)
+                    
                     println("Heifer joined")
             end
         end

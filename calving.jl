@@ -22,7 +22,11 @@ function calving!(AnimalAgent, animalModel)
         AnimalAgent.stage = :L
         AnimalAgent.dim = 1
         AnimalAgent.lactation += 1
-        AnimalAgent.pos = (rand(animalModel.rng, 1:100, 2)..., 5)
+        pos = (rand(animalModel.rng, 1:100, 2)..., 5)
+        while !isempty(pos, animalModel)
+            pos = (rand(animalModel.rng, 1:100, 2)..., 5)
+        end
+        move_agent!(AnimalAgent, pos, animalModel)
         birth!(AnimalAgent, animalModel)
                
     end

@@ -24,7 +24,11 @@ if animalModel.system == :Split
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
             # Add to the dry cow plane
-            AnimalAgent.pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            while !isempty(pos, animalModel)
+                pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            end
+            move_agent!(AnimalAgent, pos, animalModel)
         end
     end
 end
@@ -34,7 +38,11 @@ if animalModel.system == :Seasonal|| animalModel.system == :Continuous
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
-            AnimalAgent.pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            while !isempty(pos, animalModel)
+                pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            end
+            move_agent!(AnimalAgent, pos, animalModel)
     end
 end
 
@@ -66,7 +74,11 @@ if animalModel.system == :Batch
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
-            AnimalAgent.pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            while !isempty(pos, animalModel)
+                pos = (rand(animalModel.rng, 1:100, 2)..., 6)
+            end
+            move_agent!(AnimalAgent, pos, animalModel)
             println("Dried off")
         end
     end
