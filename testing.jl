@@ -84,6 +84,10 @@
         include("abm_animal_yearround.jl")
         include("export_animal_position.jl")
         include("higher_dimension.jl")
-
+        include("transmit.jl")
+        include("export_animal_position.jl")
+        include("export_animal_interactions.jl")
+        include("export_culling.jl")
+        include("fn_agent_movement.jl")
         #step!(farmModel, farm_step!, 10) 
 
