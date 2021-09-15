@@ -89,5 +89,6 @@
         include("export_animal_interactions.jl")
         include("export_culling.jl")
         include("fn_agent_movement.jl")
+        include("transmit_status.jl")
         #step!(farmModel, farm_step!, 10) 
 
