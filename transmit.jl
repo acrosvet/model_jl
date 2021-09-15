@@ -1,5 +1,4 @@
 function transmit!(AnimalAgent, animalModel)
-    if AnimalAgent.stage == :C
         possible_interactions =  collect(nearby_ids(AnimalAgent, animalModel, (1, 1, 0)))
         num_contacts = length(possible_interactions)
          if length(possible_interactions) > 0
@@ -11,6 +10,6 @@ function transmit!(AnimalAgent, animalModel)
             interacting_stage = "No contact"
         end 
         export_animal_interactions!(AnimalAgent, animalModel, interacting_id, interacting_stage, num_contacts)
-    end
+
 
 end
