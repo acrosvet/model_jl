@@ -6,7 +6,7 @@ function transmit!(AnimalAgent, animalModel)
         
          if length(possible_interactions) > 0
             transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :IS, to_stat = :ES, beta = AnimalAgent.βₛ)
-
+            transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :IR, to_stat = :ER, beta = AnimalAgent.βᵣ)
         else
             interacting_id = "No contact"
             interacting_stage = "No contact"
