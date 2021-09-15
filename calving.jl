@@ -13,13 +13,13 @@ After calving:
 """
 function calving!(AnimalAgent, animalModel)
 
-    num_calves = [a.stage == :C for a in allagents(animalModel)]
+#=     num_calves = [a.stage == :C for a in allagents(animalModel)]
     num_calves = sum(num_calves)
     if num_calves == 0
         calf_range = 10
     else
         calf_range = Int(floor(3*√num_calves))
-    end 
+    end  =#
     
     if AnimalAgent.dic == 283
         if AnimalAgent.stage == :DH
@@ -30,11 +30,7 @@ function calving!(AnimalAgent, animalModel)
         AnimalAgent.stage = :L
         AnimalAgent.dim = 1
         AnimalAgent.lactation += 1
-        pos = (rand(animalModel.rng, 1:calf_range, 2)..., 5)
-        while !isempty(pos, animalModel)
-            pos = (rand(animalModel.rng, 1:calf_range, 2)..., 5)
-        end
-        move_agent!(AnimalAgent, pos, animalModel)
+        higher_dimension!(AnimalAgent, animalModel, stage = :L, level = 5, density = 5)
         birth!(AnimalAgent, animalModel)
                
     end

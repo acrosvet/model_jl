@@ -32,6 +32,7 @@ Step AnimalAgents through time
         #flag_trades!(AnimalAgent, animalModel)
         export_animal_data!(AnimalAgent, animalModel)
         export_animal_position!(AnimalAgent, animalModel)
+       # transmit!(AnimalAgent, animalModel)
 
 
 
