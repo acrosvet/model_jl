@@ -91,5 +91,6 @@
         include("fn_agent_movement.jl")
         include("transmit_status.jl")
         include("latency.jl")
+        include)("recovery.jl")
         #step!(farmModel, farm_step!, 10) 
 
