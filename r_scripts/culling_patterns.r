@@ -35,3 +35,17 @@ tmp <- contacts %>%
     plot_ly(x = ~Day) %>%
     add_trace(y = ~`Neither infected`, name = "None inf.") %>%
     add_trace(y = ~`Transmission to agent!`, name = "Trans. to") 
+
+run <- read_csv("./export/seasonal_model_run.csv")
+
+run %>%
+    filter(Day != 0) %>%
+    group_by(Day, AnimalStatus) %>%
+    summarise(count = n()) %>%
+    pivot_wider(names_from = AnimalStatus, values_from = count) %>%
+    plot_ly(x = ~Day) %>%
+        add_trace(y = ~IR, name = "Inf. res") %>%
+        add_trace(y = ~IS, name = "Inf. sens") %>%
+        add_trace(y = ~S, name = "Suscep.") %>%
+        add_trace(y = ~ES, name = "Exp. sens.") %>%
+        add_trace(y = ~ER, name = "Exp. res.")

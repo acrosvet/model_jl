@@ -10,6 +10,7 @@ for i in 1:length(possible_interactions)
     if AnimalAgent.status == susceptible && interacting_agent.status == inf_stat
         if rand(animalModel.rng) < beta
             AnimalAgent.status = to_stat
+            AnimalAgent.days_exposed += 1
             transmission = "Transmission to agent!"
         else
             transmission = "No transmission"
@@ -17,6 +18,7 @@ for i in 1:length(possible_interactions)
     elseif interacting_agent.status == inf_stat && AnimalAgent.status == susceptible
         if rand(animalModel.rng) < beta
             interacting_agent.status = to_stat
+            AnimalAgent.days_exposed +=1 
             transmission = "Transmission from agent!"
         else
             transmission = "No transmission"
