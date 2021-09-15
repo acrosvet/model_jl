@@ -7,14 +7,6 @@
 
 function heifer_joining!(AnimalAgent, animalModel)
 
-    num_dh = [a.stage == :DH for a in allagents(animalModel)]
-    num_dh = sum(num_dh)
-
-    if num_dh == 0
-        dh_range = 10
-    else
-        dh_range = Int(floor(7*√num_dh))
-    end
     
 #Seasonal herds ------------------------------------------------------------
 
@@ -25,11 +17,12 @@ if animalModel.system == :Seasonal
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
-                    pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
+                    higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
+#=                     pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
                     while !isempty(pos, animalModel)
                         pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
                     end
-                    move_agent!(AnimalAgent, pos, animalModel)
+                    move_agent!(AnimalAgent, pos, animalModel) =#
                     println("Heifer joined")
             end
         end
@@ -46,11 +39,7 @@ if animalModel.system == :Continuous
                 AnimalAgent.pregstat = :P
                 AnimalAgent.stage = :DH
                 AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
-                pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                while !isempty(pos, animalModel)
-                    pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                end
-                move_agent!(AnimalAgent, pos, animalModel)
+                higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
                 println("Heifer joined")
         end
     end
@@ -66,11 +55,7 @@ if animalModel.system == :Split
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
-                    pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    while !isempty(pos, animalModel)
-                        pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    end
-                    move_agent!(AnimalAgent, pos, animalModel)
+                    higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
                     println("Heifer joined")
             end
         end
@@ -82,11 +67,7 @@ if animalModel.system == :Split
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
-                    pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    while !isempty(pos, animalModel)
-                        pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    end
-                    move_agent!(AnimalAgent, pos, animalModel)
+                    higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
                     println("Heifer joined")
             end
         end
@@ -111,11 +92,7 @@ if animalModel.system == :Batch
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
-                    pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    while !isempty(pos, animalModel)
-                        pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    end
-                    move_agent!(AnimalAgent, pos, animalModel)
+                    higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
                     println("Heifer joined")
             end
         end
@@ -128,11 +105,7 @@ if animalModel.system == :Batch
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
-                    pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    while !isempty(pos, animalModel)
-                        pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    end
-                    move_agent!(AnimalAgent, pos, animalModel)
+                    higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
                     println("Heifer joined")
             end
         end
@@ -146,11 +119,7 @@ if animalModel.system == :Batch
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
-                    pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    while !isempty(pos, animalModel)
-                        pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    end
-                    move_agent!(AnimalAgent, pos, animalModel)
+                    higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
                     println("Heifer joined")
             end
         end
@@ -164,12 +133,7 @@ if animalModel.system == :Batch
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
-                    pos = (rand(animalModel.rng, 1:dh_range, 2)..., 4)
-                    while !isempty(pos, animalModel)
-                        pos = (rand(animalModel.rng, 1:dh_range, 2)..., 4)
-                    end
-                    move_agent!(AnimalAgent, pos, animalModel)
-                    
+                    higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
                     println("Heifer joined")
             end
         end
