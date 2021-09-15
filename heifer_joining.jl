@@ -18,11 +18,6 @@ if animalModel.system == :Seasonal
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-#=                     pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    while !isempty(pos, animalModel)
-                        pos = (rand(animalModel.rng, 1:dh_range, 2)..., 3)
-                    end
-                    move_agent!(AnimalAgent, pos, animalModel) =#
                     println("Heifer joined")
             end
         end

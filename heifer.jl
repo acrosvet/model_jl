@@ -11,7 +11,6 @@ function heifer!(AnimalAgent, animalModel)
     if AnimalAgent.age ≥ 13*30 && AnimalAgent.stage == :W
         AnimalAgent.stage = :H
         higher_dimension!(AnimalAgent, animalModel, stage = :H, level = 3, density = 7)
-        move_agent!(AnimalAgent, pos, animalModel)
     end
 
 

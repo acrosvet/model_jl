@@ -44,6 +44,19 @@ pos_output = open("./export/seasonal_positions.csv","w")
     CSV.write(pos_output, pos_header, delim = ",", append = true, header = true)
 close(pos_output)
 
+contact_header = DataFrame(
+    agent = 0,
+    Day = 0,
+    agent_id = 0,
+    agent_stage = 0,
+    contact_id = 0,
+    contact_stage = 0,
+    number_contacted = 0
+)
+
+contact_output = open("./export/seasonal_contacts.csv", "w")
+    CSV.write(contact_output, contact_header, delim = ",", append = true, header = true)
+close(contact_output)
 run!(tmp, agent_step!, model_step!, 365*25)
 
 step!(tmp, agent_step!, model_step!) 
