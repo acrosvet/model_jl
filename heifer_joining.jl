@@ -71,8 +71,9 @@ end
 
 if AnimalAgent.stage == :H && AnimalAgent.age ≥ 550
     if  AnimalAgent.pregstat == :E
+        culling_reason = "Empty heifer"
+        export_culling!(AnimalAgent, animalModel, culling_reason)
         kill_agent!(AnimalAgent, animalModel)
-        println("Culled empty heifer")
     end
 end
 

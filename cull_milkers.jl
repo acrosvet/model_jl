@@ -13,15 +13,17 @@ function cull_milkers!(AnimalAgent, animalModel)
 #println("The number of agents is $num_agents")
 if AnimalAgent.stage == :D && AnimalAgent.pregstat == :E
     if haskey(animalModel.agents, AnimalAgent.id)
+        culling_reason = "Empty dry"
+        export_culling!(AnimalAgent, animalModel, culling_reason)
         kill_agent!(AnimalAgent, animalModel)
-        println("Culled empty dry")
     end
 end
 
 if AnimalAgent.dic >= 320
     if haskey(animalModel.agents, AnimalAgent.id)
+        culling_reason = "Slipped"
+        export_culling!(AnimalAgent, animalModel, culling_reason)
         kill_agent!(AnimalAgent, animalModel)
-        println("Slipped, cull")
     end
 end
 
@@ -40,8 +42,9 @@ if animalModel.system == :Seasonal
     if current_lactating > animalModel.num_lac 
         if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
             if haskey(animalModel.agents, AnimalAgent.id)
+                culling_reason = "Age"
+                export_culling!(AnimalAgent, animalModel, culling_reason)
                 kill_agent!(AnimalAgent, animalModel)
-                println("Age cull")
             end
         end
     end
@@ -49,8 +52,9 @@ if animalModel.system == :Seasonal
     if current_lactating > animalModel.num_lac 
         if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
             if haskey(animalModel.agents, AnimalAgent.id)
+                culling_reason = "Fertility"
+                export_culling!(AnimalAgent, animalModel, culling_reason)
                 kill_agent!(AnimalAgent, animalModel)
-                println("Fertility cull")
             end
         end
     end 
@@ -63,8 +67,9 @@ if animalModel.system == :Continuous
     if current_lactating > animalModel.num_lac 
         if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
             if haskey(animalModel.agents, AnimalAgent.id)
+                culling_reason = "Age"
+                export_culling!(AnimalAgent, animalModel, culling_reason)
                 kill_agent!(AnimalAgent, animalModel)
-                println("Age cull")
             end
         end
     end
@@ -72,8 +77,9 @@ if animalModel.system == :Continuous
     if current_lactating > animalModel.num_lac 
         if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 300 && AnimalAgent.dic < 150)
             if haskey(animalModel.agents, AnimalAgent.id)
+                culling_reason = "Fertility"
+                export_culling!(AnimalAgent, animalModel, culling_reason)
                 kill_agent!(AnimalAgent, animalModel)
-                println("Fertility cull")
             end
         end
     end 
@@ -96,8 +102,9 @@ end
                 if current_spring > animalModel.lac_spring
                     if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
                         if haskey(animalModel.agents, AnimalAgent.id)
+                            culling_reason = "Age"
+                            export_culling!(AnimalAgent, animalModel, culling_reason)
                             kill_agent!(AnimalAgent, animalModel)
-                            println("Age cull")
                         end
                     end
                 end 
@@ -108,8 +115,9 @@ end
                     if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
                         if haskey(animalModel.agents, AnimalAgent.id)
                             if AnimalAgent.agenttype != :CO
+                                culling_reason = "Fertility"
+                                export_culling!(AnimalAgent, animalModel, culling_reason)
                                 kill_agent!(AnimalAgent, animalModel)
-                                println("Fertility cull")
                             end
                         end
                     end
@@ -120,8 +128,9 @@ end
                 if current_autumn > animalModel.lac_autumn
                     if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
                         if haskey(animalModel.agents, AnimalAgent.id)
+                            culling_reason = "Age"
+                            export_culling!(AnimalAgent, animalModel, culling_reason)
                             kill_agent!(AnimalAgent, animalModel)
-                            println("Age cull")
                         end
                     end
                 end 
@@ -132,8 +141,9 @@ end
                     if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
                         if AnimalAgent.agenttype != :CO
                             if haskey(animalModel.agents, AnimalAgent.id)
+                                culling_reason = "Fertility"
+                                export_culling!(AnimalAgent, animalModel, culling_reason)
                                 kill_agent!(AnimalAgent, animalModel)
-                                println("Fertility cull")
                             end
                         end
                     end
@@ -171,8 +181,9 @@ if animalModel.system  == :Batch
             if current_b1 > animalModel.lac_batch
                 if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
                     if haskey(animalModel.agents, AnimalAgent.id)
+                        culling_reason = "Age"
+                        export_culling!(AnimalAgent, animalModel, culling_reason)
                         kill_agent!(AnimalAgent, animalModel)
-                        println("Age cull")
                     end
                 end
             end 
@@ -183,8 +194,9 @@ if animalModel.system  == :Batch
                 if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
                     if haskey(animalModel.agents, AnimalAgent.id)
                         if AnimalAgent.agenttype != :CO
+                            culling_reason = "Fertility"
+                            export_culling!(AnimalAgent, animalModel, culling_reason)
                             kill_agent!(AnimalAgent, animalModel)
-                            println("Fertility cull")
                         end
                     end
                 end
@@ -197,8 +209,9 @@ if animalModel.system  == :Batch
         if current_b2 > animalModel.lac_batch
             if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
                 if haskey(animalModel.agents, AnimalAgent.id)
+                    culling_reason = "Age"
+                    export_culling!(AnimalAgent, animalModel, culling_reason)
                     kill_agent!(AnimalAgent, animalModel)
-                    println("Age cull")
                 end
             end
         end 
@@ -209,8 +222,9 @@ if animalModel.system  == :Batch
             if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
                 if haskey(animalModel.agents, AnimalAgent.id)
                     if AnimalAgent.agenttype != :CO
+                        culling_reason = "Fertility"
+                        export_culling!(AnimalAgent, animalModel, culling_reason)
                         kill_agent!(AnimalAgent, animalModel)
-                        println("Fertility cull")
                     end
                 end
             end
@@ -222,8 +236,9 @@ if animalModel.system  == :Batch
         if current_b3 > animalModel.lac_batch
             if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
                 if haskey(animalModel.agents, AnimalAgent.id)
+                    culling_reason = "Age"
+                    export_culling!(AnimalAgent, animalModel, culling_reason)
                     kill_agent!(AnimalAgent, animalModel)
-                    println("Age cull")
                 end
             end
         end 
@@ -234,8 +249,9 @@ if animalModel.system  == :Batch
             if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
                 if haskey(animalModel.agents, AnimalAgent.id)
                     if AnimalAgent.agenttype != :CO
+                        culling_reason = "Fertility"
+                        export_culling!(AnimalAgent, animalModel, culling_reason)
                         kill_agent!(AnimalAgent, animalModel)
-                        println("Fertility cull")
                     end
                 end
             end
@@ -247,8 +263,9 @@ if animalModel.system  == :Batch
         if current_b4 > animalModel.lac_batch
             if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365))))
                 if haskey(animalModel.agents, AnimalAgent.id)
+                    culling_reason = "Age"
+                    export_culling!(AnimalAgent, animalModel, culling_reason)
                     kill_agent!(AnimalAgent, animalModel)
-                    println("Age cull")
                 end
             end
         end 
@@ -259,8 +276,9 @@ if animalModel.system  == :Batch
             if AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 280 && AnimalAgent.dic < 150)
                 if haskey(animalModel.agents, AnimalAgent.id)
                     if AnimalAgent.agenttype != :CO
+                        culling_reason = "Fertility"
+                        export_culling!(AnimalAgent, animalModel, culling_reason)
                         kill_agent!(AnimalAgent, animalModel)
-                        println("Fertility cull")
                     end
                 end
             end

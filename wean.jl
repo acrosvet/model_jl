@@ -15,8 +15,9 @@ if animalModel.system != :Continuous
                 AnimalAgent.stage = :W
                 higher_dimension!(AnimalAgent, animalModel, stage = :W, level = 2, density = 7)
             else
+                culling_reason = "Surplus"
+                export_culling!(AnimalAgent, animalModel, culling_reason)
                 kill_agent!(AnimalAgent, animalModel)
-                println("Surplus")
             end 
         end
     end

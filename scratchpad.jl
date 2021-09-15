@@ -57,6 +57,22 @@ contact_header = DataFrame(
 contact_output = open("./export/seasonal_contacts.csv", "w")
     CSV.write(contact_output, contact_header, delim = ",", append = true, header = true)
 close(contact_output)
-run!(tmp, agent_step!, model_step!, 365*25)
+
+culling_header = DataFrame(
+    step = 0,
+    Day = 0,
+    culled_id = 0,
+    age = 0,
+    pregstat = 0,
+    dim = 0,
+    dic = 0,
+    reason = 0
+)
+
+culling_output = open("./export/seasonal_culling.csv", "w")
+    CSV.write(culling_output, culling_header, delim = ",", append = true, header = true)
+close(culling_output)
+
+run!(tmp, agent_step!, model_step!, 365*1)
 
 step!(tmp, agent_step!, model_step!) 
