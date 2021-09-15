@@ -51,7 +51,10 @@ contact_header = DataFrame(
     agent_stage = 0,
     contact_id = 0,
     contact_stage = 0,
-    number_contacted = 0
+    number_contacted = 0,
+    agent_status = 0,
+    contact_status = 0,
+    outcome = 0
 )
 
 contact_output = open("./export/seasonal_contacts.csv", "w")
