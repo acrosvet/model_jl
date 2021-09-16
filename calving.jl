@@ -22,7 +22,7 @@ function calving!(AnimalAgent, animalModel)
         AnimalAgent.stage = :L
         AnimalAgent.dim = 1
         AnimalAgent.lactation += 1
-        higher_dimension!(AnimalAgent, animalModel, stage = :L, level = 5, density = 5)
+        higher_dimension!(AnimalAgent, animalModel, stage = :L, level = 5, density = 6)
         birth!(AnimalAgent, animalModel)
                
     end

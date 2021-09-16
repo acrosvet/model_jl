@@ -3,14 +3,6 @@
 """
 function dryoff!(AnimalAgent, animalModel)
 
-    num_dry = [a.stage == :D for a in allagents(animalModel)]
-    num_dry = sum(num_dry)
-    if num_dry == 0
-        dry_range = 10
-    else
-        dry_range = Int(floor(7*√num_dry))
-    end
-
 # Split calving system -----------------------------------------------------------------------------------------------    
 if animalModel.system == :Split
     if AnimalAgent.dim ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(305), 290, 330)))) && AnimalAgent.agenttype != :CO
@@ -32,11 +24,7 @@ if animalModel.system == :Split
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
             # Add to the dry cow plane
-            pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
-            while !isempty(pos, animalModel)
-                pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
-            end
-            move_agent!(AnimalAgent, pos, animalModel)
+            higher_dimension!(AnimalAgent, animalModel, stage = :D, level = 6, density = 7)
         end
     end
 end
@@ -46,11 +34,8 @@ if animalModel.system == :Seasonal|| animalModel.system == :Continuous
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
-            pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
-            while !isempty(pos, animalModel)
-                pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
-            end
-            move_agent!(AnimalAgent, pos, animalModel)
+            higher_dimension!(AnimalAgent, animalModel, stage = :D, level = 6, density = 7)
+
     end
 end
 
@@ -82,11 +67,7 @@ if animalModel.system == :Batch
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
-            pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
-            while !isempty(pos, animalModel)
-                pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
-            end
-            move_agent!(AnimalAgent, pos, animalModel)
+            higher_dimension!(AnimalAgent, animalModel, stage = :D, level = 6, density = 7)
             println("Dried off")
         end
     end

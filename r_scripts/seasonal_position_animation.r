@@ -2,6 +2,13 @@ source("./r_scripts/libraries.r")
 
 pos_data <- read_csv("./export/seasonal_positions.csv")
 
+# Investigate Day 81
+
+day_81 <- pos_data %>%
+            group_by(Day, stage) %>%
+            summarise(count = n()) %>%
+            pivot_wider(names_from = stage, values_from = count)
+
 plot_ly(pos_data) %>%
     add_trace(x=~x, 
     y=~y, 
@@ -11,18 +18,31 @@ plot_ly(pos_data) %>%
   title = "Initial agent positions (batch)")
 
 fig <- pos_data %>%
-#slice(1:25000) %>%
+slice(1:51000) %>%
 filter(step != 0) %>%
   plot_ly(
     x = ~x,
     y = ~y,
     z = ~z,
     type = 'scatter3d',
-    mode = 'markers',
-    frame = ~Day,
-    marker = list(size = 5),
-    showlegend = F, 
-    color = ~stage)
+    frame = ~step,
+    text = c("\U1F404"),
+    textfont = list(size = 15),
+    mode = 'text',
+    color = ~stage) %>%
+  layout(
+    title = "Animal movements over time",
+    scene = list(
+    xaxis = list(
+      range=c(0,63)
+    ),
+    yaxis = list(
+      range = c(0,63)
+    ),
+    zaxis = list(
+      range = c(0,8)
+    )
+  ))
 
 fig
 
