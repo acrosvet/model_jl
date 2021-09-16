@@ -5,8 +5,8 @@
     function initialiseSeasonal(
         N::Int, #Default number of animals
         movement = 0.1, #Movement in continuous space
-        βᵣ = 0.3, #Beta (resistant) 
-        βₛ = 0.35, #Beta (sensitive)
+        βᵣ = 0.4, #Beta (resistant) 
+        βₛ = 0.4, #Beta (sensitive)
         init_is = 5, # Number initially infected sensitive
         init_ir = 1, # Number initially infected resistant
         sponrec_is = 0.05, #chance of spontaneous recovery IS
@@ -140,7 +140,7 @@
     for n in 1:num_heifers
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = (rand(animalModel.rng, 1:Int(floor(7*√num_heifers)), 2)..., 4)
-        status = initial_status(n, init_ir, init_is) # Defined using initial status function
+        status = :S # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ
@@ -183,7 +183,7 @@
     for n in 1:num_weaned
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = (rand(animalModel.rng, 1:Int(floor(7*√num_weaned)), 2)..., 2)
-        status = initial_status(n, init_ir, init_is) # Defined using initial status function
+        status = :S # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(365),(295), (385))))) # Defined using initial age function
         βᵣ = βᵣ 
         βₛ = βₛ

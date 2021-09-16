@@ -6,7 +6,7 @@ position_counter = 0
             # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
             pos = (rand(animalModel.rng, 1:100, 2)..., 1)
             age = 1
-            status = :S
+            status = AnimalAgent.status
             βᵣ = animalModel.βᵣ
             βₛ = animalModel.βₛ
             days_treated = 0
