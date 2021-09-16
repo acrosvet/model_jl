@@ -6,7 +6,7 @@ recovery_time = rand(7:10)
 
 if AnimalAgent.inf_days ≥ recovery_time
     if AnimalAgent.status == :IS
-        if rand(animalModel.rng) > 0.03
+        if rand(animalModel.rng) > animalModel.sens_carrier
             AnimalAgent.status = :recovered
             AnimalAgent.inf_days = 0
             AnimalAgent.days_recovered += 1
@@ -16,7 +16,7 @@ if AnimalAgent.inf_days ≥ recovery_time
             AnimalAgent.days_carrier += 1
         end
     elseif AnimalAgent.status == :IR
-        if rand(animalModel.rng) > 0.03
+        if rand(animalModel.rng) > animalModel.res_carrier
             AnimalAgent.status = :recovered
             AnimalAgent.inf_days = 0
             AnimalAgent.days_recovered += 1

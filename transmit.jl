@@ -17,6 +17,8 @@ function transmit!(AnimalAgent, animalModel)
          if length(possible_interactions) > 0
             transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :IS, to_stat = :ES, beta = AnimalAgent.βₛ)
             transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :IR, to_stat = :ER, beta = AnimalAgent.βᵣ)
+            transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :carrier_resistant, to_stat = :IS, beta = AnimalAgent.βᵣ/2)
+            transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :carrier_sensitive, to_stat = :IS, beta = AnimalAgent.βₛ/2)
         else
             interacting_id = "No contact"
             interacting_stage = "No contact"
