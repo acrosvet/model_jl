@@ -5,7 +5,7 @@ recovery_time = rand(7:10)
 # Make recovered
 
 if AnimalAgent.inf_days ≥ recovery_time
-    if AnimalAgent.status == :IS && AnimalAgent.treatment == :U
+    if AnimalAgent.status == :IS
         if rand(animalModel.rng) > 0.03
             AnimalAgent.status = :recovered
             AnimalAgent.inf_days = 0
@@ -15,7 +15,7 @@ if AnimalAgent.inf_days ≥ recovery_time
             AnimalAgent.inf_days = 0
             AnimalAgent.days_carrier += 1
         end
-    elseif AnimalAgent.status == :IR && AnimalAgent.treatment == :U
+    elseif AnimalAgent.status == :IR
         if rand(animalModel.rng) > 0.03
             AnimalAgent.status = :recovered
             AnimalAgent.inf_days = 0
@@ -29,10 +29,10 @@ if AnimalAgent.inf_days ≥ recovery_time
 end
     # Wane immunity back to susceptible
 
-    if AnimalAgent.status == :recovered && AnimalAgent.days_recovered ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(45), 30, 60))))
+if AnimalAgent.status == :recovered && AnimalAgent.days_recovered ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(45), 30, 60))))
         AnimalAgent.status = :S
         AnimalAgent.days_recovered = 0
-    end
+end
 
 
 end

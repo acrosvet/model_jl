@@ -3,6 +3,16 @@ function transmit!(AnimalAgent, animalModel)
         num_contacts = length(possible_interactions)
         status_agent = AnimalAgent.status
 
+
+        if AnimalAgent.inf_days != 0
+            AnimalAgent.inf_days +=1 
+        elseif AnimalAgent.days_recovered != 0
+            AnimalAgent.days_recovered += 1
+        elseif  AnimalAgent.days_exposed != 0
+            AnimalAgent.days_exposed += 1
+        elseif AnimalAgent.days_carrier != 0
+            AnimalAgent.days_carrier += 1
+        end 
         
          if length(possible_interactions) > 0
             transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :IS, to_stat = :ES, beta = AnimalAgent.βₛ)

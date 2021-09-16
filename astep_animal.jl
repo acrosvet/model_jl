@@ -29,8 +29,9 @@ Step AnimalAgents through time
         export_animal_data!(AnimalAgent, animalModel)
         export_animal_position!(AnimalAgent, animalModel)
         latency!(AnimalAgent, animalModel)
-        recovery!(AnimalAgent, animalModel)
         transmit!(AnimalAgent, animalModel)
+        recovery!(AnimalAgent, animalModel)
+
 
 
 

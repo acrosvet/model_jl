@@ -48,4 +48,4 @@ pos_data %>%
   ) 
 }
 
-position_animation("C")
+position_animation("L")

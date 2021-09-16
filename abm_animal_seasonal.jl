@@ -6,7 +6,7 @@
         N::Int, #Default number of animals
         movement = 0.1, #Movement in continuous space
         βᵣ = 0.3, #Beta (resistant) 
-        βₛ = 0.6, #Beta (sensitive)
+        βₛ = 0.35, #Beta (sensitive)
         init_is = 5, # Number initially infected sensitive
         init_ir = 1, # Number initially infected resistant
         sponrec_is = 0.05, #chance of spontaneous recovery IS
@@ -216,7 +216,7 @@
         heat = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
-        days_recovered
+        days_recovered = 0
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
         end    

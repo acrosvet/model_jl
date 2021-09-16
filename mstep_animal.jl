@@ -32,6 +32,7 @@ function model_step!(animalModel)
         
     end =#
 
+
         # Increment the date by one day
 
         animalModel.date += Day(1)

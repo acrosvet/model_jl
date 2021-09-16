@@ -38,7 +38,7 @@ tmp <- contacts %>%
 
 run <- read_csv("./export/seasonal_model_run.csv")
 
-run %>%
+tmp <- run %>%
     filter(Day != 0) %>%
     group_by(Day, AnimalStatus) %>%
     summarise(count = n()) %>%
@@ -48,4 +48,6 @@ run %>%
         add_trace(y = ~IS, name = "Inf. sens") %>%
         add_trace(y = ~S, name = "Suscep.") %>%
         add_trace(y = ~ES, name = "Exp. sens.") %>%
-        add_trace(y = ~ER, name = "Exp. res.")
+        add_trace(y = ~recovered, name = "Recovered") %>%
+        add_trace(y = ~carrier_resistant, name = "Car. res.")%>%
+        add_trace(y = ~carrier_sensitive, name = "Car. Sens.")  
