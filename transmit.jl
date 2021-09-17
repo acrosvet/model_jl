@@ -15,10 +15,13 @@ function transmit!(AnimalAgent, animalModel)
         end 
         
          if length(possible_interactions) > 0
-            transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :IS, to_stat = :ES, beta = AnimalAgent.βₛ)
-            transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :IR, to_stat = :ER, beta = AnimalAgent.βᵣ)
-            transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :carrier_resistant, to_stat = :IS, beta = AnimalAgent.βᵣ/2)
-            transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible = :S, inf_stat = :carrier_sensitive, to_stat = :IS, beta = AnimalAgent.βₛ/2)
+            for i in 1:length(possible_interactions)
+                interacting_agent = animalModel[possible_interactions[i]]
+                transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :IS, to_stat = :ES, beta = AnimalAgent.βₛ)
+                transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :IR, to_stat = :ER, beta = AnimalAgent.βᵣ)
+                transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :carrier_resistant, to_stat = :IS, beta = AnimalAgent.βᵣ/2)
+                transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :carrier_sensitive, to_stat = :IS, beta = AnimalAgent.βₛ/2)
+            end
         else
             interacting_id = "No contact"
             interacting_stage = "No contact"

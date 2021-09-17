@@ -1,7 +1,7 @@
-function transmit_status!(AnimalAgent, animalModel, possible_interactions; susceptible, inf_stat, to_stat, beta)
+function transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible, inf_stat, to_stat, beta)
 
-for i in 1:length(possible_interactions)
-    interacting_agent = animalModel[possible_interactions[i]]
+
+    
     interacting_id = interacting_agent.id
     interacting_stage = interacting_agent.stage
     status_contact = interacting_agent.status
@@ -31,6 +31,6 @@ for i in 1:length(possible_interactions)
         transmission = "Neither infected"
     end
     export_animal_interactions!(AnimalAgent, animalModel, interacting_id, interacting_stage, num_contacts, transmission, status_agent, status_contact)
-end
+
 
 end
