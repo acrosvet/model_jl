@@ -7,7 +7,7 @@ contacts <- interactions %>%
                 mutate(Day = lubridate::ymd(Day)) %>%
                 filter(Day >= min(Day) & Day <= "2021-07-08") %>%
                 select(Day, agent_id, contact_id, contact_stage) %>%
-                distinct(Day, agent_id, contact_id, contact_stage) %>%
+                #distinct(Day, agent_id, contact_id, contact_stage) %>%
                 mutate(across(everything(), as.character))
 
 sources <- contacts %>%

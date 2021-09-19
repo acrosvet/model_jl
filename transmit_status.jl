@@ -22,6 +22,6 @@ function transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_
     else
         transmission = "Neither infected"
     end
-
+return transmission
 
 end
