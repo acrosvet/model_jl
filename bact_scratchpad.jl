@@ -6,5 +6,7 @@ include("bact_export_headers.jl")
 include("bact_model_step.jl")
 include("bacterial_population.jl")
 include("bacterial_treatment.jl")
+include("bact_infection.jl")
+include("bact_fitness.jl")
 
 run!(bactoMod, bact_agent_step!, bact_model_step!, 35)
