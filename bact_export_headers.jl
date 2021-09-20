@@ -11,7 +11,6 @@ bacto_output = open("./export/bacterial_model_run.csv","w")
             CSV.write(bacto_output, bacto_header, delim = ",", append = true, header = true)
          close(bacto_output)
 
-bactoMod = initialisePopulation(nbact = 10000, total_status = :IR, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0)
 
 bacterial_posheader = DataFrame(
     step = 0,
