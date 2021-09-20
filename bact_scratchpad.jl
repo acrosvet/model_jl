@@ -1,0 +1,10 @@
+include("packages.jl")
+include("agent_types.jl")
+include("abm_bacterial.jl")
+include("bact_agent_step.jl")
+include("bact_export_headers.jl")
+include("bact_model_step.jl")
+include("bacterial_population.jl")
+include("bacterial_treatment.jl")
+
+run!(bactoMod, bact_agent_step!, bact_model_step!, 35)
