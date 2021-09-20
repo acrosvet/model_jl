@@ -18,6 +18,7 @@ bacterial_posheader = DataFrame(
     bactostatus = 0,
     x = 0,
     y =0)
-bacto_posoutput = open("./export/bacterial_positions.csv","a")
-CSV.write(bacto_posoutput, bacterial_posheader, delim = ",", append = true, header = false)
+
+bacto_posoutput = open("./export/bacterial_positions.csv","w")
+CSV.write(bacto_posoutput, bacterial_posheader, delim = ",", append = true, header = true)
 close(bacto_posoutput)

@@ -4,5 +4,6 @@ function bact_agent_step!(BacterialAgent, bacterialModel)
      bact_treatment_response!(BacterialAgent, bacterialModel)
      export_bacto_position!(BacterialAgent, bacterialModel)
      treatment!(BacterialAgent, bacterialModel)
-     populate_empty!(BacterialAgent, bacterialModel)
+
+     populate_empty!(BacterialAgent, bacterialModel) 
 end
