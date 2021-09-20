@@ -8,5 +8,7 @@ include("bacterial_population.jl")
 include("bacterial_treatment.jl")
 include("bact_infection.jl")
 include("bact_fitness.jl")
+include("bact_plasmid_transfer.jl")
+include("bact_empty_neighbours.jl")
 
 run!(bactoMod, bact_agent_step!, bact_model_step!, 35)
