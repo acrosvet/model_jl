@@ -14,7 +14,7 @@ function populate_empty!(BacterialAgent, bacterialModel)
     pos_3 = (agent_x, agent_y +1)
     push!(adjacent_positions, pos_3)
     pos_4 = (agent_x, agent_y - 1)
-    push(adjacent_positions, pos_4)
+    push!(adjacent_positions, pos_4)
     pos_5 = (agent_x -1, agent_y +1)
     push!(adjacent_positions, pos_5)
     pos_6 = (agent_x - 1, agent_y - 1)
@@ -26,15 +26,17 @@ function populate_empty!(BacterialAgent, bacterialModel)
 
 
     for i in 1:length(adjacent_positions)
-    
-        if isempty(adjacent_positions[i], bacterialModel)
-            strain = BacterialAgent.strain
-            pos = adjacent_positions[i]
-            strain_status = BacterialAgent.strain_status
-            fitness = BacterialAgent.fitness
-            status = BacterialAgent.status
-            agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-            add_agent_single!(agent, bacterialModel)
+        if (adjacent_positions[i][1] <= 100 && adjacent_positions[i][1] > 0) && (adjacent_positions[i][2] <= 100 && adjacent_positions[i][2] > 0)
+            if isempty(adjacent_positions[i], bacterialModel)
+                strain = BacterialAgent.strain
+                pos = adjacent_positions[i]
+                strain_status = BacterialAgent.strain_status
+                fitness = BacterialAgent.fitness
+                status = BacterialAgent.status
+                agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
+                add_agent_single!(agent, bacterialModel)
+            end
+        end
     end
 
 end
