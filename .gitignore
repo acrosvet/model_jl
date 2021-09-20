@@ -71,3 +71,6 @@ export/Seasonal cow positions.html
 export/Seasonal infection dynamics.html
 .gitignore
 export/Seasonal cullign reason.html
+export/bacterial_model_run.csv
+.gitignore
+export/bacterial_positions.csv
