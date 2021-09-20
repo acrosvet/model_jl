@@ -33,8 +33,7 @@ function populate_empty!(BacterialAgent, bacterialModel)
                 strain_status = BacterialAgent.strain_status
                 fitness = BacterialAgent.fitness
                 status = BacterialAgent.status
-                agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-                add_agent_single!(agent, bacterialModel)
+                add_agent!(pos, bacterialModel,status, strain, strain_status, fitness)
             end
         end
     end
