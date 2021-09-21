@@ -35,7 +35,7 @@ function populate_empty!(BacterialAgent, bacterialModel)
                 strain_status = BacterialAgent.strain_status
                 fitness = BacterialAgent.fitness
                 status = BacterialAgent.status
-                if rand(bacterialModel.rng) > 0.5
+                if rand(bacterialModel.rng) < 0.05
                     add_agent!(pos, bacterialModel,status, strain, strain_status, fitness)
                 end
             end

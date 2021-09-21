@@ -4,8 +4,8 @@ positions <- read_csv("./export/bacterial_positions.csv")
 
 positions %>%
     filter(bactostatus != 0) %>%
-    arrange(step, id) %>%
-    plot_ly(x = ~x, y = ~y, color = ~strain, colors = 'Dark2', frame = ~step)
+    arrange(id) %>%
+    plot_ly(x = ~x, y = ~y, color = ~bactostatus, colors = 'Dark2', frame = ~step)
 
 positions %>%
     filter(step != 0) %>%
@@ -14,7 +14,7 @@ positions %>%
     pivot_wider(names_from = bactostatus, values_from = count) %>%
     plot_ly(x = ~step) %>%
     add_trace(y = ~S, name = "Susceptible") %>%
-    add_trace(y = ~R, name = "Resistant")
+    add_trace(y = ~IS, name = "Resistant")
 
 
 bacto_run <- read_csv("./export/bacterial_model_run.csv")
