@@ -15,11 +15,13 @@ include("export_bacterial_position.jl")
 include("export_bacterial_data.jl")
 
 
-bactoMod = initialisePopulation(nbact = 1000, total_status = :ER, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0)
+bactoMod = initialisePopulation(nbact = 1000, total_status = :ES, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0)
 
 include("bact_export_headers.jl")
 @time run!(bactoMod, bact_agent_step!, bact_model_step!, 100)
 
-bactoMod.days_treated = 0
+@time step!(bactoMod, bact_agent_step!, bact_model_step!,1)
 
-step!(bactoMod, bact_agent_step!, bact_model_step!, 10)
+bactoMod.days_treated = 1
+
+step!(bactoMod, bact_agent_step!, bact_model_step!, 1)

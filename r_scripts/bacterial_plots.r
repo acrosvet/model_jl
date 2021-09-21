@@ -13,6 +13,8 @@ positions %>%
     summarise(count = n()) %>%
     pivot_wider(names_from = bactostatus, values_from = count) %>%
     plot_ly(x = ~step) %>%
-    add_trace(y = ~IS, name = "IS") %>%
     add_trace(y = ~S, name = "Susceptible") %>%
     add_trace(y = ~R, name = "Resistant")
+
+
+bacto_run <- read_csv("./export/bacterial_model_run.csv")

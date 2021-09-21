@@ -94,7 +94,7 @@ function initialisePopulation(
 
     # set a small subpopulation of resistant bacteria
 
-    resistant_seed = rand(0.005:0.001:0.01)
+    resistant_seed = 0.01
 
 
 
