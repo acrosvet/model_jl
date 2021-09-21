@@ -4,8 +4,8 @@ positions <- read_csv("./export/bacterial_positions.csv")
 
 positions %>%
     filter(bactostatus != 0) %>%
-    arrange(id) %>%
-    plot_ly(x = ~x, y = ~y, color = ~bactostatus, frame = ~step)
+    arrange(step, id) %>%
+    plot_ly(x = ~x, y = ~y, color = ~strain, colors = 'Dark2', frame = ~step)
 
 positions %>%
     filter(step != 0) %>%

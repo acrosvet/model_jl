@@ -113,7 +113,7 @@ function initialisePopulation(
         strain = nstrains + 1
         pos = (1,1)
         strain_status = :R
-        fitness = mean(bacterialModel.fitnesses)*rand(0.75:0.05:0.95)
+        fitness = mean(bacterialModel.fitnesses)
         status = :R
         agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
         add_agent_single!(agent, bacterialModel)
