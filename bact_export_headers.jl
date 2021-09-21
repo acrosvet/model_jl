@@ -16,6 +16,7 @@ bacterial_posheader = DataFrame(
     step = 0,
     id = 0,
     bactostatus = 0,
+    strain = 0,
     x = 0,
     y =0)
 

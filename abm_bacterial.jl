@@ -9,6 +9,7 @@ function initialisePopulation(
         r_strain = rand(1:nstrains),
         status = :S,
         resistant_pop = 0,
+        dim = 33,
         rng = MersenneTwister(42);
         nbact::Int64,
         total_status::Symbol = AnimalAgent.status,
@@ -20,7 +21,7 @@ function initialisePopulation(
 
     )
 
-    agentSpace = GridSpace((100, 100); periodic = false)
+    agentSpace = GridSpace((33, 33); periodic = false)
 
     bactproperties = @dict(
         step = 0,
@@ -41,6 +42,7 @@ function initialisePopulation(
         num_susceptible = 0,
         fitnesses = [],
         strain_statuses = [],
+        dim,
     )
 
     bacterialModel = AgentBasedModel(BacterialAgent, agentSpace, properties = bactproperties)
@@ -90,8 +92,14 @@ function initialisePopulation(
 
     bacterialModel.fitnesses = bact_fitnesses = fn_strain_fitness!(strain_statuses, nstrains)
 
+    # set a small subpopulation of resistant bacteria
+
+    resistant_seed = rand(0.005:0.001:0.01)
+
+
+
     # Set up the initial parameters
-    for n in 1:nbact
+    for n in 1:(nbact - Int(floor(resistant_seed*nbact)))
         strain = rand(1:nstrains)
         pos = (1,1)
         strain_status = strain_statuses[strain]
@@ -99,6 +107,17 @@ function initialisePopulation(
         status = strain_status
         agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
         add_agent_single!(agent, bacterialModel)
+    end
+
+    for n in 1:Int(floor(resistant_seed*nbact))
+        strain = nstrains + 1
+        pos = (1,1)
+        strain_status = :R
+        fitness = mean(bacterialModel.fitnesses)*rand(0.75:0.05:0.95)
+        status = :R
+        agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
+        add_agent_single!(agent, bacterialModel)
+        println("Added agent")
     end
 
         return bacterialModel

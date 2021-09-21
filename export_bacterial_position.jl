@@ -5,6 +5,7 @@
         step = bacterialModel.step,
         id = BacterialAgent.id,
         bactostatus = BacterialAgent.status,
+        strain = BacterialAgent.strain,
         x = BacterialAgent.pos[1],
         y = BacterialAgent.pos[2])
     bacto_posoutput = open("./export/bacterial_positions.csv","a")
