@@ -2,4 +2,5 @@
 library(tidyverse)
 library(plotly)
 library(httpgd)
-
+library(gganimate)
+library(gifski)

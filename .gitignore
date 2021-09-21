@@ -74,3 +74,7 @@ export/Seasonal cullign reason.html
 export/bacterial_model_run.csv
 .gitignore
 export/bacterial_positions.csv
+export/bactoanim.gif
+export/.~lock.bacterial_positions.csv#
+.test.gif
+test.gif
