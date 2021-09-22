@@ -2,7 +2,7 @@ const time_units = 1
 
 
 
-function initialisePopulation(
+function initialiseBacteria(
 
         seed = 42,
         nstrains = rand(4:10),
