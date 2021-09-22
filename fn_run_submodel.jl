@@ -8,6 +8,8 @@
     AnimalAgent.submodel.days_exposed = AnimalAgent.days_exposed
     AnimalAgent.submodel.days_recovered = AnimalAgent.days_recovered
     AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
+    AnimalAgent.bactopop_is = AnimalAgent.submodel.sensitive_pop
+    AnimalAgent.bactopop_r = AnimalAgent.submodel.resistant_pop
         
     
     if AnimalAgent.status != :ES && AnimalAgent.status != :ER
