@@ -11,6 +11,7 @@ function initialiseBacteria(
         resistant_pop = 0,
         dim = 33,
         rng = MersenneTwister(42);
+        animalno::Int = AnimalAgent.id,
         nbact::Int64,
         total_status::Symbol = AnimalAgent.status,
         timestep::Float64 = 1.0,
@@ -52,6 +53,7 @@ function initialiseBacteria(
         min_resistant = 5,
         min_susceptible = 100,
         stress,
+        animalno,
     )
 
     bacterialModel = AgentBasedModel(BacterialAgent, agentSpace, properties = bactproperties)
