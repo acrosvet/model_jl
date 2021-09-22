@@ -30,12 +30,19 @@ function populate_empty!(BacterialAgent, bacterialModel)
     for i in 1:length(adjacent_positions)
         if (adjacent_positions[i][1] <= bacterialModel.dim && adjacent_positions[i][1] > 0) && (adjacent_positions[i][2] <= bacterialModel.dim && adjacent_positions[i][2] > 0)
             if isempty(adjacent_positions[i], bacterialModel)
-                strain = BacterialAgent.strain
+                if bacterialModel.days_treated != 0
+                    strain = bacterialModel.r_strain
+                    status = :R
+                    fitness = bacterialModel.fitnesses[bacterialModel.r_strain]
+                    strain_status = :R
+                else
+                    strain = BacterialAgent.strain
+                    status = BacterialAgent.status
+                    fitness = BacterialAgent.fitness
+                    strain_status = BacterialAgent.strain_status
+                end
                 pos = adjacent_positions[i]
-                strain_status = BacterialAgent.strain_status
-                fitness = BacterialAgent.fitness
-                status = BacterialAgent.status
-                if rand(bacterialModel.rng) < 0.05
+                if rand(bacterialModel.rng) < 0.5
                     add_agent!(pos, bacterialModel,status, strain, strain_status, fitness)
                 end
             end

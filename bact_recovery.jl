@@ -3,8 +3,10 @@ function bact_recovery!(BacterialAgent, bacterialModel)
     num_resistant = sum(num_resistant)
     if bacterialModel.days_recovered > 0
         if BacterialAgent.status == :R || BacterialAgent.status == :IS
-            if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_recovered/5)
-                if num_resistant> 5
+            if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_recovered/10)
+                if num_resistant> 5 && BacterialAgent.status == :R
+                    kill_agent!(BacterialAgent, bacterialModel)
+                elseif BacterialAgent.status == :IS
                     kill_agent!(BacterialAgent, bacterialModel)
                 end
             end

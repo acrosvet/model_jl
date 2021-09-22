@@ -21,8 +21,10 @@ if bacterialModel.days_exposed != 0 && bacterialModel.days_recovered == 0
 
             if interacting_status == :S
                 if BacterialAgent.status == :IS && (bacterialModel.total_status == :ES || bacterialModel.total_status == :IS)
+                    println("Condition 1 met")
                         if haskey(bacterialModel.agents, interacting_id) && haskey(bacterialModel.agents, BacterialAgent.id)
-                            if num_resistant > 5 && num_susceptible > 100
+                            if num_susceptible > 100
+                                println("IS invasion!")
                                 bacterialModel[interacting_id].strain = BacterialAgent.strain
                                 bacterialModel[interacting_id].status = BacterialAgent.status
                             end
@@ -30,6 +32,7 @@ if bacterialModel.days_exposed != 0 && bacterialModel.days_recovered == 0
                 elseif BacterialAgent.status == :R && (bacterialModel.total_status == :ER || bacterialModel.total_status == :IR)
                         if haskey(bacterialModel.agents, interacting_id) && haskey(bacterialModel.agents, BacterialAgent.id)
                             if num_resistant > 5 && num_susceptible > 100
+                                println("IR invasion")
                                 bacterialModel[interacting_id].strain = BacterialAgent.strain
                                 bacterialModel[interacting_id].status = BacterialAgent.status
                             end

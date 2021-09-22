@@ -13,9 +13,10 @@ include("bact_empty_neighbours.jl")
 include("bact_treatment_response.jl")
 include("export_bacterial_position.jl")
 include("export_bacterial_data.jl")
+include("bact_invasion.jl")
+include("bact_recovery.jl")
 
-
-bactoMod = initialisePopulation(nbact = 1000, total_status = :ES, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0, days_recovered = 0)
+bactoMod = initialisePopulation(nbact = 1000, total_status = :ER, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0, days_recovered = 0)
 
 include("bact_export_headers.jl")
 @time run!(bactoMod, bact_agent_step!, bact_model_step!, 10)
