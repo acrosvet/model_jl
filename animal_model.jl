@@ -18,9 +18,6 @@ include("fn_bacteria_dynamics.jl")
 
 include("fn_animal_recovery.jl")
 
-# Fn - Bact (agent step) ----------------------------------
-
-include("astep_bacteria.jl")
 
 # Fn - Animal Model Step -------------------------------------
 
