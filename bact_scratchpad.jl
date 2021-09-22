@@ -18,65 +18,59 @@ include("export_bacterial_data.jl")
 bactoMod = initialisePopulation(nbact = 1000, total_status = :ES, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0, days_recovered = 0)
 
 include("bact_export_headers.jl")
-@time run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
+@time run!(bactoMod, bact_agent_step!, bact_model_step!, 10)
 
 bactoMod.days_exposed = 1
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
-@time step!(bactoMod, bact_agent_step!, bact_model_step!,1)
-
-bactoMod.days_exposed += 1
-
-@time step!(bactoMod, bact_agent_step!, bact_model_step!,1)
-
-bactoMod.days_exposed += 1
-
-@time step!(bactoMod, bact_agent_step!, bact_model_step!,1)
+bactoMod.days_exposed = 0
+run!(bactoMod, bact_agent_step!, bact_model_step!, 5)
 
 bactoMod.days_treated = 1
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
+bactoMod.days_treated = 2
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
-bactoMod.days_treated += 1
-
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
-
-bactoMod.days_treated += 1
-
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
+bactoMod.days_treated = 3
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_treated = 0
-bactoMod.days_recovered += 1
-
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
-
+bactoMod.days_recovered = 1
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_treated = 0
-bactoMod.days_recovered += 1
-
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
-
+bactoMod.days_recovered = 2
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_treated = 0
-bactoMod.days_recovered += 1
-
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
-
+bactoMod.days_recovered = 3
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_treated = 0
-bactoMod.days_recovered += 1
-
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
-
+bactoMod.days_recovered = 4
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_treated = 0
-bactoMod.days_recovered += 1
-
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
-
+bactoMod.days_recovered = 5
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_treated = 0
-bactoMod.days_recovered += 1
+bactoMod.days_recovered = 6
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
-step!(bactoMod, bact_agent_step!, bact_model_step!, 1)
+bactoMod.days_treated = 0
+bactoMod.days_recovered = 7
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
-step!(bactoMod, bact_agent_step!, bact_model_step!, 100)
+bactoMod.days_treated = 0
+bactoMod.days_recovered = 8
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
+
+bactoMod.days_treated = 0
+bactoMod.days_recovered = 9
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
+
+bactoMod.days_treated = 0
+bactoMod.days_recovered = 10
+run!(bactoMod, bact_agent_step!, bact_model_step!, 1)

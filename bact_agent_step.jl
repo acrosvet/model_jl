@@ -1,5 +1,6 @@
 function bact_agent_step!(BacterialAgent, bacterialModel)
      bact_treatment_response!(BacterialAgent, bacterialModel)
+     invasion!(BacterialAgent, bacterialModel)
      populate_empty!(BacterialAgent, bacterialModel) 
      fitness!(BacterialAgent, bacterialModel)
      infection!(BacterialAgent, bacterialModel)

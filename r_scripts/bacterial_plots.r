@@ -2,13 +2,16 @@ source("./r_scripts/libraries.r")
 
 positions <- read_csv("./export/bacterial_positions.csv")
 
+scratch <- positions %>%
+    group_by(step, bactostatus) %>%
+    summarise(count = n()) %>%
+    pivot_wider(names_from = bactostatus, values_from = count)
 
 positions %>%
     filter(bactostatus != 0) %>%
-    arrange(id) %>%
-   # filter(id >= 100 & id <= 150) %>%
+    #arrange(id) %>%
     plot_ly(x = ~x, y = ~y, color = ~bactostatus, colors = 'Dark2', frame = ~step) %>%
-    animation_opts(redraw = FALSE, transition = 0)
+    animation_opts(redraw = T, transition = 0)
 
 
 positions %>%

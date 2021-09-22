@@ -7,6 +7,11 @@ function infection!(BacterialAgent, bacterialModel)
         while pathogenic_strain == bacterialModel.r_strain
             pathogenic_strain += 1
         end
+        if BacterialAgent.id % 3 == 0 && BacterialAgent.strain != bacterialModel.r_strain
+            if num_susceptible > 100
+                BacterialAgent.strain = pathogenic_strain
+            end
+        end
         if BacterialAgent.strain == pathogenic_strain
             if num_susceptible > 100
                 BacterialAgent.status = :IS
@@ -15,6 +20,11 @@ function infection!(BacterialAgent, bacterialModel)
         end
     elseif bacterialModel.total_status == :ER && bacterialModel.days_exposed == 1
         r_strain = bacterialModel.r_strain
+        if BacterialAgent.id % 3 == 0
+            if num_susceptible > 100
+                BacterialAgent.strain = r_strain
+            end
+        end
         if BacterialAgent.strain == r_strain
             if num_susceptible > 100
                 BacterialAgent.status = :R
