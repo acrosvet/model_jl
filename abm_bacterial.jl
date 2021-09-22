@@ -16,7 +16,8 @@ function initialisePopulation(
         timestep::Float64 = 1.0,
         days_treated::Int = AnimalAgent.days_treated,
         age::Int = AnimalAgent.age,
-        days_exposed::Int = AnimalAgent.days_exposed
+        days_exposed::Int = AnimalAgent.days_exposed,
+        days_recovered::Int = AnimalAgent.days_recovered
 
 
     )
@@ -43,6 +44,7 @@ function initialisePopulation(
         fitnesses = [],
         strain_statuses = [],
         dim,
+        days_recovered,
     )
 
     bacterialModel = AgentBasedModel(BacterialAgent, agentSpace, properties = bactproperties)
