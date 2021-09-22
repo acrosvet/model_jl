@@ -24,7 +24,8 @@ mutable struct AnimalAgent <: AbstractAgent
     treatment::Symbol # Treated or not
     days_treated::Int # Days treated
     since_tx::Int # Days since treatment
-    bactopop::Float64 # Bacterial population
+    bactopop_r::Float64 # Bacterial population
+    bactopop_is::Float64 # Bacterial population
     submodel::AgentBasedModel #Bacterial model
     stage::Symbol # Life stage
     dim::Int # Days in milk
@@ -34,7 +35,7 @@ mutable struct AnimalAgent <: AbstractAgent
     lactation::Int # Lactation number
     pregstat::Symbol # Pregnancy status
     dic::Int # Days in calf
-    heat::Bool
+    stress::Bool
     sex::Symbol
     calving_season::Symbol
     days_recovered::Int

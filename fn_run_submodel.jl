@@ -8,7 +8,20 @@
     AnimalAgent.submodel.days_exposed = AnimalAgent.days_exposed
     AnimalAgent.submodel.days_recovered = AnimalAgent.days_recovered
     AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
+        
     
+    if AnimalAgent.status != :ES && AnimalAgent.status != :ER
+        AnimalAgent.status = AnimalAgent.submodel.total_status 
+    else
+        AnimalAgent.submodel.total_status = AnimalAgent.status
+    end
+
+    if AnimalAgent.status == :ES || AnimalAgent.status == :ER
+        if AnimalAgent.submodel.total_status == :IS || AnimalAgent.submodel.total_status == :IR
+            AnimalAgent.status = AnimalAgent.submodel.total_status
+        end
+    end
+
     # run the submodel
     step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!,1)
 

@@ -44,3 +44,7 @@ run %>%
   title = "Seasonally Calving Farm (Spring)",
   yaxis = list(title = "Number of animals"),
   xaxis = list(title = "Date"))
+
+status <- run %>%
+            group_by(ModelStep, AnimalStatus) %>%
+            summarise(count = n())

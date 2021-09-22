@@ -24,8 +24,8 @@ function transmit!(AnimalAgent, animalModel)
                 status_agent = AnimalAgent.status
                 transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :IS, to_stat = :ES, beta = AnimalAgent.βₛ)
                 transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :IR, to_stat = :ER, beta = AnimalAgent.βᵣ)
-                transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :carrier_resistant, to_stat = :IS, beta = AnimalAgent.βᵣ/2)
-                transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :carrier_sensitive, to_stat = :IS, beta = AnimalAgent.βₛ/2)
+                #transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :carrier_resistant, to_stat = :IS, beta = AnimalAgent.βᵣ/2)
+                #transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :carrier_sensitive, to_stat = :IS, beta = AnimalAgent.βₛ/2)
                 export_animal_interactions!(AnimalAgent, animalModel, interacting_id, interacting_stage, num_contacts, transmission, status_agent, status_contact)
 
             end
