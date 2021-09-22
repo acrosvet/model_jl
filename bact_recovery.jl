@@ -4,9 +4,9 @@ function bact_recovery!(BacterialAgent, bacterialModel)
     if bacterialModel.days_recovered > 0
         if BacterialAgent.status == :R || BacterialAgent.status == :IS
             if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_recovered/10)
-                if num_resistant> 5 && BacterialAgent.status == :R
+                if num_resistant> bacterialModel.min_resistant && BacterialAgent.status == :R
                     kill_agent!(BacterialAgent, bacterialModel)
-                elseif BacterialAgent.status == :IS
+                elseif BacterialAgent.status == :IS && num_sensitive > bacterialModel.num_sensitive
                     kill_agent!(BacterialAgent, bacterialModel)
                 end
             end

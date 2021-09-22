@@ -13,8 +13,10 @@ function bacterial_population!(bacterialModel)
     bacterialModel.num_resistant = number_resistant
 
     resistant_prop = number_resistant/(number_resistant + number_sensitive + number_susceptible)
+    sensitive_prop = number_sensitive/(number_resistant + number_sensitive + number_susceptible)
 
     bacterialModel.resistant_pop = resistant_prop
+    bacterialModel.sensitive_pop = sensitive_prop
     
 
  end

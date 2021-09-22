@@ -20,7 +20,7 @@ function fitness!(BacterialAgent, bacterialModel)
             if BacterialAgent.fitness > interacting_fitness
                 if rand(bacterialModel.rng) < 0.05
                     if haskey(bacterialModel.agents, interacting_id) && haskey(bacterialModel.agents, BacterialAgent.id)
-                        if num_resistant > 5 && num_susceptible > 100
+                        if num_resistant > bacterialModel.min_resistant && num_susceptible > bacterialModel.min_susceptible
                             bacterialModel[interacting_id].strain = BacterialAgent.strain
                             bacterialModel[interacting_id].status = BacterialAgent.status
                         end

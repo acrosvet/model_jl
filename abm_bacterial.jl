@@ -38,6 +38,7 @@ function initialisePopulation(
         days_exposed,
         rng,
         resistant_pop = 0,
+        sensitive_pop = 0,
         num_sensitive = 0,
         num_resistant = 0,
         num_susceptible = 0,
@@ -45,6 +46,10 @@ function initialisePopulation(
         strain_statuses = [],
         dim,
         days_recovered,
+        carrier = :No,
+        min_sensitive = 0,
+        min_resistant = 5,
+        min_susceptible = 100,
     )
 
     bacterialModel = AgentBasedModel(BacterialAgent, agentSpace, properties = bactproperties)
@@ -111,16 +116,17 @@ function initialisePopulation(
         add_agent_single!(agent, bacterialModel)
     end
 
-    for n in 1:Int(floor(resistant_seed*nbact))
-        strain = nstrains + 1
-        pos = (1,1)
-        strain_status = :R
-        fitness = mean(bacterialModel.fitnesses)
-        status = :R
-        agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-        add_agent_single!(agent, bacterialModel)
-        println("Added agent")
-    end
+
+        for n in 1:Int(floor(resistant_seed*nbact))
+            strain = nstrains + 1
+            pos = (1,1)
+            strain_status = :R
+            fitness = mean(bacterialModel.fitnesses)
+            status = :R
+            agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
+            add_agent_single!(agent, bacterialModel)
+            println("Added agent")
+        end
 
         return bacterialModel
 

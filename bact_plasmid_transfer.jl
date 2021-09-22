@@ -18,7 +18,7 @@ function bact_plasmid_transfer!(BacterialAgent, bacterialModel)
             if BacterialAgent.status == :R && (interacting_status == :IS || interacting_status == :S)
                 if rand(bacterialModel.rng) < 0.005
                     if haskey(bacterialModel.agents, interacting_id) && haskey(bacterialModel.agents, BacterialAgent.id)
-                        if num_susceptible > 100
+                        if num_susceptible > bacterialModel.min_susceptible
                             bacterialModel[interacting_id].strain = BacterialAgent.strain
                             bacterialModel[interacting_id].status = BacterialAgent.status
                             bacterialModel[interacting_id].fitness = BacterialAgent.fitness

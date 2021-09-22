@@ -2,8 +2,6 @@ function populate_empty!(BacterialAgent, bacterialModel)
 
     # Fill in empty positions with bacteria
 
-   # if has_empty_positions(bacterialModel) == true
-
     agent_x = BacterialAgent.pos[1]
     agent_y = BacterialAgent.pos[2]
 
@@ -49,8 +47,5 @@ function populate_empty!(BacterialAgent, bacterialModel)
         end
     end
 
-#= else
-    return
-end =#
 
 end
