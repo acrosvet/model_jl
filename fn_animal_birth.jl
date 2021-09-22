@@ -16,14 +16,6 @@ position_counter = 0
             treatment = :U
             bactopop = 0.0
             since_tx = 0
-            submodel = initialisePopulation(
-                nbact = 100,
-                total_status = status,
-                timestep = animalModel.timestep,
-                days_treated = 0,
-                age = age,
-                days_exposed = 0
-            )
             stage = :C
             dim = 0
             days_dry = 0
@@ -36,6 +28,17 @@ position_counter = 0
             sex = rand(animalModel.rng) > 0.5 ? :F : :M
             calving_season = AnimalAgent.calving_season
             days_recovered = 0
+            submodel = initialiseBacteria(
+                nbact = 1000,
+                total_status = status,
+                timestep = 1.0,
+                age = age,
+                days_treated = days_treated,
+                days_exposed = days_exposed,
+                days_recovered = days_recovered,
+                stress = false,
+                animalno = 0
+            )
             if isempty(pos, animalModel)
                 add_agent!(pos, animalModel,  age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
                 println("$calving_season Calf born!")
