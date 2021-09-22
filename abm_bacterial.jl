@@ -17,7 +17,8 @@ function initialisePopulation(
         days_treated::Int = AnimalAgent.days_treated,
         age::Int = AnimalAgent.age,
         days_exposed::Int = AnimalAgent.days_exposed,
-        days_recovered::Int = AnimalAgent.days_recovered
+        days_recovered::Int = AnimalAgent.days_recovered,
+        stress::Bool = AnimalAgent.stress
 
 
     )
@@ -50,6 +51,7 @@ function initialisePopulation(
         min_sensitive = 0,
         min_resistant = 5,
         min_susceptible = 100,
+        stress,
     )
 
     bacterialModel = AgentBasedModel(BacterialAgent, agentSpace, properties = bactproperties)

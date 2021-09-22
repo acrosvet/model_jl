@@ -1,7 +1,8 @@
 function bact_model_step!(bacterialModel)
-    bacterial_population!(bacterialModel)
+    stress!(bacterialModel)
     bact_carrier!(bacterialModel)
     bacterialModel.age += 1
     bacterialModel.step += 1 
+    bacterial_population!(bacterialModel)
     export_bacto_data!(bacterialModel)
 end 
