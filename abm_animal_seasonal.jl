@@ -104,7 +104,8 @@
         treatment_prob = treatment_prob
         days_treated = 0 # Default is not treated
         treatment_duration = treatment_duration #Passed argument
-        bactopop = 0.0
+        bactopop_r = 0.0
+        bactopop_is = 0.0
         since_tx = 0 # Default 0 
         inf_days = 0
         agenttype = :Initial
@@ -119,7 +120,7 @@
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
         dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 290)))) #Gives a 63% ICR for this rng
-        heat = false #If animal is in oestrus
+        stress = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
@@ -135,7 +136,7 @@
             animalno = 0
         )
         if isempty(pos, animalModel)
-            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
         end
     end
 
@@ -152,7 +153,8 @@
         treatment_prob = treatment_prob
         days_treated = 0 # Default is not treated
         treatment_duration = treatment_duration #Passed argument
-        bactopop = 0.0
+        bactopop_r = 0.0
+        bactopop_is = 0.0
         since_tx = 0 # Default 0 
         inf_days = 0
         agenttype = :Initial
@@ -167,7 +169,7 @@
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :P #Initial pregnancy status
         dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(260), 199, 290)))) #Gives a 63% ICR for this rng
-        heat = false #If animal is in oestrus
+        stress = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
@@ -183,7 +185,7 @@
             animalno = 0
         )
         if isempty(pos, animalModel)
-            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
         end
     end
 
@@ -199,7 +201,8 @@
         treatment_prob = treatment_prob
         days_treated = 0 # Default is not treated
         treatment_duration = treatment_duration #Passed argument
-        bactopop = 0.0
+        bactopop_r = 0.0
+        bactopop_is = 0.0
         since_tx = 0 # Default 0 
         inf_days = 0
         agenttype = :Initial
@@ -214,7 +217,7 @@
         lactation = round(age/365) - 1 #Lactation number
         pregstat = :E #Initial pregnancy status
         dic = 0
-        heat = false #If animal is in oestrus
+        stress = false #If animal is in oestrus
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
@@ -230,7 +233,7 @@
             animalno = 0
         )
         if isempty(pos, animalModel)
-            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
         end    
     end
 

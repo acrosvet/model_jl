@@ -14,7 +14,8 @@ position_counter = 0
             days_exposed = 0
             days_carrier = 0
             treatment = :U
-            bactopop = 0.0
+            bactopop_r = 0.0
+            bactopop_is
             since_tx = 0
             stage = :C
             dim = 0
@@ -24,7 +25,7 @@ position_counter = 0
             lactation = 0
             pregstat = :E
             dic = 0
-            heat = false
+            stress = false
             sex = rand(animalModel.rng) > 0.5 ? :F : :M
             calving_season = AnimalAgent.calving_season
             days_recovered = 0
@@ -40,7 +41,7 @@ position_counter = 0
                 animalno = 0
             )
             if isempty(pos, animalModel)
-                add_agent!(pos, animalModel,  age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
+                add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
                 println("$calving_season Calf born!")
                 position_counter += 1
             end
