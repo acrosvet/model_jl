@@ -109,14 +109,7 @@
         inf_days = 0
         agenttype = :Initial
        # inf_days_ir = 0
-        submodel = initialisePopulation(
-            nbact = 100,
-            total_status = status,
-            timestep = timestep,
-            days_treated = 0,
-            age = age,
-            days_exposed = 0
-        )
+
         stage = :D #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -130,6 +123,17 @@
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
+        submodel = initialiseBacteria(
+            nbact = 1000,
+            total_status = status,
+            timestep = 1.0,
+            age = age,
+            days_treated = days_treated,
+            days_exposed = days_exposed,
+            days_recovered = days_recovered,
+            stress = false,
+            animalno = 0
+        )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
         end
@@ -153,14 +157,7 @@
         inf_days = 0
         agenttype = :Initial
        # inf_days_ir = 0
-        submodel = initialisePopulation(
-            nbact = 100,
-            total_status = status,
-            timestep = timestep,
-            days_treated = 0,
-            age = age,
-            days_exposed = 0
-        )
+
         stage = :DH #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -174,6 +171,17 @@
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
+        submodel = initialiseBacteria(
+            nbact = 1000,
+            total_status = status,
+            timestep = 1.0,
+            age = age,
+            days_treated = days_treated,
+            days_exposed = days_exposed,
+            days_recovered = days_recovered,
+            stress = false,
+            animalno = 0
+        )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
         end
@@ -196,14 +204,7 @@
         inf_days = 0
         agenttype = :Initial
        # inf_days_ir = 0
-        submodel = initialisePopulation(
-            nbact = 100,
-            total_status = status,
-            timestep = timestep,
-            days_treated = 0,
-            age = age,
-            days_exposed = 0
-        )
+
         stage = :W #Initial stage
         dim = 0 # Defined using initial dim fn
         days_dry = 0 # Default 0
@@ -217,6 +218,17 @@
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
+        submodel = initialiseBacteria(
+            nbact = 1000,
+            total_status = status,
+            timestep = 1.0,
+            age = age,
+            days_treated = days_treated,
+            days_exposed = days_exposed,
+            days_recovered = days_recovered,
+            stress = false,
+            animalno = 0
+        )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, heat, sex, calving_season, days_recovered)
         end    
