@@ -47,7 +47,7 @@ function initialisePopulation(
         strain_statuses = [],
         dim,
         days_recovered,
-        carrier = :No,
+        carrier = :no,
         min_sensitive = 0,
         min_resistant = 5,
         min_susceptible = 100,
