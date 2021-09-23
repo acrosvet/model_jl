@@ -1,7 +1,9 @@
 function infection!(BacterialAgent, bacterialModel)
-    num_susceptible = [a.status == :S for a in allagents(bacterialModel)]
-    num_susceptible = sum(num_susceptible)
 
+    num_susceptible = bacterialModel.num_susceptible
+#=     num_susceptible = [a.status == :S for a in allagents(bacterialModel)]
+    num_susceptible = sum(num_susceptible)
+ =#
     if bacterialModel.total_status == :ES && bacterialModel.days_exposed == 1
         pathogenic_strain = 1
         while pathogenic_strain == bacterialModel.r_strain

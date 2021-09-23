@@ -79,11 +79,11 @@ culling_output = open("./export/seasonal_culling.csv", "w")
     CSV.write(culling_output, culling_header, delim = ",", append = true, header = true)
 close(culling_output)
 
-#= adata = [ :pos, :age, :status, :inf_days, :days_exposed, :treatment, :days_treated, :bactopop_r, :bactopop_is, :stage, :dim, :agenttype, :pregstat, :dic, :calving_season]
+adata = [ :pos, :age, :status, :inf_days, :days_exposed, :treatment, :days_treated, :bactopop_r, :bactopop_is, :stage, :dim, :agenttype, :pregstat, :dic, :calving_season]
 mdata = [:farm_id, :num_weaned, :num_lac, :num_heifers,:date, :psc, :msd, :current_lac, :current_weaned, :current_heifers, :current_dry, :current_calves]
 @time animal_data, model_data = run!(tmp, agent_step!, model_step!, 1; adata, mdata)
-#=  =#
+
 CSV.write( "./export/animal_abm_agents.csv", animal_data)
 CSV.write("./export/animal_abm_model.csv", model_data)
- =#
+
 @time run!(tmp, agent_step!, model_step!, 1) 

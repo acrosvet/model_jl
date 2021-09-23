@@ -1,8 +1,10 @@
 
     function treatment!(BacterialAgent, bacterialModel)
         
-        num_sensitive = [a.status == :IS for a in allagents(bacterialModel)]
-        num_sensitive = sum(num_sensitive)
+        num_sensitive = bacterialModel.num_sensitive
+
+#=         num_sensitive = [a.status == :IS for a in allagents(bacterialModel)]
+        num_sensitive = sum(num_sensitive) =#
 
         # Turn over agents at each timestep
 
