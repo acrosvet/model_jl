@@ -47,4 +47,12 @@ run %>%
 
 status <- run %>%
             group_by(ModelStep, AnimalStatus) %>%
-            summarise(count = n())
+            summarise(count = n()) %>%
+            pivot_wider(names_from = AnimalStatus, values_from = count)
+
+bactopop <- run %>%
+              plot_ly(x = ~step) %>%
+              add_trace(y = ~AnimalBactoPop_r, color = ~AnimalID) 
+
+summary(run$AnimalBactoPop_r)
+summary(run$AnimalBactoPop_is)

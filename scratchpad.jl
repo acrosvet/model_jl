@@ -16,7 +16,8 @@ header = DataFrame(
     DaysSinceTreatment = 0,
     DaysDry = 0,
     TradeStatus = 0,
-    AnimalBactoPop = 0,
+    AnimalBactoPop_r = 0,
+    AnimalBactoPop_is = 0,
     AnimalAge = 0,
     AgentType = 0,
     DIM = 0,
@@ -76,6 +77,6 @@ culling_output = open("./export/seasonal_culling.csv", "w")
     CSV.write(culling_output, culling_header, delim = ",", append = true, header = true)
 close(culling_output)
 
-run!(tmp, agent_step!, model_step!, 10)
+run!(tmp, agent_step!, model_step!, 100)
 
 step!(tmp, agent_step!, model_step!) 

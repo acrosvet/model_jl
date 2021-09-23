@@ -15,7 +15,7 @@ position_counter = 0
             days_carrier = 0
             treatment = :U
             bactopop_r = 0.0
-            bactopop_is
+            bactopop_is = 0.0
             since_tx = 0
             stage = :C
             dim = 0
