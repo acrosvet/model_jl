@@ -24,7 +24,7 @@ function initialiseBacteria(
 
     )
 
-    agentSpace = GridSpace((33, 33); periodic = false)
+    agentSpace = GridSpace((dim, dim); periodic = false)
 
     bactproperties = @dict(
         step = 0,

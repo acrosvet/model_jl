@@ -17,11 +17,9 @@
         AnimalAgent.status = :IR
     end
 
-    if AnimalAgent.submodel.total_status == :CR || AnimalAgent.submodel.total_status == :CS
-        AnimalAgent.status = AnimalAgent.submodel.total_status
-    else
-        AnimalAgent.submodel.total_status = AnimalAgent.status
-    end
+
+    AnimalAgent.submodel.total_status = AnimalAgent.status
+
     
 #=     if AnimalAgent.status != :ES && AnimalAgent.status != :ER
         AnimalAgent.status = AnimalAgent.submodel.total_status 
