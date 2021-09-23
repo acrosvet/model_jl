@@ -125,7 +125,7 @@
         calving_season = :Spring
         days_recovered = 0
         submodel = @everywhere initialiseBacteria(
-            nbact = 1000,
+            nbact = 100,
             total_status = status,
             timestep = 1.0,
             age = age,
@@ -174,7 +174,7 @@
         calving_season = :Spring
         days_recovered = 0
         submodel = @everywhere initialiseBacteria(
-            nbact = 1000,
+            nbact = 100,
             total_status = status,
             timestep = 1.0,
             age = age,
@@ -222,7 +222,7 @@
         calving_season = :Spring
         days_recovered = 0
         submodel = @everywhere initialiseBacteria(
-            nbact = 1000,
+            nbact = 100,
             total_status = status,
             timestep = 1.0,
             age = age,
