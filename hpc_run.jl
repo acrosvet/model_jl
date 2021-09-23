@@ -23,11 +23,18 @@ using LightGraphs
 using Distributions
 using DataFrames
 using Dates #Package for working with dates
+using Distributed
 
-include("testing.jl")
+@everywhere using StatsBase
+addprocs(2)
+
+@everywhere include("packages.jl")
+
+@everywhere include("testing.jl")
 
 
-@time tmp = initialiseSeasonal(50)
+
+@time tmp = @everywhere initialiseSeasonal(50)
 
 
 header = DataFrame(
@@ -106,6 +113,6 @@ culling_output = open("./export/seasonal_culling.csv", "w")
     CSV.write(culling_output, culling_header, delim = ",", append = true, header = true)
 close(culling_output)
 
-@time Threads.@spawn run!(tmp, agent_step!, model_step!, 365)
+@time run!(tmp, agent_step!, model_step!, 10)
 
 step!(tmp, agent_step!, model_step!) 

@@ -22,6 +22,6 @@
 
 
     # run the submodel
-    step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!,1)
+    @everywhere step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!,1, parallel = true)
 
     end

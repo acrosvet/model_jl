@@ -1,6 +1,6 @@
 # Def - BacterialAgent --------------------------------
 
-mutable struct BacterialAgent <: AbstractAgent
+@everywhere mutable struct BacterialAgent <: AbstractAgent
     id::Int64
     pos::NTuple{2, Int}
     status::Symbol

@@ -110,7 +110,7 @@ function initialiseBacteria(
 
 
     # Set up the initial parameters
-    Threads.@threads for n in 1:(nbact - Int(floor(resistant_seed*nbact)))
+     for n in 1:(nbact - Int(floor(resistant_seed*nbact)))
         strain = rand(1:nstrains)
         pos = (1,1)
         strain_status = strain_statuses[strain]
@@ -121,7 +121,7 @@ function initialiseBacteria(
     end
 
 
-        Threads.@threads for n in 1:Int(floor(resistant_seed*nbact))
+       for n in 1:Int(floor(resistant_seed*nbact))
             strain = nstrains + 1
             pos = (1,1)
             strain_status = :R

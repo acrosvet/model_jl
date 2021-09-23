@@ -124,7 +124,7 @@
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
-        submodel = initialiseBacteria(
+        submodel = @everywhere initialiseBacteria(
             nbact = 1000,
             total_status = status,
             timestep = 1.0,
@@ -173,7 +173,7 @@
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
-        submodel = initialiseBacteria(
+        submodel = @everywhere initialiseBacteria(
             nbact = 1000,
             total_status = status,
             timestep = 1.0,
@@ -221,7 +221,7 @@
         sex = :F #Sex of initial animals (always F)
         calving_season = :Spring
         days_recovered = 0
-        submodel = initialiseBacteria(
+        submodel = @everywhere initialiseBacteria(
             nbact = 1000,
             total_status = status,
             timestep = 1.0,
