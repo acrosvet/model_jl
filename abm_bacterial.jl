@@ -129,7 +129,7 @@ function initialiseBacteria(
             status = :R
             agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
             add_agent_single!(agent, bacterialModel)
-            println("Added agent")
+           # println("Added agent")
         end
 
         return bacterialModel
