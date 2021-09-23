@@ -1,4 +1,5 @@
 function bact_model_step!(bacterialModel)
+
     stress!(bacterialModel)
     bact_carrier!(bacterialModel)
     infected_transition!(bacterialModel)
