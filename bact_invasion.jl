@@ -11,7 +11,7 @@ if bacterialModel.days_exposed != 0 && bacterialModel.days_recovered == 0
         num_contacts = length(possible_interactions)
         status_agent = BacterialAgent.status
     if length(possible_interactions) > 0
-        for i in 1:length(possible_interactions)
+        Threads.@threads for i in 1:length(possible_interactions)
             if haskey(bacterialModel.agents, possible_interactions[i])
             interacting_agent = bacterialModel[possible_interactions[i]]
             interacting_id = interacting_agent.id

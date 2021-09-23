@@ -27,7 +27,7 @@ using Dates #Package for working with dates
 include("testing.jl")
 
 
-tmp = initialiseSeasonal(50)
+@time tmp = initialiseSeasonal(50)
 
 
 header = DataFrame(
@@ -106,6 +106,6 @@ culling_output = open("./export/seasonal_culling.csv", "w")
     CSV.write(culling_output, culling_header, delim = ",", append = true, header = true)
 close(culling_output)
 
-run!(tmp, agent_step!, model_step!, 10)
+@time Threads.@spawn run!(tmp, agent_step!, model_step!, 365)
 
 step!(tmp, agent_step!, model_step!) 

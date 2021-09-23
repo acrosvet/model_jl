@@ -142,7 +142,7 @@
 
     # Add the heifers ---------------------------------------------------
 
-    for n in 1:num_heifers
+   for n in 1:num_heifers
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = (rand(animalModel.rng, 1:Int(floor(7*√num_heifers)), 2)..., 4)
         status = :S # Defined using initial status function
