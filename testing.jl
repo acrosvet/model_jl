@@ -9,6 +9,6 @@
         
         # Include the bacterial model 
         include("bacterial_model.jl")
-
+ 
         # Include the animal_model
         include("animal_model.jl")
