@@ -37,6 +37,16 @@ function transmit!(AnimalAgent, animalModel)
             export_animal_interactions!(AnimalAgent, animalModel, interacting_id, interacting_stage, num_contacts, transmission, status_agent, status_contact)
         end 
         
+        # increment days infected
+        if AnimalAgent.status == :IS || AnimalAgent.status == :IR
+            AnimalAgent.inf_days += 1
+        elseif AnimalAgent.status == :ES || AnimalAgent.status == :ER
+            AnimalAgent.inf_days += 1
+        elseif AnimalAgent.status == :recovered
+            AnimalAgent.days_recovered += 1
+        end
+
+
 
 
 end

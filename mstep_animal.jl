@@ -18,20 +18,6 @@ model_step!(animalModel)
 """
 function model_step!(animalModel)
 
-    #Define the proximity for which infection may occur
-
-#=     r = animalModel.animalProximityRadius
-
-    # Set up interactions and transmission events between animal agents using billiard ball dynamics
-    for (a1,a2) in interacting_pairs(animalModel, r, :nearest)
-        elastic_collision!(a1, a2) #Collison dynamics for each animal
-        transmit_sensitive!(a1,a2, animalModel) #Sensitive transmission function
-        transmit_resistant!(a1,a2, animalModel) #Resistant transmission function
-        transmit_carrier_is!(a1,a2, animalModel) #Transmit carrier states (sensitive)
-        transmit_carrier_ir!(a1,a2, animalModel) #Transmit carrier states (resistant)
-        
-    end =#
-
 
         # Increment the date by one day
 
@@ -85,13 +71,6 @@ if animalModel.system == :Batch
     end
 end
 end
-    # Trade animals between farms using the daytrader function
-    #daytrader!(FarmAgent, animalModel)
-
-    #Determine trading need
-
-    #trading_need!(animalModel)
-
 
 
     
