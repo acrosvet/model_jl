@@ -6,7 +6,7 @@ function bact_agent_step!(BacterialAgent, bacterialModel)
      fitness!(BacterialAgent, bacterialModel)
      bact_recovery!(BacterialAgent, bacterialModel)
      bact_plasmid_transfer!(BacterialAgent, bacterialModel)
-     export_bacto_position!(BacterialAgent, bacterialModel)
+     #export_bacto_position!(BacterialAgent, bacterialModel)
      #treatment!(BacterialAgent, bacterialModel)
 
 
