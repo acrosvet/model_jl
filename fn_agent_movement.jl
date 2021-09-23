@@ -1,10 +1,11 @@
 function agent_movement!(AnimalAgent, animalModel)
 
 if AnimalAgent.stage == :C
-    num_calves = [a.stage == :C for a in allagents(animalModel)]
-    num_calves = sum(num_calves)
+#=     num_calves = [a.stage == :C for a in allagents(animalModel)]
+    num_calves = sum(num_calves) =#
+    num_calves = animalModel.current_calves
     if num_calves == 0
-        calf_range = 10
+        calf_range = 10 
     else
         calf_range = Int(floor(3*√num_calves))
     end 
@@ -14,8 +15,9 @@ if AnimalAgent.stage == :C
     end
     move_agent!(AnimalAgent, pos, animalModel)
 elseif AnimalAgent.stage == :W
-    num_weaned = [a.stage == :W for a in allagents(animalModel)]
-    num_weaned = sum(num_weaned)
+        num_weaned = animalModel.current_weaned
+#=     num_weaned = [a.stage == :W for a in allagents(animalModel)]
+    num_weaned = sum(num_weaned) =#
     if num_weaned == 0
         weaned_range = 10
     else
@@ -27,8 +29,9 @@ elseif AnimalAgent.stage == :W
     end
     move_agent!(AnimalAgent, pos, animalModel)
 elseif AnimalAgent.stage == :H
-    num_heifers = [a.stage == :H for a in allagents(animalModel)]
-    num_heifers = sum(num_heifers)
+    num_heifers = animalModel.current_heifers
+#=     num_heifers = [a.stage == :H for a in allagents(animalModel)]
+    num_heifers = sum(num_heifers) =#
     if num_heifers == 0
         heifer_range = 10
     else
@@ -40,8 +43,9 @@ elseif AnimalAgent.stage == :H
     end
     move_agent!(AnimalAgent, pos, animalModel)
 elseif AnimalAgent.stage == :DH
-    num_dh = [a.stage == :DH for a in allagents(animalModel)]
-    num_dh = sum(num_dh)
+    num_dh = animalModel.current_dh
+#=     num_dh = [a.stage == :DH for a in allagents(animalModel)]
+    num_dh = sum(num_dh) =#
     if num_dh == 0
         dh_range = 10
     else
@@ -53,8 +57,9 @@ elseif AnimalAgent.stage == :DH
     end
     move_agent!(AnimalAgent, pos, animalModel)
 elseif AnimalAgent.stage == :L
-    num_lactating = [a.stage == :L for a in allagents(animalModel)]
-    num_lactating = sum(num_lactating)
+    num_lactating = animalModel.current_lac
+#=     num_lactating = [a.stage == :L for a in allagents(animalModel)]
+    num_lactating = sum(num_lactating) =#
     if num_lactating == 0
         lactating_range = 10
     else
@@ -66,8 +71,9 @@ elseif AnimalAgent.stage == :L
     end
     move_agent!(AnimalAgent, pos, animalModel)
 elseif AnimalAgent.stage == :D
-    num_dry = [a.stage == :D for a in allagents(animalModel)]
-    num_dry = sum(num_dry)
+    num_dry = animalModel.current_dry
+#=     num_dry = [a.stage == :D for a in allagents(animalModel)]
+    num_dry = sum(num_dry) =#
     if num_dry == 0
         dry_range = 10
     else

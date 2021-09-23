@@ -70,6 +70,11 @@
         psc,
         msd,
         current_lac = 0,
+        current_weaned = 0,
+        current_dh = 0,
+        current_heifers = 0,
+        current_dry = 0,
+        current_calves = 0,
         system,
  )# Dictionary of disease properties
 
