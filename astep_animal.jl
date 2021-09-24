@@ -8,7 +8,7 @@ Step AnimalAgents through time
     function agent_step!(AnimalAgent, animalModel)
         #bacto_dyno!(AnimalAgent)
         run_submodel!(AnimalAgent, animalModel)
-        agent_movement!(AnimalAgent, animalModel)
+        #agent_movement!(AnimalAgent, animalModel)
         cull_milkers!(AnimalAgent, animalModel)
         advance_pregnancy!(AnimalAgent)
         calving!(AnimalAgent, animalModel)
