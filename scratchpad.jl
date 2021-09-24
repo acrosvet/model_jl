@@ -1,9 +1,13 @@
-include("testing.jl")
+using Distributed 
 
-tmp = initialiseSeasonal(220)
+addprocs(4)
+
+@everywhere include("testing.jl")
+
+@everywhere tmp = initialiseSeasonal(220)
 
 
- header = DataFrame(
+#=  header = DataFrame(
     Day = 0,
     ModelStep = 0,
     FarmID = 0,
@@ -78,5 +82,10 @@ culling_header = DataFrame(
 culling_output = open("./export/seasonal_culling.csv", "w")
     CSV.write(culling_output, culling_header, delim = ",", append = true, header = true)
 close(culling_output)
+ =#
+adata = [:pos, :age, :status, :treatment, :inf_days, :days_exposed, :days_treated, :bactopop_r, :bactopop_is, :stage, :dim, :lactation, :pregstat, :dic, :stress, :days_recovered]
+mdata = [:date, :num_weaned, :num_heifers, :current_lac, :current_weaned, :current_dry, :current_calves, :current_heifers]
+@time @everywhere agent_data, model_data, _ = run!(tmp, agent_step!, model_step!, 100; adata, mdata) 
 
-@time run!(tmp, agent_step!, model_step!, 1) 
+CSV.write("./export/agent_data.csv", agent_data)
+CSV.write("./export/model_data.csv", mdata)

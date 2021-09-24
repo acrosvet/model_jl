@@ -1,4 +1,4 @@
-using Agents
+@everywhere using Agents
 using Random
 using DrWatson
 using CSV
