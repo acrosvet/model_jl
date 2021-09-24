@@ -9,7 +9,7 @@
 
 module purge
 module load julia/1.5.1-linux-x86_64
-julia /data/gpfs/projects/punim0549/acrosbie/julia_abm/model_jl/scratchpad.jl
+julia --threads 16 /data/gpfs/projects/punim0549/acrosbie/julia_abm/model_jl/scratchpad.jl
 
 
 
