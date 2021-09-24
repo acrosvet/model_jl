@@ -79,4 +79,4 @@ culling_output = open("./export/seasonal_culling.csv", "w")
     CSV.write(culling_output, culling_header, delim = ",", append = true, header = true)
 close(culling_output)
 
-@time run!(tmp, agent_step!, model_step!, 10) 
+@time run!(tmp, agent_step!, model_step!, 1) 
