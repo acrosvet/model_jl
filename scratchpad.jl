@@ -86,4 +86,4 @@ mdata = [:farm_id, :num_weaned, :num_lac, :num_heifers,:date, :psc, :msd, :curre
 CSV.write( "./export/animal_abm_agents.csv", animal_data)
 CSV.write("./export/animal_abm_model.csv", model_data)
  =#
-@time run!(tmp, agent_step!, model_step!, 1) 
+@time run!(tmp, agent_step, model_step!, 1) 

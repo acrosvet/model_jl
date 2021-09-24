@@ -18,7 +18,6 @@ model_step!(animalModel)
 """
 function model_step!(animalModel)
 
-    stock_numbers!(animalModel)
 
         # Increment the date by one day
 
