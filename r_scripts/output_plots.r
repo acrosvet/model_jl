@@ -9,7 +9,9 @@ run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/seasonal_model_r
 
 # Generate a ploot of population dynamics over time
 p <- run %>%  
+  filter(!is.na(AnimalID)) %>%
   mutate(Day = lubridate::ymd(Day)) %>%
+  filter(Day >= "2021-07-02") %>%
   group_by(Day, AnimalStage) %>% 
   summarise(count = n()) %>% 
   pivot_wider(names_from = AnimalStage, values_from = count) %>% 

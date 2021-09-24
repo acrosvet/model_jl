@@ -1,6 +1,6 @@
 # Animal ABM
 
-@everywhere include("abm_animal_seasonal.jl")
+include("abm_animal_seasonal.jl")
 
 # Animal transmission functions -------
 

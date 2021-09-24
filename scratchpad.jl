@@ -1,10 +1,10 @@
 using Distributed 
 
-addprocs(5)
+addprocs(7)
 
 include("testing.jl")
 
-@everywhere tmp = initialiseSeasonal(220)
+tmp = initialiseSeasonal(220)
 
 
  header = DataFrame(
@@ -84,5 +84,5 @@ culling_output = open("./export/seasonal_culling.csv", "w")
 close(culling_output)
 
 
-@time @everywhere agent_data, model_data, _ = run!(tmp, agent_step!, model_step!, 100;) 
+@time agent_data, model_data, _ = run!(tmp, agent_step!, model_step!, 365;) 
 
