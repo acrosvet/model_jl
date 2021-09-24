@@ -19,7 +19,7 @@ model_step!(animalModel)
 function model_step!(animalModel)
 
     stock_numbers!(animalModel)
-    thread_submodel!(animalModel)
+    @everywhere thread_submodel!(animalModel)
 
         # Increment the date by one day
 
