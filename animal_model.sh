@@ -8,7 +8,7 @@
 
 module purge
 module load julia/1.5.1-linux-x86_64
-julia --threads 8 /data/gpfs/projects/punim0549/acrosbie/model_jl/scratchpad.jl
+julia --threads 8 /data/gpfs/projects/punim0549/acrosbie/model_jl/scratchpad_farm.jl
 
 
 
