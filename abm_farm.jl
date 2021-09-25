@@ -17,6 +17,7 @@ FarmProperties = @dict(
     tradelevel,
     timestep,
     date,
+    step = 0,
 )
 
 

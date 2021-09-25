@@ -72,8 +72,10 @@ if length(animalModel.receiving) != 0
            sex = animalModel.receiving[i].sex
            calving_season = animalModel.receiving[i].calving_season
            days_recovered = animalModel.receiving[i].days_recovered
-           add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)            push!(received_stock, animalModel.receiving[i])
+           add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)            
            write(io,"Agent added\n")
+           push!(received_stock, animalModel.receiving[i])
+
    end
 end
 # Remove the received animals from the receiving container

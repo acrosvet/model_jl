@@ -1,6 +1,6 @@
 using Distributed 
 
-addprocs(16)
+addprocs(8)
 
 include("testing.jl")
 
@@ -14,4 +14,4 @@ include("aanimal_headers.jl")
 
 tmp = initialiseFarms()
 
-@time run!(tmp, farm_step!, 365)
+@time run!(tmp, farm_step!, farm_mstep!, 2)

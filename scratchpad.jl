@@ -8,5 +8,5 @@ tmp = initialiseSeasonal(220)
 
 include("aanimal_headers.jl")
 
-@time run!(tmp, agent_step!, model_step!, 365*25) 
+@time run!(tmp, agent_step!, model_step!, 365) 
 
