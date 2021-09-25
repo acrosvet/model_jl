@@ -131,7 +131,7 @@
         calving_season = :Spring
         days_recovered = 0
         submodel =  initialiseBacteria(
-            nbact = 1000,
+            nbact = 10000,
             total_status = status,
             timestep = 1.0,
             age = age,
