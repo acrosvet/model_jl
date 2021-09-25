@@ -12,4 +12,6 @@ include("aanimal_headers.jl")
 
 #@time run!(tmp, agent_step!, model_step!, 365) 
 
-tmp = initialiseFarms(farm_step!, 10)
+tmp = initialiseFarms()
+
+@time run!(tmp, farm_step!, 365)

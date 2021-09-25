@@ -1,7 +1,17 @@
 function farm_step!(FarmAgent, farmModel)
     
 
+    io = open("./export/output.txt", "a")
+    
+
+
+    write(io, "==========================================================\n")
+    write(io, "Model step")
+    write(io, "==========================================================\n")
+
     animalModel = FarmAgent.animalModel
+
+    #animalModel.receiving = []
 
     farmno = FarmAgent.id
 
@@ -15,14 +25,30 @@ function farm_step!(FarmAgent, farmModel)
             trade_partner = rand(1:length(trade_partners))
             break
         end
-     
+
+#=         println("Sending farm number $farmno can trade")
+        println(FarmAgent.animalModel.tradeable_heifers)
+        println("Heifers")
+        println(FarmAgent.animalModel.tradeable_lactating)
+        println("Cows")
+        println(FarmAgent.animalModel.tradeable_weaned)
+        println("weaned")
+        println("Receiving farm number $trade_partner can trade")
+        println(farmModel[trade_partner].animalModel.tradeable_heifers)
+        println("Heifers")
+        println(farmModel[trade_partner].animalModel.tradeable_lactating)
+        println("Cows")
+        println(farmModel[trade_partner].animalModel.tradeable_weaned)
+        println("weaned")
+        println("The length of the sending vector in the sending farm is:")
+        println(length(FarmAgent.animalModel.sending))   =#      
         agents_to_remove = []
         
 # Trade heifers ----------------------------------------
 
         # If the farm has surplus animals, and the trading partner needs heifers
         if FarmAgent.animalModel.tradeable_heifers < 0 && farmModel[trade_partner].animalModel.tradeable_heifers > 0
-            #write(io, "let's trade heifers!\n")
+            write(io, "let's trade heifers!\n")
 
             #FarmAgent.trades_from = FarmAgent.animalModel.sending
 
@@ -44,6 +70,8 @@ function farm_step!(FarmAgent, farmModel)
                 end
             end
 
+ #           println("The candidate number of heifers to send is ")
+ #           println(length(heifers_to_send))
 
             # Only send as many heifers as there are avaiable.
             num_trades_from = abs(FarmAgent.animalModel.tradeable_heifers) ≤ length(heifers_to_send) ? abs(FarmAgent.animalModel.tradeable_heifers) : length(heifers_to_send)
@@ -60,10 +88,10 @@ function farm_step!(FarmAgent, farmModel)
                 if length(heifers_to_send) != 0
                     #Push the ith animal in the sending list to the receiving container in the receiving farm
                     push!(farmModel[trade_partner].animalModel.receiving, heifers_to_send[i]) 
-                    #write(io, "Heifer traded to destination herd\n")
+                    write(io, "Heifer traded to destination herd\n")
                     #Push the sent animal to the list of animals to be removed
                     push!(agents_to_remove, heifers_to_send[i])
-                    #write(io, "Heifer sent to purge list\n")
+                    write(io, "Heifer sent to purge list\n")
                 else
  #                   println("No heifers to send")
                 end
@@ -75,7 +103,7 @@ function farm_step!(FarmAgent, farmModel)
 # Trade lactating  ----------------------------------------
 
 if FarmAgent.animalModel.tradeable_lactating < 0 && farmModel[trade_partner].animalModel.tradeable_lactating > 0
-    #write(io,"let's trade lactating cows!\n")
+    write(io,"let's trade lactating cows!\n")
 
     FarmAgent.trades_from = FarmAgent.animalModel.sending
 
@@ -106,9 +134,9 @@ if FarmAgent.animalModel.tradeable_lactating < 0 && farmModel[trade_partner].ani
     for i in 1:num_trades_to
         if length(lactating_to_send) != 0
             push!(farmModel[trade_partner].animalModel.receiving, lactating_to_send[i]) 
-            #write(io,"Lactating cow traded to destination herd\n")
+            write(io,"Lactating cow traded to destination herd\n")
             push!(agents_to_remove, lactating_to_send[i])
-            #write(io,"Lactating cow sent to purge list\n")
+            write(io,"Lactating cow sent to purge list\n")
         else
 #                   println("No heifers to send")
         end
@@ -120,7 +148,7 @@ end
 # Trade weaned ----------------------------------------
 
 if FarmAgent.animalModel.tradeable_weaned < 0 && farmModel[trade_partner].animalModel.tradeable_weaned > 0
-    #write(io,"let's trade weaned!")
+    write(io,"let's trade weaned!")
 
     FarmAgent.trades_from = FarmAgent.animalModel.sending
 
@@ -151,9 +179,9 @@ if FarmAgent.animalModel.tradeable_weaned < 0 && farmModel[trade_partner].animal
     for i in 1:num_trades_to
         if length(weaned_to_send) != 0
             push!(farmModel[trade_partner].animalModel.receiving, weaned_to_send[i]) 
-            #write(io, "Weaned traded to destination herd\n")
+            write(io, "Weaned traded to destination herd\n")
             push!(agents_to_remove, weaned_to_send[i])
-            #write(io,"Weaned sent to purge list\n")
+            write(io,"Weaned sent to purge list\n")
         else
 #                   println("No weaned to send")
         end
@@ -169,7 +197,7 @@ end
             if haskey(animalModel.agents, agents_to_remove[i].id) == true
             # Kill theagent
             kill_agent!(agents_to_remove[i].id, animalModel)
-            #write(io, "Traded agent removed from source farm\n")
+            write(io, "Traded agent removed from source farm\n")
             end  
         end
 
@@ -177,6 +205,14 @@ end
 # Step the model one step through time        
     Threads.@spawn step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
     
+    # Return the number of agents in the model at this timestep
+    farm_id = FarmAgent.id
+    num_agents = length(FarmAgent.animalModel.agents)
+    
+    number_received = length(farmModel[trade_partner].animalModel.receiving)
 
+    write(io,"The number of animals received by farm $trade_partner is $number_received\n")
+    write(io,"The number of animals in farm $farm_id is $num_agents \n")
+    close(io)
     
 end
