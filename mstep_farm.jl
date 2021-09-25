@@ -204,12 +204,14 @@ end
 
 
 # Step the model one step through time        
-    Threads.@spawn step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
+    Threads.@spawn for a in allagents(farmModel)
+        a.animalModel.rng = MersenneTwister(farm_id)
+        step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
+    end
     
     # Return the number of agents in the model at this timestep
     farm_id = FarmAgent.id
     num_agents = length(FarmAgent.animalModel.agents)
-    FarmAgent.animalModel.rng = MersenneTwister(farm_id)
 
     number_received = length(farmModel[trade_partner].animalModel.receiving)
 
