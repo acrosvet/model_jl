@@ -5,7 +5,7 @@
 
 
 """
-function daytrader!(FarmAgent, animalModel)
+function daytrader!(AnimalAgent, animalModel)
    io = open("output.txt", "a")
    # Determine if a farm needs agents traded to it:
 
@@ -46,25 +46,33 @@ received_stock = []
 # If there are animals waiting in the receiving vector, then we iteratively add those to the animalModel
 if length(animalModel.receiving) != 0
    for i in 1:length(animalModel.receiving)
-           pos = Tuple(10*rand(animalModel.rng, 2))
+           pos = animalModel.receiving[i].pos
            status = animalModel.receiving[i].status
            age = animalModel.receiving[i].age
            βᵣ = animalModel.receiving[i].βₛ
            βₛ = animalModel.receiving[i].βᵣ
-           inf_days_ir = animalModel.receiving[i].inf_days_ir
-           inf_days_is = animalModel.receiving[i].inf_days_is
+           inf_days = animalModel.receiving[i].inf_days
+           days_exposed = animalModel.receiving[i].days_exposed
+           days_carrier = animalModel.receiving[i].days_carrier
            treatment = animalModel.receiving[i].treatment
            days_treated = animalModel.receiving[i].days_treated
-           bactopop = animalModel.receiving[i].bactopop
-           submodel = animalModel.receiving[i].submodel
-           vel = animalModel.receiving[i].vel
-           stage = animalModel.receiving[i].stage
            since_tx = animalModel.receiving[i].since_tx
+           bactopop_r = animalModel.receiving[i].bactopop_r
+           bactopop_is = animalModel.receiving[i].bactopop_is
+           submodel = animalModel.receiving[i].submodel
+           stage = animalModel.receiving[i].stage
            dim = animalModel.receiving[i].dim
            days_dry = animalModel.receiving[i].days_dry
            trade_status = animalModel.receiving[i].trade_status
-           add_agent!(pos, animalModel, vel, age, status, βₛ, βᵣ, inf_days_is, inf_days_ir, treatment, days_treated, since_tx, bactopop, submodel, stage, dim, days_dry, trade_status)   
-           push!(received_stock, animalModel.receiving[i])
+           agenttype = animalModel.receiving[i].agenttype
+           lactation = animalModel.receiving[i].lactation
+           pregstat = animalModel.receiving[i].pregstat
+           dic = animalModel.receiving[i].dic
+           stress = animalModel.receiving[i].stress
+           sex = animalModel.receiving[i].sex
+           calving_season = animalModel.receiving[i].calving_season
+           days_recovered = animalModel.receiving[i].days_recovered
+           add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)            push!(received_stock, animalModel.receiving[i])
            write(io,"Agent added\n")
    end
 end

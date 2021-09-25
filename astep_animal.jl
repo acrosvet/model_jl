@@ -27,6 +27,7 @@ Step AnimalAgents through time
         #latency!(AnimalAgent, animalModel)
         transmit!(AnimalAgent, animalModel)
         recovery!(AnimalAgent, animalModel)
+        daytrader!(AnimalAgent, animalModel)
 
 
 
