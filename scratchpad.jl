@@ -1,6 +1,6 @@
 using Distributed 
 
-addprocs(7)
+addprocs(5)
 
 include("testing.jl")
 
@@ -84,5 +84,5 @@ culling_output = open("./export/seasonal_culling.csv", "w")
 close(culling_output)
 
 
-@time agent_data, model_data, _ = run!(tmp, agent_step!, model_step!, 365;) 
+@time run!(tmp, agent_step!, model_step!, 365) 
 

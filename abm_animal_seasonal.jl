@@ -65,6 +65,7 @@
         num_lac,
         num_weaned,
         num_heifers,
+        num_calves = 0,
         step,
         date,
         psc,
