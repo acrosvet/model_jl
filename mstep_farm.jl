@@ -1,6 +1,6 @@
 function farm_step!(FarmAgent, farmModel)
     
-    
+
 
     io = open("./export/output.txt", "a")
     
@@ -209,7 +209,8 @@ end
     # Return the number of agents in the model at this timestep
     farm_id = FarmAgent.id
     num_agents = length(FarmAgent.animalModel.agents)
-    
+    FarmAgent.animalModel.rng = MersenneTwister(farm_id)
+
     number_received = length(farmModel[trade_partner].animalModel.receiving)
 
     write(io,"The number of animals received by farm $trade_partner is $number_received\n")

@@ -38,6 +38,7 @@ for farm in 1:numfarms
     add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel)
     
 end
+    
 
     return farmModel
 end
