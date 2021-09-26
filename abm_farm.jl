@@ -5,6 +5,7 @@ function initialiseFarms(
     date = Date(2021,7,2),
     tradelevel = 2,
     timestep = 1,
+    step = 0,
    
 )
 
@@ -17,7 +18,7 @@ FarmProperties = @dict(
     tradelevel,
     timestep,
     date,
-    step = 0,
+    step,
 )
 
 
