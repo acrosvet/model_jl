@@ -19,12 +19,14 @@ function daytrader!(AnimalAgent, animalModel)
     # Select a number to be traded
    num_traded = abs(animalModel.tradeable_stock)
    
+   num_traded > 15 ? 15 : num_traded
+
    # Clear the to trade list from last step
    animalModel.sending = [] 
 
 
    # Put agents in the sending container according to number
-   for animal in 1:abs(animalModel.tradeable_stock)
+   for animal in 1:num_traded
         
         # Select a random agent from the eligible list of agents
        traded_agent = random_agent(animalModel, is_traded(true))
@@ -38,9 +40,10 @@ function daytrader!(AnimalAgent, animalModel)
 
 
    end        
-
+#=    println("The length of the sending vector is: \n")
+   println(length(animalModel.sending))
    println("The length of the receiving vector is: \n")
-   println(length(animalModel.receiving))
+   println(length(animalModel.receiving)) =#
 
 # Create a vector, received stock, which tracks the animals that have been added to the farm
 
@@ -76,7 +79,7 @@ if length(animalModel.receiving) != 0
            calving_season = animalModel.receiving[i].calving_season
            days_recovered = animalModel.receiving[i].days_recovered
            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)            
-           write(io,"Agent added\n")
+           write(io,"Agent traded\n")
            push!(received_stock, animalModel.receiving[i])
 
    end
@@ -93,15 +96,6 @@ if length(received_stock) == 0
    write(io, "Receiving vector cleared \n")
 end
 
-# The vector of interest is:
-#println(received_stock)
-
-
-#println("The length of the receiving vector is:")
-#println(length(animalModel.receiving))
-#animalModel.receiving = []
-#println("The length of the receiving vector is:")
-#println(length(animalModel.receiving))
 
 close(io)
 end

@@ -14,8 +14,8 @@ function flag_trades!(AnimalAgent, animalModel)
     # Dry cows
     elseif AnimalAgent.stage == :D && (AnimalAgent.days_dry ≤ 60)
         AnimalAgent.trade_status = true
-    elseif AnimalAgent.stage == :W && (AnimalAgent.age ≥ 60)
-        AnimalAgent.trade_status = true
+    #elseif AnimalAgent.stage == :W && (AnimalAgent.age ≥ 60)
+    #    AnimalAgent.trade_status = true
     elseif AnimalAgent.stage == :L && (AnimalAgent.dim ≥ 120)
         AnimalAgent.trade_status = true
     else

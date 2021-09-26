@@ -21,8 +21,8 @@ FarmProperties = @dict(
     step,
 )
 
-
-agentSpace = GraphSpace(complete_digraph(numfarms))
+            
+agentSpace = GraphSpace(static_scale_free(numfarms, numfarms, numfarms))
 
 farmModel = ABM(FarmAgent, agentSpace, properties = FarmProperties)
 

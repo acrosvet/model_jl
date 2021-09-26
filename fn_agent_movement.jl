@@ -7,7 +7,7 @@ if AnimalAgent.stage == :C
     if num_calves == 0
         calf_range = 10 
     else
-        calf_range = Int(floor(3*√num_calves))
+        calf_range = Int(floor(3*√num_calves)) > 100 ? 100 : Int(floor(3*√num_calves))
     end 
     pos = (rand(animalModel.rng, 1:calf_range, 2)..., 1)
     while !isempty(pos, animalModel)
@@ -21,7 +21,7 @@ elseif AnimalAgent.stage == :W
     if num_weaned == 0
         weaned_range = 10
     else
-        weaned_range = Int(floor(7*√num_weaned))
+        weaned_range = Int(floor(7*√num_weaned)) > 100 ? 100 : Int(floor(7*√num_weaned))
     end 
     pos = (rand(animalModel.rng, 1:weaned_range, 2)..., 2)
     while !isempty(pos, animalModel)
@@ -35,7 +35,7 @@ elseif AnimalAgent.stage == :H
     if num_heifers == 0
         heifer_range = 10
     else
-        heifer_range = Int(floor(7*√num_heifers))
+        heifer_range = Int(floor(7*√num_heifers)) > 100 ? 100 : Int(floor(7*√num_heifers))
     end 
     pos = (rand(animalModel.rng, 1:heifer_range, 2)..., 3)
     while !isempty(pos, animalModel)
@@ -49,7 +49,7 @@ elseif AnimalAgent.stage == :DH
     if num_dh == 0
         dh_range = 10
     else
-        dh_range = Int(floor(7*√num_dh))
+        dh_range = Int(floor(7*√num_dh)) > 100 ? 100 : Int(floor(7*√num_dh))
     end 
     pos = (rand(animalModel.rng, 1:dh_range, 2)..., 4)
     while !isempty(pos, animalModel)
@@ -63,7 +63,7 @@ elseif AnimalAgent.stage == :L
     if num_lactating == 0
         lactating_range = 10
     else
-        lactating_range = Int(floor(6*√num_lactating))
+        lactating_range = Int(floor(6*√num_lactating)) > 100 ? 100 : Int(floor(6*√num_lactating))
     end 
     pos = (rand(animalModel.rng, 1:lactating_range, 2)..., 5)
     while !isempty(pos, animalModel)
@@ -77,7 +77,7 @@ elseif AnimalAgent.stage == :D
     if num_dry == 0
         dry_range = 10
     else
-        dry_range = Int(floor(3*√num_dry))
+        dry_range = Int(floor(3*√num_dry)) > 100 ? 100 : Int(floor(3*√num_dry)) 
     end 
     pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
     while !isempty(pos, animalModel)

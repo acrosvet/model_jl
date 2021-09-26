@@ -29,21 +29,6 @@ function trading_need!(animalModel)
     animalModel.tradeable_weaned = tradeable_weaned
     animalModel.tradeable_stock = tradeable_stock
 
-#=     println("The currently tradeable_stock is:")
-    println(animalModel.tradeable_stock) 
-    println("Tradeable calves")
-    println(animalModel.tradeable_calves)
-    println("Tradeable heifers")
-    println(animalModel.tradeable_heifers)
-    println("Tradeable lactating")
-    println(animalModel.tradeable_lactating)
-    println("Tradeable weaned")
-    println(animalModel.tradeable_weaned) 
-
-    println("The current herd size is $current_size")
-    println("The optimal herd size is $optimal_size") =#
-
-
 
 
 end
