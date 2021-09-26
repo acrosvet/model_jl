@@ -1,6 +1,6 @@
 function farm_step!(FarmAgent, farmModel)
     
-
+    contact!(FarmAgent, farmModel)
 
     io = open("./export/output.txt", "a")
     
