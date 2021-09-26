@@ -1,11 +1,12 @@
 
 function initialiseFarms(
-    numfarms = 100,
     seed = 42,
     date = Date(2021,7,2),
     tradelevel = 2,
     timestep = 1,
-    step = 0,
+    step = 0;
+    numfarms::Int = 5,
+    nbact::Int = 10000
    
 )
 
@@ -36,7 +37,7 @@ for farm in 1:numfarms
     system = :Spring
     trades_from = []
     trades_to = []
-    animalModel = initialiseSeasonal(ncows, farm_id = id)
+    animalModel = initialiseSeasonal(ncows, farm_id = id, nbact = nbact)
     add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel)
     
 end
