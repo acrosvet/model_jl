@@ -26,7 +26,8 @@
         step::Int = 1, #Model step
         date::Date = Date(2021, 7, 2), #Model start date
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
-        msd::Date = Date(2021, 9, 24) #Mating Start Date
+        msd::Date = Date(2021, 9, 24), #Mating Start Date
+        nbact::Int = 10000
     )
     #End header
     #Body
@@ -131,7 +132,7 @@
         calving_season = :Spring
         days_recovered = 0
         submodel =  initialiseBacteria(
-            nbact = 100,
+            nbact = nbact,
             total_status = status,
             timestep = 1.0,
             age = age,
@@ -180,7 +181,7 @@
         calving_season = :Spring
         days_recovered = 0
         submodel = initialiseBacteria(
-            nbact = 100,
+            nbact = nbact,
             total_status = status,
             timestep = 1.0,
             age = age,
@@ -228,7 +229,7 @@
         calving_season = :Spring
         days_recovered = 0
         submodel =  initialiseBacteria(
-            nbact = 100,
+            nbact = nbact,
             total_status = status,
             timestep = 1.0,
             age = age,

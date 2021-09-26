@@ -1,6 +1,6 @@
 
 function initialiseFarms(
-    numfarms = 5,
+    numfarms = 100,
     seed = 42,
     date = Date(2021,7,2),
     tradelevel = 2,
