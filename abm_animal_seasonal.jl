@@ -78,6 +78,7 @@
         current_dry = 0,
         current_calves = 0,
         system,
+        nbact,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed

@@ -1,4 +1,4 @@
-function export_trades!(FarmAgent, farmModel)
+function export_trades!(FarmAgent, farmModel, trade_partner, number_received)
     trade_data = DataFrame(
         step = farmModel.step,
         date = farmModel.date,

@@ -103,7 +103,7 @@ end
 
     number_received = length(farmModel[trade_partner].animalModel.receiving)
 
-    export_trades!(FarmAgent, farmModel)
+    export_trades!(FarmAgent, farmModel, trade_partner, number_received)
 
     write(io,"The number of animals received by farm $trade_partner is $number_received\n")
     write(io,"The number of animals in farm $farm_id is $num_agents \n")
