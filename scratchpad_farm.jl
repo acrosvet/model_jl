@@ -14,4 +14,4 @@ include("aanimal_headers.jl")
 
 tmp = initialiseFarms()
 
-@time run!(tmp, farm_step!, farm_mstep!, 2)
+@time run!(tmp, farm_step!, farm_mstep!, 10)

@@ -39,6 +39,9 @@ function daytrader!(AnimalAgent, animalModel)
 
    end        
 
+   println("The length of the receiving vector is: \n")
+   println(length(animalModel.receiving))
+
 # Create a vector, received stock, which tracks the animals that have been added to the farm
 
 received_stock = []

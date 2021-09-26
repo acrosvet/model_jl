@@ -243,7 +243,7 @@
         end    
     end
     
-    animalModel.herd_size = length(animalModel.agents)
+    animalModel.herd_size = N*1.5
 
         return animalModel
 
