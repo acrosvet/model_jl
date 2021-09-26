@@ -9,6 +9,8 @@ function trading_need!(animalModel)
     animalModel.tradeable_lactating = animalModel.num_lac - animalModel.current_lac
     animalModel.tradeable_stock = animalModel.tradeable_heifers + animalModel.tradeable_lactating + animalModel.tradeable_weaned + animalModel.tradeable_calves
 
+    println("Farm")
+    println(animalModel.farm_id)
     println("Tradeable stock")
     println(animalModel.tradeable_stock)
 
