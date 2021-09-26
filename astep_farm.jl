@@ -45,6 +45,9 @@ function farm_step!(FarmAgent, farmModel)
         println(length(FarmAgent.animalModel.sending))   =#      
         agents_to_remove = []
         
+        FarmAgent.trades_from = FarmAgent.animalModel.sending
+    
+        farmModel[trade_partner].trades_to = FarmAgent.trades_from
 # Trade heifers ----------------------------------------
 
         # If the farm has surplus animals, and the trading partner needs heifers
