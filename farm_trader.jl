@@ -10,7 +10,7 @@ io = open("./export/output.txt", "a")
 
     animalModel = FarmAgent.animalModel
 
-    animalModel.receiving = []
+   # animalModel.receiving = []
 
     farmno = FarmAgent.id
 
@@ -28,16 +28,8 @@ if length(trade_partners) != 0 && FarmAgent.traded != true
      
         agents_to_remove = []
 
-# If the farm has surplus animals, and the trading partner needs heifers
-#= 
-println("Sending farm has: \n")
-println(FarmAgent.animalModel.tradeable_stock )
-println("Receiving frarm has: \n ")
-println(farmModel[trade_partner].animalModel.tradeable_stock )
- =#
 
-
-if (FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animalModel.tradeable_stock > 0) && farmModel[trade_partner].traded == false
+if (FarmAgent.animalModel.tradeable_stock > 0 && farmModel[trade_partner].animalModel.tradeable_stock < 0) && farmModel[trade_partner].traded == false
     write(io, "let's trade!\n")
 
 
@@ -76,7 +68,7 @@ if (FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animal
 
 
 
-    for i in 1:num_trades_to
+    for i in 1:num_trades_from
         if length(stock_to_send) != 0
             #Push the ith animal in the sending list to the receiving container in the receiving farm
                 push!(farmModel[trade_partner].animalModel.receiving, stock_to_send[i]) 
@@ -105,11 +97,6 @@ end
 
         animalModel.sending = []
 
-# Step the model one step through time        
-   # Threads.@spawn for a in allagents(farmModel)
-   #     a.animalModel.rng = MersenneTwister(farm_id)
-  #  end
-    
     # Return the number of agents in the model at this timestep
     farm_id = FarmAgent.id
     num_agents = length(FarmAgent.animalModel.agents)
