@@ -13,6 +13,6 @@ include("trade_header.jl")
 
 #@time run!(tmp, agent_step!, model_step!, 365) 
 
-tmp = initialiseFarms(numfarms = 10, nbact = 100)
+tmp = initialiseFarms(numfarms = 100, nbact = 10000)
 
-@time run!(tmp, farm_step!, farm_mstep!, 100)
+@time run!(tmp, farm_step!, farm_mstep!, 365*5)
