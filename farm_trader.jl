@@ -67,6 +67,7 @@ if (FarmAgent.animalModel.tradeable_stock > 0 && farmModel[trade_partner].animal
  println("Number of trades to is $num_trades_to")
 
 
+ farmModel[trade_partner].animalModel.receiving = []
 
     for i in 1:num_trades_from
         if length(stock_to_send) != 0
@@ -84,6 +85,11 @@ if (FarmAgent.animalModel.tradeable_stock > 0 && farmModel[trade_partner].animal
             println(length(farmModel[trade_partner].animalModel.receiving))
 end
 
+
+println("Farm status")
+println(FarmAgent.traded)
+println("trader status")
+println(farmModel[trade_partner].traded)
 
 # Remove the traded agents
         for i in 1:length(agents_to_remove)

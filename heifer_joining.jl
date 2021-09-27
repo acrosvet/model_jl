@@ -18,7 +18,7 @@ if animalModel.system == :Seasonal
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-                    println("Heifer joined")
+                   # println("Heifer joined")
             end
         end
 
@@ -35,7 +35,7 @@ if animalModel.system == :Continuous
                 AnimalAgent.stage = :DH
                 AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                 higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-                println("Heifer joined")
+               # println("Heifer joined")
         end
     end
 
@@ -51,7 +51,7 @@ if animalModel.system == :Split
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-                    println("Heifer joined")
+                    #println("Heifer joined")
             end
         end
     end
@@ -63,7 +63,7 @@ if animalModel.system == :Split
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-                    println("Heifer joined")
+                    #println("Heifer joined")
             end
         end
     end
@@ -89,7 +89,7 @@ if animalModel.system == :Batch
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-                    println("Heifer joined")
+                    #println("Heifer joined")
             end
         end
     end
@@ -102,7 +102,7 @@ if animalModel.system == :Batch
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-                    println("Heifer joined")
+                    #println("Heifer joined")
             end
         end
     end
@@ -116,7 +116,7 @@ if animalModel.system == :Batch
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-                    println("Heifer joined")
+                    #println("Heifer joined")
             end
         end
     end
@@ -130,7 +130,7 @@ if animalModel.system == :Batch
                     AnimalAgent.stage = :DH
                     AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
-                    println("Heifer joined")
+                    #println("Heifer joined")
             end
         end
     end
