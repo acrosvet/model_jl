@@ -37,7 +37,7 @@ println(farmModel[trade_partner].animalModel.tradeable_stock )
  =#
 
 
-if (FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animalModel.tradeable_stock > 0) #&& farmModel[trade_partner].traded == false
+if (FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animalModel.tradeable_stock > 0) && farmModel[trade_partner].traded == false
     write(io, "let's trade!\n")
 
 
@@ -119,8 +119,8 @@ end
 
 
     if number_received != 0
-        #FarmAgent.traded = true
-        #farmModel[trade_partner].traded = true
+        FarmAgent.traded = true
+        farmModel[trade_partner].traded = true
         farmModel[trade_partner].animalModel.tradeable_stock = 0
         FarmAgent.animalModel.tradeable_stock = 0
         export_trades!(FarmAgent, farmModel, trade_partner, number_received)
