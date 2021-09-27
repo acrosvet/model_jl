@@ -3,6 +3,7 @@
  trade_header = DataFrame(
     step = 0,
     date = 0,
+    traded_status = 0, 
     sending_farm = 0,
     receiving_farm = 0,
     weight = 0
