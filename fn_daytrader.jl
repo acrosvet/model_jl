@@ -5,41 +5,12 @@
 
 
 """
-function daytrader!(AnimalAgent, animalModel)
+function daytrader!(FarmAgent)
    io = open("output.txt", "a")
    # Determine if a farm needs agents traded to it:
 
-
-   # Determine what animals can be traded based on an assigned status
-   has_stage(AnimalAgent, status) = AnimalAgent.trade_status == status
-   
-   #Primitive function, decide to trade based on status
-   is_traded(status) = AnimalAgent -> has_stage(AnimalAgent, status) 
-   
-    # Select a number to be traded
-   num_traded = abs(animalModel.tradeable_stock)
-   
-   num_traded > 15 ? 15 : num_traded
-
-   # Clear the to trade list from last step
-   animalModel.sending = [] 
-
-
-   # Put agents in the sending container according to number
-   for animal in 1:num_traded
-        
-        # Select a random agent from the eligible list of agents
-       traded_agent = random_agent(animalModel, is_traded(true))
-
-       # Break the function if the pushed agent doesn't exist.
-       if typeof(traded_agent) == Nothing
-        break
-       end
-       #Push that to the sending field in the animalModel
-       push!(animalModel.sending, traded_agent)
-
-
-   end        
+   animalModel = FarmAgent.animalModel
+      
 #=    println("The length of the sending vector is: \n")
    println(length(animalModel.sending))
    println("The length of the receiving vector is: \n")

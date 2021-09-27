@@ -28,7 +28,7 @@ Step AnimalAgents through time
         transmit!(AnimalAgent, animalModel)
         recovery!(AnimalAgent, animalModel)
         flag_trades!(AnimalAgent,animalModel)
-        daytrader!(AnimalAgent, animalModel)
+        #daytrader!(AnimalAgent, animalModel)
 
 
 
