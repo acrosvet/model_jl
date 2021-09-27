@@ -15,7 +15,7 @@ function calving!(AnimalAgent, animalModel)
 
     if AnimalAgent.dic == 283
         if AnimalAgent.stage == :DH
-           println("Heifer calved")
+         #  println("Heifer calved")
         end
         AnimalAgent.pregstat = :E
         AnimalAgent.dic = 0
