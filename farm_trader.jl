@@ -20,7 +20,7 @@ io = open("./export/output.txt", "a")
     if length(trade_partners) != 0 && FarmAgent.traded != true 
             trade_partner = rand(farmModel.rng, 1:length(trade_partners))
 
-            while trade_partner == farmno
+            while trade_partner == farmno 
                 trade_partner = rand(farmModel.rng, 1:length(trade_partners))
                 break
             end
@@ -29,10 +29,10 @@ io = open("./export/output.txt", "a")
             agents_to_remove = []
 
         if farmModel[trade_partner].traded == false
-            println("This loop is evaluating and the status of the farm is:")
+#=             println("This loop is evaluating and the status of the farm is:")
             println(FarmAgent.traded)
             println("And the status of the trading partner is: ")
-            println(farmModel[trade_partner].traded)        
+            println(farmModel[trade_partner].traded)   =#      
             if (FarmAgent.animalModel.tradeable_stock > 0 && farmModel[trade_partner].animalModel.tradeable_stock < 0) 
                 write(io, "let's trade!\n")
 
@@ -68,7 +68,7 @@ io = open("./export/output.txt", "a")
                 num_trades_to = num_trades_to > max_trade ? max_trade : num_trades_to
 
 
-                println("Number of trades to is $num_trades_to")
+                #println("Number of trades to is $num_trades_to")
 
 
                 farmModel[trade_partner].animalModel.receiving = []
@@ -85,8 +85,8 @@ io = open("./export/output.txt", "a")
                             println("No stock to send")
                     end
                 end
-                        println("This many animals were sent:")
-                        println(length(farmModel[trade_partner].animalModel.receiving))
+                        #println("This many animals were sent:")
+                       # println(length(farmModel[trade_partner].animalModel.receiving))
 
 
 
@@ -118,7 +118,7 @@ io = open("./export/output.txt", "a")
                     #FarmAgent.animalModel.tradeable_stock = 0
                     export_trades!(FarmAgent, farmModel, trade_partner, number_received)
                 end 
-                write(io,"The number of animals received by farm $trade_partner is $number_received\n")
+                write(io,"The number of animals received by farm $trade_partner from $farm_id is $number_received\n")
                 write(io,"The number of animals in farm $farm_id is $num_agents \n")
                 close(io)
             end
