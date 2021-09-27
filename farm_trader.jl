@@ -17,11 +17,11 @@ io = open("./export/output.txt", "a")
         trade_partners = node_neighbors(FarmAgent, farmModel)
 
        #println(trade_partners)
-        
-        trade_partner = rand(1:length(trade_partners))
+if length(trade_partners) != 0       
+        trade_partner = rand(farmModel.rng, 1:length(trade_partners))
 
         while trade_partner == farmno
-            trade_partner = rand(1:length(trade_partners))
+            trade_partner = rand(farmModel.rng, 1:length(trade_partners))
             break
         end
 
@@ -50,7 +50,7 @@ if (FarmAgent.animalModel.tradeable_stock < 0 && farmModel[trade_partner].animal
     else
         #If not, then select the required stock class to send based on the number of animals avaialble
         for i in 1:length(FarmAgent.animalModel.sending)
-                if i > rand(5:15)
+                if i > rand(farmModel.rng, 5:15)
                     break
                 else
                     push!(stock_to_send, FarmAgent.animalModel.sending[i])
@@ -107,7 +107,6 @@ end
 # Step the model one step through time        
    # Threads.@spawn for a in allagents(farmModel)
    #     a.animalModel.rng = MersenneTwister(farm_id)
-        step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
   #  end
     
     # Return the number of agents in the model at this timestep
@@ -122,5 +121,5 @@ end
     write(io,"The number of animals received by farm $trade_partner is $number_received\n")
     write(io,"The number of animals in farm $farm_id is $num_agents \n")
     close(io)
-
+end
 end
