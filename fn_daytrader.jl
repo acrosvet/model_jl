@@ -6,7 +6,7 @@
 
 """
 function daytrader!(FarmAgent)
-   io = open("output.txt", "a")
+   io = open("output_receipt.txt", "a")
    # Determine if a farm needs agents traded to it:
 
    animalModel = FarmAgent.animalModel
