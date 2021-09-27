@@ -1,8 +1,8 @@
 function farm_step!(FarmAgent, farmModel)
 
-    FarmAgent.trade_status == false
+    FarmAgent.traded == false
 
-    if Dates.format(farmModel.date, "e") == "Wed" && FarmAgent.trade_status == false
+    if Dates.format(farmModel.date, "e") == "Wed" #&& FarmAgent.traded == false
         farm_trader!(FarmAgent, farmModel)
     end
     

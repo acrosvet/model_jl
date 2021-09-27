@@ -39,7 +39,7 @@ for farm in 1:numfarms
     trades_to = []
     traded = false
     animalModel = initialiseSeasonal(ncows, farm_id = id, nbact = nbact)
-    add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel)
+    add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel, traded)
     
 end
     
