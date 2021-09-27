@@ -17,7 +17,7 @@ io = open("./export/output.txt", "a")
         trade_partners = node_neighbors(FarmAgent, farmModel)
 
        #println(trade_partners)
-if length(trade_partners) != 0       
+if length(trade_partners) != 0 && FarmAgent.traded != true 
         trade_partner = rand(farmModel.rng, 1:length(trade_partners))
 
         while trade_partner == farmno

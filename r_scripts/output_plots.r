@@ -6,6 +6,19 @@ library(lubridate)
 run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/seasonal_model_run.csv")
 
 
+# Faceted plot of farm runs 
+
+
+ run %>%  
+  filter(!is.na(AnimalID)) %>%
+  mutate(Day = lubridate::ymd(Day)) %>%
+  filter(Day >= "2021-07-02") %>%
+  group_by(Day, FarmID, AnimalStage) %>% 
+  summarise(count = n()) %>% 
+  ggplot(aes(x = Day, y = count)) +
+  geom_line(aes(colour  = factor(AnimalStage))) +
+  facet_wrap(~FarmID, nrow = 100)
+
 
 # Generate a ploot of population dynamics over time
 p <- run %>%  
