@@ -51,5 +51,6 @@ mutable struct FarmAgent <: AbstractAgent
     ncows::Int #Number of animals
     system::Symbol #Calving system
     animalModel::AgentBasedModel
+    traded::Bool
    # daytraders::Dict
 end
