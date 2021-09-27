@@ -28,7 +28,7 @@ function send_trades!(animalModel)
        #Push that to the sending field in the animalModel
        push!(animalModel.sending, traded_agent)
 
-
+       #println(length(animalModel.sending))
    end  
 
 end
