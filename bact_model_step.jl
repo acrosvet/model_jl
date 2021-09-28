@@ -6,5 +6,5 @@ function bact_model_step!(bacterialModel)
     bacterialModel.age += 1
     bacterialModel.step += 1 
     bacterial_population!(bacterialModel)
-    #export_bacto_data!(bacterialModel)
+    export_bacto_data!(bacterialModel)
 end 

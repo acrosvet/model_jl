@@ -4,7 +4,7 @@ addprocs(16)
 
 include("testing.jl")
 
-tmp = initialiseSeasonal(220, nbact = 100)
+tmp = initialiseSeasonal(220, nbact = 1000)
 
 include("aanimal_headers.jl")
 
