@@ -28,7 +28,7 @@
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
         msd::Date = Date(2021, 9, 24), #Mating Start Date
         nbact::Int = 10000,
-        seed::Int = 42
+        seed::Int = FarmAgent.id
     )
     #End header
     #Body
