@@ -18,7 +18,7 @@
         culling_rate = 0.3, #Culling rate
         num_lac = N, #Initial number of lactating cows
         num_heifers = floor(0.3*N)*0.5,
-        num_weaned = floor(0.3*N)*0.5,
+        num_weaned = floor(0.3*N)*0.5;
         #rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3, #Treatment probability, passed from farmModel
         treatment_duration::Int = 5, #Treatment duration, passed from farmModel
@@ -216,7 +216,7 @@
         days_treated = 0 # Default is not treated
         treatment_duration = treatment_duration #Passed argument
         bactopop_r = 0.0
-        bactopo_is = 0.0
+        bactopop_is = 0.0
         since_tx = 0 # Default 0 
         inf_days = 0
         agenttype = :Initial
