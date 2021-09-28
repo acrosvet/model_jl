@@ -38,12 +38,15 @@ position_counter = 0
                 days_exposed = days_exposed,
                 days_recovered = days_recovered,
                 stress = false,
-                animalno = 0
+                animalno = 0,
+                seed = AnimalAgent.id
             )
             if isempty(pos, animalModel)
                 add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
                 #println("$calving_season Calf born!")
                 position_counter += 1
             end
+
+
     end
 end

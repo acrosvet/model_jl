@@ -18,7 +18,7 @@
         num_lac = N, #Initial number of lactating cows
         num_heifers = floor(0.3*N),
         num_weaned = floor(0.3*N),
-        rng = MersenneTwister(42); #Random seed 
+        #rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3, #Treatment probability, passed from farmModel
         treatment_duration::Int = 5, #Treatment duration, passed from farmModel
         farm_id::Int = 1, #Farm ID (from FarmModel)
@@ -27,7 +27,8 @@
         date::Date = Date(2021, 7, 2), #Model start date
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
         msd::Date = Date(2021, 9, 24), #Mating Start Date
-        nbact::Int = 10000
+        nbact::Int = 10000,
+        seed::Int = 42
     )
     #End header
     #Body
@@ -52,7 +53,7 @@
         treatment_duration, 
         res_carrier,
         sens_carrier,
-        rng,
+        rng = MersenneTwister(seed),
         culling_rate,
         herd_size = N,
         sending = [], # Agent sending container
@@ -79,6 +80,7 @@
         current_calves = 0,
         system,
         nbact,
+        seed
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed

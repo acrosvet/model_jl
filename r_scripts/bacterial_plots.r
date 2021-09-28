@@ -17,13 +17,22 @@ process <- positions %>%
             filter(bactostatus != 0) %>%
             select(x,y,bactostatus,step)
 
-process <- as.matrix(process)
 
-plot_ly(z = process, colors = "Greys", type = "heatmap")
+
+
 
   htmlwidgets::saveWidget(p, "./export/Bacterial Positions.html", selfcontained = F, libdir = "lib")
 
+p <- positions %>%
+    filter(step != 0) %>%
+    #filter(step == 1) %>%
+    ggplot(aes(x = x, y = y, fill = bactostatus)) +
+    geom_tile() +
+    transition_states(step, transition_length = 0, state_length = 1)
+library(gganimate)
+animate(p)
 
+anim_save("./export/animation.gif")
 positions %>%
     filter(bactostatus != 0) %>%
     arrange(id) %>%

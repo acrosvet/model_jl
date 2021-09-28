@@ -4,12 +4,12 @@ const time_units = 1
 
 function initialiseBacteria(
 
-        seed = 42,
+       
         nstrains = rand(4:10),
         r_strain = rand(1:nstrains),
         status = :S,
-        resistant_pop = 0,
-        rng = MersenneTwister(seed);
+        resistant_pop = 0;
+        #rng = MersenneTwister(seed);
         dim::Int = 100,
         animalno::Int = AnimalAgent.id,
         nbact::Int64,
@@ -19,7 +19,8 @@ function initialiseBacteria(
         age::Int = AnimalAgent.age,
         days_exposed::Int = AnimalAgent.days_exposed,
         days_recovered::Int = AnimalAgent.days_recovered,
-        stress::Bool = AnimalAgent.stress
+        stress::Bool = AnimalAgent.stress,
+        seed::Int = 42
 
 
     )
@@ -29,7 +30,6 @@ function initialiseBacteria(
     bactproperties = @dict(
         step = 0,
         nbact,
-        seed,
         status,
         nstrains,
         timestep,
@@ -38,7 +38,7 @@ function initialiseBacteria(
         total_status,
         age,
         days_exposed,
-        rng,
+        rng = MersenneTwister(seed),
         resistant_pop = 0,
         sensitive_pop = 0,
         num_sensitive = 0,
@@ -54,6 +54,7 @@ function initialiseBacteria(
         min_susceptible = 100,
         stress,
         animalno,
+        seed
     )
 
     bacterialModel = AgentBasedModel(BacterialAgent, agentSpace, properties = bactproperties)
