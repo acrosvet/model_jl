@@ -6,7 +6,8 @@ function initialiseFarms(
     timestep = 1,
     step = 0;
     numfarms::Int = 5,
-    nbact::Int = 10000
+    nbact::Int = 10000,
+    dim::Int = 100
    
 )
 
@@ -20,6 +21,7 @@ FarmProperties = @dict(
     timestep,
     date,
     step,
+    dim
 )
 
             
@@ -38,7 +40,7 @@ for farm in 1:numfarms
     trades_from = []
     trades_to = []
     traded = false
-    animalModel = initialiseSeasonal(ncows, farm_id = id, nbact = nbact)
+    animalModel = initialiseSeasonal(ncows, farm_id = id, seed = id, nbact = nbact, dim = dim)
     add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel, traded)
     
 end

@@ -17,18 +17,19 @@
         culling_rate = 0.3, #Culling rate
         num_lac = N, #Initial number of lactating cows
         num_heifers = floor(0.3*N),
-        num_weaned = floor(0.3*N),
+        num_weaned = floor(0.3*N);
         #rng = MersenneTwister(42); #Random seed 
         treatment_prob::Float64 = 0.3, #Treatment probability, passed from farmModel
         treatment_duration::Int = 5, #Treatment duration, passed from farmModel
-        farm_id::Int = 1, #Farm ID (from FarmModel)
+        farm_id::Int = FarmAgent.id, #Farm ID (from FarmModel)
         system::Symbol = :Seasonal,
         step::Int = 1, #Model step
         date::Date = Date(2021, 7, 2), #Model start date
         psc::Date = Date(2021, 7, 3), #Planned Start of Calving,
         msd::Date = Date(2021, 9, 24), #Mating Start Date
         nbact::Int = 10000,
-        seed::Int = FarmAgent.id
+        seed::Int = FarmAgent.id,
+        dim::Int = 100
     )
     #End header
     #Body
@@ -80,7 +81,8 @@
         current_calves = 0,
         system,
         nbact,
-        seed
+        seed, 
+        dim
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
@@ -143,7 +145,8 @@
             days_exposed = days_exposed,
             days_recovered = days_recovered,
             stress = false,
-            animalno = 0
+            animalno = 0,
+            dim = dim
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -192,7 +195,8 @@
             days_exposed = days_exposed,
             days_recovered = days_recovered,
             stress = false,
-            animalno = 0
+            animalno = 0,
+            dim = dim
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -240,7 +244,8 @@
             days_exposed = days_exposed,
             days_recovered = days_recovered,
             stress = false,
-            animalno = 0
+            animalno = 0,
+            dim = dim
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
