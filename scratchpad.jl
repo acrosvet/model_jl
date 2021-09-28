@@ -1,6 +1,6 @@
 using Distributed 
 
-addprocs(16)
+addprocs(5)
 
 include("testing.jl")
 
