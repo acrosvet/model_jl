@@ -9,8 +9,8 @@ function initialiseBacteria(
         r_strain = rand(1:nstrains),
         status = :S,
         resistant_pop = 0,
-        dim = 10,
         rng = MersenneTwister(seed);
+        dim::Int = 100,
         animalno::Int = AnimalAgent.id,
         nbact::Int64,
         total_status::Symbol = AnimalAgent.status,
