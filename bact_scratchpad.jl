@@ -76,4 +76,4 @@ run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_treated = 0
 bactoMod.days_recovered = 10
-run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
+run!(bactoMod, bact_agent_step!, bact_model_step!, 20)

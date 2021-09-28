@@ -1,6 +1,6 @@
 function farm_step!(FarmAgent, farmModel)
 
-    FarmAgent.animalModel.seed = FarmAgent.id
+   # FarmAgent.animalModel.seed = FarmAgent.id
     
 
     if Dates.format(farmModel.date, "e") == "Wed" && FarmAgent.traded == false

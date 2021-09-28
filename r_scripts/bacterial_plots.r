@@ -7,11 +7,21 @@ scratch <- positions %>%
     summarise(count = n()) %>%
     pivot_wider(names_from = bactostatus, values_from = count)
 
-positions %>%
+p <- positions %>%
     filter(bactostatus != 0) %>%
     #arrange(id) %>%
     plot_ly(x = ~x, y = ~y, color = ~bactostatus, colors = 'Dark2', frame = ~step) %>%
     animation_opts(redraw = T, transition = 0)
+
+process <- positions %>% 
+            filter(bactostatus != 0) %>%
+            select(x,y,bactostatus,step)
+
+process <- as.matrix(process)
+
+plot_ly(z = process, colors = "Greys", type = "heatmap")
+
+  htmlwidgets::saveWidget(p, "./export/Bacterial Positions.html", selfcontained = F, libdir = "lib")
 
 
 positions %>%
