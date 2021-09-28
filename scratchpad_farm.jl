@@ -1,6 +1,6 @@
 using Distributed 
 
-addprocs(3)
+addprocs(16)
 
 include("testing.jl")
 
@@ -13,6 +13,6 @@ include("trade_header.jl")
 
 #@time run!(tmp, agent_step!, model_step!, 365) 
 
-tmp = initialiseFarms(numfarms = 50, nbact = 1000, dim = 33)
+tmp = initialiseFarms(numfarms = 10, nbact = 100, dim = 10)
 
 @time run!(tmp, farm_step!, farm_mstep!, 5)

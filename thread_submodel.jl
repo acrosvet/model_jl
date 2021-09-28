@@ -2,9 +2,10 @@ function thread_submodel!(animalModel)
 
 
 
-    Threads.@spawn  for a in allagents(animalModel)
+     #Threads.@threads 
+     for a in collect(allagents(animalModel))
          a.submodel.seed = a.id + animalModel.seed
-         step!(a.submodel, bact_agent_step!, bact_model_step!,1)
+         Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!,1)
      end
  
  end

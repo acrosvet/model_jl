@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ssh -t acrosbie@spartan.hpc.unimelb.edu.au 'squeue -u acrosbie ; bash'
