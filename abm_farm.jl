@@ -52,7 +52,7 @@ end
 
 for farm in 1:numfarms
     id +=1
-    status = farm % 2 == 0 ? :S : :I
+    status = id == rand(1:numfarms) ? :I : :S
     tradelevel = rand(1:5)
     ncows = rand(150:220)
     system = farm_system(id)

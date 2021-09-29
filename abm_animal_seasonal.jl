@@ -7,8 +7,6 @@
         movement = 0.1, #Movement in continuous space
         βᵣ = 0.4, #Beta (resistant) 
         βₛ = 0.4, #Beta (sensitive)
-        init_is = 5, # Number initially infected sensitive
-        init_ir = 1, # Number initially infected resistant
         sponrec_is = 0.05, #chance of spontaneous recovery IS
         sponrec_ir = 0.04,  #chance of spontaneous recovery IR
         timestep = 1.0, #Set model timestep
@@ -29,7 +27,8 @@
         msd::Date = Date(2021, 9, 24), #Mating Start Date
         nbact::Int = 10000,
         seed::Int = FarmAgent.id,
-        dim::Int = 100
+        dim::Int = 100,
+        farm_status::Symbol = FarmAgent.status
     )
     #End header
     #Body
@@ -82,11 +81,35 @@
         system,
         nbact,
         seed, 
-        dim
+        dim,
+        farm_status,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
+    
+    function init_infected_r(farm_status, N)
+        if farm_status == :S
+            return 0
+        elseif farm_status == :R
+            return Int(floor(N*(rand(0.05:0.05:0.15))))
+        elseif farm_status == :IS
+            return 0
+        end
+    end
+
+    function init_infected_is(farm_status, N)
+        if farm_status == :S
+            return Int(floor(n*(rand(0.0:0.01:0.05))))
+        elseif farm_status == :R
+            return Int(floor(N*(rand(0.0:0.01:0.05))))
+        elseif farm_status == :IS
+            return Int(floor(N*(rand(0.05:0.01:0.1))))
+        end
+    end
+
+    init_ir = init_infected_r(farm_status, N)
+    init_is = init_infected_is(farm_status, N)
 
     # Set the initial dim
     #Define a function to set initial infected status. This gets supplied to the loop describing the initial system state.
