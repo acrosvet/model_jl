@@ -11,4 +11,5 @@ function stock_numbers!(animalModel)
     animalModel.current_heifers = current_stock(:H, animalModel)
     animalModel.current_dry = current_stock(:D, animalModel)
     animalModel.current_calves = current_stock(:C, animalModel)
+
 end

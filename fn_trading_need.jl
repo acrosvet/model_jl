@@ -1,5 +1,6 @@
 function trading_need!(animalModel)
 
+
     optimal_lactating = animalModel.N
 
     current_size = length(animalModel.agents)
@@ -28,7 +29,6 @@ function trading_need!(animalModel)
     animalModel.tradeable_lactating = tradeable_lactating
     animalModel.tradeable_weaned = tradeable_weaned
     animalModel.tradeable_stock = tradeable_stock
-
 
 
 end
