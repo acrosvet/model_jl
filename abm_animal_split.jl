@@ -32,7 +32,8 @@
         msd_2::Date = (msd - Month(4)), #Second joining
         nbact::Int = 10000,
         seed::Int = FarmAgent.id,
-        dims::Int = 100
+        dims::Int = 100,
+        farm_status::Symbol = FarmAgent.status
         )
     #End header
     #Body
@@ -90,24 +91,15 @@
         current_autumn = 0,
         nbact,
         seed,
-        dims
+        dims,
+        farm_status
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
 
-    # Set the initial dim
-    #Define a function to set initial infected status. This gets supplied to the loop describing the initial system state.
-    function initial_status(n, init_ir, init_is)
-        if n ≤ init_is 
-            :IS
-        elseif n > init_is && n <= (init_is + init_ir)
-            :IR
-        elseif n > init_is + init_ir
-            :S
-        end
-    end
-
+    init_ir = init_infected_r(farm_status, N)
+    init_is = init_infected_is(farm_status, N)
 
 # Add the lactating cows ---------------------------------------------------
 
