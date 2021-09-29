@@ -7,7 +7,7 @@ function initialiseFarms(
     step = 0;
     numfarms::Int = 5,
     nbact::Int = 10000,
-    dim::Int = 100
+    dims::Int = 100
    )
 
 
@@ -20,7 +20,7 @@ FarmProperties = @dict(
     timestep,
     date,
     step,
-    dim,
+    dims,
 )
 
             
@@ -32,7 +32,7 @@ id = 0
 
 function farm_status(id, ncows, nbact, dim)
     if id % 5 == 0
-        initialiseSeasonal(ncows, farm_id = id, seed = id, nbact = nbact, dim = dim)
+        initialiseSeasonal(ncows, farm_id = id, seed = id, nbact = nbact, dims = dims)
     elseif id % 4 == 0
         initialiseBatch(ncows, farm_id = id, seed = id, nbact = nbact, dim = dim)
     else

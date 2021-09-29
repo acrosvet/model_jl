@@ -27,7 +27,7 @@
         msd::Date = Date(2021, 9, 24), #Mating Start Date
         nbact::Int = 10000,
         seed::Int = FarmAgent.id,
-        dim::Int = 100,
+        dims::Int = 100,
         farm_status::Symbol = FarmAgent.status
     )
     #End header
@@ -81,30 +81,17 @@
         system,
         nbact,
         seed, 
-        dim,
+        dims,
         farm_status,
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
-    
-
-
 
     init_ir = init_infected_r(farm_status, N)
     init_is = init_infected_is(farm_status, N)
 
     # Set the initial dim
-    #Define a function to set initial infected status. This gets supplied to the loop describing the initial system state.
-    function initial_status(n, init_ir, init_is)
-        if n ≤ init_is 
-            :IS
-        elseif n > init_is && n <= (init_is + init_ir)
-            :IR
-        elseif n > init_is + init_ir
-            :S
-        end
-    end
 
     #Define a function parameter to govern the movement of animals in different states
 
@@ -152,7 +139,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -202,7 +189,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -251,7 +238,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)

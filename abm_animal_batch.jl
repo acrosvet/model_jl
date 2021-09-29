@@ -36,7 +36,7 @@
         msd_4::Date = (msd - Month(3)),
         nbact::Int = 10000,
         seed::Int = FarmAgent.id,
-        dim::Int = 100
+        dims::Int = 100
     )
     #End header
     #Body
@@ -99,7 +99,7 @@
         current_b4 = 0,
         nbact,
         seed,
-        dim
+        dims
  )# Dictionary of disease properties
 
     # Define the model: Agent type, agent space, properties, and type of random seed
@@ -160,7 +160,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -208,7 +208,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -255,7 +255,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -304,7 +304,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -352,7 +352,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -399,7 +399,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -447,7 +447,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -495,7 +495,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -542,7 +542,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -590,7 +590,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -638,7 +638,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
@@ -685,7 +685,7 @@
             days_recovered = days_recovered,
             stress = false,
             animalno = 0,
-            dim = dim
+            dims = dims
         )
         if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)

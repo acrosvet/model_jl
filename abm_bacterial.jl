@@ -10,7 +10,7 @@ function initialiseBacteria(
         status = :S,
         resistant_pop = 0;
         #rng = MersenneTwister(seed);
-        dim::Int = 100,
+        dims::Int = 100,
         animalno::Int = AnimalAgent.id,
         nbact::Int64,
         total_status::Symbol = AnimalAgent.status,
@@ -25,7 +25,7 @@ function initialiseBacteria(
 
     )
 
-    agentSpace = GridSpace((dim, dim); periodic = false)
+    agentSpace = GridSpace((dims, dims); periodic = false)
 
     bactproperties = @dict(
         step = 0,
@@ -46,12 +46,12 @@ function initialiseBacteria(
         num_susceptible = 0,
         fitnesses = [],
         strain_statuses = [],
-        dim,
+        dims,
         days_recovered,
         carrier = :no,
         min_sensitive = 0,
-        min_resistant = 5,
-        min_susceptible = 100,
+        min_resistant = Int(floor(0.01*nbact)),
+        min_susceptible = Int(floor(0.1*nbact)),
         stress,
         animalno,
         seed
