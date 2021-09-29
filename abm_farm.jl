@@ -30,13 +30,13 @@ farmModel = ABM(FarmAgent, agentSpace, properties = FarmProperties)
 
 id = 0
 
-function farm_status(id, ncows, nbact, dim)
+function farm_status(id, ncows, nbact, dims, status)
     if id % 5 == 0
-        initialiseSeasonal(ncows, farm_id = id, seed = id, nbact = nbact, dims = dims)
+        initialiseSeasonal(ncows, farm_id = id, seed = id, nbact = nbact, dims = dims, farm_status = status)
     elseif id % 4 == 0
-        initialiseBatch(ncows, farm_id = id, seed = id, nbact = nbact, dim = dim)
+        initialiseBatch(ncows, farm_id = id, seed = id, nbact = nbact, dims = dims, farm_status = status)
     else
-        initialiseSplit(ncows, farm_id = id, seed = id, nbact = nbact, dim = dim)
+        initialiseSplit(ncows, farm_id = id, seed = id, nbact = nbact, dims = dims, farm_status = status)
     end
 end
 
@@ -59,7 +59,7 @@ for farm in 1:numfarms
     trades_from = []
     trades_to = []
     traded = false
-    animalModel = farm_status(id, ncows, nbact, dim)
+    animalModel = farm_status(id, ncows, nbact, dims, status)
     add_agent!(id, farmModel, status, tradelevel, trades_from, trades_to, ncows, system, animalModel, traded)
     
 end
