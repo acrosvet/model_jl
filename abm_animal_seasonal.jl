@@ -88,25 +88,8 @@
     # Define the model: Agent type, agent space, properties, and type of random seed
     animalModel = ABM(AnimalAgent, agentSpace, properties = pathogenProperties)
     
-    function init_infected_r(farm_status, N)
-        if farm_status == :S
-            return 0
-        elseif farm_status == :R
-            return Int(floor(N*(rand(0.05:0.05:0.15))))
-        elseif farm_status == :IS
-            return 0
-        end
-    end
 
-    function init_infected_is(farm_status, N)
-        if farm_status == :S
-            return Int(floor(n*(rand(0.0:0.01:0.05))))
-        elseif farm_status == :R
-            return Int(floor(N*(rand(0.0:0.01:0.05))))
-        elseif farm_status == :IS
-            return Int(floor(N*(rand(0.05:0.01:0.1))))
-        end
-    end
+
 
     init_ir = init_infected_r(farm_status, N)
     init_is = init_infected_is(farm_status, N)
