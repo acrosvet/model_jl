@@ -61,6 +61,7 @@ run %>%
   xaxis = list(title = "Date"))
 
 status <- run %>%
+            filter(ModelStep != 0) %>%
             group_by(ModelStep, AnimalStatus) %>%
             summarise(count = n()) %>%
             pivot_wider(names_from = AnimalStatus, values_from = count)

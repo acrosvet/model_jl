@@ -54,7 +54,8 @@ function initialiseBacteria(
         min_susceptible = Int(floor(0.1*nbact)),
         stress,
         animalno,
-        seed
+        seed,
+        dim = dims
     )
 
     bacterialModel = AgentBasedModel(BacterialAgent, agentSpace, properties = bactproperties)

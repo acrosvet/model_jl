@@ -6,7 +6,7 @@ Step AnimalAgents through time
 
 """
     function agent_step!(AnimalAgent, animalModel)
-        #bacto_dyno!(AnimalAgent)
+        #bacto_dyno!(AnimalAgent) 
         if animalModel.step > 1
             agent_movement!(AnimalAgent, animalModel)
         end

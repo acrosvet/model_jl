@@ -7,7 +7,8 @@ function initialiseFarms(
     step = 0;
     numfarms::Int = 5,
     nbact::Int = 10000,
-    dims::Int = 100
+    dims::Int = 100,
+    num_res::Int = 1
    )
 
 
@@ -50,9 +51,19 @@ function farm_system(id)
     end
 end
 
+function set_status(id, num_res)
+    if id <= num_res
+        :R
+    elseif id % 5 == 0
+        :IS
+    else
+        :S
+    end
+end
+
 for farm in 1:numfarms
     id +=1
-    status = id == rand(1:numfarms) ? :I : :S
+    status = set_status(id, num_res)
     tradelevel = rand(1:5)
     ncows = rand(150:220)
     system = farm_system(id)
