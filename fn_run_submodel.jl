@@ -1,7 +1,7 @@
     function run_submodel!(AnimalAgent, animalModel)
 
     # Update the submodel parameters
-
+    AnimalAgent.submodel.total_status = AnimalAgent.status
     AnimalAgent.submodel.animalno = AnimalAgent.id
     AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
     AnimalAgent.submodel.age = AnimalAgent.age
@@ -17,8 +17,6 @@
         AnimalAgent.status = :IR
     end
 
-    println(AnimalAgent.bactopop_r)
-    println(AnimalAgent.submodel.resistant_pop)
 
     AnimalAgent.submodel.total_status = AnimalAgent.status
 
