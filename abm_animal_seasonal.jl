@@ -101,6 +101,9 @@
     for n in 1:(N - num_heifers)
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = (rand(animalModel.rng, 1:Int(floor(6*√num_lac)), 2)..., 5)
+        while !isempty(pos, animalModel)
+            pos = (rand(animalModel.rng, 1:Int(floor(6*√num_lac)), 2)..., 5)
+        end
         status = initial_status(n, init_ir, init_is) # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -141,9 +144,7 @@
             animalno = 0,
             dims = dims
         )
-        if isempty(pos, animalModel)
-            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
-        end
+        add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
     end
 
     # Add the heifers ---------------------------------------------------
@@ -151,6 +152,9 @@
    for n in 1:num_heifers
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = (rand(animalModel.rng, 1:Int(floor(7*√num_heifers)), 2)..., 4)
+        while !isempty(pos, animalModel)
+            pos = (rand(animalModel.rng, 1:Int(floor(7*√num_heifers)), 2)..., 4)
+        end
         status = :S # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -191,15 +195,16 @@
             animalno = 0,
             dims = dims
         )
-        if isempty(pos, animalModel)
             add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
-        end
     end
 
     # Add weaned ---------------------------------------------------------------------------
     for n in 1:num_weaned
         # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
         pos = (rand(animalModel.rng, 1:Int(floor(7*√num_weaned)), 2)..., 2)
+        while !isempty(pos, animalModel)
+            pos = (rand(animalModel.rng, 1:Int(floor(7*√num_weaned)), 2)..., 2)
+        end
         status = :S # Defined using initial status function
         age = Int(floor(rand(truncated(Rayleigh(365),(295), (385))))) # Defined using initial age function
         βᵣ = βᵣ 
@@ -240,9 +245,7 @@
             animalno = 0,
             dims = dims
         )
-        if isempty(pos, animalModel)
-            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
-        end    
+            add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered) 
     end
     
     animalModel.herd_size = N*1.5

@@ -108,32 +108,69 @@ function initialiseBacteria(
 
     # set a small subpopulation of resistant bacteria
 
-    resistant_seed = 0.01
+    if bacterialModel.total_status == :IS
+        min_sensitive = Int(floor(rand(0.5:0.01:0.6)*nbact))
+    else
+        min_sensitive = 0
+    end
+
+    if bacterialModel.total_status == :IR
+        min_resistant = Int(floor(rand(0.5:0.01:0.6)*nbact))
+    else
+        min_resistant = bacterialModel.min_resistant
+    end
 
 
 
     # Set up the initial parameters
-     for n in 1:(nbact - Int(floor(resistant_seed*nbact)))
+     for n in 1:(nbact - min_resistant - min_sensitive)
         strain = rand(1:nstrains)
-        pos = (1,1)
+        pos = (rand(1:dims),rand(1:dims))
         strain_status = strain_statuses[strain]
         fitness = bact_fitnesses[strain]
         status = strain_status
-        agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-        add_agent_single!(agent, bacterialModel)
+        #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
+        #if isempty(pos, bacterialModel)
+            add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
+        #end
+        #add_agent_single!(agent, bacterialModel)
     end
 
 
-       for n in 1:Int(floor(resistant_seed*nbact))
+       for n in 1:min_resistant
             strain = nstrains + 1
-            pos = (1,1)
+            pos = (rand(1:dims),rand(1:dims))
             strain_status = :R
             fitness = mean(bacterialModel.fitnesses)
             status = :R
-            agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-            add_agent_single!(agent, bacterialModel)
+            #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
+            #add_agent_single!(agent, bacterialModel)
+            #if isempty(pos, bacterialModel)
+                add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
+            #end
            # println("Added agent")
         end
+
+        if min_sensitive != 0
+            for n in 1:min_sensitive
+                pathogenic_strain = 1
+                while pathogenic_strain == bacterialModel.r_strain
+                    pathogenic_strain += 1
+                end
+                strain = pathogenic_strain
+                pos = (rand(1:dims),rand(1:dims))
+                strain_status = :IS
+                fitness = bacterialModel.fitnesses[pathogenic_strain]
+                status = :IS
+                #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
+                #add_agent_single!(agent, bacterialModel)
+                #if isempty(pos, bacterialModel)
+                    add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
+                #end
+               # println("Added agent")
+            end
+        end
+
 
         return bacterialModel
 

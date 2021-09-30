@@ -3,6 +3,7 @@ source("./r_scripts/libraries.r")
 positions <- read_csv("./export/bacterial_positions.csv")
 
 scratch <- positions %>%
+    filter(id != 0) %>%
     group_by(step, bactostatus) %>%
     summarise(count = n()) %>%
     pivot_wider(names_from = bactostatus, values_from = count)
@@ -28,16 +29,23 @@ p <- positions %>%
     #filter(step == 1) %>%
     ggplot(aes(x = x, y = y, fill = bactostatus)) +
     geom_tile() +
-    transition_states(step, transition_length = 0, state_length = 1)
+    transition_states(step, transition_length = 0, state_length = 1) +
+    theme_void()+    
+    ggtitle('Model day {frame}')
+
+
+
 library(gganimate)
 animate(p)
+
+p <-  p 
 
 anim_save("./export/animation.gif")
 positions %>%
     filter(bactostatus != 0) %>%
     arrange(id) %>%
     plot_ly(x = ~x, y = ~y, color = ~strain, colors = 'Dark2', frame = ~step) %>%
-    animation_opts(redraw = FALSE, transition = 0)
+    animation_opts(redraw = FALSE, transition = 0) 
 
 
 
