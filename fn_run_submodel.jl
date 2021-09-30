@@ -17,6 +17,8 @@
         AnimalAgent.status = :IR
     end
 
+    println(AnimalAgent.bactopop_r)
+    println(AnimalAgent.submodel.resistant_pop)
 
     AnimalAgent.submodel.total_status = AnimalAgent.status
 
