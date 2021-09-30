@@ -8,5 +8,5 @@ function bact_model_step!(bacterialModel)
     bacterial_population!(bacterialModel)
     #export_bacto_data!(bacterialModel)
 
-    println("Stepped")
+# println("Stepped")
 end 

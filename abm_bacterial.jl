@@ -41,6 +41,7 @@ function initialiseBacteria(
         rng = MersenneTwister(seed),
         resistant_pop = 0,
         sensitive_pop = 0,
+        susceptible_pop = 0,
         num_sensitive = 0,
         num_resistant = 0,
         num_susceptible = 0,
@@ -84,7 +85,7 @@ function initialiseBacteria(
     bacterialModel.strain_statuses = strain_statuses = fn_strain_status!(nstrains, r_strain)
 
 
-    strain_status = (strain == r_strain) ? :R : :IS
+    strain_status = (strain == r_strain) ? :R : :S
 
 
 

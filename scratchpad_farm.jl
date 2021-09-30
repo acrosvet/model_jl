@@ -15,4 +15,4 @@ include("trade_header.jl")
 
 tmp = initialiseFarms(numfarms = 100, nbact = 1000, dims = 33)
 
-@time run!(tmp, farm_step!, farm_mstep!, 365*5)
+@time run!(tmp, farm_step!, farm_mstep!, 10)
