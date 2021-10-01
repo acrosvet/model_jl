@@ -1,5 +1,5 @@
         # Required packages 
-        include("packages.jl")
+        @everywhere include("packages.jl")
 
         @everywhere include("agent_types.jl")
 
@@ -11,4 +11,4 @@
         @everywhere include("bacterial_model.jl")
  
         # Include the animal_model
-        include("animal_model.jl")
+        @everywhere include("animal_model.jl")

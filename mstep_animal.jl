@@ -19,7 +19,7 @@ model_step!(animalModel)
 function model_step!(animalModel)
 
     stock_numbers!(animalModel)
-    thread_submodel!(animalModel)
+    #thread_submodel!(animalModel)
     trading_need!(animalModel)
     send_trades!(animalModel)
         # Increment the date by one day

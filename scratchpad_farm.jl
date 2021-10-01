@@ -1,10 +1,17 @@
 using Distributed 
 
-addprocs(32)
+addprocs(4)
+
+Threads.@threads for i in 1:Threads.nthreads()
+    println(i)
+        # We use a different seed for each thread so that the various threads don't duplicate
+        # the same values.
+        Random.seed!(1234 + i)
+end
 
 include("testing.jl")
 
-include("farm_model.jl")
+include("farm_model.jl")        
 
 #tmp = initialiseSeasonal(220)
 
@@ -15,7 +22,7 @@ include("trade_header.jl")
 
 
 
-tmp = initialiseFarms(numfarms = 100, nbact = 1000, dims = 33)
+tmp = initialiseFarms(numfarms = 10, nbact = 100, dims = 10)
 
-@time run!(tmp, farm_step!, farm_mstep!, 100)
+@time run!(tmp, farm_step!, farm_mstep!, 10)
 println(Threads.nthreads())
