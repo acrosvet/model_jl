@@ -1,9 +1,7 @@
-function thread_submodel!(animalModel)
+function thread_submodel!(AnimalAgent, animalModel)
 
-     #Threads.@threads 
-     for a in collect(allagents(animalModel))
-         a.submodel.seed = a.id + animalModel.seed
-         Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!,1)
-     end
- 
+
+         AnimalAgent.seed = AnimalAgent.id + animalModel.seed
+         Threads.@spawn step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!,1)
+
  end
