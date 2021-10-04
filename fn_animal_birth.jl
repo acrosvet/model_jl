@@ -4,9 +4,14 @@ position_counter = 0
 
     while position_counter == 0
             # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-            pos = (rand(animalModel.rng, 1:Int(floor(3*√animalModel.num_calves)), 2)..., 1)
+            if animalModel.current_calves == 0
+                range = 10
+            else
+                range = Int(floor(3*√animalModel.current_calves))
+            end 
+            pos = (rand(animalModel.rng, 1:range, 2)..., 1)
             while !isempty(pos, animalModel)
-                pos = (rand(animalModel.rng, 1:Int(floor(3*√animalModel.num_calves)), 2)..., 1)
+                pos = (rand(animalModel.rng, 1:range, 2)..., 1)
             end
             age = 1
             status = AnimalAgent.status
@@ -32,7 +37,7 @@ position_counter = 0
             sex = rand(animalModel.rng) > 0.5 ? :F : :M
             calving_season = AnimalAgent.calving_season
             days_recovered = 0
-            submodel = initialiseBacteria(
+            submodel = initialiseBacteriaSub(
                 nbact = animalModel.nbact,
                 total_status = status,
                 timestep = 1.0,
