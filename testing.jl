@@ -1,14 +1,14 @@
         # Required packages 
-        @everywhere include("packages.jl")
+        include("packages.jl")
 
-        @everywhere include("agent_types.jl")
+        include("agent_types.jl")
 
         # Def - time resolution ------------
 
         const time_resolution = 1
         
         # Include the bacterial model 
-        @everywhere include("bacterial_model.jl")
+        include("bacterial_model.jl")
  
         # Include the animal_model
-        @everywhere include("animal_model.jl")
+        include("animal_model.jl")

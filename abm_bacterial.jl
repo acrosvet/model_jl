@@ -38,7 +38,7 @@ function initialiseBacteria(
         total_status,
         age,
         days_exposed,
-        rng = MersenneTwister(seed),
+        rng = MersenneTwister(),
         resistant_pop = 0,
         sensitive_pop = 0,
         susceptible_pop = 0,
