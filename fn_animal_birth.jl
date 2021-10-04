@@ -4,7 +4,10 @@ position_counter = 0
 
     while position_counter == 0
             # Position, initially random, a tuple defined by the random parms of the model and with dimension of 2
-            pos = (rand(animalModel.rng, 1:100, 2)..., 1)
+            pos = (rand(animalModel.rng, 1:Int(floor(3*√animalModel.num_calves)), 2)..., 1)
+            while !isempty(pos, animalModel)
+                pos = (rand(animalModel.rng, 1:Int(floor(3*√animalModel.num_calves)), 2)..., 1)
+            end
             age = 1
             status = AnimalAgent.status
             βᵣ = animalModel.βᵣ
@@ -42,12 +45,9 @@ position_counter = 0
                 seed = AnimalAgent.id, 
                 rng = MersenneTwister(Threads.threadid())
             )
-            if isempty(pos, animalModel)
                 add_agent!(pos, animalModel, age, status, βₛ, βᵣ, inf_days, days_exposed, days_carrier, treatment, days_treated, since_tx, bactopop_r, bactopop_is, submodel, stage, dim, days_dry, trade_status, agenttype, lactation, pregstat, dic, stress, sex, calving_season, days_recovered)
                 #println("$calving_season Calf born!")
                 position_counter += 1
-            end
-
 
     end
 end
