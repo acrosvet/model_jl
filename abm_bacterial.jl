@@ -20,7 +20,8 @@ function initialiseBacteria(
         days_exposed::Int = AnimalAgent.days_exposed,
         days_recovered::Int = AnimalAgent.days_recovered,
         stress::Bool = AnimalAgent.stress,
-        seed::Int = 42
+        seed::Int = 42,
+        rng::MersenneTwister = MersenneTwister(42)
 
 
     )
@@ -38,7 +39,7 @@ function initialiseBacteria(
         total_status,
         age,
         days_exposed,
-        rng = MersenneTwister(),
+        rng = rng,
         resistant_pop = 0,
         sensitive_pop = 0,
         susceptible_pop = 0,

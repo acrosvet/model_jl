@@ -18,6 +18,12 @@ model_step!(animalModel)
 """
 function model_step!(animalModel)
 
+    for a in collect(allagents(animalModel))
+        rng = [MersenneTwister(i) for i = 1:Threads.nthreads()]
+        AnimalAgent.submodel.rng = rng[Threads.threadid()]
+        Threads.@spawn step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!,1)
+    end
+
     stock_numbers!(animalModel)
     #thread_submodel!(animalModel)
     trading_need!(animalModel)
