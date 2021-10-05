@@ -21,7 +21,7 @@ Threads.@threads for i in 1:Threads.nthreads()
         Random.seed!(1234 + i)
 end
 
-tmp = initialiseFarms(numfarms = 10, nbact = 1000, dims = 33)
+tmp = initialiseFarms(numfarms = 100, nbact = 10000, dims = 100)
 
-@time run!(tmp, farm_step!, farm_mstep!, 10)
+@time run!(tmp, farm_step!, farm_mstep!, 100)
 println(Threads.nthreads())
