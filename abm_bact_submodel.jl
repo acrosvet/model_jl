@@ -20,7 +20,6 @@ function initialiseBacteriaSub(
         seed::Int = 42,
         rng::MersenneTwister = MersenneTwister(42)
 
-
     )
 
     agentSpace = GridSpace((dims, dims); periodic = false)
@@ -119,17 +118,19 @@ function initialiseBacteriaSub(
     end
 
 
-
     # Set up the initial parameters
      for n in 1:(nbact - min_resistant - min_sensitive)
         strain = rand(bacterialModel.rng, 1:nstrains)
         pos = (rand(bacterialModel.rng, 1:dims),rand(bacterialModel.rng, 1:dims))
+        while  !isempty(pos, bacterialModel)
+            pos = (rand(bacterialModel.rng, 1:dims),rand(bacterialModel.rng, 1:dims))
+        end
         strain_status = strain_statuses[strain]
         fitness = bact_fitnesses[strain]
         status = strain_status
         #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
         #if isempty(pos, bacterialModel)
-            add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
+            add_agent!(pos, bacterialModel, status, strain, strain_status, fitness)
         #end
         #add_agent_single!(agent, bacterialModel)
     end
@@ -138,13 +139,16 @@ function initialiseBacteriaSub(
        for n in 1:min_resistant
             strain = nstrains + 1
             pos = (rand(bacterialModel.rng, 1:dims),rand(bacterialModel.rng, 1:dims))
+            while  !isempty(pos, bacterialModel)
+                pos = (rand(bacterialModel.rng, 1:dims),rand(bacterialModel.rng, 1:dims))
+            end
             strain_status = :R
             fitness = mean(bacterialModel.fitnesses)
             status = :R
             #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
             #add_agent_single!(agent, bacterialModel)
             #if isempty(pos, bacterialModel)
-                add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
+                add_agent!(pos, bacterialModel, status, strain, strain_status, fitness)
             #end
            # println("Added agent")
         end
@@ -157,13 +161,16 @@ function initialiseBacteriaSub(
                 end
                 strain = pathogenic_strain
                 pos = (rand(bacterialModel.rng, 1:dims),rand(bacterialModel.rng, 1:dims))
+                while  !isempty(pos, bacterialModel)
+                    pos = (rand(bacterialModel.rng, 1:dims),rand(bacterialModel.rng, 1:dims))
+                end
                 strain_status = :IS
                 fitness = bacterialModel.fitnesses[pathogenic_strain]
                 status = :IS
                 #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
                 #add_agent_single!(agent, bacterialModel)
                 #if isempty(pos, bacterialModel)
-                    add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
+                    add_agent!(pos, bacterialModel, status, strain, strain_status, fitness)
                 #end
                # println("Added agent")
             end
