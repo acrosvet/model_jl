@@ -19,8 +19,8 @@ model_step!(animalModel)
 function model_step!(animalModel)
 
     for a in collect(allagents(animalModel))
-        rng = [MersenneTwister(i) for i = 1:Threads.nthreads()]
-        a.submodel.rng = rng[Threads.threadid()]
+        
+        a.submodel.rng = MersenneTwister(hash(a))
         Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!,1)
     end
 

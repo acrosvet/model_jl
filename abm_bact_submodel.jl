@@ -18,7 +18,7 @@ function initialiseBacteriaSub(
         days_recovered::Int = AnimalAgent.days_recovered,
         stress::Bool = AnimalAgent.stress,
         seed::Int = 42,
-        rng::MersenneTwister = MersenneTwister(42)
+        rng::MersenneTwister = MersenneTwister(hash(AnimalAgent))
 
     )
 
