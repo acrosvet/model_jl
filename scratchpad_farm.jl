@@ -1,6 +1,6 @@
 using Distributed 
 
-#addprocs(32)
+addprocs(32)
 include("testing.jl")
 
 
@@ -21,7 +21,7 @@ Threads.@threads for i in 1:Threads.nthreads()
         Random.seed!(1234 + i)
 end
 
-tmp = initialiseFarms(numfarms = 10, nbact = 100, dims = 10)
+tmp = initialiseFarms(numfarms = 10, nbact = 1000, dims = 33)
 
 @time run!(tmp, farm_step!, farm_mstep!, 10)
 println(Threads.nthreads())
