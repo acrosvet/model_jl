@@ -23,5 +23,5 @@ end
  =#
 tmp = initialiseFarms(numfarms = 100, nbact = 1000, dims = 33)
 
-@time run!(tmp, farm_step!, farm_mstep!, 100)
+@time run!(tmp, farm_step!, farm_mstep!, 10)
 println(Threads.nthreads())
