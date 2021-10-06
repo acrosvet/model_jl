@@ -5,7 +5,7 @@ function dryoff!(AnimalAgent, animalModel)
 
 # Split calving system -----------------------------------------------------------------------------------------------    
 if animalModel.system == :Split
-    if AnimalAgent.dim ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(305), 290, 330)))) && AnimalAgent.agenttype != :CO
+    if AnimalAgent.dim ≥ rand(animalModel.rng, 290:315) && AnimalAgent.agenttype != :CO
         if AnimalAgent.pregstat == :E
             if rand(animalModel.rng) > 0.4 && AnimalAgent.dim < 330
                 if AnimalAgent.calving_season == :Spring
@@ -30,7 +30,7 @@ if animalModel.system == :Split
 end
 # Spring calving system -------------------------------------------------------------
 if animalModel.system == :Seasonal|| animalModel.system == :Continuous
-    if AnimalAgent.dim ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(305), 290, 330))))
+    if AnimalAgent.dim ≥ rand(animalModel.rng, 290:315)
             AnimalAgent.stage = :D
             AnimalAgent.days_dry = 1
             AnimalAgent.dim = 0
@@ -42,7 +42,7 @@ end
 # Batch calving system ----------------------------------------------------------------
 
 if animalModel.system == :Batch
-    if AnimalAgent.dim ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(305), 290, 330)))) && AnimalAgent.agenttype != :CO
+    if AnimalAgent.dim ≥ rand(animalModel.rng, 290:315) && AnimalAgent.agenttype != :CO
         if AnimalAgent.pregstat == :E
             if rand(animalModel.rng) > 0.4 && AnimalAgent.dim < 330
                 if AnimalAgent.calving_season == :B1
