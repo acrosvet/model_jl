@@ -22,6 +22,8 @@ function initialiseBacteriaSub(
 
     )
 
+    Random.seed!(rng)
+
     agentSpace = GridSpace((dims, dims); periodic = false)
 
     bactproperties = @dict(
