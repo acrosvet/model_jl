@@ -14,14 +14,14 @@ include("trade_header.jl")
 
 #@time run!(tmp, agent_step!, model_step!, 365) 
 
-Threads.@threads for i in 1:Threads.nthreads()
+#= Threads.@threads for i in 1:Threads.nthreads()
     #println(i)
         # We use a different seed for each thread so that the various threads don't duplicate
         # the same values.
         Random.seed!(1234 + i)
 end
+ =#
+tmp = initialiseFarms(numfarms = 100, nbact = 1000, dims = 33)
 
-tmp = initialiseFarms(numfarms = 100, nbact = 10000, dims = 100)
-
-@time run!(tmp, farm_step!, farm_mstep!, 10)
+@time run!(tmp, farm_step!, farm_mstep!, 100)
 println(Threads.nthreads())

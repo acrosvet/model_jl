@@ -21,6 +21,7 @@ function model_step!(animalModel)
     for a in collect(allagents(animalModel))
         
         a.submodel.rng = MersenneTwister(hash(a))
+        Random.seed!(a.submodel.rng)
         Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!,1)
     end
 
