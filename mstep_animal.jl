@@ -18,11 +18,11 @@ model_step!(animalModel)
 """
 function model_step!(animalModel)
 
-    for a in collect(allagents(animalModel))
+    Threads.@threads for a in collect(allagents(animalModel))
         
         a.submodel.rng = MersenneTwister(hash(a))
         Random.seed!(a.submodel.rng)
-        Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!,1)
+        step!(a.submodel, bact_agent_step!, bact_model_step!,1)
     end
 
     stock_numbers!(animalModel)
