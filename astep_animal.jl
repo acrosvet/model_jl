@@ -11,7 +11,7 @@ Step AnimalAgents through time
             agent_movement!(AnimalAgent, animalModel)
         end
         run_submodel!(AnimalAgent, animalModel)
-       # thread_submodel!(AnimalAgent, animalModel)
+        thread_submodel!(AnimalAgent, animalModel)
         
         cull_milkers!(AnimalAgent, animalModel)
         advance_pregnancy!(AnimalAgent)

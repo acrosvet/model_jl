@@ -8,6 +8,8 @@ function farm_step!(FarmAgent, farmModel)
         farm_trader!(FarmAgent, farmModel)
     end
     
-    
+    Random.seed!(MersenneTwister(hash(FarmAgent)))
+    FarmAgent.animalModel.rng = MersenneTwister(hash(FarmAgent))
+    Threads.@spawn step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
 
 end
