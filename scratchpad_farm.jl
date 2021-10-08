@@ -1,16 +1,16 @@
 using Distributed 
 
-addprocs(32)
-include("testing.jl")
+addprocs(16)
+@everywhere include("testing.jl")
 
 
 
-include("farm_model.jl")        
+@everywhere include("farm_model.jl")        
 
 #tmp = initialiseSeasonal(220)
 
-include("aanimal_headers.jl")
-include("trade_header.jl")
+@everywhere include("aanimal_headers.jl")
+@everywhere include("trade_header.jl")
 
 #@time run!(tmp, agent_step!, model_step!, 365) 
 
