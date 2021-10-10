@@ -10,6 +10,6 @@ function farm_step!(FarmAgent, farmModel)
     
     Random.seed!(MersenneTwister(hash(FarmAgent)))
     FarmAgent.animalModel.rng = MersenneTwister(hash(FarmAgent))
-    @everywhere @async Threads.@spawn step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
-
+    out = @everywhere @async Threads.@spawn step!(FarmAgent.animalModel, agent_step!, model_step!, 1)
+    fetch(out)
 end

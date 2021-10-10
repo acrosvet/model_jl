@@ -12,7 +12,7 @@ Step AnimalAgents through time
         end
         run_submodel!(AnimalAgent, animalModel)
         @everywhere thread_submodel!(AnimalAgent, animalModel)
-        
+
         cull_milkers!(AnimalAgent, animalModel)
         advance_pregnancy!(AnimalAgent)
         calving!(AnimalAgent, animalModel)
