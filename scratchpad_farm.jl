@@ -21,7 +21,7 @@ addprocs(32)
         Random.seed!(1234 + i)
 end
  =#
-tmp = initialiseFarms(numfarms = 10, nbact = 1000, dims = 33)
+ tmp = initialiseFarms(numfarms = 10, nbact = 1000, dims = 33)
 
-@time run!(tmp, farm_step!, farm_mstep!, 5)
+@time run!(tmp, farm_step!, farm_mstep!, 365)
 println(Threads.nthreads())
