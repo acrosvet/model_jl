@@ -11,7 +11,7 @@ Step AnimalAgents through time
             agent_movement!(AnimalAgent, animalModel)
         end
         run_submodel!(AnimalAgent, animalModel)
-        @everywhere thread_submodel!(AnimalAgent, animalModel)
+       # @everywhere thread_submodel!(AnimalAgent, animalModel)
 
         cull_milkers!(AnimalAgent, animalModel)
         advance_pregnancy!(AnimalAgent)
@@ -23,8 +23,8 @@ Step AnimalAgents through time
         heifer_joining!(AnimalAgent, animalModel)
         dryoff!(AnimalAgent, animalModel)
         update_agent!(AnimalAgent) #Apply the update_agent function
-        export_animal_data!(AnimalAgent, animalModel)
-        export_animal_position!(AnimalAgent, animalModel)
+        @everywhere export_animal_data!(AnimalAgent, animalModel)
+        @everywhere export_animal_position!(AnimalAgent, animalModel)
         #latency!(AnimalAgent, animalModel)
         transmit!(AnimalAgent, animalModel)
         recovery!(AnimalAgent, animalModel)
