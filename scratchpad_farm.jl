@@ -1,17 +1,17 @@
 using Distributed 
 
-addprocs(16)
-@everywhere include("testing.jl")
+addprocs(32)
+ include("testing.jl")
 
 
 
-@everywhere include("farm_model.jl")        
+ include("farm_model.jl")        
 
 #tmp = initialiseSeasonal(220)
 
-@everywhere include("aanimal_headers.jl")
-@everywhere include("trade_header.jl")
-@everywhere include("export_prepare_adata.jl")
+ include("aanimal_headers.jl")
+ include("trade_header.jl")
+ include("export_prepare_adata.jl")
 #@time run!(tmp, agent_step!, model_step!, 365) 
 
 #= Threads.@threads for i in 1:Threads.nthreads()
