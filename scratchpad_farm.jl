@@ -11,7 +11,7 @@ addprocs(32)
 
  include("aanimal_headers.jl")
  include("trade_header.jl")
- include("export_prepare_adata.jl")
+ #include("export_prepare_adata.jl")
 #@time run!(tmp, agent_step!, model_step!, 365) 
 
 #= Threads.@threads for i in 1:Threads.nthreads()
@@ -23,5 +23,5 @@ end
  =#
 tmp = initialiseFarms(numfarms = 10, nbact = 1000, dims = 33)
 
-@time run!(tmp, farm_step!, farm_mstep!, 10)
+@time run!(tmp, farm_step!, farm_mstep!, 5)
 println(Threads.nthreads())
