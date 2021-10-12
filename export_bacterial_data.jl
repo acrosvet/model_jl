@@ -5,7 +5,9 @@
         sensitive = bacterialModel.num_sensitive,
         resistant = bacterialModel.num_resistant,
         susceptible = bacterialModel.num_susceptible,
-        resistant_proportion = bacterialModel.resistant_pop)
+        resistant_proportion = bacterialModel.resistant_pop,
+        total_status = bacterialModel.total_status,
+        days_exposed = bacterialModel.days_exposed)
     bacto_output = open("./export/bacterial_model_run.csv","a")
     CSV.write(bacto_output, bacterial_data, delim = ",", append = true, header = false)
     close(bacto_output)

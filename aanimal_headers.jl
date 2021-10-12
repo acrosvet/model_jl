@@ -25,6 +25,9 @@
     psc = 0,
     msd = 0,
     CurrentLac = 0,
+    bact_exposed = 0,
+    bact_total_stat = 0,
+    bact_tdays_rec = 0
 )
 
 output = open("./export/seasonal_model_run.csv","w")

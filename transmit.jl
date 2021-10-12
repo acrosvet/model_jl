@@ -1,4 +1,5 @@
 function transmit!(AnimalAgent, animalModel)
+    if animalModel.step > 1
         possible_interactions =  collect(nearby_ids(AnimalAgent, animalModel, (1, 1, 0)))
         num_contacts = length(possible_interactions)
         status_agent = AnimalAgent.status
@@ -48,5 +49,5 @@ function transmit!(AnimalAgent, animalModel)
 
 
 
-
+    end
 end
