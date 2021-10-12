@@ -31,7 +31,7 @@ Step AnimalAgents through time
         flag_trades!(AnimalAgent,animalModel)
         #daytrader!(AnimalAgent, animalModel)
 
-
+ 
 
     end
  

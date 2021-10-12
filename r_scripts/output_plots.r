@@ -3,7 +3,18 @@ source("./r_scripts/libraries.r")
 library(lubridate)
 #library(htmlwidgets)
 # Import the model run from the animalModel
-run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/seasonal_model_run.csv")
+run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/seasonal_model_run.csv") %>%
+        janitor::clean_names()
+
+
+# GGPLOT static plots of infection------------------------------------------------
+
+run %>% 
+  mutate(day = lubridate::ymd(day)) %>%
+  group_by(day, animal_status) %>%
+  summarise(count = n()) %>%
+  ggplot(aes(x = day, y = count, colour =animal_status)) +
+  geom_line()
 
 
 # Faceted plot of farm runs 

@@ -6,6 +6,7 @@ function transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_
     if AnimalAgent.status == susceptible && interacting_agent.status == inf_stat
         if rand(animalModel.rng) < beta
             AnimalAgent.status = to_stat
+            AnimalAgent.submodel.total_status = to_stat
             AnimalAgent.days_exposed += 1
             transmission = "Transmission to agent!"
         else
@@ -14,7 +15,8 @@ function transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_
     elseif interacting_agent.status == inf_stat && AnimalAgent.status == susceptible
         if rand(animalModel.rng) < beta
             interacting_agent.status = to_stat
-            AnimalAgent.days_exposed +=1 
+            interacting_agent.submodel.total_status = to_stat
+            interacting_agent.days_exposed +=1 
             transmission = "Transmission from agent!"
         else
             transmission = "No transmission"
