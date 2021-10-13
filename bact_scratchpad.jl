@@ -18,7 +18,7 @@ include("bact_carrier_state.jl")
 include("bact_stressor.jl")
 include("bact_infected_transition.jl")
 
-@time bactoMod = initialiseBacteria(nbact = 10000, dims = 100, total_status = :IS, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0, days_recovered = 0, stress = false, animalno = 0)
+@time bactoMod = initialiseBacteria(nbact = 10000, dims = 100, total_status = :ER, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0, days_recovered = 0, stress = false, animalno = 0)
 
 include("bact_export_headers.jl")
 @time run!(bactoMod, bact_agent_step!, bact_model_step!, 1)

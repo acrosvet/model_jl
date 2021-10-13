@@ -21,14 +21,14 @@
     
 
 
-
+#= 
     bact_model_step!(AnimalAgent.submodel)
 
     for a in collect(allagents(AnimalAgent.submodel))
          bact_agent_step!(a, AnimalAgent.submodel)
     end
-
+ =#
     # run the submodel
-    #step!(AnimalAgent.submodel, bact_agent_tep!, bact_model_step!,1)
+    step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!,1)
 
     end

@@ -18,7 +18,6 @@ model_step!(animalModel)
 """
 function model_step!(animalModel)
 
-<<<<<<< HEAD
 #=      Threads.@threads for a in collect(allagents(animalModel))
         
         a.submodel.rng = MersenneTwister(hash(a))
@@ -45,13 +44,13 @@ function model_step!(animalModel)
             println(animalModel[i].bactopop_r)
 
         end
-=======
+
     for a in collect(allagents(animalModel))
         
         a.submodel.rng = MersenneTwister(hash(a))
         Random.seed!(a.submodel.rng)
-        Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!,1)
->>>>>>> parent of 069de04 (push)
+        Threads.@spawn @sync step!(a.submodel, bact_agent_step!, bact_model_step!,1)
+
     end
 
     stock_numbers!(animalModel)
@@ -110,7 +109,5 @@ if animalModel.system == :Batch
     end
 end
 end
-
-
-    
+end
 end
