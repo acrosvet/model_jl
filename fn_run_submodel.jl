@@ -1,5 +1,12 @@
     function run_submodel!(AnimalAgent, animalModel)
 
+        if AnimalAgent.bactopop_is > 0.5 
+            AnimalAgent.status = :IS
+        elseif AnimalAgent.bactopop_r > 0.5
+            AnimalAgent.status = :IR
+        end
+    
+
     # Update the submodel parameters
     AnimalAgent.submodel.step = animalModel.step
     AnimalAgent.submodel.total_status = AnimalAgent.status
@@ -12,14 +19,8 @@
 #=     AnimalAgent.bactopop_is = AnimalAgent.submodel.sensitive_pop
     AnimalAgent.bactopop_r = AnimalAgent.submodel.resistant_pop =#
     
-    if AnimalAgent.bactopop_is > 0.5 
-        AnimalAgent.status = :IS
-    elseif AnimalAgent.bactopop_r > 0.5
-        AnimalAgent.status = :IR
-    end
 
 
-    AnimalAgent.submodel.total_status = AnimalAgent.status
 
     bact_model_step!(AnimalAgent.submodel)
 

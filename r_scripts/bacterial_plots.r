@@ -60,3 +60,6 @@ positions %>%
 
 
 bacto_run <- read_csv("./export/bacterial_model_run.csv")
+
+View(bacto_run %>%
+    arrange(animal_id, step))
