@@ -1,7 +1,7 @@
 function infection!(BacterialAgent, bacterialModel)
 
     num_susceptible = bacterialModel.num_susceptible
-    println(num_susceptible)
+    #println(num_susceptible)
 #=     num_susceptible = [a.status == :S for a in allagents(bacterialModel)]
     num_susceptible = sum(num_susceptible)
  =#

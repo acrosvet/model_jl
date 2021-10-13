@@ -1,4 +1,5 @@
 bacto_header = DataFrame(
+    animal_id = 0, 
     step = 0,
     sensitive = 0,
     resistant = 0,

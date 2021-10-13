@@ -1,6 +1,7 @@
     function run_submodel!(AnimalAgent, animalModel)
 
     # Update the submodel parameters
+    AnimalAgent.submodel.step = animalModel.step
     AnimalAgent.submodel.total_status = AnimalAgent.status
     AnimalAgent.submodel.animalno = AnimalAgent.id
     AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
@@ -20,8 +21,13 @@
 
     AnimalAgent.submodel.total_status = AnimalAgent.status
 
+    bact_model_step!(AnimalAgent.submodel)
+
+    for a in collect(allagents(AnimalAgent.submodel))
+         bact_agent_step!(a, AnimalAgent.submodel)
+    end
 
     # run the submodel
-    #step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!,1)
+    #step!(AnimalAgent.submodel, bact_agent_tep!, bact_model_step!,1)
 
     end

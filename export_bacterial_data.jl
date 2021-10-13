@@ -1,6 +1,7 @@
 
  function export_bacto_data!(bacterialModel)
     bacterial_data = DataFrame(
+        animal_id = bacterialModel.animalno,
         step = bacterialModel.step,
         sensitive = bacterialModel.num_sensitive,
         resistant = bacterialModel.num_resistant,

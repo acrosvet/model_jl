@@ -10,8 +10,8 @@ Step AnimalAgents through time
         if animalModel.step > 1
             agent_movement!(AnimalAgent, animalModel)
         end
-        run_submodel!(AnimalAgent, animalModel)
-        thread_submodel!(AnimalAgent, animalModel)
+        Threads.@spawn @sync run_submodel!(AnimalAgent, animalModel)
+        #thread_submodel!(AnimalAgent, animalModel)
 
         cull_milkers!(AnimalAgent, animalModel)
         advance_pregnancy!(AnimalAgent)
