@@ -32,10 +32,17 @@ function model_step!(animalModel)
             num_sense = [a.status == :IS for a in allagents(animalModel[i].submodel)]
             num_sense = sum(num_sense)/length(animalModel[i].submodel.agents)
             animalModel[i].bactopop_is = num_sense
+            println(i)
+            println(num_sense)
+            println(animalModel[i].bactopop_is)
 
             num_res = [a.status == :R for a in allagents(animalModel[i].submodel)]
             num_res = sum(num_res)/length(animalModel[i].submodel.agents)
             animalModel[i].bactopop_r = num_res
+            println(i)
+            println(num_res)
+            println(animalModel[i].bactopop_r)
+
         end
     end
 

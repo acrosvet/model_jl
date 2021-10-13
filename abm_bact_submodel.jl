@@ -93,10 +93,10 @@ function initialiseBacteriaSub(
         for i in 1:nstrains
         strain_status = strain_statuses[i]
         if strain_status == :R
-           fitness =  1 - rand(bacterialModel.rng, Distributions.Beta(4,20),1)[1]
+           fitness =  1 - rand(bacterialModel.rng, Distributions.Beta(1,10),1)[1]
            push!(bact_fitnesses, fitness)
         else
-            fitness  = 1 - rand(bacterialModel.rng, Distributions.Beta(1,20),1)[1]
+            fitness  = 1 - rand(bacterialModel.rng, Distributions.Beta(1,10),1)[1]
             push!(bact_fitnesses, fitness)
         end
     end

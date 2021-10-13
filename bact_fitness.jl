@@ -18,13 +18,13 @@ function fitness!(BacterialAgent, bacterialModel)
             interacting_fitness = interacting_agent.fitness
 
             if BacterialAgent.fitness > interacting_fitness
-                if rand(bacterialModel.rng) < 0.05
+                #if rand(bacterialModel.rng) < 0.05
                     if haskey(bacterialModel.agents, interacting_id) && haskey(bacterialModel.agents, BacterialAgent.id)
                         if bacterialModel.num_resistant > bacterialModel.min_resistant && bacterialModel.num_susceptible > bacterialModel.min_susceptible
                             bacterialModel[interacting_id].strain = BacterialAgent.strain
                             bacterialModel[interacting_id].status = BacterialAgent.status
                         end
-                    end
+                  #  end
                 end
             end
         end
