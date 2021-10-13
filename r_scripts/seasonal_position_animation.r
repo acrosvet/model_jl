@@ -12,17 +12,16 @@ day_81 <- pos_data %>%
 tmp = pos_data %>% 
   filter(stage == "L")
 
-fig <- plot_ly(pos_data) %>%
-    filter(step ==1) %>%
+plot_ly(pos_data) %>%
     add_trace(x=~x, 
     y=~y, 
     z=~z, 
     color = ~stage) %>%
     layout(
-  title = "Initial agent positions")
+  title = "Initial agent positions (batch)")
 
 fig <- pos_data %>%
-#slice(1:51000) %>%
+slice(1:51000) %>%
 filter(step != 0) %>%
   plot_ly(
     x = ~x,
@@ -71,7 +70,7 @@ position_animation <- function(stage){
             label = "heifers."}
           
 pos_data %>%
-  #slice(1:51000) %>%
+  slice(1:51000) %>%
   filter(Day != 0) %>%
   filter(stage == !!stage) %>%
   plot_ly(
