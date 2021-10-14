@@ -32,26 +32,22 @@ function model_step!(animalModel)
             num_sense = [a.status == :IS for a in allagents(animalModel[i].submodel)]
             num_sense = sum(num_sense)/length(animalModel[i].submodel.agents)
             animalModel[i].bactopop_is = num_sense
-            println(i)
-            println(num_sense)
-            println(animalModel[i].bactopop_is)
+
 
             num_res = [a.status == :R for a in allagents(animalModel[i].submodel)]
             num_res = sum(num_res)/length(animalModel[i].submodel.agents)
             animalModel[i].bactopop_r = num_res
-            println(i)
-            println(num_res)
-            println(animalModel[i].bactopop_r)
+
 
         end
-
-    for a in collect(allagents(animalModel))
+    end
+#=     for a in collect(allagents(animalModel))
         
         a.submodel.rng = MersenneTwister(hash(a))
         Random.seed!(a.submodel.rng)
         Threads.@spawn @sync step!(a.submodel, bact_agent_step!, bact_model_step!,1)
 
-    end
+    end =#
 
     stock_numbers!(animalModel)
     #thread_submodel!(animalModel)
@@ -110,4 +106,4 @@ if animalModel.system == :Batch
 end
 end
 end
-end
+

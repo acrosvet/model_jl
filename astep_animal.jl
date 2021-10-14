@@ -6,6 +6,8 @@ Step AnimalAgents through time
 
 """
     function agent_step!(AnimalAgent, animalModel)
+        transmit!(AnimalAgent, animalModel)
+        recovery!(AnimalAgent, animalModel)
         #bacto_dyno!(AnimalAgent) 
         if animalModel.step > 1
             agent_movement!(AnimalAgent, animalModel)
@@ -27,8 +29,7 @@ Step AnimalAgents through time
         export_animal_data!(AnimalAgent, animalModel)
         export_animal_position!(AnimalAgent, animalModel)
         #latency!(AnimalAgent, animalModel)
-        transmit!(AnimalAgent, animalModel)
-        recovery!(AnimalAgent, animalModel)
+        
         flag_trades!(AnimalAgent,animalModel)
         #daytrader!(AnimalAgent, animalModel)
 
