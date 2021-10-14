@@ -1,10 +1,7 @@
 function infection!(BacterialAgent, bacterialModel)
 
     num_susceptible = bacterialModel.num_susceptible
-    #println(num_susceptible)
-#=     num_susceptible = [a.status == :S for a in allagents(bacterialModel)]
-    num_susceptible = sum(num_susceptible)
- =#
+
     if bacterialModel.total_status == :ES && bacterialModel.days_exposed == 1
         pathogenic_strain = 1
         while pathogenic_strain == bacterialModel.r_strain
@@ -12,7 +9,7 @@ function infection!(BacterialAgent, bacterialModel)
         end
         bacterialModel.strain_statuses[pathogenic_strain] = :IS
         if BacterialAgent.id % 3 == 0 && BacterialAgent.strain != bacterialModel.r_strain
-            if num_susceptible > bacterialModel.min_susceptible
+            if (num_susceptible > bacterialModel.min_susceptible) && (bacterialModel.num_resistant > bacterialModel.min_resistant)
                 BacterialAgent.strain = pathogenic_strain
                 BacterialAgent.status = :IS
                 BacterialAgent.fitness = bacterialModel.fitnesses[pathogenic_strain]
@@ -21,7 +18,7 @@ function infection!(BacterialAgent, bacterialModel)
     elseif bacterialModel.total_status == :ER && bacterialModel.days_exposed == 1
         r_strain = bacterialModel.r_strain
         if BacterialAgent.id % 3 == 0
-            if num_susceptible > bacterialModel.min_susceptible
+            if (num_susceptible > bacterialModel.min_susceptible) && (bacterialModel.num_resistant > bacterialModel.min_resistant)
                 BacterialAgent.strain = r_strain
                 BacterialAgent.status = :R
                 BacterialAgent.fitness = bacterialModel.fitnesses[r_strain]

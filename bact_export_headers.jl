@@ -5,6 +5,7 @@ bacto_header = DataFrame(
     resistant = 0,
     susceptible = 0,
     resistant_proportion = 0,
+    sensitive_proportion = 0,
     total_status = 0,
     days_exposed = 0,
 )

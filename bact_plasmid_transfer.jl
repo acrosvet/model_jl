@@ -1,8 +1,5 @@
 function bact_plasmid_transfer!(BacterialAgent, bacterialModel)
 
-#=     num_susceptible = [a.status == :S for a in allagents(bacterialModel)]
-    num_susceptible = sum(num_susceptible) =#
-
     num_susceptible = bacterialModel.num_susceptible
 
     possible_interactions =  collect(nearby_ids(BacterialAgent, bacterialModel, (1, 1)))
