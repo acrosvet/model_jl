@@ -28,7 +28,7 @@ if bacterialModel.num_susceptible > bacterialModel.min_susceptible
             #if (num_susceptible > bacterialModel.min_susceptible) && (bacterialModel.num_resistant > bacterialModel.min_resistant)
                 BacterialAgent.strain = r_strain
                 BacterialAgent.status = :R
-                BacterialAgent.fitness = bacterialModel.fitnesses[r_strain]*rand(bacterialModel.rng, 0.6:0.01:075)
+                BacterialAgent.fitness = bacterialModel.fitnesses[r_strain]*rand(bacterialModel.rng, 0.5:0.01:0.6)
             #end
         end
     end

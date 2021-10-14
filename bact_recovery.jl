@@ -7,7 +7,6 @@ function bact_recovery!(BacterialAgent, bacterialModel)
     bacterialModel.num_susceptible = sum(num_susceptible)
     
     if bacterialModel.days_recovered > 0
-        if BacterialAgent.status == :R || BacterialAgent.status == :IS
             if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_recovered/10)
                 if (bacterialModel.num_resistant > bacterialModel.min_resistant) && BacterialAgent.status == :R
                     if haskey(bacterialModel.agents, BacterialAgent.id)
@@ -19,7 +18,6 @@ function bact_recovery!(BacterialAgent, bacterialModel)
                     end
                 end
             end
-        end
     end
 
 end

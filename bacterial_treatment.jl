@@ -8,7 +8,7 @@
 
         # Turn over agents at each timestep
 
-        if bacterialModel.days_treated > 0
+        if bacterialModel.days_treated > 0 && bacterialModel.days_recovered == 0
             if bacterialModel.total_status == :IR || bacterialModel.total_status == :IS
                 if BacterialAgent.status == :IS
                     if rand(animalModel.rng) < ℯ^(-bacterialModel.days_treated/10)
