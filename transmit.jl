@@ -1,20 +1,10 @@
 function transmit!(AnimalAgent, animalModel)
+    
     if animalModel.step > 1
         possible_interactions =  collect(nearby_ids(AnimalAgent, animalModel, (1, 1, 0)))
         num_contacts = length(possible_interactions)
         status_agent = AnimalAgent.status
 
-
-        if AnimalAgent.inf_days != 0
-            AnimalAgent.inf_days +=1 
-        elseif AnimalAgent.days_recovered != 0
-            AnimalAgent.days_recovered += 1
-        elseif  AnimalAgent.days_exposed != 0
-            AnimalAgent.days_exposed += 1
-        elseif AnimalAgent.days_carrier != 0
-            AnimalAgent.days_carrier += 1
-        end 
-        
          if length(possible_interactions) > 0
             for i in 1:length(possible_interactions)
                 interacting_agent = animalModel[possible_interactions[i]]

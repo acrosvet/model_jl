@@ -18,13 +18,6 @@ model_step!(animalModel)
 """
 function model_step!(animalModel)
 
-#=      Threads.@threads for a in collect(allagents(animalModel))
-        
-        a.submodel.rng = MersenneTwister(hash(a))
-        Random.seed!(a.submodel.rng)
-        step!(a.submodel, bact_agent_step!, bact_model_step!,1)
-    end  =#
-
     # Update bacterial population ----------
 
     for i in 1:length(animalModel.agents)
@@ -41,18 +34,11 @@ function model_step!(animalModel)
 
         end
     end
-#=     for a in collect(allagents(animalModel))
-        
-        a.submodel.rng = MersenneTwister(hash(a))
-        Random.seed!(a.submodel.rng)
-        Threads.@spawn @sync step!(a.submodel, bact_agent_step!, bact_model_step!,1)
-
-    end =#
 
     stock_numbers!(animalModel)
-    #thread_submodel!(animalModel)
     trading_need!(animalModel)
     send_trades!(animalModel)
+    
         # Increment the date by one day
 
         animalModel.date += Day(1)
