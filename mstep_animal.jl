@@ -20,7 +20,7 @@ function model_step!(animalModel)
 
     # Update bacterial population ----------
 
-    for i in 1:length(animalModel.agents)
+    Threads.@threads for i in 1:length(animalModel.agents)
         if haskey(animalModel.agents, i)
             num_sense = [a.status == :IS for a in allagents(animalModel[i].submodel)]
             num_sense = sum(num_sense)/length(animalModel[i].submodel.agents)
