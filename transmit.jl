@@ -6,7 +6,7 @@ function transmit!(AnimalAgent, animalModel)
         status_agent = AnimalAgent.status
 
          if length(possible_interactions) > 0
-            Threads.@threads @sync for i in 1:length(possible_interactions)
+            Threads.@threads  for i in 1:length(possible_interactions)
                 interacting_agent = animalModel[possible_interactions[i]]
                 interacting_id = interacting_agent.id
                 interacting_stage = interacting_agent.stage
