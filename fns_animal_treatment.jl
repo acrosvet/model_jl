@@ -29,7 +29,7 @@ function treatment!(AnimalAgent, animalModel)
         if (AnimalAgent.status != :IS && AnimalAgent.status != :IR) && return
         elseif AnimalAgent.treatment == :U && (rand(animalModel.rng) < animalModel.treatment_prob)
             AnimalAgent.treatment = :T
-            AnimalAgent.day_treated = 1
+            AnimalAgent.days_treated = 1
             
         end
     
