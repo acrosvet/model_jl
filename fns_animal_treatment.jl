@@ -18,6 +18,7 @@ function endTreatment!(AnimalAgent, animalModel)
             if AnimalAgent.treatment != :T && return
             elseif AnimalAgent.days_treated ≥ animalModel.treatment_duration
                 AnimalAgent.treatment = :PT
+                AnimalAgent.days_treated = 0
             end
     end
 
@@ -28,6 +29,7 @@ function treatment!(AnimalAgent, animalModel)
         if (AnimalAgent.status != :IS && AnimalAgent.status != :IR) && return
         elseif AnimalAgent.treatment == :U && (rand(animalModel.rng) < animalModel.treatment_prob)
             AnimalAgent.treatment = :T
+            AnimalAgent.day_treated = 1
             
         end
     

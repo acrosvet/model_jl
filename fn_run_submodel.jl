@@ -15,6 +15,7 @@
     AnimalAgent.submodel.age = AnimalAgent.age
     AnimalAgent.submodel.days_exposed = AnimalAgent.days_exposed
     AnimalAgent.submodel.days_recovered = AnimalAgent.days_recovered
+    println(AnimalAgent.submodel.days_recovered)
     AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
 #=     AnimalAgent.bactopop_is = AnimalAgent.submodel.sensitive_pop
     AnimalAgent.bactopop_r = AnimalAgent.submodel.resistant_pop =#
