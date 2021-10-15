@@ -10,7 +10,9 @@ function bact_treatment_response!(BacterialAgent, bacterialModel)
         if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_treated/10)
             #if rand(bacterialModel.rng) < 0.5
                 if num_susceptible > bacterialModel.min_susceptible
-                    kill_agent!(BacterialAgent, bacterialModel)
+                    if haskey(bacterialModel.agents, BacterialAgent.id)
+                        kill_agent!(BacterialAgent, bacterialModel)
+                    end
                 end
            #end
         end

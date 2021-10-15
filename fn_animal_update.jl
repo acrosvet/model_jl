@@ -15,6 +15,11 @@ function update_agent!(AnimalAgent)
     end
     
 # Increment days infected, exposed and recovered
+    if (AnimalAgent.status == :IR || AnimalAgent.status == :IS) && AnimalAgent.inf_days == 0
+        AnimalAgent.inf_days = 1
+        AnimalAgent.days_exposed = 0
+    end
+    
     if AnimalAgent.inf_days != 0
         AnimalAgent.inf_days +=1 
     elseif AnimalAgent.days_recovered != 0

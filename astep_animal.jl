@@ -6,8 +6,15 @@ Step AnimalAgents through time
 
 """
     function agent_step!(AnimalAgent, animalModel)
+
+                #Run submodel
+                run_submodel!(AnimalAgent, animalModel)
+
         #Transmission functions
-        
+                update_agent!(AnimalAgent) #Apply the update_agent function
+
+
+
         transmit!(AnimalAgent, animalModel)
         recovery!(AnimalAgent, animalModel)
         treatment!(AnimalAgent, animalModel)
@@ -17,8 +24,7 @@ Step AnimalAgents through time
             agent_movement!(AnimalAgent, animalModel)
         end
 
-        #Run submodel
-        run_submodel!(AnimalAgent, animalModel)
+
 
         #Population dynamics
         cull_milkers!(AnimalAgent, animalModel)
@@ -30,7 +36,6 @@ Step AnimalAgents through time
         heifer!(AnimalAgent, animalModel)
         heifer_joining!(AnimalAgent, animalModel)
         dryoff!(AnimalAgent, animalModel)
-        update_agent!(AnimalAgent) #Apply the update_agent function
         
         # Trading flags
         flag_trades!(AnimalAgent,animalModel)

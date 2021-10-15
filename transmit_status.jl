@@ -8,7 +8,7 @@ function transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_
         if rand(animalModel.rng) < beta_int
             AnimalAgent.status = to_stat
             AnimalAgent.submodel.total_status = to_stat
-            AnimalAgent.days_exposed += 1
+            AnimalAgent.days_exposed = 1
             transmission = "Transmission to agent!"
         else
             transmission = "No transmission"
@@ -18,7 +18,7 @@ function transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_
         if rand(animalModel.rng) < beta_agent
             interacting_agent.status = to_stat
             interacting_agent.submodel.total_status = to_stat
-            interacting_agent.days_exposed +=1 
+            interacting_agent.days_exposed =1 
             transmission = "Transmission from agent!"
         else
             transmission = "No transmission"
