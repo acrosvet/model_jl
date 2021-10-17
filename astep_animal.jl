@@ -7,11 +7,11 @@ Step AnimalAgents through time
 """
     function agent_step!(AnimalAgent, animalModel)
 
-                #Run submodel
-                run_submodel!(AnimalAgent, animalModel)
+        #Run submodel
+        run_submodel!(AnimalAgent, animalModel)
 
         #Transmission functions
-                update_agent!(AnimalAgent) #Apply the update_agent function
+        update_agent!(AnimalAgent) #Apply the update_agent function
 
 
 

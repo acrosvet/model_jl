@@ -1,14 +1,14 @@
 using Distributed 
 
-addprocs(32)
+addprocs(16)
 
 include("testing.jl")
 
 
-    tmp = initialiseSeasonal(25, nbact = 1000, dims = 33, farm_id = 1, farm_status = :R, seed = 42)
+   tmp = initialiseSeasonal(100, nbact = 1000, dims = 33, farm_id = 1, farm_status = :R, seed = 42)
 
 
-    include("aanimal_headers.jl")
+   include("aanimal_headers.jl")
 
-    @time  Threads.@spawn run!(tmp,  agent_step!, model_step!, 25) 
+    @time   run!(tmp,  agent_step!, model_step!, 5) 
 
