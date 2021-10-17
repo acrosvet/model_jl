@@ -1,17 +1,17 @@
 function bact_treatment_response!(BacterialAgent, bacterialModel)
 
-    num_susceptible = [a.status == :S for a in allagents(bacterialModel)]
-    bacterialModel.num_susceptible = sum(num_susceptible)
-
-
-    num_susceptible = bacterialModel.num_susceptible
 
     if bacterialModel.days_treated > 0 && (BacterialAgent.status == :IS || BacterialAgent.status == :S)
-        if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_treated/10)
+        if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_treated/20)
             #if rand(bacterialModel.rng) < 0.5
-                if num_susceptible > bacterialModel.min_susceptible
+                if bacterialModel.num_susceptible > bacterialModel.min_susceptible
                     if haskey(bacterialModel.agents, BacterialAgent.id)
                         kill_agent!(BacterialAgent, bacterialModel)
+                        if BacterialAgent.status == :IS
+                            bacterialModel.num_sensitive -= 1
+                        elseif BacterialAgent.status == :S
+                            bacterialModel.num_susceptible -= 1
+                        end
                     end
                 end
            #end

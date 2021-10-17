@@ -1,10 +1,4 @@
 function fitness!(BacterialAgent, bacterialModel)
-    
-    num_resistant = [a.status == :R for a in allagents(bacterialModel)]
-    bacterialModel.num_resistant = sum(num_resistant)
-
-    num_susceptible = [a.status == :S for a in allagents(bacterialModel)]
-    bacterialModel.num_susceptible = sum(num_susceptible)
 
         possible_interactions =  collect(nearby_ids(BacterialAgent, bacterialModel, (1, 1)))
         num_contacts = length(possible_interactions) 
@@ -24,11 +18,13 @@ function fitness!(BacterialAgent, bacterialModel)
                             if haskey(bacterialModel.agents, interacting_id) && haskey(bacterialModel.agents, BacterialAgent.id)
                                     bacterialModel[interacting_id].strain = BacterialAgent.strain
                                     bacterialModel[interacting_id].status = BacterialAgent.status
+                                    bacterialModel.num_resistant -=1 
                             end
                         elseif interacting_agent.status == :S && (bacterialModel.num_susceptible > bacterialModel.min_susceptible) 
                             if haskey(bacterialModel.agents, interacting_id) && haskey(bacterialModel.agents, BacterialAgent.id)
                                 bacterialModel[interacting_id].strain = BacterialAgent.strain
                                 bacterialModel[interacting_id].status = BacterialAgent.status
+                                bacterialModel.num_susceptible -= 1
                             end
                         end
                     end

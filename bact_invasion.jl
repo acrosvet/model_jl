@@ -1,12 +1,6 @@
 function invasion!(BacterialAgent, bacterialModel)
 
-    num_resistant = [a.status == :R for a in allagents(bacterialModel)]
-    bacterialModel.num_resistant = sum(num_resistant)
-
-    num_susceptible = [a.status == :S for a in allagents(bacterialModel)]
-    bacterialModel.num_susceptible = sum(num_susceptible)
-
-
+ 
     if bacterialModel.days_exposed != 0 && bacterialModel.days_recovered == 0
         #println("evaluating")
             possible_interactions =  collect(nearby_ids(BacterialAgent, bacterialModel, (1, 1)))
@@ -31,6 +25,7 @@ function invasion!(BacterialAgent, bacterialModel)
                                             #println("IS invasion!")
                                             bacterialModel[interacting_id].strain = BacterialAgent.strain
                                             bacterialModel[interacting_id].status = BacterialAgent.status
+                                            bacterialModel.num_susceptible -= 1
                                         end
                                     end
                                 end
@@ -41,6 +36,7 @@ function invasion!(BacterialAgent, bacterialModel)
                                         #println("IR invasion")
                                         bacterialModel[interacting_id].strain = BacterialAgent.strain
                                         bacterialModel[interacting_id].status = BacterialAgent.status
+                                        bacterialModel.num_susceptible -= 1
                                     end
                                 end
                             end
