@@ -32,7 +32,7 @@ function invasion!(BacterialAgent, bacterialModel)
                         elseif BacterialAgent.status == :R && (bacterialModel.total_status == :ER)
                             if rand(bacterialModel.rng) < 0.5    
                                 if haskey(bacterialModel.agents, interacting_id) && haskey(bacterialModel.agents, BacterialAgent.id)
-                                    if (bacterialModel.num_resistant > bacterialModel.min_resistant) && (bacterialModel.num_susceptible > bacterialModel.min_susceptible)
+                                    if bacterialModel.num_susceptible > bacterialModel.min_susceptible
                                         #println("IR invasion")
                                         bacterialModel[interacting_id].strain = BacterialAgent.strain
                                         bacterialModel[interacting_id].status = BacterialAgent.status

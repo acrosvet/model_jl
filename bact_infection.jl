@@ -13,16 +13,16 @@ if bacterialModel.num_susceptible > bacterialModel.min_susceptible
             #if (num_susceptible > bacterialModel.min_susceptible) && (bacterialModel.num_resistant > bacterialModel.min_resistant)
                 BacterialAgent.strain = pathogenic_strain
                 BacterialAgent.status = :IS
-                BacterialAgent.fitness = bacterialModel.fitnesses[pathogenic_strain]*rand(bacterialModel.rng, 0.75:0.01:0.9)
+                BacterialAgent.fitness = bacterialModel.fitnesses[pathogenic_strain]*rand(bacterialModel.rng, 0.75:0.01:1.0)
             #end
         end
     elseif bacterialModel.total_status == :ER && bacterialModel.days_exposed == 1
         r_strain = bacterialModel.r_strain
-        if BacterialAgent.id % 4 == 0
+        if BacterialAgent.id % 3 == 0
             #if (num_susceptible > bacterialModel.min_susceptible) && (bacterialModel.num_resistant > bacterialModel.min_resistant)
                 BacterialAgent.strain = r_strain
                 BacterialAgent.status = :R
-                BacterialAgent.fitness = bacterialModel.fitnesses[r_strain]*rand(bacterialModel.rng, 0.5:0.01:0.6)
+                BacterialAgent.fitness = bacterialModel.fitnesses[r_strain]*rand(bacterialModel.rng, 0.75:0.01:1.0)
             #end
         end
     end
