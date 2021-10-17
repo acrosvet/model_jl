@@ -22,11 +22,17 @@ function update_agent!(AnimalAgent)
     
     if AnimalAgent.inf_days != 0
         AnimalAgent.inf_days +=1 
-    elseif AnimalAgent.days_recovered != 0
+    end
+
+    if AnimalAgent.days_recovered != 0
         AnimalAgent.days_recovered += 1
-    elseif  AnimalAgent.days_exposed != 0
+    end
+
+    if  AnimalAgent.days_exposed != 0
         AnimalAgent.days_exposed += 1
-    elseif AnimalAgent.days_carrier != 0
+    end
+
+    if AnimalAgent.days_carrier != 0
         AnimalAgent.days_carrier += 1
     end 
     

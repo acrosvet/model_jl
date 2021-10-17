@@ -15,8 +15,8 @@ function treatment_effect!(AnimalAgent)
 
 function endTreatment!(AnimalAgent, animalModel)
     #Define the endpoint of treatment
-            if AnimalAgent.treatment != :T && return
-            elseif AnimalAgent.days_treated ≥ animalModel.treatment_duration
+
+            if AnimalAgent.treatment == :T && AnimalAgent.days_treated ≥ animalModel.treatment_duration
                 AnimalAgent.treatment = :PT
                 AnimalAgent.days_treated = 0
             end
@@ -26,11 +26,11 @@ function endTreatment!(AnimalAgent, animalModel)
 
 function treatment!(AnimalAgent, animalModel)
         # Assign a treatment status
-        if (AnimalAgent.status != :IS && AnimalAgent.status != :IR) && return
-        elseif AnimalAgent.treatment == :U && (rand(animalModel.rng) < animalModel.treatment_prob)
-            AnimalAgent.treatment = :T
-            AnimalAgent.days_treated = 1
-            
+        if AnimalAgent.status == :IS || AnimalAgent.status == :IR
+            if AnimalAgent.treatment == :U && (rand(animalModel.rng) < animalModel.treatment_prob)
+                AnimalAgent.treatment = :T
+                AnimalAgent.days_treated = 1
+             end
         end
     
-    end
+end

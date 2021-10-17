@@ -9,7 +9,7 @@
 
     # Update the submodel parameters
     AnimalAgent.submodel.step = animalModel.step
-    AnimalAgent.submodel.status = AnimalAgent.status
+    AnimalAgent.submodel.total_status = AnimalAgent.status
     AnimalAgent.submodel.animalno = AnimalAgent.id
     AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
     AnimalAgent.submodel.age = AnimalAgent.age

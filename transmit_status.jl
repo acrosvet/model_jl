@@ -9,6 +9,7 @@ function transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_
             AnimalAgent.status = to_stat
             AnimalAgent.submodel.total_status = to_stat
             AnimalAgent.days_exposed = 1
+            AnimalAgent.inf_days = 0
             transmission = "Transmission to agent!"
         else
             transmission = "No transmission"
@@ -19,6 +20,7 @@ function transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_
             interacting_agent.status = to_stat
             interacting_agent.submodel.total_status = to_stat
             interacting_agent.days_exposed =1 
+            interacting_agent.inf_days = 0
             transmission = "Transmission from agent!"
         else
             transmission = "No transmission"
