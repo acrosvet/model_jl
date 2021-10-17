@@ -24,7 +24,7 @@ include("bact_export_headers.jl")
 @time run!(bactoMod, bact_agent_step!, bact_model_step!, 20)
 
 bactoMod.days_exposed = 1
-bactoMod.total_status = :ER
+bactoMod.total_status = :ES
 @time run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_exposed = 0
