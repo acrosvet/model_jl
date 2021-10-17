@@ -130,11 +130,7 @@ function initialiseBacteriaSub(
         strain_status = strain_statuses[strain]
         fitness = bact_fitnesses[strain]
         status = strain_status
-        #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-        #if isempty(pos, bacterialModel)
             add_agent!(pos, bacterialModel, status, strain, strain_status, fitness)
-        #end
-        #add_agent_single!(agent, bacterialModel)
     end
 
 
@@ -147,12 +143,7 @@ function initialiseBacteriaSub(
             strain_status = :R
             fitness = mean(bacterialModel.fitnesses)
             status = :R
-            #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-            #add_agent_single!(agent, bacterialModel)
-            #if isempty(pos, bacterialModel)
                 add_agent!(pos, bacterialModel, status, strain, strain_status, fitness)
-            #end
-           # println("Added agent")
         end
 
         if min_sensitive != 0
@@ -169,12 +160,7 @@ function initialiseBacteriaSub(
                 strain_status = :IS
                 fitness = bacterialModel.fitnesses[pathogenic_strain]
                 status = :IS
-                #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-                #add_agent_single!(agent, bacterialModel)
-                #if isempty(pos, bacterialModel)
                     add_agent!(pos, bacterialModel, status, strain, strain_status, fitness)
-                #end
-               # println("Added agent")
             end
         end
 

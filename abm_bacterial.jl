@@ -9,7 +9,6 @@ function initialiseBacteria(
         r_strain = rand(1:nstrains),
         status = :S,
         resistant_pop = 0;
-        #rng = MersenneTwister(seed);
         dims::Int = 100,
         animalno::Int = AnimalAgent.id,
         nbact::Int64,
@@ -130,11 +129,7 @@ function initialiseBacteria(
         strain_status = strain_statuses[strain]
         fitness = bact_fitnesses[strain]
         status = strain_status
-        #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-        #if isempty(pos, bacterialModel)
             add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
-        #end
-        #add_agent_single!(agent, bacterialModel)
     end
 
 
@@ -144,12 +139,7 @@ function initialiseBacteria(
             strain_status = :R
             fitness = mean(bacterialModel.fitnesses)
             status = :R
-            #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-            #add_agent_single!(agent, bacterialModel)
-            #if isempty(pos, bacterialModel)
                 add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
-            #end
-           # println("Added agent")
         end
 
         if min_sensitive != 0
@@ -163,12 +153,7 @@ function initialiseBacteria(
                 strain_status = :IS
                 fitness = bacterialModel.fitnesses[pathogenic_strain]
                 status = :IS
-                #agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-                #add_agent_single!(agent, bacterialModel)
-                #if isempty(pos, bacterialModel)
                     add_agent_single!(bacterialModel, status, strain, strain_status, fitness)
-                #end
-               # println("Added agent")
             end
         end
 
