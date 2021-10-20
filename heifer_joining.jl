@@ -16,7 +16,7 @@ if animalModel.system == :Seasonal
             if animalModel.date == (animalModel.msd + Day(6*7))
                     AnimalAgent.pregstat = :P
                     AnimalAgent.stage = :DH
-                    AnimalAgent.dic = Int(floor(rand(truncated(Rayleigh(50), 0, 63))))
+                    AnimalAgent.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(50), 0, 63))))
                     higher_dimension!(AnimalAgent, animalModel, stage = :DH, level = 4, density = 7)
                    # println("Heifer joined")
             end

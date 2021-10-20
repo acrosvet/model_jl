@@ -9,8 +9,10 @@ run <- read_csv("/home/alex/Documents/julia_abm/model_jl/export/seasonal_model_r
 
 # GGPLOT static plots of infection------------------------------------------------
 
-run %>% 
+x11(); run %>% 
   mutate(day = lubridate::ymd(day)) %>%
+  filter(animal_status != 0 & animal_status != 20) %>%
+  filter(!is.na(animal_status)) %>%
   group_by(day, animal_status) %>%
   summarise(count = n()) %>%
   ggplot(aes(x = day, y = count, colour =animal_status)) +

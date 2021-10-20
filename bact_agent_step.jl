@@ -1,4 +1,7 @@
 function bact_agent_step!(BacterialAgent, bacterialModel)
+
+    Random.seed!(hash(bacterialModel))
+
      bact_recovery!(BacterialAgent, bacterialModel)
      infection!(BacterialAgent, bacterialModel)
      invasion!(BacterialAgent, bacterialModel)
