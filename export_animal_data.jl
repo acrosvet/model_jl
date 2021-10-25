@@ -131,19 +131,19 @@ end
 
 # Differetial output by system type -------------------------------------
     if animalModel.system == :Seasonal
-        open("./export/seasonal_model_run.csv","a") do io
+        open("./export/seasonal_model_run.csv", lock = true,"a") do io
         CSV.write(io, data, delim = ",", append = true, header = false)
         end
     elseif animalModel.system == :Split
-        open("./export/splt_model_run.csv","a") do io
+        open("./export/splt_model_run.csv", lock = true, "a") do io
             CSV.write(io, data, delim = ",", append = true, header = false)
             end
     elseif animalModel.system == :Batch
-        open("./export/batch_model_run.csv","a") do io
+        open("./export/batch_model_run.csv",lock = true, "a") do io
             CSV.write(io, data, delim = ",", append = true, header = false)
             end
     elseif animalModel.system == :Continuous
-        open("./export/continuous_model_run.csv","a") do io
+        open("./export/continuous_model_run.csv", lock = true,"a") do io
             CSV.write(io, data, delim = ",", append = true, header = false)
             end
     end
