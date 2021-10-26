@@ -20,7 +20,8 @@ function model_step!(animalModel)
 
     # Update bacterial population ----------
 
-    Threads.@threads for i in 1:length(animalModel.agents)
+    #Threads.@threads 
+    for i in 1:length(animalModel.agents)
         if haskey(animalModel.agents, i)
             num_sense = [a.status == :IS for a in allagents(animalModel[i].submodel)]
             num_sense = sum(num_sense)/length(animalModel[i].submodel.agents)
@@ -39,7 +40,8 @@ function model_step!(animalModel)
         
         #Threads.@spawn begin 
             a.submodel.rng = MersenneTwister(hash(a))
-            @async Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!, 1)
+           # @async 
+            Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!, 1)
         #end
     end
 
