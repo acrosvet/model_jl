@@ -29,7 +29,7 @@ if AnimalAgent.inf_days ≥ recovery_time
     end
 end
 
-if AnimalAgent.days_recovered > Int(floor(rand(animalModel.rng, truncated(Rayleigh(90),(180), (365)))))
+if AnimalAgent.days_recovered > Int(floor(rand(animalModel.rng, truncated(Rayleigh(60),(70), (180)))))
     if AnimalAgent.status != :CR && AnimalAgent.status != :CS
         AnimalAgent.status = :S
     end
