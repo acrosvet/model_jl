@@ -26,9 +26,9 @@ function export_animal_data!(AnimalAgent, animalModel)
             msd = animalModel.msd,
             CurrentLac = animalModel.current_lac,
             CalvingSeason = AnimalAgent.calving_season,
-            bact_exposed = AnimalAgent.submodel.days_exposed,
+            bact_exposed = AnimalAgent.days_exposed,
             bact_total_stat = AnimalAgent.submodel.total_status,
-            bact_tdays_rec = AnimalAgent.submodel.days_recovered
+            bact_tdays_rec = AnimalAgent.days_recovered
     
         )
 elseif animalModel.system == :Split
@@ -62,9 +62,9 @@ elseif animalModel.system == :Split
         CurrentSpring = animalModel.current_spring,
         AutumnLac = animalModel.lac_autumn,
         CurrentAutumn = animalModel.current_autumn,
-        bact_exposed = AnimalAgent.submodel.days_exposed,
+        bact_exposed = AnimalAgent.days_exposed,
         bact_total_stat = AnimalAgent.submodel.total_status,
-        bact_tdays_rec = AnimalAgent.submodel.days_recovered,
+        bact_tdays_rec = AnimalAgent.days_recovered,
 
     )
 elseif animalModel.system == :Batch
@@ -94,9 +94,9 @@ elseif animalModel.system == :Batch
         msd_2 = animalModel.msd_2,
         CurrentLac = animalModel.current_lac,
         CalvingSeason = AnimalAgent.calving_season,
-        bact_exposed = AnimalAgent.submodel.days_exposed,
+        bact_exposed = AnimalAgent.days_exposed,
         bact_total_stat = AnimalAgent.submodel.total_status,
-        bact_tdays_rec = AnimalAgent.submodel.days_recovered,
+        bact_tdays_rec = AnimalAgent.days_recovered,
 
     )
 elseif animalModel.system == :Continuous
@@ -122,9 +122,9 @@ elseif animalModel.system == :Continuous
             DIM = AnimalAgent.dim,
             PregStat = AnimalAgent.pregstat,
             dic = AnimalAgent.dic,
-            bact_exposed = AnimalAgent.submodel.days_exposed,
+            bact_exposed = AnimalAgent.days_exposed,
             bact_total_stat = AnimalAgent.submodel.total_status,
-            bact_tdays_rec = AnimalAgent.submodel.days_recovered,
+            bact_tdays_rec = AnimalAgent.days_recovered,
     
         )
 end 
