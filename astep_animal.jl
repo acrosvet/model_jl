@@ -7,7 +7,7 @@ Step AnimalAgents through time
 """
     function agent_step!(AnimalAgent, animalModel)
 
-        
+        update_agent!(AnimalAgent)    
 
         transmit!(AnimalAgent, animalModel)
         recovery!(AnimalAgent, animalModel)
@@ -18,7 +18,6 @@ Step AnimalAgents through time
 run_submodel!(AnimalAgent, animalModel)
 
 #Transmission functions
-update_agent!(AnimalAgent) #Apply the update_agent function
 
 
         if animalModel.step > 1
@@ -42,7 +41,7 @@ update_agent!(AnimalAgent) #Apply the update_agent function
         flag_trades!(AnimalAgent,animalModel)
 
         #Export functions
-        #export_animal_data!(AnimalAgent, animalModel)
+        export_animal_data!(AnimalAgent, animalModel)
        
        # export_animal_position!(AnimalAgent, animalModel)
 
