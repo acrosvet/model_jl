@@ -11,11 +11,14 @@ Step AnimalAgents through time
 
         transmit!(AnimalAgent, animalModel)
         recovery!(AnimalAgent, animalModel)
+        recrudescence!(AnimalAgent, animalModel)
         treatment!(AnimalAgent, animalModel)
         endTreatment!(AnimalAgent, animalModel)
 
 #Run submodel
 run_submodel!(AnimalAgent, animalModel)
+Threads.@spawn step!(a.submodel, bact_agent_step!, bact_model_step!, 1)
+
 
 #Transmission functions
 
