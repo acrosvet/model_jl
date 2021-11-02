@@ -22,7 +22,7 @@ received_stock = []
 
 # If there are animals waiting in the receiving vector, then we iteratively add those to the animalModel
 if length(animalModel.receiving) != 0
-   for i in 1:length(animalModel.receiving)
+  @async.Threads@threads for i in 1:length(animalModel.receiving)
            pos = animalModel.receiving[i].pos
            status = animalModel.receiving[i].status
            age = animalModel.receiving[i].age

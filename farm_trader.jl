@@ -73,7 +73,7 @@ io = open("./export/output.txt", "a")
 
                 farmModel[trade_partner].animalModel.receiving = []
 
-                for i in 1:num_trades_from
+                @async Threads.@threads for i in 1:num_trades_from
                     if length(stock_to_send) != 0
                         #Push the ith animal in the sending list to the receiving container in the receiving farm
                             push!(farmModel[trade_partner].animalModel.receiving, stock_to_send[i]) 
@@ -92,7 +92,7 @@ io = open("./export/output.txt", "a")
 
 
                 # Remove the traded agents
-                    for i in 1:length(agents_to_remove)
+                    @async Threads.@threads for i in 1:length(agents_to_remove)
                         # Make sure they are in the agent list
                         if haskey(animalModel.agents, agents_to_remove[i].id) == true
                         # Kill theagent
