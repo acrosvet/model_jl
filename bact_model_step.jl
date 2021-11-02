@@ -12,3 +12,4 @@ function bact_model_step!(bacterialModel)
 
 # println("Stepped")
 end 
+ 

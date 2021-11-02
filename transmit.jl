@@ -6,7 +6,7 @@ function transmit!(AnimalAgent, animalModel)
         status_agent = AnimalAgent.status
 
          if length(possible_interactions) > 0
-            Threads.@threads  for i in 1:length(possible_interactions)
+            @async Threads.@threads for i in 1:length(possible_interactions)
                 interacting_agent = animalModel[possible_interactions[i]]
                 interacting_id = interacting_agent.id
                 interacting_stage = interacting_agent.stage
@@ -15,7 +15,7 @@ function transmit!(AnimalAgent, animalModel)
                 status_agent = AnimalAgent.status
                 transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :IS, to_stat = :ES, beta = AnimalAgent.bactopop_is)
                 transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :IR, to_stat = :ER, beta = AnimalAgent.bactopop_r)
-                transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :CR, to_stat = :IR, beta = AnimalAgent.bactopop_ir)
+                transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :CR, to_stat = :IR, beta = AnimalAgent.bactopop_r)
                 transmission = transmit_status!(AnimalAgent, animalModel, interacting_agent, possible_interactions; susceptible = :S, inf_stat = :CS, to_stat = :IS, beta = AnimalAgent.bactopop_is)
                 export_animal_interactions!(AnimalAgent, animalModel, interacting_id, interacting_stage, num_contacts, transmission, status_agent, status_contact)
 

@@ -30,11 +30,6 @@ end
 
 
 
-#= container = [a.stage == :L for a in allagents(animalModel)]
-current_lactating = sum(container)
- =#
-#animalModel.current_lac = current_lactating
-
 current_lactating = animalModel.current_lac
 
 # Spring calving systems -------------------------------------------------

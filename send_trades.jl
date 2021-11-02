@@ -16,7 +16,7 @@ function send_trades!(animalModel)
 
 
    # Put agents in the sending container according to number
-   for animal in 1:num_traded
+   @async Threads.@threads for animal in 1:num_traded
         
         # Select a random agent from the eligible list of agents
        traded_agent = random_agent(animalModel, is_traded(true))

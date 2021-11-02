@@ -25,7 +25,7 @@ function populate_empty!(BacterialAgent, bacterialModel)
     push!(adjacent_positions, pos_8)
 
 
-  for i in 1:length(adjacent_positions)
+@async Threads.@threads for i in 1:length(adjacent_positions)
         if (adjacent_positions[i][1] <= bacterialModel.dim && adjacent_positions[i][1] > 0) && (adjacent_positions[i][2] <= bacterialModel.dim && adjacent_positions[i][2] > 0)
             if isempty(adjacent_positions[i], bacterialModel)
                 if bacterialModel.days_treated != 0

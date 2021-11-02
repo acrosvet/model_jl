@@ -1,6 +1,6 @@
 function bacterial_population!(bacterialModel)
     
-    number_susceptible = [a.status == :S for a in allagents(bacterialModel)]
+    number_susceptible =  [a.status == :S for a in allagents(bacterialModel)]
     number_susceptible = sum(number_susceptible)
     bacterialModel.num_susceptible = number_susceptible
 

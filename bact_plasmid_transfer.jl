@@ -5,7 +5,7 @@ function bact_plasmid_transfer!(BacterialAgent, bacterialModel)
     num_contacts = length(possible_interactions)
     status_agent = BacterialAgent.status
     if length(possible_interactions) > 0
-         for i in 1:length(possible_interactions)
+        @async Threads.@threads for i in 1:length(possible_interactions)
             if haskey(bacterialModel.agents, possible_interactions[i])
             interacting_agent = bacterialModel[possible_interactions[i]]
             interacting_id = interacting_agent.id

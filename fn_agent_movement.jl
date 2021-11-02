@@ -3,8 +3,7 @@ function agent_movement!(AnimalAgent, animalModel)
     Random.seed!(animalModel.rng)
 
 if AnimalAgent.stage == :C
-#=     num_calves = [a.stage == :C for a in allagents(animalModel)]
-    num_calves = sum(num_calves) =#
+
     num_calves = animalModel.current_calves
     if num_calves == 0
         calf_range = 10 

@@ -25,7 +25,7 @@ FarmProperties = @dict(
 )
 
             
-agentSpace = GraphSpace(static_scale_free(numfarms, numfarms, numfarms/5))
+agentSpace = GraphSpace(static_scale_free(numfarms, numfarms, 3))
 
 farmModel = ABM(FarmAgent, agentSpace, properties = FarmProperties)
 
