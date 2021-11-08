@@ -19,8 +19,6 @@ Step AnimalAgents through time
 run_submodel!(AnimalAgent, animalModel)
 
 
-subrun = Threads.@spawn step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!, 1)
-fetch(subrun)
 
 
 #Transmission functions

@@ -6,6 +6,8 @@
             AnimalAgent.status = :IR
         end
      
+    
+
 
     # Update the submodel parameters
     AnimalAgent.submodel.step = animalModel.step
@@ -16,5 +18,10 @@
     AnimalAgent.submodel.days_exposed = AnimalAgent.days_exposed
     AnimalAgent.submodel.days_recovered = AnimalAgent.days_recovered
     AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
+
+    if AnimalAgent.status != :S
+        step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!)
+        println("Stepped")
+    end
 
     end

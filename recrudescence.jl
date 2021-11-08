@@ -1,7 +1,7 @@
 function recrudescence!(AnimalAgent, animalModel)
 
 
-if AnimalAgent.days_recovered > Int(floor(rand(animalModel.rng, truncated(Rayleigh(60),(70), (180)))))
+if AnimalAgent.days_recovered > rand(animalModel.rng, 60:180)
     if AnimalAgent.status == :recovered
         AnimalAgent.status = :S
         AnimalAgent.days_recovered = 0

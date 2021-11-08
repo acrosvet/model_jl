@@ -5,8 +5,8 @@
     function initialiseSeasonal(
         N::Int, #Default number of animals
         movement = 0.1, #Movement in continuous space
-        βᵣ = 0.4, #Beta (resistant) 
-        βₛ = 0.4, #Beta (sensitive)
+        βᵣ = 0.9, #Beta (resistant) 
+        βₛ = 0.9, #Beta (sensitive)
         sponrec_is = 0.05, #chance of spontaneous recovery IS
         sponrec_ir = 0.04,  #chance of spontaneous recovery IR
         timestep = 1.0, #Set model timestep
