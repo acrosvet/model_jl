@@ -34,7 +34,7 @@ Step AnimalAgents through time
         dryoff!(AnimalAgent, animalModel)#Dry cows off
         
         # Trading flags
-        flag_trades!(AnimalAgent,animalModel)
+        flag_trades!(AnimalAgent,animalModel)#Determine what animals can be traded at any time step
 
         #Export functions
         export_animal_data!(AnimalAgent, animalModel)
