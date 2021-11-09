@@ -20,8 +20,12 @@
     AnimalAgent.submodel.days_treated = AnimalAgent.days_treated
 
     if AnimalAgent.status != :S
-        step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!)
-        println("Stepped")
+        if AnimalAgent.status == :recovered && (AnimalAgent.bactopop_is < 0.1 || AnimalAgent.bactopop_r < 0.1)
+            return
+        else
+            step!(AnimalAgent.submodel, bact_agent_step!, bact_model_step!)
+            println("Stepped")
+        end
     end
 
     end

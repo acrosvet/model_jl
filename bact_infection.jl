@@ -1,6 +1,6 @@
 function infection!(BacterialAgent, bacterialModel)
 
-if bacterialModel.num_susceptible > bacterialModel.min_susceptible
+#if bacterialModel.num_susceptible > bacterialModel.min_susceptible
 
 
     if bacterialModel.total_status == :ES && bacterialModel.days_exposed == 1
@@ -13,7 +13,7 @@ if bacterialModel.num_susceptible > bacterialModel.min_susceptible
             #if (num_susceptible > bacterialModel.min_susceptible) && (bacterialModel.num_resistant > bacterialModel.min_resistant)
                 BacterialAgent.strain = pathogenic_strain
                 BacterialAgent.status = :IS
-                BacterialAgent.fitness = bacterialModel.fitnesses[pathogenic_strain]*rand(bacterialModel.rng, 0.75:0.01:1.0)
+                BacterialAgent.fitness = bacterialModel.fitnesses[pathogenic_strain]*rand(bacterialModel.rng, 0.95:0.01:1.1)
             #end
         end
     elseif bacterialModel.total_status == :ER && bacterialModel.days_exposed == 1
@@ -22,10 +22,10 @@ if bacterialModel.num_susceptible > bacterialModel.min_susceptible
             #if (num_susceptible > bacterialModel.min_susceptible) && (bacterialModel.num_resistant > bacterialModel.min_resistant)
                 BacterialAgent.strain = r_strain
                 BacterialAgent.status = :R
-                BacterialAgent.fitness = bacterialModel.fitnesses[r_strain]*rand(bacterialModel.rng, 0.75:0.01:1.0)
+                BacterialAgent.fitness = bacterialModel.fitnesses[r_strain]*rand(bacterialModel.rng, 0.95:0.01:1.1)
             #end
         end
     end
-end
+#end
 end
 
