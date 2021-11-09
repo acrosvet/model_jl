@@ -7,7 +7,8 @@
 """
 function wean!(AnimalAgent, animalModel)
 
-if animalModel.system != :Continuous
+# Wean calves at between 55 and 70 days of age
+
     if AnimalAgent.stage == :C
         #if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
         if AnimalAgent.age ≥ rand(animalModel.rng, 55:70)
@@ -22,15 +23,7 @@ if animalModel.system != :Continuous
             end 
         end
     end
-end
 
-if animalModel.system == :Continuous
-    if AnimalAgent.stage == :C
- #if AnimalAgent.age ≥ Int(floor(rand(animalModel.rng, truncated(Rayleigh(60), 55, 70))))
- if AnimalAgent.age ≥ rand(animalModel.rng, 55:70)
-                AnimalAgent.stage = :W
-                higher_dimension!(AnimalAgent, animalModel, stage = :W, level = 2, density = 7)
-            end 
-        end
-    end
+
+
 end

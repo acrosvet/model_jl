@@ -13,10 +13,9 @@ After calving:
 """
 function calving!(AnimalAgent, animalModel)
 
-    if AnimalAgent.dic == 283
-        if AnimalAgent.stage == :DH
-         #  println("Heifer calved")
-        end
+#Calve all animals at day 273 to 293
+
+    if AnimalAgent.dic == 283 + rand(animalModel.rng, -10:1:10)
         AnimalAgent.pregstat = :E
         AnimalAgent.dic = 0
         AnimalAgent.stage = :L

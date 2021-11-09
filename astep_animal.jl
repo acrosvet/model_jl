@@ -7,22 +7,15 @@ Step AnimalAgents through time
 """
     function agent_step!(AnimalAgent, animalModel)
 
-        update_agent!(AnimalAgent)    
+        update_agent!(AnimalAgent)#Step the agent through time, updating state parameters   
+        mortality!(AnimalAgent, animalModel)#Probability of infected animals dying
+        recovery!(AnimalAgent, animalModel)#Define the dynamics of animals recovering from treatment.
+        transmit!(AnimalAgent, animalModel)#Transmit infection directly between agents
+        recrudescence!(AnimalAgent, animalModel)#Recrudecent infection from carriers
+        treatment!(AnimalAgent, animalModel)#Apply treatment
+        endTreatment!(AnimalAgent, animalModel)#End treatment
 
-        transmit!(AnimalAgent, animalModel)
-        recovery!(AnimalAgent, animalModel)
-        recrudescence!(AnimalAgent, animalModel)
-        treatment!(AnimalAgent, animalModel)
-        endTreatment!(AnimalAgent, animalModel)
-
-#Run submodel
-run_submodel!(AnimalAgent, animalModel)
-
-
-
-
-#Transmission functions
-
+# Move the agents, but only after the first time step
 
         if animalModel.step > 1
             agent_movement!(AnimalAgent, animalModel)
@@ -31,15 +24,14 @@ run_submodel!(AnimalAgent, animalModel)
 
 
         #Population dynamics
-        cull_milkers!(AnimalAgent, animalModel)
-        advance_pregnancy!(AnimalAgent)
-        calving!(AnimalAgent, animalModel)
-        bobby_cull!(AnimalAgent, animalModel)
-        joining!(AnimalAgent, animalModel)
-        wean!(AnimalAgent, animalModel)
-        heifer!(AnimalAgent, animalModel)
-        heifer_joining!(AnimalAgent, animalModel)
-        dryoff!(AnimalAgent, animalModel)
+        cull_milkers!(AnimalAgent, animalModel)#Cull lactating cows as required
+        calving!(AnimalAgent, animalModel)#Create new calf agents as cows calve
+        bobby_cull!(AnimalAgent, animalModel)#Cull bobby calves
+        joining!(AnimalAgent, animalModel)#Join animals
+        wean!(AnimalAgent, animalModel)#Transition - calf to weaned
+        heifer!(AnimalAgent, animalModel)#Transition - weaned to heifer
+        heifer_joining!(AnimalAgent, animalModel)# Join heifers
+        dryoff!(AnimalAgent, animalModel)#Dry cows off
         
         # Trading flags
         flag_trades!(AnimalAgent,animalModel)
@@ -49,6 +41,10 @@ run_submodel!(AnimalAgent, animalModel)
        
        # export_animal_position!(AnimalAgent, animalModel)
 
+
+# Run the animal's bacterial submodel
+
+run_submodel!(AnimalAgent, animalModel)
 
     end
  
