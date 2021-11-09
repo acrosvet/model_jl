@@ -14,7 +14,9 @@ if AnimalAgent.stage == :C
     while !isempty(pos, animalModel)
         pos = (rand(animalModel.rng, 1:calf_range, 2)..., 1)
     end
-    move_agent!(AnimalAgent, pos, animalModel)
+    if haskey(animalModel.agents, AnimalAgent.id)
+        move_agent!(AnimalAgent, pos, animalModel)
+    end
 elseif AnimalAgent.stage == :W
         num_weaned = animalModel.current_weaned
 #=     num_weaned = [a.stage == :W for a in allagents(animalModel)]
@@ -28,7 +30,9 @@ elseif AnimalAgent.stage == :W
     while !isempty(pos, animalModel)
         pos = (rand(animalModel.rng, 1:weaned_range, 2)..., 2)
     end
-    move_agent!(AnimalAgent, pos, animalModel)
+    if haskey(animalModel.agents, AnimalAgent.id)
+        move_agent!(AnimalAgent, pos, animalModel)
+    end
 elseif AnimalAgent.stage == :H
     num_heifers = animalModel.current_heifers
 #=     num_heifers = [a.stage == :H for a in allagents(animalModel)]
@@ -42,7 +46,9 @@ elseif AnimalAgent.stage == :H
     while !isempty(pos, animalModel)
         pos = (rand(animalModel.rng, 1:heifer_range, 2)..., 3)
     end
-    move_agent!(AnimalAgent, pos, animalModel)
+    if haskey(animalModel.agents, AnimalAgent.id)
+        move_agent!(AnimalAgent, pos, animalModel)
+    end
 elseif AnimalAgent.stage == :DH
     num_dh = animalModel.current_dh
 #=     num_dh = [a.stage == :DH for a in allagents(animalModel)]
@@ -56,7 +62,9 @@ elseif AnimalAgent.stage == :DH
     while !isempty(pos, animalModel)
         pos = (rand(animalModel.rng, 1:dh_range, 2)..., 4)
     end
-    move_agent!(AnimalAgent, pos, animalModel)
+    if haskey(animalModel.agents, AnimalAgent.id)
+        move_agent!(AnimalAgent, pos, animalModel)
+    end
 elseif AnimalAgent.stage == :L
     num_lactating = animalModel.current_lac
 #=     num_lactating = [a.stage == :L for a in allagents(animalModel)]
@@ -70,7 +78,9 @@ elseif AnimalAgent.stage == :L
     while !isempty(pos, animalModel)
         pos = (rand(animalModel.rng, 1:lactating_range, 2)..., 5)
     end
-    move_agent!(AnimalAgent, pos, animalModel)
+    if haskey(animalModel.agents, AnimalAgent.id)
+        move_agent!(AnimalAgent, pos, animalModel)
+    end
 elseif AnimalAgent.stage == :D
     num_dry = animalModel.current_dry
 #=     num_dry = [a.stage == :D for a in allagents(animalModel)]
@@ -84,7 +94,9 @@ elseif AnimalAgent.stage == :D
     while !isempty(pos, animalModel)
         pos = (rand(animalModel.rng, 1:dry_range, 2)..., 6)
     end
-    move_agent!(AnimalAgent, pos, animalModel)
+    if haskey(animalModel.agents, AnimalAgent.id)
+        move_agent!(AnimalAgent, pos, animalModel)
+    end
 end
 
 end

@@ -9,6 +9,7 @@ function send_trades!(animalModel)
     # Select a number to be traded
    num_traded = abs(animalModel.tradeable_stock)
    
+   #Max trade 15 at one time
    num_traded > 15 ? 15 : num_traded
 
    # Clear the to trade list from last step

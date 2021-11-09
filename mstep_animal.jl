@@ -20,25 +20,12 @@ function model_step!(animalModel)
 
     # Update bacterial population ----------
 
-    #Threads.@threads 
-    @async Threads.@threads for i in 1:length(animalModel.agents)
-        if haskey(animalModel.agents, i)
-            num_sense = [a.status == :IS for a in allagents(animalModel[i].submodel)]
-            num_sense = sum(num_sense)/length(animalModel[i].submodel.agents)
-            animalModel[i].bactopop_is = num_sense
 
-
-            num_res = [a.status == :R for a in allagents(animalModel[i].submodel)]
-            num_res = sum(num_res)/length(animalModel[i].submodel.agents)
-            animalModel[i].bactopop_r = num_res
-
-
-        end
-    end
+    update_bactopop!(animalModel)
 
 
 
-    stock_numbers!(animalModel)
+    stock_numbers!(animalModel)#
     trading_need!(animalModel)
     send_trades!(animalModel)
     
@@ -50,49 +37,8 @@ function model_step!(animalModel)
         animalModel.step +=1
     
 
-# Increment psc ---------------------------------------------------
-if animalModel.system != :Continuous
-    if Year(animalModel.date) > Year(animalModel.psc)
-        animalModel.psc += Year(1)
-    end
+update_psc!(animalModel)
+update_msd!(animalModel)
 
-if animalModel.system == :Split || animalModel.system == :Batch
-    if Year(animalModel.date) > Year(animalModel.psc_2)
-        animalModel.psc_2 += Year(1)
-    end
-end
-
-if animalModel.system == :Batch
-    if Year(animalModel.date) > Year(animalModel.psc_3)
-        animalModel.psc_3 += Year(1)
-    end
-
-    if Year(animalModel.date) > Year(animalModel.psc_4)
-        animalModel.psc_4 += Year(1)
-    end
-end
-
-# Increment msd ---------------------------------------------
-
-    if Year(animalModel.date) > Year(animalModel.msd)
-        animalModel.msd += Year(1)
-    end
-
-if animalModel.system == :Split || animalModel.system == :Batch
-    if Year(animalModel.date) > Year(animalModel.msd_2)
-        animalModel.msd_2 += Year(1)
-    end
-end
-
-if animalModel.system == :Batch
-    if Year(animalModel.date) > Year(animalModel.msd_3)
-        animalModel.msd_3 += Year(1)
-    end
-
-    if Year(animalModel.date) > Year(animalModel.msd_4)
-        animalModel.msd_4 += Year(1)
-    end
-end
-end
 end
 

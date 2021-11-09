@@ -2,6 +2,9 @@ function bact_plasmid_transfer!(BacterialAgent, bacterialModel)
 
 
     possible_interactions =  collect(nearby_ids(BacterialAgent, bacterialModel, (1, 1)))
+
+    if length(possible_interactions) > 0
+
     num_contacts = length(possible_interactions)
     status_agent = BacterialAgent.status
     if length(possible_interactions) > 0
@@ -33,6 +36,6 @@ function bact_plasmid_transfer!(BacterialAgent, bacterialModel)
         end
     end
 
-
+end
 
 end

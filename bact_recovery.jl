@@ -1,6 +1,6 @@
 function bact_recovery!(BacterialAgent, bacterialModel)
 
-    if bacterialModel.total_status == :recovered
+    if bacterialModel.total_status == :recovered || bacterialModel.total_status == :RR || bacterialModel.total_status == :RS
             if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_recovered/50)
                 if (bacterialModel.num_resistant > bacterialModel.min_resistant) && BacterialAgent.status == :R
                     if haskey(bacterialModel.agents, BacterialAgent.id)

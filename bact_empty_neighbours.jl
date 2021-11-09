@@ -1,12 +1,18 @@
 function populate_empty!(BacterialAgent, bacterialModel)
 
+if random_empty(bacterialModel) != Nothing 
+
     # Fill in empty positions with bacteria
+
+#Set the agent position
 
     agent_x = BacterialAgent.pos[1]
     agent_y = BacterialAgent.pos[2]
 
+# Create an empty vector of nearby positions    
     adjacent_positions = []
 
+#Push all adjacent positions to the vector
     pos_1 = (agent_x + 1, agent_y)
     push!(adjacent_positions, pos_1)
     pos_2 = (agent_x - 1, agent_y)
@@ -24,7 +30,7 @@ function populate_empty!(BacterialAgent, bacterialModel)
     pos_8 = (agent_x + 1, agent_y - 1)
     push!(adjacent_positions, pos_8)
 
-
+# Iterate through the empty positions created by treatment, populating them with resistant bacteria if treatment is still ongoing.
 @async Threads.@threads for i in 1:length(adjacent_positions)
         if (adjacent_positions[i][1] <= bacterialModel.dim && adjacent_positions[i][1] > 0) && (adjacent_positions[i][2] <= bacterialModel.dim && adjacent_positions[i][2] > 0)
             if isempty(adjacent_positions[i], bacterialModel)
@@ -47,5 +53,5 @@ function populate_empty!(BacterialAgent, bacterialModel)
         end
     end
 
-
+end 
 end

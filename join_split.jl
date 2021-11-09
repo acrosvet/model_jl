@@ -1,4 +1,4 @@
-function join_split(AnimalAgent, animalModel)
+function join_split!(AnimalAgent, animalModel)
 
     # Additional split calving options ---------------------------------
 if animalModel.system == :Split

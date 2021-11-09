@@ -2,7 +2,7 @@ function bact_model_step!(bacterialModel)
 
     
 
-    stress!(bacterialModel)
+    #stress!(bacterialModel)
     bact_carrier!(bacterialModel)
     #infected_transition!(bacterialModel)
     #bacterialModel.age += 1
