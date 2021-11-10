@@ -8,17 +8,26 @@ Step AnimalAgents through time
     function agent_step!(AnimalAgent, animalModel)
 
         update_agent!(AnimalAgent)#Step the agent through time, updating state parameters   
+
         mortality!(AnimalAgent, animalModel)#Probability of infected animals dying
         recovery!(AnimalAgent, animalModel)#Define the dynamics of animals recovering from treatment.
         transmit!(AnimalAgent, animalModel)#Transmit infection directly between agents
         recrudescence!(AnimalAgent, animalModel)#Recrudecent infection from carriers
         treatment!(AnimalAgent, animalModel)#Apply treatment
         endTreatment!(AnimalAgent, animalModel)#End treatment
+        run_submodel!(AnimalAgent, animalModel)
+
 
 # Move the agents, but only after the first time step
 
         if animalModel.step > 1
             agent_movement!(AnimalAgent, animalModel)
+        end
+#Set the infected status of the initially infected agents
+        if animalModel.step == 1
+            if AnimalAgent.status == :IR || AnimalAgent.status == :IS
+                AnimalAgent.inf_days = 1
+            end
         end
 
 
@@ -44,7 +53,6 @@ Step AnimalAgents through time
 
 # Run the animal's bacterial submodel
 
-run_submodel!(AnimalAgent, animalModel)
 
     end
  

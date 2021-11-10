@@ -89,3 +89,9 @@ export/splt_model_run.csv
 export/tmp.csv
 r_scripts/data/table_one.csv
 export/.~lock.seasonal_model_run.csv#
+animal_model.sh
+farm_model.sh
+push_to_spartan.sh
+spartan_login.sh
+spartan-queue.sh
+export_plots.sh

@@ -62,10 +62,12 @@ function update_agent!(AnimalAgent)
     if AnimalAgent.status == :ES
         if AnimalAgent.bactopop_is < 0.5 && AnimalAgent.days_exposed >= 7
             AnimalAgent.status = :recovered
+            AnimalAgent.days_exposed = 0
         end
     elseif AnimalAgent.status == :ER
         if AnimalAgent.bactopop_r < 0.5 && AnimalAgent.days_exposed >= 7
             AnimalAgent.status = :recovered
+            AnimalAgent.days_exposed = 0
         end
     end
 

@@ -12,7 +12,7 @@ if AnimalAgent.inf_days ≥ recovery_time
             AnimalAgent.status = :RS
             AnimalAgent.inf_days = 0
             AnimalAgent.days_recovered = 1
-        else
+        else 
         #Animals may become carriers at the parametrised rate.
             AnimalAgent.status = :CS
             AnimalAgent.inf_days = 0
