@@ -8,7 +8,7 @@ using Dates
 using Random
 using DrWatson
 
-export(initialiseBacteria, bact_carrier!, populate_empty!, bacterial_population!, treatment!, bact_export_headers, fitness!, infection!, invasion!, bact_plasmid_transfer!, bact_recovery!, stress!, export_bacto_position!, export_bacto_data! )
+export initialiseBacteria, bact_carrier!, populate_empty!, bacterial_population!, treatment!, bact_export_headers, fitness!, infection!, invasion!, bact_plasmid_transfer!, bact_recovery!, stress!, export_bacto_position!, export_bacto_data!
 
 # Define agent =====================================================================================
 
