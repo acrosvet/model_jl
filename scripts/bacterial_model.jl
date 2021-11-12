@@ -1,9 +1,17 @@
 include("./src/bacterial.jl")
 using .bacterial
 
+using Agents
+using CSV
+using DataFrames
+using Distributions
+using Dates
+using Random
+using DrWatson
+
 @time bactoMod = initialiseBacteria(nbact = 1000, dims = 33, total_status = :S, timestep = 1.0, age = 0, days_treated = 0, days_exposed = 0, days_recovered = 0, stress = false, animalno = 0)
 
-include("bact_export_headers.jl")
+bact_export_headers()
 @time run!(bactoMod, bact_agent_step!, bact_model_step!, 1)
 
 bactoMod.days_exposed = 1

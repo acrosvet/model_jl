@@ -8,7 +8,7 @@ using Dates
 using Random
 using DrWatson
 
-export initialiseBacteria, bact_carrier!, populate_empty!, bacterial_population!, treatment!, bact_export_headers, fitness!, infection!, invasion!, bact_plasmid_transfer!, bact_recovery!, stress!, export_bacto_position!, export_bacto_data!
+export initialiseBacteria, bact_carrier!, populate_empty!, bacterial_population!, bact_treatment_response!, bact_export_headers, fitness!, infection!, invasion!, bact_plasmid_transfer!, bact_recovery!, stress!, export_bacto_position!, export_bacto_data!, bact_agent_step!, bact_model_step!
 
 # Define agent =====================================================================================
 
@@ -211,7 +211,6 @@ Fill empty grid spaces left by treatment
 """
 function populate_empty!(BacterialAgent, bacterialModel)
 
-    if random_empty(bacterialModel) != Nothing 
     
         # Fill in empty positions with bacteria
     
@@ -264,7 +263,6 @@ function populate_empty!(BacterialAgent, bacterialModel)
             end
         end
     
-    end 
     end
 
 
@@ -308,35 +306,28 @@ treatment!
 Bacterial behaviour during treatment
 """
 
-function treatment!(BacterialAgent, bacterialModel)
-        
-    num_sensitive = bacterialModel.num_sensitive
+function bact_treatment_response!(BacterialAgent, bacterialModel)
 
-    num_sensitive = [a.status == :IS for a in allagents(bacterialModel)]
-    num_sensitive = sum(num_sensitive)
 
-    # Turn over agents at each timestep
-
-    if bacterialModel.days_treated > 0 && bacterialModel.days_recovered
-        if bacterialModel.total_status == :IR || bacterialModel.total_status == :IS
-            if BacterialAgent.status == :IS
-                if rand(animalModel.rng) < ℯ^(-bacterialModel.days_treated/10)
-                    if bacterialModel.total_status == :CS && num_sensitive > bacterialModel.min_sensitive
+    if bacterialModel.days_treated > 0 && (BacterialAgent.status == :IS || BacterialAgent.status == :S)
+        if rand(bacterialModel.rng) < ℯ^(-bacterialModel.days_treated/20)
+            #if rand(bacterialModel.rng) < 0.5
+                if bacterialModel.num_susceptible > bacterialModel.min_susceptible
+                    if haskey(bacterialModel.agents, BacterialAgent.id)
                         kill_agent!(BacterialAgent, bacterialModel)
-                        strain = bacterialModel.r_strain
-                        pos = BacterialAgent.pos
-                        strain_status = bacterialModel.strain_statuses[r_strain]
-                        fitness = bacterialModel.fitnesses[r_strain]
-                        status = bacterialModel.strain_statuses[r_strain]
-                        agent = BacterialAgent(n, pos,  status, strain, strain_status, fitness)
-                        add_agent_single!(agent, bacterialModel) 
+                        if BacterialAgent.status == :IS
+                            bacterialModel.num_sensitive -= 1
+                        elseif BacterialAgent.status == :S
+                            bacterialModel.num_susceptible -= 1
+                        end
                     end
                 end
-            end
+           #end
         end
-    end   
-end
+    end
 
+
+end
  #Export headers
 
 """
