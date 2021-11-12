@@ -10,7 +10,7 @@ mutable struct BacterialAgent
     pos::CartesianIndex{2}
     status::Int8 # 0 = Susceptible, 1 = Pathogenic, 2 = Resistant, 3 = Exposed pathogenic, 4 = Exposed resistant, 5 = Carrier pathogenic, 6 = Carrier resistant, 7 =  Recovered pathogenic, 8 = Recovered resistant
     fitness::Float16
-    neighbours::Array{CartesianIndex,8}
+    neighbours::Array{CartesianIndex}
 end
 
 """
@@ -34,6 +34,17 @@ mutable struct BacterialModel
     rng::MersenneTwister
 end
 
+# Container for data
+
+mutable struct BacterialData
+    timestep::Array{Int16}
+    pop_r::Array{Float32}
+    pop_s::Array{Float32}
+    pop_p::Array{Float32}
+    pop_d::Array{Float32}
+end
+
+bacterialData = BacterialData([0],[0.0],[0.0],[0.0],[0.0])
 #Utility ====================================================================================
 """
 count_colonies!
@@ -68,6 +79,29 @@ function count_colonies!(bacterialSubmodel)
     bacterialSubmodel.pop_d = pop_d
 
 
+end
+
+
+"""
+get_neighbours()
+return neighbouring elements in a matrix 
+"""
+function get_neighbours(pos)
+
+    surrounding = Array{CartesianIndex}(undef, 8)    
+
+    surrounding[1] = pos + CartesianIndex(-1,1)
+    surrounding[2] = pos + CartesianIndex(0,1)
+    surrounding[3] = pos + CartesianIndex(1,1)
+    surrounding[4] = pos + CartesianIndex(1,0)
+    surrounding[5] = pos + CartesianIndex(1,-1)
+    surrounding[6] = pos + CartesianIndex(0,-1)
+    surrounding[7] = pos + CartesianIndex(-1,-1)
+    surrounding[8] = pos + CartesianIndex(-1,0)
+
+
+    return surrounding
+   
 end
 
 # Initialise agents ==================================================================================
@@ -125,7 +159,7 @@ function initialiseBacteria(;
             pos = CartesianIndices(colonies)[i]
             status = i % 2 == 0 ? 1 : 0
             fitness = set_fitness(fitnesses, status)
-            neighbours = Array{CartesianIndex, 8}
+            neighbours = get_neighbours(pos)
             colony = BacterialAgent(id, pos, status, fitness, neighbours)
             colonies[i] = colony
         end
@@ -137,7 +171,7 @@ function initialiseBacteria(;
             pos = CartesianIndices(colonies)[i]
             status = i % 2 == 0 ? 2 : 0
             fitness = set_fitness(fitnesses, status)
-            neighbours = Array{CartesianIndex, 8}
+            neighbours = get_neighbours(pos)
             colony = BacterialAgent(id, pos, status, fitness, neighbours)
             colonies[i] = colony
         end
@@ -147,7 +181,7 @@ function initialiseBacteria(;
             pos = CartesianIndices(colonies)[i]
             status = 0
             fitness = set_fitness(fitnesses, status)
-            neighbours = Array{CartesianIndex, 8}
+            neighbours = get_neighbours(pos)
             colony = BacterialAgent(id, pos, status, fitness, neighbours)
             colonies[i] = colony
         end
@@ -163,6 +197,7 @@ return bacterialSubmodel
 end
 
 @time bacterialSubmodel =  initialiseBacteria(animalno = Int16(100), nbact = Int16(33*33), total_status = Int8(1), days_treated = Int8(0), days_exposed = Int8(0), days_recovered = Int8(0), stress = false, seed = Int8(42))
+
 
 """
 bact_treatment!
@@ -186,35 +221,68 @@ function bact_treatment!(bacterialSubmodel)
     
 end
 
-"""
-neighbours()
-return neighbouring elements in a matrix 
-"""
-function neighbours!(pos)
 
-        n1 = pos - CartesianIndex(1,0)
-        n2 = pos + CartesianIndex(1,0)
-        n3 = pos - CartesianIndex(0,1)
-        n4 = pos + CartesianIndex(0,1)
-        n5 = pos + CartesianIndex(1,1)
-        n6 = pos - CartesianIndex(1,1)
+"""
+bact_repopulate!
+Repopulate after treatment
+"""
+function bact_repopulate!(bacterialSubmodel)
 
+    bacterialSubmodel.pop_d == 0 && return
+
+    for i in 1:length(bacterialSubmodel.colonies)
+        if bacterialSubmodel.colonies[i].status == 10
+            competing_neighbour = bacterialSubmodel.colonies[i].neighbours[rand(bacterialSubmodel.rng,1:8)]
+            if (competing_neighbour[1] > 0 && competing_neighbour[2] > 0) && (competing_neighbour[1] ≤ 33 && competing_neighbour[2] ≤ 33)
+                if bacterialSubmodel.days_treated != 0 && bacterialSubmodel.total_status ≤ 1
+                    if rand(bacterialSubmodel.rng) < 0.5
+                        if bacterialSubmodel.colonies[competing_neighbour].status == 1
+                            return
+                        elseif bacterialSubmodel.colonies[competing_neighbour].status == 0
+                            return
+                        elseif bacterialSubmodel.colonies[competing_neighbour].status == 2
+                            bacterialSubmodel.colonies[i].status = 2
+                        end
+                    end
+                elseif bacterialSubmodel.days_treated == 0 && bacterialSubmodel.total_status ≤ 1
+                    if rand(bacterialSubmodel.rng) < 0.5
+                        bacterialSubmodel.colonies[i].status = bacterialSubmodel.colonies[competing_neighbour].status
+                    end
+                end
+            end    
+        end
     end
-    
 end
+
+"""
+bact_export!
+Export bacterial data
+"""
+function bact_export!(bacterialSubmodel, bacterialData)
+    push!(bacterialData.timestep, bacterialSubmodel.timestep)
+    push!(bacterialData.pop_r, bacterialSubmodel.pop_r)
+    push!(bacterialData.pop_s, bacterialSubmodel.pop_s)
+    push!(bacterialData.pop_p, bacterialSubmodel.pop_p)
+    push!(bacterialData.pop_d, bacterialSubmodel.pop_d)
+end
+
 
 """
 bact_timestep!
 Update attributes over time
 """
-function bact_step!(bacterialSubmodel)
+function bact_step!(bacterialSubmodel, bacterialData)
     bact_treatment!(bacterialSubmodel) #Apply treatment
+    bact_repopulate!(bacterialSubmodel)#Replace bacteria killed by treatment
     count_colonies!(bacterialSubmodel)#Update the population
+    bact_export!(bacterialSubmodel, bacterialData)
     bacterialSubmodel.timestep += 1#Step through time
 end
             
                 
-bacterialSubmodel.days_treated = 1
+bacterialSubmodel.days_treated = 0
 
 
-bact_step!(bacterialSubmodel)
+ bact_step!(bacterialSubmodel, bacterialData)
+
+@time [bact_step!(bacterialSubmodel, bacterialData) for i in 1:1825]
