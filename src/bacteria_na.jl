@@ -2,6 +2,7 @@
 
 using Random: MersenneTwister
 
+
 """
 Agent type - BacterialAgent
 """
@@ -123,14 +124,16 @@ function initialiseBacteria(;
 
     # Agent space =========================================================================================
 
+
+
     colonies = Array{BacterialAgent}(undef, 33,33)
 
     #Create the initial model properties ==========================================================================
 
-    pop_r = Float16(0.0)
-    pop_s = Float16(0.0)
-    pop_p = Float16(0.0)
-    pop_d = Float16(0.0) 
+    pop_r = 0.0
+    pop_s = 0.0
+    pop_p = 0.0
+    pop_d = 0.0 
     days_carrier = 0
 
 
@@ -195,7 +198,7 @@ return bacterialModel
 
 end
 
-@time bacterialModel =  initialiseBacteria(animalno = Int16(100), nbact = Int16(33*33), total_status = Int8(1), days_treated = Int8(0), days_exposed = Int8(0), days_recovered = Int8(0), stress = false, seed = Int8(42))
+@time bacterialModel =  initialiseBacteria(animalno = Int16(100), nbact = Int16(33*33), total_status = Int8(0), days_treated = Int8(0), days_exposed = Int8(0), days_recovered = Int8(0), stress = false, seed = Int8(42))
 
 
 """
@@ -341,30 +344,62 @@ Bacterial colonies for exposed animals
 """
 function bact_exposed!(bacterialModel)
 
-    bacterialModel.total_status != 3 || bacterialModel.total_status != 4 && return
-    bacterialModel.days_exposed != 1 && return
-    #3 = exposed pathogenic
-    #4 = exposed resistant
+    bacterialModel.total_status != 3 && bacterialModel.total_status != 4 && return
+    if bacterialModel.days_exposed == 1 
+        #3 = exposed pathogenic
+        #4 = exposed resistant
 
-    if bacterialModel.total_status == 3
-        for colony in 1:length(bacterialModel.colonies)
-            if bacterialModel.colonies[colony].id % 3 == 0
-                bacterialModel.colonies[colony].status = 1
-                bacterialModel.colonies[colony].fitness = 1
-                bacterialModel.colonies[colony].processed = true
+        if bacterialModel.total_status == 3
+            for colony in 1:length(bacterialModel.colonies)
+                if bacterialModel.colonies[colony].id % 3 == 0
+                    bacterialModel.colonies[colony].status = 1
+                    #bacterialModel.colonies[colony].fitness = 1
+                    bacterialModel.colonies[colony].processed = true
+                end
+            end
+        elseif bacterialModel.total_status == 4
+            for colony in 1:length(bacterialModel.colonies)
+                if bacterialModel.colonies[colony].id % 3 == 0
+                    bacterialModel.colonies[colony].status = 2
+                    #bacterialModel.colonies[colony].fitness = 1
+                    bacterialModel.colonies[colony].processed = true
+                end
             end
         end
-    elseif bacterialModel.total_status == 4
-        for colony in 1:length(bacterialModel.colonies)
-            if bacterialModel.colonies[colony].id % 3 == 0
-                bacterialModel.colonies[colony].status = 2
-                bacterialModel.colonies[colony].fitness = 2
-                bacterialModel.colonies[colony].processed = true
-            end
+    elseif bacterialModel.days_exposed > 1
+        for i in 1:length(bacterialModel.colonies)
+            bacterialModel.colonies[i].processed == true && return
+                competing_neighbour = bacterialModel.colonies[i].neighbours[rand(bacterialModel.rng,1:8)]
+                if (competing_neighbour[1] > 0 && competing_neighbour[2] > 0) && (competing_neighbour[1] ≤ 33 && competing_neighbour[2] ≤ 33)
+                    if bacterialModel.colonies[i].status == 1 || bacterialModel.colonies[i].status == 2
+                        #if rand(bacterialModel.rng) > 0.5
+                            bacterialModel.colonies[competing_neighbour].status = bacterialModel.colonies[i].status
+                            bacterialModel.colonies[competing_neighbour].processed = true
+                        #end
+                    end
+                end     
         end
     end
 end
 
+"""
+bact_recovery!(bacterialModel)
+Immune response to pathogenic bacteria
+"""
+function bact_recovery!(bacterialModel)
+    bacterialModel.days_recovered == 0 && return
+
+    for colony in 1:length(bacterialModel.colonies)
+        bacterialModel.colonies[colony].status == 5 || bacterialModel.colonies[colony] == 6
+        if rand(bacterialModel.rng)  < ℯ^(-bacterialModel.days_recovered/20)
+            if rand(bacterialModel.rng) < 0.5
+                bacterialModel.colonies[colony].status = 0#0 is susceptible
+                bacterialModel.colonies[colony].processed = true
+            end
+        end  
+    end
+
+end
 """
 bact_step!
 Update attributes over time
@@ -372,6 +407,7 @@ Update attributes over time
 function bact_step!(bacterialModel, bacterialData)
     bact_processed!(bacterialModel)#Reset the processed counter
     bact_exposed!(bacterialModel)
+    bact_recovery!(bacterialModel)#Recovery over time
     bact_treatment!(bacterialModel) #Apply treatment
     bact_repopulate!(bacterialModel)#Replace bacteria killed by treatment
     bact_carrier!(bacterialModel)#Set carrier status
@@ -383,10 +419,11 @@ end
     
 
 
-bacterialModel.total_status = 4
-bacterialModel.days_exposed = 1
+bacterialModel.total_status = 0
+bacterialModel.days_exposed = 0
+bacterialModel.days_recovered = 0
 
  @time bact_step!(bacterialModel, bacterialData)
 
 
-@time [bact_step!(bacterialModel, bacterialData) for i in 1:10]
+#@time [bact_step!(bacterialModel, bacterialData) for i in 1:10]
