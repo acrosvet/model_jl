@@ -422,7 +422,7 @@ function bact_step!(bacterialModel, bacterialData)
     end
     count_colonies!(bacterialModel)#Update the population
     bact_export!(bacterialModel, bacterialData)#Export the bacterial data
-    bact_timestep!(bacterialModel)#Step through time
+    #bact_timestep!(bacterialModel)#Step through time
 end
     
 
