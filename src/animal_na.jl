@@ -12,6 +12,7 @@ mutable struct AnimalAgent
     id::Int16
     pos::CartesianIndex{3}
     status::Int8
+    stage::Int8
     days_infected::Int8
     days_exposed::Int8
     days_carrier::Int8
@@ -240,40 +241,84 @@ function initialiseSpring(;
 
     animalModel = AnimalModel(farmno, animals, timestep, rng, system, psc, psc_2, psc_3, psc_4, msd, msd_2, msd_3, msd_4, seed, mortality, farm_status, optimal_size, treatment_prob, treatment_length, carrier_prob, number_stock, number_lactating, current_lactating, optimal_lactating, current_heifers, optimal_heifers, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry)
 
-    # Add the lactating cows ---------------------------------------------
+    
+    # Set the initial stock parameters
+    num_heifers = floor(0.3*number_lactating)
+    num_weaned = floor(0.3*number_lactating)
 
-    for cow in 1:number_lactating
-        id = cow
-        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(6*√number_lactating)), 2)..., 5)
+    # Add the lactating cows ---------------------------------------------
+id_counter = 0
+    for cow in 1:(number_lactating - num_heifers)
+        id_counter += 1
+        id = Int16(id_counter)
+        stage = Int8(5)
+        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_lactating*√number_lactating)), 2)..., 5)
         while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
-            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(6*√num_lac)), 2)..., 5)
+            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animal_model.density_lactating*√num_lac)), 2)..., 5)
         end
-        status = 0
-        days_infected = 0
-        days_exposed = 0
-        days_carrier = 0
-        days_recovered = 0
-        days_treated = 0
-        treatment = 0
-        pop_p = 0.0
-        pop_d = 0.0
-        pop_r = 0.0
-        bacteriaSubmodel = initialiseBacteria(animalno = Int16(100), nbact = Int16(33*33), total_status = Int8(0), days_treated = Int8(0), days_exposed = Int8(0), days_recovered = Int8(0), stress = false, seed = Int8(42))
+        status = Int8(initial_status!(animalModel, id))
+        days_infected = Int8(0)
+        days_exposed = Int8(0)
+        days_carrier = Int8(0)
+        days_recovered = Int8(0)
+        days_treated = Int8(0)
+        treatment = Int8(0)
+        pop_p = Float32(0.0)
+        pop_d = Float32(0.0)
+        pop_r = Float32(0.0)
+        bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+        dic =  Int16(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 290)))) #Gives a 63% ICR for this rng
+        dim = Int16(0)
+        stress = false
+        sex = 1#Female
+        calving_season = 0#Spring
+        age = Int16(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
+        lactation= round(age/365) - 1
+        pregstat = 1#Pregnant
+        trade_status = 0#false
+        neighbours = get_neighbours_animal(pos)
+        AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)    end
+
+# Add the heifers ---------------------------------------------
+
+    for heifer in 1:num_heifers
+        id_counter += 1
+        id = Int16(id_counter)
+        stage = 4
+        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 5)
+        while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
+            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animal_model.density_dry*√num_heifers)), 2)..., 5)
+        end
+        status = Int8(initial_status!(animalModel, id))
+        days_infected = Int8(0)
+        days_exposed = Int8(0)
+        days_carrier = Int8(0)
+        days_recovered = Int8(0)
+        days_treated = Int8(0)
+        treatment = Int8(0)
+        pop_p = Float32(0.0)
+        pop_d = Float32(0.0)
+        pop_r = Float32(0.0)
+        bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
         dic =  Int16(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 290)))) #Gives a 63% ICR for this rng
         dim = 0
         stress = false
         sex = 1#Female
         calving_season = 0#Spring
-        age = Int(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
+        age = Int16(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
         lactation= round(age/365) - 1
         pregstat = 1#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
-        AnimalAgent(id, pos, status, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours) 
-    end
+        AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)   
+     end
+
 
 
     return animalModel
+
+
+
 
     
 
