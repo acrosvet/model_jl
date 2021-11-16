@@ -171,7 +171,9 @@ function initial_status!(animalModel, id)
         if id % 25 == 0
             2#Resistant
         elseif id % 30 == 0
-            5#Carrier resistant
+            6#Carrier resistant
+        elseif id % 40 == 0
+            5#Carrier pathogenic
         else
             0#susceptible
         end
@@ -255,7 +257,7 @@ function initialiseSpring(;
     num_weaned = floor(0.3*number_lactating)
 
     # Add the lactating cows ---------------------------------------------
-id_counter = 0
+    id_counter = 0
     for cow in 1:(number_lactating - num_heifers)
         id_counter += 1
         id = Int16(id_counter)
@@ -367,20 +369,21 @@ id_counter = 0
 
 end
 
-@time animalModel = initialiseSpring(farmno = Int8(1), farm_status = Int8(0), system = Int8(0), psc = Int16(0), msd = Int16(0), seed = Int8(42), mortality = Float32(0.05), optimal_size = Int16(100), number_lactating = Int16(100), treatment_prob = Float32(0.5), treatment_length = Int8(5), carrier_prob = Float32(0.5), timestep = Int16(0), density_lactating = Int8(6), density_calves = Int8(3), density_dry = Int8(7), num_lactating = Int16(100))
+@time animalModel = initialiseSpring(farmno = Int8(1), farm_status = Int8(2), system = Int8(0), psc = Int16(0), msd = Int16(0), seed = Int8(42), mortality = Float32(0.05), optimal_size = Int16(100), number_lactating = Int16(100), treatment_prob = Float32(0.5), treatment_length = Int8(5), carrier_prob = Float32(0.5), timestep = Int16(0), density_lactating = Int8(6), density_calves = Int8(3), density_dry = Int8(7), num_lactating = Int16(100))
 
 """
 update_animal!(animalModel)
 Increment animal parameters
 """
 function update_animal!(animalModel, position)
-
-            animalModel.animals[position].age += 1
-
-            if animalModel.animals[position].treatment == 1
-                animalModel.animals[position].days_treated += 1
-            end
-
+    #Advance age
+    animalModel.animals[position].age += 1
+    #Advance days treated if treated
+    if animalModel.animals[position].treatment == 1
+        animalModel.animals[position].days_treated += 1
+    end
+    #Advance bacterial model timestep
+    animalModel.animals[position].bacteriaSubmodel.timestep += 1
 end
 
 
@@ -389,9 +392,9 @@ run_submodel!(animalModel)
 Run the bacterial submodel for each animalModel
 """
 function run_submodel!(animalModel, position)
-
+        #if animalModel.animals[position].status != 0 && animalModel.animals[position].status != 10
             bact_step!(animalModel.animals[position].bacteriaSubmodel, bacterialData)
-
+        #end
 end
 
 """
@@ -399,20 +402,39 @@ animal_step!
 Animal stepping function
 """
 function animal_step!(animalModel)
-
     @async Threads.@threads for position in animalModel.positions
         if isassigned(animalModel.animals, animalModel.positions[position])
-                update_animal!(animalModel, position)
-                if animalModel.animals[position].status != 0 && animalModel.animals[position].status != 10
-                    run_submodel!(animalModel, position)
-                end
+            update_animal!(animalModel, position)
+            run_submodel!(animalModel, position)
+                
         end
     end
 end
 
+"""
+export_bacterialData!(bacterialData)
+Create DataFrame from bacterial data, write to CSV
+"""
+function export_bacterialData!(bacterialData)
+    #Create the data frame
+    dat = DataFrame(
+        id = bacterialData.id,
+        timestep = bacterialData.timestep,
+        pop_r = bacterialData.pop_r,
+        pop_s = bacterialData.pop_s,
+        pop_p = bacterialData.pop_p,
+        pop_d = bacterialData.pop_d
+    )
+    #Write the results to CSV
+    CSV.write("./export/bact_na.csv", dat)
+
+end
+
+
 
 @time animal_step!(animalModel)
 
-ProfileView.@profview animal_step!(animalModel)
+#ProfileView.@profview animal_step!(animalModel)
 
 @time [animal_step!(animalModel) for i in 1:365]
+
