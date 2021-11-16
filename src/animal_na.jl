@@ -392,9 +392,9 @@ run_submodel!(animalModel)
 Run the bacterial submodel for each animalModel
 """
 function run_submodel!(animalModel, position)
-        #if animalModel.animals[position].status != 0 && animalModel.animals[position].status != 10
+        if animalModel.animals[position].status != 0 && animalModel.animals[position].status != 10
             bact_step!(animalModel.animals[position].bacteriaSubmodel, bacterialData)
-        #end
+        end
 end
 
 """
