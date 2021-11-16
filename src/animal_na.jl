@@ -1,14 +1,15 @@
+
 include("bacteria_na.jl")
 
 #Define agent ============================
 
-using Random: MersenneTwister
+ using Random: MersenneTwister
 using Distributions: Rayleigh, truncated
 
-"""
+#= """
 Agent type - AnimalAgent
-"""
-mutable struct AnimalAgent
+""" =#
+ mutable struct AnimalAgent
     id::Int16
     pos::CartesianIndex{3}
     status::Int8
@@ -35,11 +36,12 @@ mutable struct AnimalAgent
     neighbours::Array{CartesianIndex}
 end
 
+
 """
 AnimalModel
 Type container for animal model
 """
-mutable struct AnimalModel
+ mutable struct AnimalModel
     farmno::Int16
     animals::Array{AnimalAgent}
     timestep::Int16
@@ -72,7 +74,9 @@ mutable struct AnimalModel
     density_lactating::Int8
     density_calves::Int8
     density_dry::Int8
+    positions::LinearIndices
 end
+
 
 """
 AnimalData
@@ -95,7 +99,7 @@ end
 
 #Initialise the data struct
 
-animalData = AnimalData([0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0])
+ animalData = AnimalData([0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0])
 
 """
 count_animals!(animalModel)
@@ -213,7 +217,8 @@ function initialiseSpring(;
     timestep::Int16,
     density_lactating::Int8,
     density_dry::Int8,
-    density_calves::Int8
+    density_calves::Int8,
+    num_lactating::Int16
     )
 
     #Agent space =======================================================
@@ -237,9 +242,12 @@ function initialiseSpring(;
     receiving =  Array{AnimalAgent}(undef, 15)
     rng = MersenneTwister(seed)
 
+
+    positions = LinearIndices(animals)
+
     #Set up the model ====================================================
 
-    animalModel = AnimalModel(farmno, animals, timestep, rng, system, psc, psc_2, psc_3, psc_4, msd, msd_2, msd_3, msd_4, seed, mortality, farm_status, optimal_size, treatment_prob, treatment_length, carrier_prob, number_stock, number_lactating, current_lactating, optimal_lactating, current_heifers, optimal_heifers, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry)
+    animalModel = AnimalModel(farmno, animals, timestep, rng, system, psc, psc_2, psc_3, psc_4, msd, msd_2, msd_3, msd_4, seed, mortality, farm_status, optimal_size, treatment_prob, treatment_length, carrier_prob, number_stock, number_lactating, current_lactating, optimal_lactating, current_heifers, optimal_heifers, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions)
 
     
     # Set the initial stock parameters
@@ -254,7 +262,7 @@ id_counter = 0
         stage = Int8(5)
         pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_lactating*√number_lactating)), 2)..., 5)
         while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
-            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animal_model.density_lactating*√num_lac)), 2)..., 5)
+            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_lactating*√num_lactating)), 2)..., 5)
         end
         status = Int8(initial_status!(animalModel, id))
         days_infected = Int8(0)
@@ -277,7 +285,9 @@ id_counter = 0
         pregstat = 1#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
-        AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)    end
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)    
+        animals[pos] = animal
+    end
 
 # Add the heifers ---------------------------------------------
 
@@ -287,7 +297,7 @@ id_counter = 0
         stage = 4
         pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 5)
         while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
-            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animal_model.density_dry*√num_heifers)), 2)..., 5)
+            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 5)
         end
         status = Int8(initial_status!(animalModel, id))
         days_infected = Int8(0)
@@ -310,19 +320,99 @@ id_counter = 0
         pregstat = 1#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
-        AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)   
-     end
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)    
+        animals[pos] = animal     
+    end
+
+     #Add weaned animals
+
+     for heifer in 1:num_weaned
+        id_counter += 1
+        id = Int16(id_counter)
+        stage = 4
+        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 2)
+        while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
+            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 2)
+        end
+        status = Int8(initial_status!(animalModel, id))
+        days_infected = Int8(0)
+        days_exposed = Int8(0)
+        days_carrier = Int8(0)
+        days_recovered = Int8(0)
+        days_treated = Int8(0)
+        treatment = Int8(0)
+        pop_p = Float32(0.0)
+        pop_d = Float32(0.0)
+        pop_r = Float32(0.0)
+        bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+        dic =  Int16(0) #Gives a 63% ICR for this rng
+        dim = 0
+        stress = false
+        sex = 1#Female
+        calving_season = 0#Spring
+        age = Int16(floor(rand(truncated(Rayleigh(365),(295), (385))))) # Defined using initial age function
+        lactation= round(age/365) - 1
+        pregstat = 0#Pregnant
+        trade_status = 0#false
+        neighbours = get_neighbours_animal(pos)
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)    
+        animals[pos] = animal     
+    end
 
 
+    animalModel.animals = animals
 
     return animalModel
-
-
-
-
     
 
 end
 
-@time animalModel = initialiseSpring(farmno = Int8(1), farm_status = Int8(0), system = Int8(0), psc = Int16(0), msd = Int16(0), seed = Int8(42), mortality = Float32(0.05), optimal_size = Int16(100), number_lactating = Int16(100), treatment_prob = Float32(0.5), treatment_length = Int8(5), carrier_prob = Float32(0.5), timestep = Int16(0), density_lactating = Int8(6), density_calves = Int8(3), density_dry = Int8(7))
+@time animalModel = initialiseSpring(farmno = Int8(1), farm_status = Int8(0), system = Int8(0), psc = Int16(0), msd = Int16(0), seed = Int8(42), mortality = Float32(0.05), optimal_size = Int16(100), number_lactating = Int16(100), treatment_prob = Float32(0.5), treatment_length = Int8(5), carrier_prob = Float32(0.5), timestep = Int16(0), density_lactating = Int8(6), density_calves = Int8(3), density_dry = Int8(7), num_lactating = Int16(100))
 
+"""
+update_animal!(animalModel)
+Increment animal parameters
+"""
+function update_animal!(animalModel, position)
+
+            animalModel.animals[position].age += 1
+
+            if animalModel.animals[position].treatment == 1
+                animalModel.animals[position].days_treated += 1
+            end
+
+end
+
+
+"""
+run_submodel!(animalModel)
+Run the bacterial submodel for each animalModel
+"""
+function run_submodel!(animalModel, position)
+
+            bact_step!(animalModel.animals[position].bacteriaSubmodel, bacterialData)
+
+end
+
+"""
+animal_step!
+Animal stepping function
+"""
+function animal_step!(animalModel)
+
+    @async Threads.@threads for position in animalModel.positions
+        if isassigned(animalModel.animals, animalModel.positions[position])
+                update_animal!(animalModel, position)
+                if animalModel.animals[position].status != 0 && animalModel.animals[position].status != 10
+                    run_submodel!(animalModel, position)
+                end
+        end
+    end
+end
+
+
+@time animal_step!(animalModel)
+
+ProfileView.@profview animal_step!(animalModel)
+
+@time [animal_step!(animalModel) for i in 1:365]

@@ -53,7 +53,7 @@ bacterialData = BacterialData([0],[0.0],[0.0],[0.0],[0.0])
 count_colonies!
 Count the number of each type of bacterial colony in an animal host
 """
-function count_colonies!(bacterialModel)
+function count_colonies!(bacterialModel, colony)
 
 
     pop_r = 0.0
@@ -61,7 +61,7 @@ function count_colonies!(bacterialModel)
     pop_p = 0.0
     pop_d = 0.0
 
-    for colony in 1:length(bacterialModel.colonies)
+    #for colony in 1:length(bacterialModel.colonies)
         if bacterialModel.colonies[colony].status == 0
             pop_s += 1
         elseif bacterialModel.colonies[colony].status == 1
@@ -71,7 +71,7 @@ function count_colonies!(bacterialModel)
         elseif bacterialModel.colonies[colony].status == 10
             pop_d += 1
         end
-    end
+    #end
     
 
     total_pop = pop_p + pop_s + pop_r
@@ -191,8 +191,13 @@ function initialiseBacteria(;
 
 
 
+    bacterialModel.colonies = colonies
+
     #Determine the population proportions of each bacterial type
-    count_colonies!(bacterialModel)
+    
+    for colony in 1:length(bacterialModel.colonies)
+        count_colonies!(bacterialModel, colony)
+    end
 
 return bacterialModel
 
@@ -205,12 +210,12 @@ end
 bact_treatment!
 Bacteria respond to treatment
 """
-function bact_treatment!(bacterialModel)
+function bact_treatment!(bacterialModel, colony)
 
     bacterialModel.days_treated == 0 && return
 
 
-    for colony in 1:length(bacterialModel.colonies)
+   # for colony in 1:length(bacterialModel.colonies)
         if bacterialModel.colonies[colony].status ≤ 1 #For susceptible and sensitive
             if rand(bacterialModel.rng)  < ℯ^(-bacterialModel.days_treated/20)
                 if rand(bacterialModel.rng) < 0.5
@@ -220,7 +225,7 @@ function bact_treatment!(bacterialModel)
                 end
             end    
         end
-    end
+   # end
     
 end
 
@@ -229,14 +234,14 @@ end
 bact_repopulate!
 Repopulate after treatment
 """
-function bact_repopulate!(bacterialModel)
+function bact_repopulate!(bacterialModel, colony)
 
     bacterialModel.pop_d == 0 && return
 
-    for i in 1:length(bacterialModel.colonies)
-        if bacterialModel.colonies[i].status == 10
-            bacterialModel.colonies[i].processed == true && return
-            competing_neighbour = bacterialModel.colonies[i].neighbours[rand(bacterialModel.rng,1:8)]
+  #  for i in 1:length(bacterialModel.colonies)
+        if bacterialModel.colonies[colony].status == 10
+            bacterialModel.colonies[colony].processed == true && return
+            competing_neighbour = bacterialModel.colonies[colony].neighbours[rand(bacterialModel.rng,1:8)]
             if (competing_neighbour[1] > 0 && competing_neighbour[2] > 0) && (competing_neighbour[1] ≤ 33 && competing_neighbour[2] ≤ 33)
                 if bacterialModel.days_treated != 0 && bacterialModel.total_status ≤ 1
                     if rand(bacterialModel.rng) < 0.5
@@ -245,20 +250,20 @@ function bact_repopulate!(bacterialModel)
                         elseif bacterialModel.colonies[competing_neighbour].status == 0
                             return
                         elseif bacterialModel.colonies[competing_neighbour].status == 2
-                            bacterialModel.colonies[i].status = 2
-                            bacterialModel.colonies[i].processed = true
+                            bacterialModel.colonies[colony].status = 2
+                            bacterialModel.colonies[colony].processed = true
 
                         end
                     end
                 elseif bacterialModel.days_treated == 0 && bacterialModel.total_status ≤ 1
                     if rand(bacterialModel.rng) < 0.5
-                        bacterialModel.colonies[i].status = bacterialModel.colonies[competing_neighbour].status
-                        bacterialModel.colonies[i].processed = true
+                        bacterialModel.colonies[colony].status = bacterialModel.colonies[competing_neighbour].status
+                        bacterialModel.colonies[colony].processed = true
                     end
                 end
             end    
         end
-    end
+   # end
 end
 
 """
@@ -279,26 +284,26 @@ end
 bact_carrier!
 Set the bacterial population of carrier animals
 """
-function bact_carrier!(bacterialModel)
+function bact_carrier!(bacterialModel, colony)
 
     bacterialModel.total_status != 5 && bacterialModel.total_status != 6 && return
 
     if bacterialModel.total_status == 6 && bacterialModel.days_carrier == 1#carrier resistant
-         for colony in 1:bacterialModel.colonies
+    #     for colony in 1:bacterialModel.colonies
             if bacterialModel.colonies[colony].id % 10 == 0
                 bacterialModel.colonies[colony].processed == true && return
                 bacterialModel.colonies[colony].id = 2
                 bacterialModel.colonies[colony].processed = true
             end
-        end
+      #  end
     elseif bacterialModel.total_status == 5 && bacterialModel.days_carrier == 1     
-         for colony in 1:bacterialModel.colonies
+      #   for colony in 1:bacterialModel.colonies
             if bacterialModel.colonies[colony].id % 10 == 0
                 bacterialModel.colonies[colony].processed == true && return
                 bacterialModel.colonies[colony].id = 1
                 bacterialModel.colonies[colony].processed = true
             end
-        end
+      #  end
     end
 end
 
@@ -306,29 +311,29 @@ end
 bact_fitness!
 Competition between bacterial colonies
 """
-function bact_fitness!(bacterialModel)
-    for i in 1:length(bacterialModel.colonies)
-        bacterialModel.colonies[i].processed == true && return
-            competing_neighbour = bacterialModel.colonies[i].neighbours[rand(bacterialModel.rng,1:8)]
+function bact_fitness!(bacterialModel, colony)
+  #  for i in 1:length(bacterialModel.colonies)
+        bacterialModel.colonies[colony].processed == true && return
+            competing_neighbour = bacterialModel.colonies[colony].neighbours[rand(bacterialModel.rng,1:8)]
             if (competing_neighbour[1] > 0 && competing_neighbour[2] > 0) && (competing_neighbour[1] ≤ 33 && competing_neighbour[2] ≤ 33)
-                if bacterialModel.colonies[i].fitness < bacterialModel.colonies[competing_neighbour].fitness
+                if bacterialModel.colonies[colony].fitness < bacterialModel.colonies[competing_neighbour].fitness
                     if rand(bacterialModel.rng) < 0.5
-                        bacterialModel.colonies[i].status = bacterialModel.colonies[competing_neighbour].status
-                        bacterialModel.colonies[i].fitness = bacterialModel.colonies[competing_neighbour].fitness
+                        bacterialModel.colonies[colony].status = bacterialModel.colonies[competing_neighbour].status
+                        bacterialModel.colonies[colony].fitness = bacterialModel.colonies[competing_neighbour].fitness
                     end
                 end
             end    
-    end
+  #  end
 end
 
 """
 bact_processed
 ensure bacteria do not get processed twice
 """
-function bact_processed!(bacterialModel)
-    for colony in 1:length(bacterialModel.colonies)
+function bact_processed!(bacterialModel, colony)
+    #for colony in 1:length(bacterialModel.colonies)
         bacterialModel.colonies[colony].processed = false
-    end
+    #end
 end
 """
 bact_timestep!
@@ -342,7 +347,7 @@ end
 bact_exposed
 Bacterial colonies for exposed animals
 """
-function bact_exposed!(bacterialModel)
+function bact_exposed!(bacterialModel, colony)
 
     bacterialModel.total_status != 3 && bacterialModel.total_status != 4 && return
     if bacterialModel.days_exposed == 1 
@@ -350,35 +355,35 @@ function bact_exposed!(bacterialModel)
         #4 = exposed resistant
 
         if bacterialModel.total_status == 3
-            for colony in 1:length(bacterialModel.colonies)
+           # for colony in 1:length(bacterialModel.colonies)
                 if bacterialModel.colonies[colony].id % 3 == 0
                     bacterialModel.colonies[colony].status = 1
                     #bacterialModel.colonies[colony].fitness = 1
                     bacterialModel.colonies[colony].processed = true
-                end
+              #  end
             end
         elseif bacterialModel.total_status == 4
-            for colony in 1:length(bacterialModel.colonies)
+           # for colony in 1:length(bacterialModel.colonies)
                 if bacterialModel.colonies[colony].id % 3 == 0
                     bacterialModel.colonies[colony].status = 2
                     #bacterialModel.colonies[colony].fitness = 1
                     bacterialModel.colonies[colony].processed = true
-                end
+            #    end
             end
         end
     elseif bacterialModel.days_exposed > 1
-        for i in 1:length(bacterialModel.colonies)
-            bacterialModel.colonies[i].processed == true && return
-                competing_neighbour = bacterialModel.colonies[i].neighbours[rand(bacterialModel.rng,1:8)]
+       # for i in 1:length(bacterialModel.colonies)
+            bacterialModel.colonies[colony].processed == true && return
+                competing_neighbour = bacterialModel.colonies[colony].neighbours[rand(bacterialModel.rng,1:8)]
                 if (competing_neighbour[1] > 0 && competing_neighbour[2] > 0) && (competing_neighbour[1] ≤ 33 && competing_neighbour[2] ≤ 33)
-                    if bacterialModel.colonies[i].status == 1 || bacterialModel.colonies[i].status == 2
+                    if bacterialModel.colonies[colony].status == 1 || bacterialModel.colonies[colony].status == 2
                         #if rand(bacterialModel.rng) > 0.5
-                            bacterialModel.colonies[competing_neighbour].status = bacterialModel.colonies[i].status
+                            bacterialModel.colonies[competing_neighbour].status = bacterialModel.colonies[colony].status
                             bacterialModel.colonies[competing_neighbour].processed = true
                         #end
                     end
                 end     
-        end
+       # end
     end
 end
 
@@ -386,10 +391,10 @@ end
 bact_recovery!(bacterialModel)
 Immune response to pathogenic bacteria
 """
-function bact_recovery!(bacterialModel)
+function bact_recovery!(bacterialModel, colony)
     bacterialModel.days_recovered == 0 && return
 
-    for colony in 1:length(bacterialModel.colonies)
+   # for colony in 1:length(bacterialModel.colonies)
         bacterialModel.colonies[colony].status == 5 || bacterialModel.colonies[colony] == 6
         if rand(bacterialModel.rng)  < ℯ^(-bacterialModel.days_recovered/20)
             if rand(bacterialModel.rng) < 0.5
@@ -397,7 +402,7 @@ function bact_recovery!(bacterialModel)
                 bacterialModel.colonies[colony].processed = true
             end
         end  
-    end
+ #   end
 
 end
 """
@@ -405,15 +410,18 @@ bact_step!
 Update attributes over time
 """
 function bact_step!(bacterialModel, bacterialData)
-    bact_processed!(bacterialModel)#Reset the processed counter
-    bact_exposed!(bacterialModel)
-    bact_recovery!(bacterialModel)#Recovery over time
-    bact_treatment!(bacterialModel) #Apply treatment
-    bact_repopulate!(bacterialModel)#Replace bacteria killed by treatment
-    bact_carrier!(bacterialModel)#Set carrier status
-    bact_fitness!(bacterialModel)
-    count_colonies!(bacterialModel)#Update the population
+    for colony in 1:length(bacterialModel.colonies)
+        bact_processed!(bacterialModel, colony)#Reset the processed counter
+        bact_exposed!(bacterialModel, colony)
+        bact_recovery!(bacterialModel, colony)#Recovery over time
+        bact_treatment!(bacterialModel, colony) #Apply treatment
+        bact_repopulate!(bacterialModel, colony)#Replace bacteria killed by treatment
+        bact_carrier!(bacterialModel, colony)#Set carrier status
+        bact_fitness!(bacterialModel, colony)
+        count_colonies!(bacterialModel, colony)#Update the population
+    end
     bact_export!(bacterialModel, bacterialData)#Export the bacterial data
+
     bact_timestep!(bacterialModel)#Step through time
 end
     
