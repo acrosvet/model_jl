@@ -40,6 +40,7 @@ end
 # Container for data
 
 mutable struct BacterialData
+    id::Array{Int16}
     timestep::Array{Int16}
     pop_r::Array{Float16}
     pop_s::Array{Float16}
@@ -47,13 +48,13 @@ mutable struct BacterialData
     pop_d::Array{Float16}
 end
 
-bacterialData = BacterialData([0],[0.0],[0.0],[0.0],[0.0])
+bacterialData = BacterialData([0],[0],[0.0],[0.0],[0.0],[0.0])
 #Utility ====================================================================================
 """
 count_colonies!
 Count the number of each type of bacterial colony in an animal host
 """
-function count_colonies!(bacterialModel, colony)
+function count_colonies!(bacterialModel)
 
 
     pop_r = 0.0
@@ -61,7 +62,7 @@ function count_colonies!(bacterialModel, colony)
     pop_p = 0.0
     pop_d = 0.0
 
-    #for colony in 1:length(bacterialModel.colonies)
+    for colony in 1:length(bacterialModel.colonies)
         if bacterialModel.colonies[colony].status == 0
             pop_s += 1
         elseif bacterialModel.colonies[colony].status == 1
@@ -71,7 +72,7 @@ function count_colonies!(bacterialModel, colony)
         elseif bacterialModel.colonies[colony].status == 10
             pop_d += 1
         end
-    #end
+    end
     
 
     total_pop = pop_p + pop_s + pop_r
@@ -195,15 +196,14 @@ function initialiseBacteria(;
 
     #Determine the population proportions of each bacterial type
     
-    for colony in 1:length(bacterialModel.colonies)
-        count_colonies!(bacterialModel, colony)
-    end
+        count_colonies!(bacterialModel)
+    
 
 return bacterialModel
 
 end
 
-@time bacterialModel =  initialiseBacteria(animalno = Int16(100), nbact = Int16(33*33), total_status = Int8(0), days_treated = Int8(0), days_exposed = Int8(0), days_recovered = Int8(0), stress = false, seed = Int8(42))
+@time bacterialModel =  initialiseBacteria(animalno = Int16(100), nbact = Int16(33*33), total_status = Int8(2), days_treated = Int8(0), days_exposed = Int8(0), days_recovered = Int8(0), stress = false, seed = Int8(42))
 
 
 """
@@ -271,6 +271,7 @@ bact_export!
 Export bacterial data
 """
 function bact_export!(bacterialModel, bacterialData)
+    push!(bacterialData.id, bacterialModel.id)
     push!(bacterialData.timestep, bacterialModel.timestep)
     push!(bacterialData.pop_r, bacterialModel.pop_r)
     push!(bacterialData.pop_s, bacterialModel.pop_s)
@@ -410,7 +411,7 @@ bact_step!
 Update attributes over time
 """
 function bact_step!(bacterialModel, bacterialData)
-    for colony in 1:length(bacterialModel.colonies)
+    @async Threads.@threads for colony in 1:length(bacterialModel.colonies)
         bact_processed!(bacterialModel, colony)#Reset the processed counter
         bact_exposed!(bacterialModel, colony)
         bact_recovery!(bacterialModel, colony)#Recovery over time
@@ -418,10 +419,9 @@ function bact_step!(bacterialModel, bacterialData)
         bact_repopulate!(bacterialModel, colony)#Replace bacteria killed by treatment
         bact_carrier!(bacterialModel, colony)#Set carrier status
         bact_fitness!(bacterialModel, colony)
-        count_colonies!(bacterialModel, colony)#Update the population
     end
+    count_colonies!(bacterialModel)#Update the population
     bact_export!(bacterialModel, bacterialData)#Export the bacterial data
-
     bact_timestep!(bacterialModel)#Step through time
 end
     
@@ -433,5 +433,7 @@ bacterialModel.days_recovered = 0
 
  @time bact_step!(bacterialModel, bacterialData)
 
+
+[bact_step!(bacterialModel, bacterialData) for i in 1:365]
 
 #@time [bact_step!(bacterialModel, bacterialData) for i in 1:10]
