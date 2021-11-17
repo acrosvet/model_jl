@@ -559,6 +559,93 @@ function end_treatment!(animal, animalModel)
     animal.days_treated = 0
 end
 
+"""move_animal(animal, animalModel)
+Shuffle animals at each step
+"""
+function move_animal!(animal, animalModel, stage, density, stock_in_class)
+    stock_in_class == 0 ? range = 10 : range = Int(floor(density*√stock_in_class))
+    range > 100 ? range = 100 : range = range
+    oldpos = animal.pos
+    newpos = CartesianIndex(rand(animalModel.rng, 1:range)...,stage)
+    while check_assignment(animalModel.animals, newpos) == true
+        newpos = CartesianIndex(rand(animalModel.rng, 1:range)...,stage)
+    end
+    animalModel.animals[newpos] = animal
+    animalModel.animals[oldpos] = undef
+end
+
+"""
+move_calf!(animal, animalModel)
+Move Calves
+"""
+function move_calf!(animal, animalModel)
+    move_animal!(animal, animalModel, 0, animalModel.density_calves, animalModel.num_calves)
+end
+
+"""
+move_weaned!(animal, animalModel)
+Move weaned
+"""
+function move_weaned!(animal, animalModel)
+    move_animal!(animal, animalModel, 1, animalModel.density_dry, animalModel.num_weaned)
+end
+
+"""
+move_dh!(animal, animalModel)
+Move dh
+"""
+function move_dh!(animal, animalModel)
+    move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.num_dh)
+end
+
+"""
+move_heifer!(animal, animalModel)
+Move heifer
+"""
+function move_heifer!(animal, animalModel)
+    move_animal!(animal, animalModel, 3, animalModel.density_dry, animalModel.num_heifers)
+end
+
+"""
+move_lactating!(animal, animalModel)
+Move lactating
+"""
+function move_lactating!(animal, animalModel)
+    move_animal!(animal, animalModel, 4, animalModel.density_lactating, animalModel.num_lactating)
+end
+
+"""
+move_dry!(animal, animalModel)
+Move dry
+"""
+function move_dry!(animal, animalModel)
+    move_animal!(animal, animalModel, 5, animalModel.density_dry, animalModel.num_dry)
+end
+
+
+
+
+"""
+animal_shuffle!(animal, animalModel)
+Randomly move animals.
+"""
+function animal_shuffle!(animal, animalModel)
+    animal.stage > 5 && return
+    if animal.stage == 0
+        move_calf!(animal, animalModel)
+    elseif animal.stage == 1
+        move_weaned!(animal, animalModel)
+    elseif animal.stage == 2
+        move_dh!(animal, animalModel)
+    elseif animal.stage == 3
+        move_heifer(animal, animalModel)
+    elseif animal.stage == 4
+        move_lactating!(animal, animalModel)
+    elseif animal.stage == 5
+        move_dry!(animal, animalModel)
+    end
+end
+
 """
 animal_step!
 Animal stepping function
@@ -567,6 +654,7 @@ function animal_step!(animalModel, animalData)
     @async Threads.@threads for position in animalModel.positions
          animal = animalModel.animals[position]
          !isassigned(animalModel.animals, animal) && continue
+         #Disease dynamics
             update_animal!(animalModel, animal)
             animal_mortality!(animalModel, animal, position)
             animal_recovery!(animal, animalModel)
@@ -575,8 +663,19 @@ function animal_step!(animalModel, animalData)
             animal_susceptiblility!(animal, animalModel)
             animal_treatment!(animal, animalModel)
             end_treatment!(animal, animalModel)
-            run_submodel!(animal)    
+            run_submodel!(animal)
+        #Population dynamics
     end
+
+    #Move the agents in space
+    @async Threads.@threads for position in animalModel.positions
+        animal = animalModel.animals[position]
+         !isassigned(animalModel.animals, animal) && continue
+         animal_shuffle!(animal, animalModel)
+    end
+
+    #refresh the positions
+    animalModel.positions = LinearIndices(animalModel.animals)
 
     count_animals!(animalModel)
     animal_export!(animalModel,animalData)
