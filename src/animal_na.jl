@@ -3,8 +3,9 @@ include("bacteria_na.jl")
 
 #Define agent ============================
 
- using Random: MersenneTwister
+using Random: MersenneTwister
 using Distributions: Rayleigh, truncated
+using CSV, DataFrames
 
 #= """
 Agent type - AnimalAgent
@@ -63,7 +64,7 @@ Type container for animal model
     treatment_length::Int8
     carrier_prob::Float32
     number_stock::Int16
-    number_lactating::Int16
+    num_lactating::Int16
     current_lactating::Int16
     optimal_lactating::Int16
     current_heifers::Int16
@@ -75,6 +76,15 @@ Type container for animal model
     density_calves::Int8
     density_dry::Int8
     positions::LinearIndices
+    pop_r::Int16
+    pop_s::Int16
+    pop_p::Int16
+    pop_d::Int16
+    num_calves::Int16
+    num_weaned::Int16
+    num_dh::Int16
+    num_heifers::Int16
+    num_dry::Int16
 end
 
 
@@ -121,31 +131,33 @@ function count_animals!(animalModel)
     animalModel.number_stock = 0
 
     #Count the values of each agent type, and update
-    for animal in 1:length(animalModel.animals)
-        if animalModel.animals[animal].status == 0
-            animalModel.pop_s += 1
-        elseif animalModel.animals[animal].status == 1
-            animalModel.pop_p += 1
-        elseif animalModel.animals[animal].status == 2
-            animalModel.pop_r += 1
-        elseif animalModel.animals[animal].status == 10
-            animalModel.pop_d += 1
-        elseif animalModel.animals[animal].stage == 0
-            animalModel.num_calves += 1
-        elseif animalModel.animals[animal].stage == 1
-            animalModel.num_weaned += 1
-        elseif animalModel.animals[animal].stage == 2
-            animalModel.num_dh += 1
-        elseif animalModel.animals[animal].stage == 3
-            animalModel.num_heifers += 1
-        elseif animalModel.animals[animal].stage == 4
-            animalModel.num_lactating += 1
-        elseif animalModel.animals[animal].stage == 5
-            animalModel.num_dry += 1
-        end   
+@async Threads.@threads for animal in animalModel.positions
+        if isassigned(animalModel.animals, animalModel.positions[animal])
+            if animalModel.animals[animal].status == 0
+                animalModel.pop_s += 1
+            elseif animalModel.animals[animal].status == 1
+                animalModel.pop_p += 1
+            elseif animalModel.animals[animal].status == 2
+                animalModel.pop_r += 1
+            elseif animalModel.animals[animal].status == 10
+                animalModel.pop_d += 1
+            elseif animalModel.animals[animal].stage == 0
+                animalModel.num_calves += 1
+            elseif animalModel.animals[animal].stage == 1
+                animalModel.num_weaned += 1
+            elseif animalModel.animals[animal].stage == 2
+                animalModel.num_dh += 1
+            elseif animalModel.animals[animal].stage == 3
+                animalModel.num_heifers += 1
+            elseif animalModel.animals[animal].stage == 4
+                animalModel.num_lactating += 1
+            elseif animalModel.animals[animal].stage == 5
+                animalModel.num_dry += 1
+            end   
+        end
     end
 
-    animalModel.number_stock = animalModel.number_calves + animalModel.num_dh + animalModel.num_heifers + animalModel.num_lactating + animalModel.num_dry
+    animalModel.number_stock = animalModel.num_calves + animalModel.num_dh + animalModel.num_heifers + animalModel.num_lactating + animalModel.num_dry
 end
 
 """
@@ -212,7 +224,7 @@ function initialiseSpring(;
     seed::Int8,
     mortality::Float32,
     optimal_size::Int16,
-    number_lactating::Int16,
+    num_lactating::Int16,
     treatment_prob::Float32,
     treatment_length::Int8,
     carrier_prob::Float32,
@@ -220,7 +232,6 @@ function initialiseSpring(;
     density_lactating::Int8,
     density_dry::Int8,
     density_calves::Int8,
-    num_lactating::Int16
     )
 
     #Agent space =======================================================
@@ -243,26 +254,37 @@ function initialiseSpring(;
     sending = Array{AnimalAgent}(undef, 15)
     receiving =  Array{AnimalAgent}(undef, 15)
     rng = MersenneTwister(seed)
+    pop_r = 0
+    pop_s = 0
+    pop_p = 0
+    pop_d = 0
+    num_calves = 0
+    num_weaned = 0
+    num_dh = 0
+    num_heifers = 0
+    num_dry = 0
+    number_stock = 0
+
 
 
     positions = LinearIndices(animals)
 
     #Set up the model ====================================================
 
-    animalModel = AnimalModel(farmno, animals, timestep, rng, system, psc, psc_2, psc_3, psc_4, msd, msd_2, msd_3, msd_4, seed, mortality, farm_status, optimal_size, treatment_prob, treatment_length, carrier_prob, number_stock, number_lactating, current_lactating, optimal_lactating, current_heifers, optimal_heifers, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions)
+    animalModel = AnimalModel(farmno, animals, timestep, rng, system, psc, psc_2, psc_3, psc_4, msd, msd_2, msd_3, msd_4, seed, mortality, farm_status, optimal_size, treatment_prob, treatment_length, carrier_prob, number_stock, num_lactating, current_lactating, optimal_lactating, current_heifers, optimal_heifers, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, num_calves, num_weaned, num_dh, num_heifers, num_dry)
 
     
     # Set the initial stock parameters
-    num_heifers = floor(0.3*number_lactating)
-    num_weaned = floor(0.3*number_lactating)
+    num_heifers = floor(0.3*num_lactating)
+    num_weaned = floor(0.3*num_lactating)
 
     # Add the lactating cows ---------------------------------------------
     id_counter = 0
-    for cow in 1:(number_lactating - num_heifers)
+    for cow in 1:(num_lactating - num_heifers)
         id_counter += 1
         id = Int16(id_counter)
         stage = Int8(5)
-        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_lactating*√number_lactating)), 2)..., 5)
+        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_lactating*√num_lactating)), 2)..., 5)
         while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
             pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_lactating*√num_lactating)), 2)..., 5)
         end
@@ -364,12 +386,14 @@ function initialiseSpring(;
 
     animalModel.animals = animals
 
+    count_animals!(animalModel)
+
     return animalModel
     
 
 end
 
-@time animalModel = initialiseSpring(farmno = Int8(1), farm_status = Int8(2), system = Int8(0), psc = Int16(0), msd = Int16(0), seed = Int8(42), mortality = Float32(0.05), optimal_size = Int16(100), number_lactating = Int16(100), treatment_prob = Float32(0.5), treatment_length = Int8(5), carrier_prob = Float32(0.5), timestep = Int16(0), density_lactating = Int8(6), density_calves = Int8(3), density_dry = Int8(7), num_lactating = Int16(100))
+@time animalModel = initialiseSpring(farmno = Int8(1), farm_status = Int8(2), system = Int8(0), psc = Int16(0), msd = Int16(0), seed = Int8(42), mortality = Float32(0.05), optimal_size = Int16(100), num_lactating = Int16(100), treatment_prob = Float32(0.5), treatment_length = Int8(5), carrier_prob = Float32(0.5), timestep = Int16(0), density_lactating = Int8(6), density_calves = Int8(3), density_dry = Int8(7))
 
 """
 update_animal!(animalModel)
@@ -398,17 +422,73 @@ function run_submodel!(animalModel, position)
 end
 
 """
+new_animal_position!(animalModel, density)
+"""
+function new_animal_position!(animalModel; density, number_stock, new_stage, new_status, position)
+    
+    newpos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(density*√number_stock)), 2)..., new_stage)
+    
+    while isassigned(animalModel.animals, LinearIndices(animalModel.animals)[newpos[1], newpos[2], newpos[3]]) == true
+        newpos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(density*√number_stock)), 2)..., new_stage)
+    end
+
+    animalModel.animals[position].stage = new_status
+    animalModel.animals[position].stage = new_stage
+    animalModel.animals[position].pos = newpos
+    animalModel.animals[newpos] = animalModel.animals[position]
+    animalModel.animals[position] = undef
+
+end
+"""
+animal_mortality!(animalModel. position)
+Determine animal mortality if infected
+"""
+function animal_mortality!(animalModel, position)
+
+    if animalModel.animals[position].status == 2#resistant
+        if animalModel.animals[position].stage == 0#Calf
+            if rand(animalModel.rng) < rand(animalModel.rng, 0.05:0.01:0.3)#Has a chance of dying of between 5 and 30%
+                new_animal_position!(animalModel, density = 1, number_stock = 10000, new_stage = 10, new_status = 10, position = position)
+            end    
+        end
+    end
+
+end
+
+
+"""
 animal_step!
 Animal stepping function
 """
-function animal_step!(animalModel)
+function animal_step!(animalModel, animalData)
     @async Threads.@threads for position in animalModel.positions
         if isassigned(animalModel.animals, animalModel.positions[position])
             update_animal!(animalModel, position)
-            run_submodel!(animalModel, position)
-                
+            animal_mortality!(animalModel, position)
+            run_submodel!(animalModel, position)    
         end
     end
+
+    count_animals!(animalModel)
+    animal_export!(animalModel,animalData)
+
+end
+
+
+"""
+animal_export!(animalModel, animalData)
+"""
+function animal_export!(animalModel,animalData)
+    push!(animalData.id, animalModel.farmno)
+    push!(animalData.timestep, animalModel.timestep)
+    push!(animalData.pop_r, animalModel.pop_r)
+    push!(animalData.pop_d, animalModel.pop_d)
+    push!(animalData.num_calves, animalModel.num_calves)
+    push!(animalData.num_weaned, animalModel.num_weaned)
+    push!(animalData.num_dh, animalModel.num_dh)
+    push!(animalData.num_heifers, animalModel.num_heifers)
+    push!(animalData.num_lactating, animalModel.num_lactating)
+    push!(animalData.num_dry, animalModel.num_dry)
 end
 
 """
@@ -430,11 +510,35 @@ function export_bacterialData!(bacterialData)
 
 end
 
+"""
+export_bacterialData!(bacterialData)
+Create DataFrame from bacterial data, write to CSV
+"""
+function export_animalData!(bacterialData)
+    #Create the data frame
+    dat = DataFrame(
+        id = animalData.id,
+        step = animalData.timestep,
+        pop_r = animalData.pop_r,
+        pop_d = animalData.pop_d,
+        num_calves = animalData.num_calves,
+        num_weaned = animalData.num_weaned,
+        num_dh = animalData.num_dh,
+        num_heifers = animalData.num_heifers,
+        num_lactating = animalData.num_lactating,
+        num_dry = animalData.num_dry
+    )
+    #Write the results to CSV
+    CSV.write("./export/animal_na.csv", dat)
+
+end
 
 
-@time animal_step!(animalModel)
+
+@time animal_step!(animalModel, animalData)
 
 #ProfileView.@profview animal_step!(animalModel)
 
-@time [animal_step!(animalModel) for i in 1:365]
+@time [animal_step!(animalModel, animalData) for i in 1:365]
 
+export_animalData!(animalData)
