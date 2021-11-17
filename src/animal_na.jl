@@ -400,14 +400,16 @@ update_animal!(animalModel)
 Increment animal parameters
 """
 function update_animal!(animalModel, position)
+    animal = animalModel.animals[position]
+    animal.bacteriaSubmodel.timestep += 1
+    
     #Advance age
-    animalModel.animals[position].age += 1
+    animal.age += 1
     #Advance days treated if treated
-    if animalModel.animals[position].treatment == 1
-        animalModel.animals[position].days_treated += 1
-    end
-    #Advance bacterial model timestep
-    animalModel.animals[position].bacteriaSubmodel.timestep += 1
+    animal.treatment != 1 && return
+    animal.days_treated += 1
+
+
 end
 
 
@@ -416,15 +418,21 @@ run_submodel!(animalModel)
 Run the bacterial submodel for each animalModel
 """
 function run_submodel!(animalModel, position)
-        if animalModel.animals[position].status != 0 && animalModel.animals[position].status != 10
+        animal = animalModel.animals[position]
+        animal.status == 0 && return
+        animal.status == 10 && return
+
+        bact_step!(animal.bacteriaSubmodel, bacterialData)
+
+#=         if animalModel.animals[position].status != 0 && animalModel.animals[position].status != 10
             bact_step!(animalModel.animals[position].bacteriaSubmodel, bacterialData)
-        end
+        end =#
 end
 
 """
 new_animal_position!(animalModel, density)
 """
-function new_animal_position!(animalModel; density, number_stock, new_stage, new_status, position)
+function new_animal_position!(animalModel, animal; density, number_stock, new_stage, new_status, position)
     
     newpos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(density*√number_stock)), 2)..., new_stage)
     
@@ -432,9 +440,10 @@ function new_animal_position!(animalModel; density, number_stock, new_stage, new
         newpos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(density*√number_stock)), 2)..., new_stage)
     end
 
-    animalModel.animals[position].stage = new_status
-    animalModel.animals[position].stage = new_stage
-    animalModel.animals[position].pos = newpos
+    animal.stage = new_stage
+    animal.status = new_status
+    animal.pos = new_pos
+
     animalModel.animals[newpos] = animalModel.animals[position]
     animalModel.animals[position] = undef
 
@@ -445,13 +454,19 @@ Determine animal mortality if infected
 """
 function animal_mortality!(animalModel, position)
 
-    if animalModel.animals[position].status == 2#resistant
+    animal = animalModel.animals[position]
+    animal.status != 2 && return
+    animal.stage != 0 && return
+    rand(animalModel.rng) > rand(animalModel.rng, 0.05:0.01:0.3) && return
+    new_animal_position!(animalModel, animal, density = 1, number_stock = 10000, new_stage = 10, new_status = 10, position = position)
+
+#=     if animalModel.animals[position].status == 2#resistant
         if animalModel.animals[position].stage == 0#Calf
             if rand(animalModel.rng) < rand(animalModel.rng, 0.05:0.01:0.3)#Has a chance of dying of between 5 and 30%
                 new_animal_position!(animalModel, density = 1, number_stock = 10000, new_stage = 10, new_status = 10, position = position)
             end    
         end
-    end
+    end =#
 
 end
 
