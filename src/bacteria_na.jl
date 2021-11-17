@@ -260,6 +260,7 @@ bact_export!
 Export bacterial data
 """
 function bact_export!(bacterialModel, bacterialData)
+
     push!(bacterialData.id, bacterialModel.id)
     push!(bacterialData.timestep, bacterialModel.timestep)
     push!(bacterialData.pop_r, bacterialModel.pop_r)
@@ -269,7 +270,7 @@ function bact_export!(bacterialModel, bacterialData)
 end
 
 
-        
+         
 """
 bact_carrier!
 Set the bacterial population of carrier animals
