@@ -35,6 +35,7 @@ Agent type - AnimalAgent
     pregstat::Int8
     trade_status::Int8
     neighbours::Array{CartesianIndex}
+    processed::Bool
 end
 
 
@@ -232,6 +233,7 @@ function initialiseSpring(;
     density_lactating::Int8,
     density_dry::Int8,
     density_calves::Int8,
+    processed = false
     )
 
     #Agent space =======================================================
@@ -309,7 +311,7 @@ function initialiseSpring(;
         pregstat = 1#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
-        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)    
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed)    
         animals[pos] = animal
     end
 
@@ -344,7 +346,7 @@ function initialiseSpring(;
         pregstat = 1#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
-        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)    
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed)    
         animals[pos] = animal     
     end
 
@@ -379,7 +381,7 @@ function initialiseSpring(;
         pregstat = 0#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
-        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours)    
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed)    
         animals[pos] = animal     
     end
 
@@ -399,17 +401,13 @@ end
 update_animal!(animalModel)
 Increment animal parameters
 """
-function update_animal!(animalModel, position)
-    animal = animalModel.animals[position]
+function update_animal!(animalModel, animal)
     animal.bacteriaSubmodel.timestep += 1
-    
     #Advance age
     animal.age += 1
     #Advance days treated if treated
     animal.treatment != 1 && return
     animal.days_treated += 1
-
-
 end
 
 
@@ -417,16 +415,10 @@ end
 run_submodel!(animalModel)
 Run the bacterial submodel for each animalModel
 """
-function run_submodel!(animalModel, position)
-        animal = animalModel.animals[position]
+function run_submodel!(animal)
         animal.status == 0 && return
         animal.status == 10 && return
-
         bact_step!(animal.bacteriaSubmodel, bacterialData)
-
-#=         if animalModel.animals[position].status != 0 && animalModel.animals[position].status != 10
-            bact_step!(animalModel.animals[position].bacteriaSubmodel, bacterialData)
-        end =#
 end
 
 """
@@ -452,22 +444,47 @@ end
 animal_mortality!(animalModel. position)
 Determine animal mortality if infected
 """
-function animal_mortality!(animalModel, position)
-
-    animal = animalModel.animals[position]
+function animal_mortality!(animalModel, animal, position)
     animal.status != 2 && return
     animal.stage != 0 && return
     rand(animalModel.rng) > rand(animalModel.rng, 0.05:0.01:0.3) && return
     new_animal_position!(animalModel, animal, density = 1, number_stock = 10000, new_stage = 10, new_status = 10, position = position)
+end
 
-#=     if animalModel.animals[position].status == 2#resistant
-        if animalModel.animals[position].stage == 0#Calf
-            if rand(animalModel.rng) < rand(animalModel.rng, 0.05:0.01:0.3)#Has a chance of dying of between 5 and 30%
-                new_animal_position!(animalModel, density = 1, number_stock = 10000, new_stage = 10, new_status = 10, position = position)
-            end    
-        end
-    end =#
+"""
+animal_processed!(animalModel, position)
+Reset the animal processed flag
+"""
+function animal_processed!(animal)
+animal.processed = false
+end
 
+
+"""
+animal_recovery!(animal)
+Animals recover from infection
+"""
+function animal_recovery!(animal, animalModel)
+    animal.days_infected == 0 && return
+    animal.status != 1 && animal.status != 2 && return
+    recovery_time = rand(animalModel.rng, 5:7)
+    animal.days_infected < recovery_time && return 
+    animal.days_infected = 0
+    bernoulli = rand(animalModel.rng)
+    if  bernoulli > animalModel.carrier_prob
+        animal.days_carrier = 1
+        animal.status == 1 ? animal.status = 7 : animal.status = 8
+    else
+        animal.status ==  1 ? animal.status = 5 : animal.status = 6
+        animal.days_recovered = 1
+    end
+end
+
+"""
+animal_transmission!(animal)
+Transmit infection between animals
+"""
+function animal_transmission!(animal)
 end
 
 
@@ -477,17 +494,20 @@ Animal stepping function
 """
 function animal_step!(animalModel, animalData)
     @async Threads.@threads for position in animalModel.positions
-        if isassigned(animalModel.animals, animalModel.positions[position])
-            update_animal!(animalModel, position)
-            animal_mortality!(animalModel, position)
-            run_submodel!(animalModel, position)    
-        end
+         animal = animalModel.animals[position]
+         !isassigned(animalModel.animals, animal) && continue
+            update_animal!(animalModel, animal)
+            animal_mortality!(animalModel, animal, position)
+            animal_recovery!(animal, animalModel)
+            run_submodel!(animal)    
     end
 
     count_animals!(animalModel)
     animal_export!(animalModel,animalData)
 
 end
+
+
 
 
 """
