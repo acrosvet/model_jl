@@ -461,6 +461,13 @@ end
 
 
 """
+check_assignment
+Determine if a position of interest is defined or not
+"""
+function check_assignment(space, pos)
+    isassigned(space, LinearIndices(space)[pos[1], pos[2], pos[3]])
+end
+"""
 animal_recovery!(animal)
 Animals recover from infection
 """
@@ -482,9 +489,26 @@ end
 
 """
 animal_transmission!(animal)
-Transmit infection between animals
+Transmit infection between animals.
+Only infected, recovering or carrier animals can transmit to their neighbours
 """
-function animal_transmission!(animal)
+function animal_transmission!(animal, animalModel)
+    animal.status == 0 || animal.status > 8 && return
+    pos = animal.pos
+    animal.neighbours = get_neighbours_animal(pos)
+    bernoulli = rand(animalModel.rng)
+    if animal.status % 2 == 0
+        bernoulli > animal.pop_r && return
+    else
+        bernoulli > animal.pop_p && return
+    end 
+
+    for competing_neighbour in enumerate(animal.neighbours)
+        checkbounds(Bool, animalModel.animals, competing_neighbour) == false && continue
+        check_assignment(animalModel.animals, competing_neighbour) == false && continue
+
+    end
+
 end
 
 
@@ -499,6 +523,7 @@ function animal_step!(animalModel, animalData)
             update_animal!(animalModel, animal)
             animal_mortality!(animalModel, animal, position)
             animal_recovery!(animal, animalModel)
+            animal_transmission!(animal, animalModel)
             run_submodel!(animal)    
     end
 
