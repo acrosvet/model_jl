@@ -646,6 +646,25 @@ function animal_shuffle!(animal, animalModel)
     end
 end
 
+
+"""
+cull_empty_dry!(animal, animalModel)
+"""
+function cull_empty_dry!(animal, animalModel)
+    animal.stage != 5 && return
+    animal.pregstat != 0 && return
+    move_animal!(animal, animalModel, 10, 1, 10000)
+end
+
+"""
+cull_slipped!(animal, animalModel)
+cull animals more than 320 dic that have not calved
+"""
+function cull_slipped!(animal, animalModel)
+    animal.dic < 320 && return
+    move_animal!(animal, animalModel, 10, 1, 10000)
+end
+
 """
 animal_step!
 Animal stepping function
