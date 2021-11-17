@@ -224,11 +224,11 @@ end
 check_bounds(competing_neighbour)
 return from boundary cases in the matrix, take the blue pill
 """
-function check_bounds(competing_neighbour)
-    competing_neighbour[1] ≤ 0 && return
-    competing_neighbour[2] ≤ 0 && return
-    competing_neighbour[3] > 33 && return
-    competing_neighbour[4] > 33 && return 
+function check_bounds(competing_neighbour, min, max)
+    competing_neighbour[1] ≤ min && return
+    competing_neighbour[2] ≤ min && return
+    competing_neighbour[3] > max && return
+    competing_neighbour[4] > max && return 
 end
 
 
@@ -241,7 +241,7 @@ function bact_repopulate!(bacterialModel, colony)
     bacterialModel.pop_d == 0 && return
     colony.status != 10 && return
     competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-    check_bounds(competing_neighbour)
+    check_bounds(competing_neighbour, 0, 33)
         if bacterialModel.days_treated != 0 && bacterialModel.total_status ≤ 1
             rand(bacterialModel.rng) ≥ 0.5 && return
             colony.status != 2 && return
@@ -298,7 +298,7 @@ Competition between bacterial colonies
 """
 function bact_fitness!(bacterialModel, colony)
     competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-    check_bounds(competing_neighbour)
+    check_bounds(competing_neighbour, 0, 33)
         colony.fitness > competing_neighbour.fitness && return
         rand(bacterialModel.rng) ≥ 0.5 && return
             colony.status = competing_neighbour.status
@@ -342,7 +342,7 @@ function bact_exposed!(bacterialModel, colony)
         end
     elseif bacterialModel.days_exposed > 1
                 competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-                check_bounds(competing_neighbour)
+                check_bounds(competing_neighbour, 0, 33)
                 colony.status != 1 && colony.status != 2 && return
                     competing_neighbour.status = colony.status
                     competing_neighbour.processed = true
