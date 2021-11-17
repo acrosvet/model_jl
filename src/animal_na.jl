@@ -20,7 +20,7 @@ Agent type - AnimalAgent
     days_carrier::Int8
     days_recovered::Int16
     days_treated::Int8
-    treatment::Int8
+    treatment::Bool
     pop_p::Float32
     pop_d::Float32
     pop_r::Float32
@@ -296,7 +296,7 @@ function initialiseSpring(;
         days_carrier = Int8(0)
         days_recovered = Int8(0)
         days_treated = Int8(0)
-        treatment = Int8(0)
+        treatment = false
         pop_p = Float32(0.0)
         pop_d = Float32(0.0)
         pop_r = Float32(0.0)
@@ -331,7 +331,7 @@ function initialiseSpring(;
         days_carrier = Int8(0)
         days_recovered = Int8(0)
         days_treated = Int8(0)
-        treatment = Int8(0)
+        treatment = false
         pop_p = Float32(0.0)
         pop_d = Float32(0.0)
         pop_r = Float32(0.0)
@@ -366,7 +366,7 @@ function initialiseSpring(;
         days_carrier = Int8(0)
         days_recovered = Int8(0)
         days_treated = Int8(0)
-        treatment = Int8(0)
+        treatment = false
         pop_p = Float32(0.0)
         pop_d = Float32(0.0)
         pop_r = Float32(0.0)
@@ -497,20 +497,67 @@ function animal_transmission!(animal, animalModel)
     pos = animal.pos
     animal.neighbours = get_neighbours_animal(pos)
     bernoulli = rand(animalModel.rng)
-    if animal.status % 2 == 0
+    if animal.status % 2 == 0 #Resistant animals are even, sensitive animals are odd
         bernoulli > animal.pop_r && return
     else
         bernoulli > animal.pop_p && return
     end 
-
-    for competing_neighbour in enumerate(animal.neighbours)
-        checkbounds(Bool, animalModel.animals, competing_neighbour) == false && continue
-        check_assignment(animalModel.animals, competing_neighbour) == false && continue
-
+    #The animal can now go on to infect its neighbours
+    @async Threads.@threads for coord in enumerate(animal.neighbours)
+        checkbounds(Bool, animalModel.animals, coord) == false && continue
+        check_assignment(animalModel.animals, coord) == false && continue
+        competing_neighbour = animalModel.animals[coord]
+        competing_neighbour.status != 0  || competing_neighbour.status > 8 && continue
+        competing_neighbour.status = animal.status
     end
-
 end
 
+"""
+animal_shedding!(animal)
+Recrudescent infection from carrier animals
+"""
+function animal_shedding!(animal)
+    animal.stress == false && return
+    animal.status != 5 && animal.status != 6 && return
+    animal.days_exposed = 1
+    animal.status == 5 ? animal.status = 3 : animal.status = 4 #If carriers are stressed, they shed as though exposed again
+end
+
+"""
+animal_susceptiblility(animal, animalModel)
+Animals return to susceptibility at a variable interval after recovery, simulates waning immunity
+"""
+function animal_susceptiblility!(animal, animalModel)
+    animal.days_recovered != 0 && return
+    animal.status != 7 && animal.status != 8 && return
+    animal.days_recovered < rand(animalModel.rng, 60:180) && return
+    animal.days_exposed = 1
+    animal.status == 7 ? animal.status = 3 : animal.status = 4 #Return to exposed pathogenic or exposed resistant
+end
+
+"""
+animal_treatment!(animal, animalModel)
+Decide to treat animals
+"""
+function animal_treatment!(animal, animalModel)
+    animal.treatment == true && return
+    animal.status != 1 && animal.status != 2 && return
+    bernoulli = rand(animalModel.rng)
+    bernoulli > animalModel.treatment_prob && return
+    animal.days_treated = 1
+    animal.treatment = true
+end
+
+"""
+end_treatment!(animal, animalModel)
+End treatment after course duration.
+"""
+function end_treatment!(animal, animalModel)
+    animal.treatment == false && return
+    animal.days_treated < animalModel.treatment_length && return
+    animal.treatment = false
+    animal.days_treated = 0
+end
 
 """
 animal_step!
@@ -524,6 +571,10 @@ function animal_step!(animalModel, animalData)
             animal_mortality!(animalModel, animal, position)
             animal_recovery!(animal, animalModel)
             animal_transmission!(animal, animalModel)
+            animal_shedding!(animal)
+            animal_susceptiblility!(animal, animalModel)
+            animal_treatment!(animal, animalModel)
+            end_treatment!(animal, animalModel)
             run_submodel!(animal)    
     end
 
@@ -531,7 +582,6 @@ function animal_step!(animalModel, animalData)
     animal_export!(animalModel,animalData)
 
 end
-
 
 
 
@@ -599,6 +649,6 @@ end
 
 #ProfileView.@profview animal_step!(animalModel)
 
-@time [animal_step!(animalModel, animalData) for i in 1:365]
+@time [animal_step!(animalModel, animalData) for i in 1:1825]
 
-export_animalData!(animalData)
+@time export_animalData!(animalData)
