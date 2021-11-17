@@ -95,3 +95,5 @@ push_to_spartan.sh
 spartan_login.sh
 spartan-queue.sh
 export_plots.sh
+export/bact_na.csv
+export/animal_na.csv
