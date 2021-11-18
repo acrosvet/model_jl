@@ -796,6 +796,33 @@ function bobby_cull!(animal, animalModel)
     cull!(animal, animalModel)
 end
 
+"""
+join_seasonal!(animal, animalModel)
+Join animals in seasonal systems
+"""
+function join_seasonal!(animal, animalModel)
+    animalModel.timestep != animalModel.msd + 120 && return
+    rand(animalModel.rng) > 0.85 && return
+        animal.pregstat = 1
+        animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+        animal.joined = true
+end
+
+"""
+animal_joining!(animal, animalModel)
+"""
+function animal_joining!(animal, animalModel)
+    animalModel.pregstat == 0 && return
+    animalModel.stage != 4 && return
+    if animalModel.system == 1
+        join_seasonal!(animal, animalModel)
+    elseif animalModel.system == 2
+        join_split!(animal, animalModel)
+    else
+        join_batch!(animal, animalModel)
+    end
+
+end
 
 """
 animal_step!
