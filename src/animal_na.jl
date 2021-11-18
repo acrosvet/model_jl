@@ -784,6 +784,19 @@ function animal_birth!(animal, animalModel)
         animalModel.animals[pos] = animal
 end
 
+
+"""
+bobby_cull!(animal, animalModel)
+Cull bobby calves
+"""
+function bobby_cull!(animal, animalModel)
+    animal.stage != 0 && return
+    animal.sex != 0 && return
+    animal.age < 4 && return
+    cull!(animal, animalModel)
+end
+
+
 """
 animal_step!
 Animal stepping function
