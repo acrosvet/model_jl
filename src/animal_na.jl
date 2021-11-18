@@ -448,7 +448,7 @@ function animal_mortality!(animalModel, animal, position)
     animal.status != 2 && return
     animal.stage != 0 && return
     rand(animalModel.rng) > rand(animalModel.rng, 0.05:0.01:0.3) && return
-    new_animal_position!(animalModel, animal, density = 1, number_stock = 10000, new_stage = 10, new_status = 10, position = position)
+    cull!(animalModel, animal)
 end
 
 """
@@ -646,6 +646,15 @@ function animal_shuffle!(animal, animalModel)
     end
 end
 
+"""
+cull!(animal, animalModel)
+Move an animal to level 10, culled
+"""
+function cull!(animal, animalModel)
+    move_animal!(animal, animalModel, 10, 1, 10000)
+    animal.stage = 10
+    animal.status = 10
+end
 
 """
 cull_empty_dry!(animal, animalModel)
@@ -653,7 +662,7 @@ cull_empty_dry!(animal, animalModel)
 function cull_empty_dry!(animal, animalModel)
     animal.stage != 5 && return
     animal.pregstat != 0 && return
-    move_animal!(animal, animalModel, 10, 1, 10000)
+    cull!(animal, animalModel)
 end
 
 """
@@ -663,6 +672,116 @@ cull animals more than 320 dic that have not calved
 function cull_slipped!(animal, animalModel)
     animal.dic < 320 && return
     move_animal!(animal, animalModel, 10, 1, 10000)
+    cull!(animal, animalModel)
+
+end
+
+"""
+age_cull!(animal)
+"""
+function age_cull!(animal, animalModel)
+    animal.age ≤ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365)))) && return
+    cull!(animal, animalModel)
+end
+
+"""
+fertility_cull!(animal, animalModel)
+cull for fertility
+"""
+function fertility_cull!(animal, animalModel)
+    animal.dim < 280 && return
+    animal.dic ≥ 150 && return
+    cull!(animal, animalModel)
+end
+
+"""
+do_culls!(animal, animalModel, system)
+Perform both cull types
+"""
+function do_culls!(animal, animalModel, system)
+    age_cull!(animal, animalModel)
+    fertility_cull!(animal, animalModel)
+    animalModel.status == 10 ?  system -= 1 : return
+end
+
+"""
+cull_seasonal(animal, animalModel)
+Cull for seasonal systems (system = 0)
+"""
+function cull_seasonal!(animal, animalModel)
+    animalModel.system != 0 && return
+    animal.stage != 4 && return
+    animalModel.current_lac < animalModel.num_lac && return
+    do_culls!(animal, animalModel, animalModel.current_lac)
+end
+
+"""
+cull_split!(animal, animalModel)
+Cull for split systems (system 1)
+"""
+function cull_split!(animal, animalModel)
+    animalModel.system != 2 && return
+    animal.stage!= 4 && return
+    if animalModel.current_spring > animalModel.num_spring
+        animal.calving_season != 1 && return
+        do_culls!(animal, animalModel, animalModel.current_spring)
+    elseif animalModel.current_autumn > animalModel.num_autumn
+        animalModel.calving_season != 2 && return
+        do_culls!(animal, animalModel, animalModel.current_autumn)
+    end
+end
+
+"""
+calving!(animal, animalModel)
+Calve cows, create calf.
+"""
+function calving!(animal, animalModel)
+    animal.dic < 273 && return
+    animal.stage != 5 && return
+    animal.dic != 283 + rand(animalModel.rng, -10:1:10) && return
+        animal.pregstat = 0
+        animal.dic = 0
+        animal.stage = 4
+        animal.dim = 1
+        animal.lactation += 1
+        animal_birth!(animal, animalModel)
+        move_animal!(animal, animalModel, 4, animalModel.density_lactating, animalMode.current_lactating)
+end
+
+"""
+animal_birth!(animal,animalModel)
+Create a calf
+"""
+function animal_birth!(animal, animalModel)
+        id = Int16(1)
+        stage = 0
+        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_calves*√animalModel.current_calves)), 2)..., 1)
+        while isassigned(animalModel.animals, LinearIndices(animalModel.animals)[pos[1], pos[2], pos[3]]) == true
+            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_calves*√animalModel.current_calves)), 2)..., 1)
+        end
+        status = (animal.status == 1 || animal.status == 2) ? (animal.status == 1  ? 3 : 4) : 0
+        days_infected = 0
+        days_exposed = (status == 3 || status == 4) ? Int8(1) : Int8(0)
+        days_carrier = Int8(0)
+        days_recovered = Int8(0)
+        days_treated = Int8(0)
+        treatment = false
+        pop_p = animal.pop_p
+        pop_d = animal.pop_d
+        pop_r = animal.pop_r
+        bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+        dic = 0
+        dim = 0
+        stress = false
+        sex = rand(animalModel.rng) > 0.5 ? 1 : 0
+        calving_season = animal.calving_season
+        age = Int16(1)
+        lactation = 0
+        pregstat = 0
+        trade_status = 0#false
+        neighbours = get_neighbours_animal(pos)
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed)    
+        animalModel.animals[pos] = animal
 end
 
 """
@@ -673,6 +792,7 @@ function animal_step!(animalModel, animalData)
     @async Threads.@threads for position in animalModel.positions
          animal = animalModel.animals[position]
          !isassigned(animalModel.animals, animal) && continue
+         animal.stage > 5 && continue #Actions do not apply to levels 6 and above
          #Disease dynamics
             update_animal!(animalModel, animal)
             animal_mortality!(animalModel, animal, position)
@@ -684,12 +804,16 @@ function animal_step!(animalModel, animalData)
             end_treatment!(animal, animalModel)
             run_submodel!(animal)
         #Population dynamics
+            cull_slipped!(animal, animalModel)
+            cull_empty_dry!(animal, animalModel)
+            cull_seasonal!(animal, animalModel)
     end
 
     #Move the agents in space
     @async Threads.@threads for position in animalModel.positions
         animal = animalModel.animals[position]
          !isassigned(animalModel.animals, animal) && continue
+         animal.stage > 5 && continue 
          animal_shuffle!(animal, animalModel)
     end
 
