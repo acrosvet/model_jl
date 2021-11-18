@@ -86,6 +86,7 @@ Type container for animal model
     num_dh::Int16
     num_heifers::Int16
     num_dry::Int16
+    id_counter::Int16
 end
 
 
@@ -142,17 +143,17 @@ function count_animals!(animalModel)
                 animalModel.pop_r += 1
             elseif animalModel.animals[animal].status == 10
                 animalModel.pop_d += 1
-            elseif animalModel.animals[animal].stage == 0
-                animalModel.num_calves += 1
             elseif animalModel.animals[animal].stage == 1
-                animalModel.num_weaned += 1
+                animalModel.num_calves += 1
             elseif animalModel.animals[animal].stage == 2
-                animalModel.num_dh += 1
+                animalModel.num_weaned += 1
             elseif animalModel.animals[animal].stage == 3
-                animalModel.num_heifers += 1
+                animalModel.num_dh += 1
             elseif animalModel.animals[animal].stage == 4
-                animalModel.num_lactating += 1
+                animalModel.num_heifers += 1
             elseif animalModel.animals[animal].stage == 5
+                animalModel.num_lactating += 1
+            elseif animalModel.animals[animal].stage == 6
                 animalModel.num_dry += 1
             end   
         end
@@ -237,7 +238,7 @@ function initialiseSpring(;
     )
 
     #Agent space =======================================================
-    animals = Array{AnimalAgent}(undef, 100,100,10)
+    animals = Array{AnimalAgent}(undef, 100,100,8)
 
     #Create the initial model parameters ===============================
 
@@ -266,6 +267,7 @@ function initialiseSpring(;
     num_heifers = 0
     num_dry = 0
     number_stock = 0
+    id_counter = 0
 
 
 
@@ -273,7 +275,7 @@ function initialiseSpring(;
 
     #Set up the model ====================================================
 
-    animalModel = AnimalModel(farmno, animals, timestep, rng, system, psc, psc_2, psc_3, psc_4, msd, msd_2, msd_3, msd_4, seed, mortality, farm_status, optimal_size, treatment_prob, treatment_length, carrier_prob, number_stock, num_lactating, current_lactating, optimal_lactating, current_heifers, optimal_heifers, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, num_calves, num_weaned, num_dh, num_heifers, num_dry)
+    animalModel = AnimalModel(farmno, animals, timestep, rng, system, psc, psc_2, psc_3, psc_4, msd, msd_2, msd_3, msd_4, seed, mortality, farm_status, optimal_size, treatment_prob, treatment_length, carrier_prob, number_stock, num_lactating, current_lactating, optimal_lactating, current_heifers, optimal_heifers, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, num_calves, num_weaned, num_dh, num_heifers, num_dry, id_counter)
 
     
     # Set the initial stock parameters
@@ -281,10 +283,11 @@ function initialiseSpring(;
     num_weaned = floor(0.3*num_lactating)
 
     # Add the lactating cows ---------------------------------------------
-    id_counter = 0
+    #Lactating stage is 5, lactating index is 5
+    animalModel.id_counter = 0
     for cow in 1:(num_lactating - num_heifers)
-        id_counter += 1
-        id = Int16(id_counter)
+        animalModel.id_counter += 1
+        id = Int16(animalModel.id_counter)
         stage = Int8(5)
         pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_lactating*√num_lactating)), 2)..., 5)
         while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
@@ -318,12 +321,12 @@ function initialiseSpring(;
 # Add the heifers ---------------------------------------------
 
     for heifer in 1:num_heifers
-        id_counter += 1
-        id = Int16(id_counter)
+        animalModel.id_counter += 1
+        id = Int16(animalModel.id_counter)
         stage = 4
-        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 5)
+        pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 4)
         while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
-            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 5)
+            pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 4)
         end
         status = Int8(initial_status!(animalModel, id))
         days_infected = Int8(0)
@@ -342,7 +345,7 @@ function initialiseSpring(;
         sex = 1#Female
         calving_season = 0#Spring
         age = Int16(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
-        lactation= round(age/365) - 1
+        lactation= 0
         pregstat = 1#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
@@ -352,10 +355,10 @@ function initialiseSpring(;
 
      #Add weaned animals
 
-     for heifer in 1:num_weaned
-        id_counter += 1
-        id = Int16(id_counter)
-        stage = 4
+     for weaned in 1:num_weaned
+        animalModel.id_counter += 1
+        id = Int16(animalModel.id_counter)
+        stage = 2
         pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 2)
         while isassigned(animals, LinearIndices(animals)[pos[1], pos[2], pos[3]]) == true
             pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√num_heifers)), 2)..., 2)
@@ -377,7 +380,7 @@ function initialiseSpring(;
         sex = 1#Female
         calving_season = 0#Spring
         age = Int16(floor(rand(truncated(Rayleigh(365),(295), (385))))) # Defined using initial age function
-        lactation= round(age/365) - 1
+        lactation= 0
         pregstat = 0#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
@@ -444,8 +447,8 @@ end
 animal_mortality!(animalModel. position)
 Determine animal mortality if infected
 """
-function animal_mortality!(animalModel, animal, position)
-    animal.status != 2 && return
+function animal_mortality!(animalModel, animal)
+    animal.status != 2 && animal.status != 1 && return
     animal.stage != 0 && return
     rand(animalModel.rng) > rand(animalModel.rng, 0.05:0.01:0.3) && return
     cull!(animalModel, animal)
@@ -456,7 +459,7 @@ animal_processed!(animalModel, position)
 Reset the animal processed flag
 """
 function animal_processed!(animal)
-animal.processed = false
+    animal.processed = false
 end
 
 
@@ -579,7 +582,7 @@ move_calf!(animal, animalModel)
 Move Calves
 """
 function move_calf!(animal, animalModel)
-    move_animal!(animal, animalModel, 0, animalModel.density_calves, animalModel.num_calves)
+    move_animal!(animal, animalModel, 1, animalModel.density_calves, animalModel.num_calves)
 end
 
 """
@@ -587,7 +590,7 @@ move_weaned!(animal, animalModel)
 Move weaned
 """
 function move_weaned!(animal, animalModel)
-    move_animal!(animal, animalModel, 1, animalModel.density_dry, animalModel.num_weaned)
+    move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.num_weaned)
 end
 
 """
@@ -595,7 +598,7 @@ move_dh!(animal, animalModel)
 Move dh
 """
 function move_dh!(animal, animalModel)
-    move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.num_dh)
+    move_animal!(animal, animalModel, 3, animalModel.density_dry, animalModel.num_dh)
 end
 
 """
@@ -603,7 +606,7 @@ move_heifer!(animal, animalModel)
 Move heifer
 """
 function move_heifer!(animal, animalModel)
-    move_animal!(animal, animalModel, 3, animalModel.density_dry, animalModel.num_heifers)
+    move_animal!(animal, animalModel, 4, animalModel.density_dry, animalModel.num_heifers)
 end
 
 """
@@ -611,7 +614,7 @@ move_lactating!(animal, animalModel)
 Move lactating
 """
 function move_lactating!(animal, animalModel)
-    move_animal!(animal, animalModel, 4, animalModel.density_lactating, animalModel.num_lactating)
+    move_animal!(animal, animalModel, 5, animalModel.density_lactating, animalModel.num_lactating)
 end
 
 """
@@ -619,7 +622,7 @@ move_dry!(animal, animalModel)
 Move dry
 """
 function move_dry!(animal, animalModel)
-    move_animal!(animal, animalModel, 5, animalModel.density_dry, animalModel.num_dry)
+    move_animal!(animal, animalModel, 6, animalModel.density_dry, animalModel.num_dry)
 end
 
 
@@ -630,18 +633,18 @@ animal_shuffle!(animal, animalModel)
 Randomly move animals.
 """
 function animal_shuffle!(animal, animalModel)
-    animal.stage > 5 && return
-    if animal.stage == 0
+    animal.stage > 6 && return
+    if animal.stage == 1
         move_calf!(animal, animalModel)
-    elseif animal.stage == 1
-        move_weaned!(animal, animalModel)
     elseif animal.stage == 2
-        move_dh!(animal, animalModel)
+        move_weaned!(animal, animalModel)
     elseif animal.stage == 3
-        move_heifer(animal, animalModel)
+        move_dh!(animal, animalModel)
     elseif animal.stage == 4
-        move_lactating!(animal, animalModel)
+        move_heifer(animal, animalModel)
     elseif animal.stage == 5
+        move_lactating!(animal, animalModel)
+    elseif animal.stage == 6
         move_dry!(animal, animalModel)
     end
 end
@@ -651,8 +654,8 @@ cull!(animal, animalModel)
 Move an animal to level 10, culled
 """
 function cull!(animal, animalModel)
-    move_animal!(animal, animalModel, 10, 1, 10000)
-    animal.stage = 10
+    move_animal!(animal, animalModel, 8, 1, 10000)
+    animal.stage = 8
     animal.status = 10
 end
 
@@ -660,7 +663,7 @@ end
 cull_empty_dry!(animal, animalModel)
 """
 function cull_empty_dry!(animal, animalModel)
-    animal.stage != 5 && return
+    animal.stage != 6 && return
     animal.pregstat != 0 && return
     cull!(animal, animalModel)
 end
@@ -671,7 +674,6 @@ cull animals more than 320 dic that have not calved
 """
 function cull_slipped!(animal, animalModel)
     animal.dic < 320 && return
-    move_animal!(animal, animalModel, 10, 1, 10000)
     cull!(animal, animalModel)
 
 end
@@ -710,7 +712,7 @@ Cull for seasonal systems (system = 0)
 """
 function cull_seasonal!(animal, animalModel)
     animalModel.system != 0 && return
-    animal.stage != 4 && return
+    animal.stage != 5 && return
     animalModel.current_lac < animalModel.num_lac && return
     do_culls!(animal, animalModel, animalModel.current_lac)
 end
@@ -721,7 +723,7 @@ Cull for split systems (system 1)
 """
 function cull_split!(animal, animalModel)
     animalModel.system != 2 && return
-    animal.stage!= 4 && return
+    animal.stage!= 5 && return
     if animalModel.current_spring > animalModel.num_spring
         animal.calving_season != 1 && return
         do_culls!(animal, animalModel, animalModel.current_spring)
@@ -736,16 +738,16 @@ calving!(animal, animalModel)
 Calve cows, create calf.
 """
 function calving!(animal, animalModel)
+    animal.stage != 6 && animal.stage != 4 && return
     animal.dic < 273 && return
-    animal.stage != 5 && return
     animal.dic != 283 + rand(animalModel.rng, -10:1:10) && return
         animal.pregstat = 0
         animal.dic = 0
-        animal.stage = 4
+        animal.stage = 5
         animal.dim = 1
         animal.lactation += 1
         animal_birth!(animal, animalModel)
-        move_animal!(animal, animalModel, 4, animalModel.density_lactating, animalMode.current_lactating)
+        move_animal!(animal, animalModel, 5, animalModel.density_lactating, animalMode.current_lactating)
 end
 
 """
@@ -754,7 +756,7 @@ Create a calf
 """
 function animal_birth!(animal, animalModel)
         id = Int16(1)
-        stage = 0
+        stage = 1
         pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_calves*√animalModel.current_calves)), 2)..., 1)
         while isassigned(animalModel.animals, LinearIndices(animalModel.animals)[pos[1], pos[2], pos[3]]) == true
             pos = CartesianIndex(rand(animalModel.rng, 1:Int(floor(animalModel.density_calves*√animalModel.current_calves)), 2)..., 1)
