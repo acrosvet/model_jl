@@ -832,6 +832,32 @@ function animal_status!(animal)
 end
 
 """
+animal_wean!(animal, animalModel)
+Wean calves to next lifestage
+"""
+function animal_wean!(animal, animalModel)
+    animal.stage != 1 && return
+    animal.age ≤ rand(animalModel.rng, 55:70) && return
+    if rand(animalModell.rng) < 0.5
+        animal.stage = 2
+        move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.current_weaned)
+    else 
+        cull!(animal, animalModel)
+    end
+end
+
+"""
+animal_heifer!(animal, animalModel)
+Transition to the heifer lifestage
+"""
+function animal_heifer!(animal, animalModel)  
+    animal.age < 13*30 && return
+    animal.stage != 2 && return
+    animal.stage = 3
+    move_animal!(animal, animalModel, 3, animalModel.density_dry, animalModel.current_heifers)
+end
+
+"""
 animal_step!
 Animal stepping function
 """
@@ -858,6 +884,9 @@ function animal_step!(animalModel, animalData)
         #Population dynamics
             calving!(animal, animalModel)
             bobby_cull!(animal, animalModel)
+            animal_wean!(animal, animalModel)
+            animal_heifer!(animal, animalModel)
+            
             animal_joining!(animal, animalModel)
             cull_slipped!(animal, animalModel)
             cull_empty_dry!(animal, animalModel)
