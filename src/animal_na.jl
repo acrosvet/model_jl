@@ -1,17 +1,19 @@
 
-include("bacteria_na.jl")
-using Dates
+
+  include("bacteria_na.jl")
+  using Dates
 
 #Define agent ============================
 
-using Random: MersenneTwister
-using Distributions: Rayleigh, truncated
-using CSV, DataFrames
+  using Random: MersenneTwister
+  using Distributions: Rayleigh, truncated
+  using CSV, DataFrames
 
 """
 Agent type - AnimalAgent
 """
- mutable struct AnimalAgent
+
+  mutable struct AnimalAgent
     id::Int16
     pos::Array{Int8}
     status::Int8
@@ -45,7 +47,8 @@ end
 AnimalModel
 Type container for animal model
 """
- mutable struct AnimalModel
+
+  mutable struct AnimalModel
     farmno::Int16
     animals::Array{AnimalAgent}
     timestep::Int16
@@ -94,9 +97,10 @@ end
 AnimalData
 Struct for animal data 
 """
-mutable struct AnimalData
+
+  mutable struct AnimalData
     id::Array{Int8}
-    timestep::Array{Int16}
+    timestep::Array{Date}
     pop_r::Array{Int16}
     pop_s::Array{Int16}
     pop_p::Array{Int16}
@@ -115,22 +119,36 @@ mutable struct AnimalData
     pop_ep::Array{Int16}
 end
 
+
+  mutable struct AllData
+    id::Array{Int}
+    date::Array{Date}
+    stage::Array{Int}
+    pregstat::Array{Int}
+    status::Array{Int}
+    dic::Array{Int}
+    dim::Array{Int}
+    age::Array{Int}
+end
+
+  allData = AllData([0], [Date(0)], [0], [0], [0], [0], [0], [0])
 #Initialise the data struct
 
- animalData = AnimalData([0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0])
+   animalData = AnimalData([0], [Date(0)], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0])
 
 """
 count_animals!(animalModel)
 Count stock classes and types at each step of the animalModel
 """
-function count_animals!(animalModel)
+
+  function count_animals!(animalModel)
 
 
     #Stages 
     animalModel.current_calves = count(i->(i.stage == 1), animalModel.animals)
     animalModel.current_weaned = count(i->(i.stage == 2), animalModel.animals)
-    animalModel.current_dh = count(i->(i.stage == 3), animalModel.animals)
-    animalModel.current_heifers = count(i->(i.stage == 4), animalModel.animals)
+    animalModel.current_dh = count(i->(i.stage == 4), animalModel.animals)
+    animalModel.current_heifers = count(i->(i.stage == 3), animalModel.animals)
     animalModel.current_lactating = count(i->(i.stage == 5), animalModel.animals)
     animalModel.current_dry = Int16(count(i->(i.stage == 6), animalModel.animals))
 
@@ -142,14 +160,15 @@ function count_animals!(animalModel)
     
 
 
-    animalModel.current_stock = animalModel.current_calves + animalModel.current_dh + animalModel.current_heifers + animalModel.current_lactating + animalModel.current_dry 
+    animalModel.current_stock = animalModel.current_weaned + animalModel.current_calves + animalModel.current_dh + animalModel.current_heifers + animalModel.current_lactating + animalModel.current_dry 
 end
 
 """
 initial_status!(herd_prev)
 Set the initial status of farms based on the herd-level prevalence
 """
-function initial_status!(animalModel, id)
+
+  function initial_status!(animalModel, id)
     if animalModel.farm_status == 0#No active infection, no resistance
         if id % 30 == 0
             5#Carrier pathogenic
@@ -182,7 +201,8 @@ get_neighbours_animal!(pos)
 Return the position of neighbouring animals on the same plane in a 3 dimensional matrix
 #Choose a random agent to interact with
 """
-function get_neighbours_animal(pos)
+
+  function get_neighbours_animal(pos)
 
     surrounding = Array{Array{Int8}}(undef,8)  
 
@@ -200,7 +220,7 @@ function get_neighbours_animal(pos)
 
 end
 
-function initialiseSpring(;
+  function initialiseSpring(;
     farmno::Int8 = FarmAgent.id,
     farm_status::Int8,
     system::Int8,
@@ -262,7 +282,7 @@ function initialiseSpring(;
         treatment = false
         pop_d = Float32(0.0)
         bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
-        dic =  Int16(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 290)))) #Gives a 63% ICR for this rng
+        dic =  Int16(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 280)))) #Gives a 63% ICR for this rng
         dim = Int16(0)
         pop_p = Float32(bacteriaSubmodel.pop_p)
         pop_r = Float32(bacteriaSubmodel.pop_r)
@@ -301,7 +321,7 @@ function initialiseSpring(;
         bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
         pop_p = Float32(bacteriaSubmodel.pop_p)
         pop_r = Float32(bacteriaSubmodel.pop_r)
-        dic =  Int16(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 290)))) #Gives a 63% ICR for this rng
+        dic =  Int16(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 280)))) #Gives a 63% ICR for this rng
         dim = 0
         stress = false
         sex = 1#Female
@@ -361,21 +381,21 @@ function initialiseSpring(;
 
 end
 
-@time animalModel = initialiseSpring(
+@time   animalModel = initialiseSpring(
                 farmno = Int8(1),
                 farm_status = Int8(2),
                 system = Int8(1),
                 msd = Date(2021,9,24),
                 seed = Int8(42),
-                optimal_stock = Int16(100),
-                optimal_lactating = Int16(100),
+                optimal_stock = Int16(273),
+                optimal_lactating = Int16(273),
                 treatment_prob = Float32(0.5),
                 treatment_length = Int8(3),
                 carrier_prob = Float32(0.05),
                 timestep = Int16(0),
-                density_lactating = Int8(5),
-                density_dry = Int8(5),
-                density_calves = Int8(2),
+                density_lactating = Int8(6),
+                density_dry = Int8(7),
+                density_calves = Int8(3),
                 date = Date(2021,7,2)
 );
 
@@ -384,18 +404,29 @@ end
 update_animal!(animalModel)
 Increment animal parameters
 """
-function update_animal!(animalModel, animal)
+
+  function update_animal!(animalModel, animal)
     if animal.dim > 0 
         animal.dim += 1 
-    elseif animal.dic > 0 
+    end 
+
+    if animal.dic > 0 
         animal.dic += 1
-    elseif animal.days_infected > 0
-        animal.days_infected += 1 
-    elseif animal.days_treated > 0
+    end
+
+    if animal.days_infected > 0
+        animal.days_infected += 1
+    end 
+    
+    if animal.days_treated > 0
         animal.days_treated += 1
-    elseif animal.days_carrier > 0
+    end
+
+    if animal.days_carrier > 0
         animal.days_carrier += 1
-    elseif animal.days_exposed > 0
+    end
+
+    if animal.days_exposed > 0
         animal.days_exposed += 1
     end
 
@@ -410,10 +441,10 @@ end
 run_submodel!(animalModel)
 Run the bacterial submodel for each animalModel
 """
-function run_submodel!(animal)
+
+  function run_submodel!(animal)
     bacteriaSubmodel = animal.bacteriaSubmodel
     #Update the submodel parameters
-    bacteriaSubmodel.timestep += 1
     bacteriaSubmodel.total_status = animal.status
     bacteriaSubmodel.days_treated = animal.days_treated
     bacteriaSubmodel.days_exposed = animal.days_exposed
@@ -432,19 +463,20 @@ end
 animal_mortality!(animalModel. position)
 Determine animal mortality if infected
 """
-function animal_mortality!(animalModel, animal)
+
+  function animal_mortality!(animalModel, animal)
     animal.status != 2 && animal.status != 1 && return
     animal.stage != 0 && return
     rand(animalModel.rng) > rand(animalModel.rng, 0.05:0.01:0.3) && return
     cull!(animalModel, animal)
-    println("Mortality")
+   # println("Mortality")
 end
 
 """
 animal_processed!(animalModel, position)
 Reset the animal processed flag
 """
-function animal_processed!(animal)
+  function animal_processed!(animal)
     animal.processed = false
 end
 
@@ -454,7 +486,8 @@ end
 animal_recovery!(animal)
 Animals recover from infection
 """
-function animal_recovery!(animal, animalModel)
+
+  function animal_recovery!(animal, animalModel)
     animal.days_infected == 0 && return
     animal.status != 1 && animal.status != 2 && return
     recovery_time = rand(animalModel.rng, 5:7)
@@ -475,7 +508,8 @@ animal_transmission!(animal)
 Transmit infection between animals.
 Only infected, recovering or carrier animals can transmit to their neighbours
 """
-function animal_transmission!(animal, animalModel)
+
+  function animal_transmission!(animal, animalModel)
     animal.status == 0  && return
     pos = animal.pos
     animal.neighbours = get_neighbours_animal(pos)
@@ -500,7 +534,8 @@ end
 animal_shedding!(animal)
 Recrudescent infection from carrier animals
 """
-function animal_shedding!(animal)
+
+  function animal_shedding!(animal)
     animal.stress == false && return
     animal.status != 5 && animal.status != 6 && return
     animal.days_exposed = 1
@@ -511,7 +546,8 @@ end
 animal_susceptiblility(animal, animalModel)
 Animals return to susceptibility at a variable interval after recovery, simulates waning immunity
 """
-function animal_susceptiblility!(animal, animalModel)
+
+  function animal_susceptiblility!(animal, animalModel)
     animal.days_recovered != 0 && return
     animal.status != 7 && animal.status != 8 && return
     animal.days_recovered < rand(animalModel.rng, 60:127) && return
@@ -524,21 +560,23 @@ end
 animal_treatment!(animal, animalModel)
 Decide to treat animals
 """
-function animal_treatment!(animal, animalModel)
+
+  function animal_treatment!(animal, animalModel)
     animal.treatment == true && return
     animal.status != 1 && animal.status != 2 && return
     bernoulli = rand(animalModel.rng)
     bernoulli > animalModel.treatment_prob && return
     animal.days_treated = 1
     animal.treatment = true
-    println("treatment")
+    #println("treatment")
 end
 
 """
 end_treatment!(animal, animalModel)
 End treatment after course duration.
 """
-function end_treatment!(animal, animalModel)
+
+  function end_treatment!(animal, animalModel)
     animal.treatment == false && return
     animal.days_treated < animalModel.treatment_length && return
     animal.treatment = false
@@ -548,11 +586,14 @@ end
 """move_animal(animal, animalModel)
 Shuffle animals at each step
 """
-function move_animal!(animal, animalModel, stage, density,  stock_in_class)
+
+  function move_animal!(animal, animalModel, stage, density,  stock_in_class)
     stock_in_class <= 0 ? range = 10 : range = Int(floor(density*√stock_in_class))
+
     range > 100 ? range = 100 : range = range
     oldpos = animal.pos
     newpos = [rand(animalModel.rng, 1:range, 2)...,stage]
+
     while newpos in animalModel.positions == true
         newpos = [rand(animalModel.rng, 1:range, 2)...,stage]
     end
@@ -567,7 +608,8 @@ end
 move_calf!(animal, animalModel)
 Move Calves
 """
-function move_calf!(animal, animalModel)
+
+  function move_calf!(animal, animalModel)
     move_animal!(animal, animalModel, 1, animalModel.density_calves, animalModel.current_calves)
 end
 
@@ -575,7 +617,8 @@ end
 move_weaned!(animal, animalModel)
 Move weaned
 """
-function move_weaned!(animal, animalModel)
+
+  function move_weaned!(animal, animalModel)
     move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.current_weaned)
 end
 
@@ -583,23 +626,26 @@ end
 move_dh!(animal, animalModel)
 Move dh
 """
-function move_dh!(animal, animalModel)
-    move_animal!(animal, animalModel, 3, animalModel.density_dry, animalModel.current_dh)
+
+  function move_dh!(animal, animalModel)
+    move_animal!(animal, animalModel, 4, animalModel.density_dry, animalModel.current_dh)
 end
 
 """
 move_heifer!(animal, animalModel)
 Move heifer
 """
-function move_heifer!(animal, animalModel)
-    move_animal!(animal, animalModel, 4, animalModel.density_dry, animalModel.current_heifers)
+
+  function move_heifer!(animal, animalModel)
+    move_animal!(animal, animalModel, 3, animalModel.density_dry, animalModel.current_heifers)
 end
 
 """
 move_lactating!(animal, animalModel)
 Move lactating
 """
-function move_lactating!(animal, animalModel)
+
+  function move_lactating!(animal, animalModel)
     move_animal!(animal, animalModel, 5, animalModel.density_lactating, animalModel.current_lactating)
 end
 
@@ -607,7 +653,8 @@ end
 move_dry!(animal, animalModel)
 Move dry
 """
-function move_dry!(animal, animalModel)
+
+  function move_dry!(animal, animalModel)
     move_animal!(animal, animalModel, 6, animalModel.density_dry, animalModel.current_dry)
 end
 
@@ -618,14 +665,16 @@ end
 animal_shuffle!(animal, animalModel)
 Randomly move animals.
 """
-function animal_shuffle!(animal, animalModel)
+
+  function animal_shuffle!(animal, animalModel)
+    animal.status == 0 && return
     if animal.stage == 1
         move_calf!(animal, animalModel)
     elseif animal.stage == 2
         move_weaned!(animal, animalModel)
-    elseif animal.stage == 3
-        move_dh!(animal, animalModel)
     elseif animal.stage == 4
+        move_dh!(animal, animalModel)
+    elseif animal.stage == 3
         move_heifer!(animal, animalModel)
     elseif animal.stage == 5
         move_lactating!(animal, animalModel)
@@ -638,17 +687,36 @@ end
 cull!(animal, animalModel)
 Move an animal to level 10, culled
 """
-function cull!(animal, animalModel)
+
+   function cull!(animal, animalModel)
+
+    if animal.status == 1
+        animalModel.current_calves -= 1
+    elseif animal.status == 2
+        animalModel.current_weaned -=1
+    elseif animal.status == 3
+        animalModel.current_heifers -=1 
+    elseif animal.status == 4
+        animalModel.current_dh -= 1 
+    elseif animal.status == 5
+        animalModel.curent_lactating -=1 
+    elseif animal.status == 6
+        animalModel.current_dry -= 1
+    end
+
     deleteat!(animalModel.animals, findall(x -> x == animal, animalModel.animals))
     #splice!(animalModel.animals, animal)
     deleteat!(animalModel.positions, findall(x -> x == animal.pos, animalModel.positions))
+
+
     #println("Culled")
 end
 
 """
 cull_empty_dry!(animal, animalModel)
 """
-function cull_empty_dry!(animal, animalModel)
+
+  function cull_empty_dry!(animal, animalModel)
     animal.stage != 6 && return
     animal.pregstat != 0 && return
     cull!(animal, animalModel)
@@ -659,7 +727,8 @@ end
 cull_slipped!(animal, animalModel)
 cull animals more than 320 dic that have not calved
 """
-function cull_slipped!(animal, animalModel)
+
+  function cull_slipped!(animal, animalModel)
     animal.dic < 320 && return
     cull!(animal, animalModel)
 end
@@ -667,56 +736,61 @@ end
 """
 age_cull!(animal)
 """
-function age_cull!(animal, animalModel)
-    animal.age ≤ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 2*365, 7*365)))) && return
+
+  function age_cull!(animal, animalModel)
+    animal.age ≤ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 5*365, 7*365)))) && return
     cull!(animal, animalModel)
-    println("culled")
+    #println("age culled")
 end
 
 """
 fertility_cull!(animal, animalModel)
 cull for fertility
 """
-function fertility_cull!(animal, animalModel)
+
+  function fertility_cull!(animal, animalModel)
     animal.dim < 280 && return
     animal.dic ≥ 150 && return
     cull!(animal, animalModel)
+   # println("fert cull")
 end
 
 """
 do_culls!(animal, animalModel, system)
 Perform both cull types
 """
-function do_culls!(animal, animalModel, system)
+
+  function do_culls!(animal, animalModel)
     age_cull!(animal, animalModel)
     fertility_cull!(animal, animalModel)
-    animalModel.status == 10 ?  system -= 1 : return
 end
 
 """
 cull_seasonal(animal, animalModel)
-Cull for seasonal systems (system = 0)
+Cull for seasonal systems (system = 1)
 """
-function cull_seasonal!(animal, animalModel)
+
+  function cull_seasonal!(animal, animalModel)
     animalModel.system != 1 && return
     animal.stage != 5 && return
-    animalModel.current_lactating < animalModel.optimal_lactating && return
-    do_culls!(animal, animalModel, animalModel.current_lactating)
+    animalModel.current_lactating <= animalModel.optimal_lactating && return
+    do_culls!(animal, animalModel)
 end
 
 """
 cull_split!(animal, animalModel)
 Cull for split systems (system 1)
 """
-function cull_split!(animal, animalModel)
+
+  function cull_split!(animal, animalModel)
     animalModel.system != 2 && return
     animal.stage!= 5 && return
     if animalModel.current_spring > animalModel.optimal_spring
         animal.calving_season != 1 && return
-        do_culls!(animal, animalModel, animalModel.current_spring)
+        do_culls!(animal, animalModel)
     elseif animalModel.current_autumn > animalModel.optimal_autumn
         animalModel.calving_season != 2 && return
-        do_culls!(animal, animalModel, animalModel.current_autumn)
+        do_culls!(animal, animalModel)
     end
 end
 
@@ -724,9 +798,10 @@ end
 calving!(animal, animalModel)
 Calve cows, create calf.
 """
-function calving!(animal, animalModel)
-    animal.stage != 6 && animal.stage != 4 && return
-    animal.dic < 273 && return
+
+  function calving!(animal, animalModel)
+    #animal.stage != 6 && animal.stage != 4 && return
+    #animal.dic < 273 && return
     animal.dic != 283  && return
         animal.pregstat = 0
         animal.dic = 0
@@ -734,7 +809,7 @@ function calving!(animal, animalModel)
         animal.dim = 1
         animal.lactation += 1
         animal.carryover = false
-        println("calved")
+        #println("calved")
         animal_birth!(animal, animalModel)
         move_animal!(animal, animalModel, 5, animalModel.density_lactating, animalModel.current_lactating)
 end
@@ -743,7 +818,8 @@ end
 animal_birth!(animal,animalModel)
 Create a calf
 """
-function animal_birth!(animal, animalModel)
+
+  function animal_birth!(animal, animalModel)
         animalModel.id_counter += 1
         id = Int16(animalModel.id_counter)
         stage = 1
@@ -780,7 +856,7 @@ function animal_birth!(animal, animalModel)
         carryover = false
         animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover)    
         push!(animalModel.animals, animal)
-        println("birth")
+       # println("birth")
 end
 
 
@@ -788,7 +864,8 @@ end
 bobby_cull!(animal, animalModel)
 Cull bobby calves
 """
-function bobby_cull!(animal, animalModel)
+
+  function bobby_cull!(animal, animalModel)
     animal.stage != 1 && return
     animal.sex != 0 && return
     animal.age < 4 && return
@@ -800,27 +877,35 @@ end
 join_seasonal!(animal, animalModel)
 Join animals in seasonal systems
 """
-function join_seasonal!(animal, animalModel)
-    animalModel.date != (animalModel.msd + Month(3)) && return
+
+  function join_seasonal!(animal, animalModel)
+    if animalModel.date == (animalModel.msd + Month(3))
+        if rand(animalModel.rng) < 0.85
+            animal.pregstat = 1
+            animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 93))))
+        end
+    end
+#=     animalModel.date != (animalModel.msd + Month(3)) && return
     rand(animalModel.rng) > 0.85 && return
         animal.pregstat = 1
-        animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
-        println("cow joined")
+        animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 93))))
+        #println("cow joined") =#
 end
 
 """
 animal_joining!(animal, animalModel)
 """
-function animal_joining!(animal, animalModel)
+
+  function animal_joining!(animal, animalModel)
     animal.pregstat != 0 && return
     animal.stage != 5 && return
     if animalModel.system == 1
         join_seasonal!(animal, animalModel)
-        println("joining")
+        #println("joining")
     elseif animalModel.system == 2
-        join_split!(animal, animalModel)
+       # join_split!(animal, animalModel)
     else
-        join_batch!(animal, animalModel)
+       # join_batch!(animal, animalModel)
     end
 
 end
@@ -829,7 +914,8 @@ end
 animal_status!(animal)
 Update the status of each animal depending on its bacterial population.
 """
-function animal_status!(animal)
+
+  function animal_status!(animal)
     if animal.pop_r ≥ 0.5
         animal.status = 2 
         animal.days_infected = 1
@@ -847,15 +933,16 @@ end
 animal_wean!(animal, animalModel)
 Wean calves to next lifestage
 """
-function animal_wean!(animal, animalModel)
+
+  function animal_wean!(animal, animalModel)
     animal.stage != 1 && return
-    animal.age ≤ rand(animalModel.rng, 55:70) && return
+    animal.age != 60 && return
     if rand(animalModel.rng) < 0.5
         animal.stage = 2
         move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.current_weaned)
     else 
         cull!(animal, animalModel)
-        println("calf cull")
+        #("calf cull")
     end
 end
 
@@ -863,8 +950,9 @@ end
 animal_heifer!(animal, animalModel)
 Transition to the heifer lifestage
 """
-function animal_heifer!(animal, animalModel)  
-    animal.age < 13*30 && return
+
+  function animal_heifer!(animal, animalModel)  
+    animal.age != 13*30 && return
     animal.stage != 2 && return
     animal.stage = 3
     move_animal!(animal, animalModel, 3, animalModel.density_dry, animalModel.current_heifers)
@@ -874,10 +962,11 @@ end
 heifer_pregnancy!(animal, animalModel)
 Set heifer pregnancy status
 """
-function heifer_pregnancy!(animal, animalModel)
+
+  function heifer_pregnancy!(animal, animalModel)
     animal.pregstat = 1
     animal.stage = 4
-    animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(50), 0, 63))))
+    animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(42), 1, 63))))
     move_animal!(animal, animalModel, 4, animalModel.density_dry, animalModel.current_dh)
 end
 
@@ -885,18 +974,21 @@ end
 join_heifer_seasonal!(animal, animalModel)
 Join heifers for seasonal systems 
 """
-function join_heifer_seasonal!(animal, animalModel)
+
+  function join_heifer_seasonal!(animal, animalModel)
     animalModel.system != 1 && return
-    animalModel.date != (animalModel.msd + Day(42)) && return
-    heifer_pregnancy!(animal, animalModel)
-    println("Heifer joined")
+    if animalModel.date == (animalModel.msd + Day(42))
+        heifer_pregnancy!(animal, animalModel)
+    end
+    #println("Heifer joined")
 end
 
 """
 join_heifer_split!(animal, animalModel)
 Join heifers in split systems
 """
-function join_heifer_split!(animal, animalModel)
+
+  function join_heifer_split!(animal, animalModel)
     animalModel.system != 2 && return
     if animal.calving_season == 1 && animalModel.date == (animalModel.msd + Day(42))
         heifer_pregnancy!(animal, animalModel)
@@ -909,7 +1001,8 @@ end
 join_heifer_batch!(animal, animalModel)
 Join heifers in batch systems
 """
-function join_heifer_batch!(animal, animalModel)
+
+  function join_heifer_batch!(animal, animalModel)
     animalModel.system != 3 && return
     if animal.calving_season == 1 && animalModel.date == (animalModel.msd + Day(42))
         heifer_pregnancy!(animal, animalModel)
@@ -926,7 +1019,8 @@ end
 join_heifers!(animal, animalModel)
 Join heifers for all systems
 """
-function join_heifers!(animal, animalModel)
+
+  function join_heifers!(animal, animalModel)
     animal.pregstat == 1 && return
     animal.stage != 3 && return
     join_heifer_seasonal!(animal, animalModel)
@@ -938,7 +1032,8 @@ end
 cull_empty_heifers!(animal, animalModel)
 Cull empty heifers
 """
-function cull_empty_heifers!(animal, animalModel)
+
+  function cull_empty_heifers!(animal, animalModel)
     animal.stage != 3 && return
     animal.pregstat == 1 && return
     animal.age < 550 && return
@@ -950,7 +1045,8 @@ end
 set_dry!(animal, animalModel)
 Set an animal's status to dry
 """
-function set_dry!(animal, animalModel)
+
+  function set_dry!(animal, animalModel)
     animal.stage = 6
     animal.dim = 0
     move_animal!(animal, animalModel, 6, animalModel.density_dry, animalModel.current_dry)
@@ -961,17 +1057,19 @@ end
 dryoff_seasonal!(animal, animalModel)
 Dry off lactating cows in seasonal systems
 """
-function dryoff_seasonal!(animal, animalModel)
+
+  function dryoff_seasonal!(animal, animalModel)
     animalModel.system != 1 && return
     set_dry!(animal, animalModel)
-    println("Dried off")
+    #println("Dried off")
 end
 
 """
 dryoff_split!(animal, animalModel)
 Dry off lactating cows in split systems
 """
-function dryoff_split!(animal, animalModel)
+
+  function dryoff_split!(animal, animalModel)
     animalModel.system != 2 && return
     if animal.pregstat == 0 && animal.dim < 330 && rand(animalModel.rng) < 0.4 && animal.carryover == false
         animal.calving_season == 1 ? animal.calving_season = 2 : animal.calving_season = 1
@@ -985,7 +1083,8 @@ end
 dryoff_batch!(animal, animalModel)
 Dryoff animals in batch systems
 """
-function dryoff_batch!(animal, animalModel)
+
+  function dryoff_batch!(animal, animalModel)
     animalModel.system != 3 && return
     if animal.pregstat == 0 && animal.dim < 330 && rand(animalModel.rng) < 0.4 && animal.carryover == false
         animal.carryover = true
@@ -1004,9 +1103,11 @@ end
 animal_dryoff!(animal, animalModel)
 Dryoff function for all calving systems
 """
-function animal_dryoff!(animal, animalModel)
+
+  function animal_dryoff!(animal, animalModel)
     animal.stage  != 5 && return
-    animal.dim < rand(animalModel.rng, 290:315) && return
+    animal.dim != 305 && return
+    #animal.dim <= rand(animalModel.rng, 290:315) && return
     dryoff_seasonal!(animal, animalModel)
     dryoff_batch!(animal, animalModel)
     dryoff_split!(animal, animalModel)
@@ -1016,7 +1117,8 @@ end
 flag_trades!(animal, animalModel)
 Flag animals eligible for trading
 """
-function flag_trades!(animal, animalModel)
+
+  function flag_trades!(animal, animalModel)
     animal.stage != 3 && animal.stage != 4 && animal.stage != 5 && animal.stage != 6 && return
     if animal.stage == 3 && animal.age >= 13*30 && animal.age <= 18*30
         animal.trade_status = true
@@ -1033,7 +1135,8 @@ end
 update_msd!(animalModel)
 Update the msd for each year
 """
-function update_msd!(animalModel)
+
+  function update_msd!(animalModel)
     if Year(animalModel.date) > Year(animalModel.msd)
         animalModel.msd += Year(1)
     elseif animalModel.system == 2 || animalModel.system == 3
@@ -1053,7 +1156,8 @@ end
 animal_mstep!(animal, animalModel)
 Update some parameters once per day
 """
-function animal_mstep!(animalModel, animalData)
+
+  function animal_mstep!(animalModel, animalData)
     animalModel.timestep += 1
     animalModel.date += Day(1)
     update_msd!(animalModel)
@@ -1067,11 +1171,13 @@ end
 animal_step!
 Animal stepping function
 """
-function animal_step!(animalModel, animalData)
+
+  function animal_step!(animalModel, animalData)
 
 
-     for x in 1:length(animalModel.animals)
+  for x in 1:length(animalModel.animals)
          checkbounds(Bool, animalModel.animals, x) == false && continue       # !isassigned(animalModel.animals, animalModel.animals[position]) && continue
+         #x > length(animalModel.animals) && continue
          animal = animalModel.animals[x]
          animal.stage > 6 && continue #Actions do not apply to levels 6 and above
          #Disease dynamics
@@ -1084,7 +1190,7 @@ function animal_step!(animalModel, animalData)
             animal_treatment!(animal, animalModel)
             end_treatment!(animal, animalModel)
             animal_status!(animal)
-            run_submodel!(animal)
+            #run_submodel!(animal)
 
         #Population dynamics
             calving!(animal, animalModel)
@@ -1107,6 +1213,7 @@ function animal_step!(animalModel, animalData)
             animal.stage > 6 && continue 
             animal_shuffle!(animal, animalModel)
             get_neighbours_animal(animal.pos)
+            export_alldata!(animal, animalModel, allData)
     end
 
     #Step global model vars
@@ -1119,9 +1226,10 @@ end
 """
 animal_export!(animalModel, animalData)
 """
-function animal_export!(animalModel,animalData)
+
+  function animal_export!(animalModel,animalData)
     push!(animalData.id, animalModel.farmno)
-    push!(animalData.timestep, animalModel.timestep)
+    push!(animalData.timestep, animalModel.date)
     push!(animalData.pop_r, animalModel.pop_r)
     push!(animalData.pop_d, animalModel.pop_d)
     push!(animalData.pop_p,  count(i->(i.status == 1), animalModel.animals))
@@ -1140,11 +1248,37 @@ function animal_export!(animalModel,animalData)
 
 end
 
+  function export_alldata!(animal, animalModel, allData)
+    push!(allData.id, animal.id)
+    push!(allData.date, animalModel.date)
+    push!(allData.stage, animal.stage)
+    push!(allData.pregstat, animal.pregstat)
+    push!(allData.status, animal.status)
+    push!(allData.dic, animal.dic)
+    push!(allData.dim, animal.dim)
+    push!(allData.age, animal.age)
+end
+
+  function write_allData!(allData)
+    dat = DataFrame(
+        id = allData.id,
+        date = allData.date,
+        stage = allData.stage,
+        pregstat = allData.pregstat,
+        status = allData.status,
+        dic = allData.dic,
+        dim = allData.dim,
+        age = allData.age
+    )
+
+    CSV.write("./export/all_na.csv", dat)
+end
 """
 export_bacterialData!(bacterialData)
 Create DataFrame from bacterial data, write to CSV
 """
-function export_bacterialData!(bacterialData)
+
+  function export_bacterialData!(bacterialData)
     #Create the data frame
     dat = DataFrame(
         id = bacterialData.id,
@@ -1163,7 +1297,8 @@ end
 export_bacterialData!(bacterialData)
 Create DataFrame from bacterial data, write to CSV
 """
-function export_animalData!(bacterialData)
+
+  function export_animalData!(bacterialData)
     #Create the data frame
     dat = DataFrame(
         id = animalData.id,
@@ -1191,8 +1326,11 @@ end
 
 
 
-@time animal_step!(animalModel, animalData)
+@profview animal_step!(animalModel, animalData)
 
+#@profview 
 @time [animal_step!(animalModel, animalData) for i in 1:1825]
 
 @time export_animalData!(animalData)
+
+write_allData!(allData)
