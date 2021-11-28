@@ -1,6 +1,7 @@
 # Define agent =====================================================================================
 
 using Random: MersenneTwister
+using FLoops
 
 
 """
@@ -29,7 +30,7 @@ mutable struct BacterialModel
     colonies::Array{BacterialAgent}
     total_status::Int8
     days_treated::Int8
-    days_exposed::Int8
+    days_exposed::Int
     days_recovered::Int16
     days_carrier::Int16
     stress::Bool
@@ -62,7 +63,7 @@ function count_colonies!(bacterialModel)
     pop_p = 0.0
     pop_d = 0.0
 
-    for colony in 1:length(bacterialModel.colonies)
+  @floop  for colony in 1:length(bacterialModel.colonies)
         if bacterialModel.colonies[colony].status == 0
             pop_s += 1
         elseif bacterialModel.colonies[colony].status == 1
@@ -225,10 +226,22 @@ check_bounds(competing_neighbour)
 return from boundary cases in the matrix, take the blue pill
 """
 function check_bounds(competing_neighbour, min, max)
-    competing_neighbour[1] ≤ min && return
-    competing_neighbour[2] ≤ min && return
-    competing_neighbour[3] > max && return
-    competing_neighbour[4] > max && return 
+
+   if competing_neighbour[1] < min
+    false
+   elseif competing_neighbour[1] > max
+       false
+    elseif competing_neighbour[2] < min
+        false
+    elseif competing_neighbour[2] > max
+        false
+    end
+
+
+#=     competing_neighbour[1] ≤ min ? false : true
+    competing_neighbour[2] ≤ min ? false : true
+    competing_neighbour[1] > max ? false : true
+    competing_neighbour[2] > max ? false : true  =#
 end
 
 
@@ -241,7 +254,9 @@ function bact_repopulate!(bacterialModel, colony)
     bacterialModel.pop_d == 0 && return
     colony.status != 10 && return
     competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-    checkbounds(Bool, bacterialModel.colonies, competing_neighbour) == false && return
+    check_bounds(competing_neighbour, 1, 33) == false && return
+    competing_neighbour = bacterialModel.colonies[competing_neighbour]
+   # length(competing_neighbour) == 0 && return
         if bacterialModel.days_treated != 0 && bacterialModel.total_status ≤ 1
             rand(bacterialModel.rng) ≥ 0.5 && return
             colony.status != 2 && return
@@ -297,8 +312,15 @@ bact_fitness!
 Competition between bacterial colonies
 """
 function bact_fitness!(bacterialModel, colony)
+    colony.status == 0 && return
     competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-    checkbounds(Bool, bacterialModel.colonies, competing_neighbour) == false && return
+
+    check_bounds(competing_neighbour, 1, 33) == false && return
+    #competing_neighbour = filter(x-> x.pos == competing_neighbour, bacterialModel.colonies)
+   # competing_neighbour = bacterialModel.colonies[pos.==competing_neighbour]
+   competing_neighbour = bacterialModel.colonies[competing_neighbour]
+    #length(competing_neighbour) == 0 && return
+    #competing_neighbour = competing_neighbour[1]
         colony.fitness > competing_neighbour.fitness && return
         rand(bacterialModel.rng) ≥ 0.5 && return
             colony.status = competing_neighbour.status
@@ -342,7 +364,8 @@ function bact_exposed!(bacterialModel, colony)
         end
     elseif bacterialModel.days_exposed > 1
                 competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-                checkbounds(Bool, bacterialModel.colonies, competing_neighbour) == false && return
+                check_bounds(competing_neighbour, 1, 33) == false && return
+                competing_neighbour = bacterialModel.colonies[competing_neighbour]
                 colony.status != 1 && colony.status != 2 && return
                     competing_neighbour.status = colony.status
                     competing_neighbour.processed = true
@@ -365,7 +388,7 @@ bact_step!
 Update attributes over time
 """
 function bact_step!(bacterialModel, bacterialData)
-    @async Threads.@threads for x in enumerate(bacterialModel.colonies)
+  @floop for x in 1:length(bacterialModel.colonies)
         colony = bacterialModel.colonies[x]
         bact_processed!(colony)#Reset the processed counter
         colony.processed == true && continue 
@@ -377,19 +400,17 @@ function bact_step!(bacterialModel, bacterialData)
         bact_fitness!(bacterialModel, colony)
     end
     count_colonies!(bacterialModel)#Update the population
-    bact_export!(bacterialModel, bacterialData)#Export the bacterial data
+   # bact_export!(bacterialModel, bacterialData)#Export the bacterial data
     #bact_timestep!(bacterialModel)#Step through time
 end
     
 
-
+#= 
 bacterialModel.total_status = 0
 bacterialModel.days_exposed = 0
 bacterialModel.days_recovered = 0
+ =#
+ #@profview bact_step!(bacterialModel, bacterialData)
 
- @time bact_step!(bacterialModel, bacterialData)
 
-
-[bact_step!(bacterialModel, bacterialData) for i in 1:365]
-
-#@time [bact_step!(bacterialModel, bacterialData) for i in 1:10]
+#[bact_step!(bacterialModel, bacterialData) for i in 1:365]
