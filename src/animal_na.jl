@@ -2,6 +2,7 @@
 
   include("bacteria_na.jl")
   using Dates
+  using FLoops
 
 #Define agent ============================
 
@@ -19,7 +20,7 @@ Agent type - AnimalAgent
     status::Int8
     stage::Int8
     days_infected::Int8
-    days_exposed::Int8
+    days_exposed::Int
     days_carrier::Int16
     days_recovered::Int16
     days_treated::Int8
@@ -40,6 +41,9 @@ Agent type - AnimalAgent
     neighbours::Array{Array{Int8}}
     processed::Bool
     carryover::Bool
+    fpt::Bool
+    vaccinated::Bool
+    susceptibility::Float32
 end
 
 
@@ -129,9 +133,21 @@ end
     dic::Array{Int}
     dim::Array{Int}
     age::Array{Int}
+    pop_p::Array{Float32}
+    pop_d::Array{Float32}
+    pop_r::Array{Float32}
+    submodel_r::Array{Float32}
+    submodel_d::Array{Float32}
+    submodel_p::Array{Float32}
+    days_infected::Array{Int8}
+    days_exposed::Array{Int}
+    days_recovered::Array{Int16}
+    days_carrier::Array{Int16}
+    days_treated::Array{Int16}
+    treatment::Array{Bool}
 end
 
-  allData = AllData([0], [Date(0)], [0], [0], [0], [0], [0], [0])
+  allData = AllData([], [], [], [], [], [], [], [], [],[],[],[],[],[],[],[],[],[],[],[])
 #Initialise the data struct
 
    animalData = AnimalData([0], [Date(0)], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0])
@@ -295,7 +311,10 @@ end
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
         carryover = false
-        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover)    
+        susceptibility = 1.0
+        fpt = false
+        vaccinated = false
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
         push!(animalModel.animals, animal)
     end
 
@@ -332,7 +351,10 @@ end
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
         carryover = false
-        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover)    
+        fpt = false
+        vaccinated = false
+        susceptibility = 1.0
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
         push!(animalModel.animals, animal)
     end
 
@@ -368,8 +390,11 @@ end
         pregstat = 0#Pregnant
         trade_status = 0#false
         neighbours = get_neighbours_animal(pos)
-        carryover = false
-        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover)    
+        carryover = false 
+        fpt = false
+        vaccinated = false
+        susceptibility = 1.0
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
         push!(animalModel.animals, animal)
     end
 
@@ -450,12 +475,13 @@ Run the bacterial submodel for each animalModel
     bacteriaSubmodel.days_exposed = animal.days_exposed
     bacteriaSubmodel.days_recovered = animal.days_recovered
     bacteriaSubmodel.stress = animal.stress
-    animal.pop_r = bacteriaSubmodel.pop_r
-    animal.pop_p = bacteriaSubmodel.pop_p
+
     
         animal.status == 0 && return
-        animal.status == 10 && return
         bact_step!(animal.bacteriaSubmodel, bacterialData)
+
+        animal.pop_r = bacteriaSubmodel.pop_r
+        animal.pop_p = bacteriaSubmodel.pop_p
 end
 
 
@@ -495,11 +521,11 @@ Animals recover from infection
     animal.days_infected = 0
     bernoulli = rand(animalModel.rng)
     if  bernoulli > animalModel.carrier_prob
-        animal.days_carrier = 1
+        animal.bacteriaSubmodel.days_carrier =animal.days_carrier = 1
         animal.status == 1 ? animal.status = 7 : animal.status = 8
     else
         animal.status ==  1 ? animal.status = 5 : animal.status = 6
-        animal.days_recovered = 1
+        animal.bacteriaSubmodel.days_recovered = animal.days_recovered = 1
     end
 end
 
@@ -520,13 +546,16 @@ Only infected, recovering or carrier animals can transmit to their neighbours
         bernoulli > animal.pop_p && return
     end 
     #The animal can now go on to infect its neighbours
-    for neighbour in 1:length(animal.neighbours)
-        competing_neighbour = filter(x -> animal.pos == neighbour, animalModel.animals)
+    for i in 1:length(animal.neighbours)
+        competing_neighbour = filter(x -> x.pos == animal.neighbours[i], animalModel.animals)
+        #println(competing_neighbour)
         isempty(competing_neighbour) == true && continue
+        competing_neighbour = competing_neighbour[1]
         competing_neighbour.status != 0  && continue
         animal.status % 2 == 0 ? competing_neighbour.status = 4 : competing_neighbour.status = 3
-        animal.days_exposed = 1
-        println("transmission")
+        competing_neighbour.days_exposed = 1
+        competing_neighbour.bacteriaSubmodel.days_exposed = 1
+       # println("transmission")
     end
 end
 
@@ -539,6 +568,7 @@ Recrudescent infection from carrier animals
     animal.stress == false && return
     animal.status != 5 && animal.status != 6 && return
     animal.days_exposed = 1
+    animal.bacteriaSubmodel.days_exposed = 1
     animal.status == 5 ? animal.status = 3 : animal.status = 4 #If carriers are stressed, they shed as though exposed again
 end
 
@@ -553,6 +583,7 @@ Animals return to susceptibility at a variable interval after recovery, simulate
     animal.days_recovered < rand(animalModel.rng, 60:127) && return
     animal.days_recovered = 0
     animal.days_exposed = 1
+    animal.bacteriaSubmodel.days_exposed = 1
     animal.status == 7 ? animal.status = 3 : animal.status = 4 #Return to exposed pathogenic or exposed resistant
 end
 
@@ -667,7 +698,7 @@ Randomly move animals.
 """
 
   function animal_shuffle!(animal, animalModel)
-    animal.status == 0 && return
+    #animal.status == 0 && return
     if animal.stage == 1
         move_calf!(animal, animalModel)
     elseif animal.stage == 2
@@ -854,7 +885,10 @@ Create a calf
         neighbours = get_neighbours_animal(pos)
         processed = true
         carryover = false
-        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover)    
+        fpt = false
+        vaccinated = false
+        susceptibility = 1.0
+        animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
         push!(animalModel.animals, animal)
        # println("birth")
 end
@@ -916,6 +950,7 @@ Update the status of each animal depending on its bacterial population.
 """
 
   function animal_status!(animal)
+     animal.days_infected > 1 && return
     if animal.pop_r ≥ 0.5
         animal.status = 2 
         animal.days_infected = 1
@@ -1175,13 +1210,12 @@ Animal stepping function
   function animal_step!(animalModel, animalData)
 
 
-  for x in 1:length(animalModel.animals)
-         checkbounds(Bool, animalModel.animals, x) == false && continue       # !isassigned(animalModel.animals, animalModel.animals[position]) && continue
+    for x in 1:length(animalModel.animals)
+         checkbounds(Bool, animalModel.animals, x) == false && continue   
+            # !isassigned(animalModel.animals, animalModel.animals[position]) && continue
          #x > length(animalModel.animals) && continue
-         animal = animalModel.animals[x]
-         animal.stage > 6 && continue #Actions do not apply to levels 6 and above
+        animal = animalModel.animals[x]
          #Disease dynamics
-            update_animal!(animalModel, animal)
             animal_mortality!(animalModel, animal)
             animal_recovery!(animal, animalModel)
             animal_transmission!(animal, animalModel)
@@ -1189,8 +1223,9 @@ Animal stepping function
             animal_susceptiblility!(animal, animalModel)
             animal_treatment!(animal, animalModel)
             end_treatment!(animal, animalModel)
+            run_submodel!(animal)
             animal_status!(animal)
-            #run_submodel!(animal)
+
 
         #Population dynamics
             calving!(animal, animalModel)
@@ -1210,10 +1245,13 @@ Animal stepping function
             flag_trades!(animal, animalModel)
 
         #Movement
-            animal.stage > 6 && continue 
             animal_shuffle!(animal, animalModel)
             get_neighbours_animal(animal.pos)
+            update_animal!(animalModel, animal)
+
             export_alldata!(animal, animalModel, allData)
+
+     
     end
 
     #Step global model vars
@@ -1257,6 +1295,23 @@ end
     push!(allData.dic, animal.dic)
     push!(allData.dim, animal.dim)
     push!(allData.age, animal.age)
+    push!(allData.pop_p, animal.pop_p)
+    push!(allData.pop_d, animal.pop_d)
+    push!(allData.pop_r, animal.pop_r)
+    push!(allData.submodel_r, animal.bacteriaSubmodel.pop_r)
+    push!(allData.submodel_d, animal.bacteriaSubmodel.pop_d)
+    push!(allData.submodel_p, animal.bacteriaSubmodel.pop_p)
+    push!(allData.days_infected, animal.days_infected)
+    push!(allData.days_exposed, animal.days_exposed)
+    push!(allData.days_recovered, animal.days_recovered)
+    push!(allData.days_treated, animal.days_treated)
+    push!(allData.treatment, animal.treatment)
+
+
+
+
+
+    
 end
 
   function write_allData!(allData)
@@ -1268,7 +1323,18 @@ end
         status = allData.status,
         dic = allData.dic,
         dim = allData.dim,
-        age = allData.age
+        age = allData.age,
+        pop_p = allData.pop_p,
+        pop_d = allData.pop_d,
+        pop_r = allData.pop_r,
+        submodel_r = allData.submodel_r,
+        submodel_d = allData.submodel_d,
+        submodel_p = allData.submodel_p,
+        days_infected = allData.days_infected,
+        days_exposed = allData.days_exposed,
+        days_recovered = allData.days_recovered,
+        days_treated = allData.days_treated,
+        treatment = allData.treatment
     )
 
     CSV.write("./export/all_na.csv", dat)
@@ -1329,7 +1395,7 @@ end
 @profview animal_step!(animalModel, animalData)
 
 #@profview 
-@time [animal_step!(animalModel, animalData) for i in 1:1825]
+@time [animal_step!(animalModel, animalData) for i in 1:355]
 
 @time export_animalData!(animalData)
 
