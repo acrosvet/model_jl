@@ -63,7 +63,7 @@ function count_colonies!(bacterialModel)
     pop_p = 0.0
     pop_d = 0.0
 
-  @floop  for colony in 1:length(bacterialModel.colonies)
+    for colony in 1:length(bacterialModel.colonies)
         if bacterialModel.colonies[colony].status == 0
             pop_s += 1
         elseif bacterialModel.colonies[colony].status == 1
@@ -295,14 +295,16 @@ function bact_carrier!(bacterialModel, colony)
 
     total_status != 5 && total_status != 6 && return
     bacterialModel.days_carrier != 1 && return
-    colony.id % 10 != 0 && return
+    
 
 
     if total_status == 6
-            colony.id = 2
+            rand(bacterialModel.rng) > 0.10 && return 
+            colony.status = 2
             colony.processed = true
     elseif total_status == 5
-            colony.id = 1
+            rand(bacterialModel.rng) > 0.10 && return 
+            colony.status = 1
             colony.processed = true
     end
 end
@@ -378,17 +380,18 @@ Immune response to pathogenic bacteria
 """
 function bact_recovery!(bacterialModel, colony)
     bacterialModel.days_recovered == 0 && return
-    colony.status != 5 && colony.status != 6 && return
+    colony.status != 7 && colony.status != 8 && return
     rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_recovered/20) && return
     colony.status = 0
     colony.processed = true
 end
+
 """
 bact_step!
 Update attributes over time
 """
 function bact_step!(bacterialModel, bacterialData)
-  @floop for x in 1:length(bacterialModel.colonies)
+  for x in 1:length(bacterialModel.colonies)
         colony = bacterialModel.colonies[x]
         bact_processed!(colony)#Reset the processed counter
         colony.processed == true && continue 
