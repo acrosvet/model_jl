@@ -18,13 +18,32 @@ na_data %>%
     add_trace(y = ~pop_r, name = 'Resistant', type = 'bar') %>%
     add_trace(y = ~pop_car_r, name = 'Carrier R', type = 'bar') %>%
     add_trace(y = ~pop_rec_r, name = 'Recovered R', type = 'bar') %>%
+    add_trace(y = ~pop_rec_p, name = 'Recovered P', type = 'bar') %>%
+    add_trace(y = ~pop_p, name = 'Sensitive', type = 'bar') %>%
+    add_trace(y = ~pop_car_p, name = 'Carrier S', type = 'bar') %>%
     layout(barmode = 'stack')
 
 #Examine the total data output
 
 all_data <- read_csv("./export/all_na.csv")
 
-#Days exposed not incrementing
+
+statuses <- all_data %>% 
+group_by(date, status) %>%
+summarise(count = n()) %>%
+pivot_wider(names_from = status, values_from = count) %>%
+mutate(across(where(is.numeric), replace_na, replace = 0))
+
+
+statuses %>%
+    plot_ly(x = ~date) %>%
+    add_trace(y = ~`0`, name = 'susceptible') %>%
+    #add_trace(y = ~`5`, name = 'cp') %>%
+    add_trace(y = ~`6`, name = 'cr') %>%
+    add_trace(y = ~`2`, name = 'r') %>%
+    add_trace(y = ~`4`, name = 'er') %>%
+    add_trace(y = ~`8`, name = 'rr')
+    #Days exposed not incrementing
 
 de <- all_data %>%
     filter(days_exposed != 0)
