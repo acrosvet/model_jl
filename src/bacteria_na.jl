@@ -1,7 +1,7 @@
 # Define agent =====================================================================================
 
 using Random: MersenneTwister
-using FLoops
+#using FLoops
 
 
 """
@@ -270,6 +270,8 @@ function bact_repopulate!(bacterialModel, colony)
 
 end
 
+
+
 """
 bact_export!
 Export bacterial data
@@ -299,11 +301,11 @@ function bact_carrier!(bacterialModel, colony)
 
 
     if total_status == 6
-            rand(bacterialModel.rng) > 0.10 && return 
+            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.30) && return 
             colony.status = 2
             colony.processed = true
     elseif total_status == 5
-            rand(bacterialModel.rng) > 0.10 && return 
+            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.30) && return 
             colony.status = 1
             colony.processed = true
     end

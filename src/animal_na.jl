@@ -2,7 +2,7 @@
 
   include("bacteria_na.jl")
   using Dates
-  using FLoops
+  #using FLoops
 
 #Define agent ============================
 
@@ -99,7 +99,7 @@ Type container for animal model
     prev_r::Float32
     prev_p::Float32
     prev_cr::Float32
-    prev_pr::Float32
+    prev_cp::Float32
 end
 
 
@@ -197,7 +197,7 @@ function initial_status!(animalModel)
     1
   elseif bernoulli < animalModel.prev_r
     2
-  elseif bernoulli < animalModel.prev_pr
+  elseif bernoulli < animalModel.prev_cp
     5
   elseif bernoulli < animalModel.prev_cr
     6
@@ -253,7 +253,7 @@ end
     prev_r::Float32,
     prev_p::Float32,
     prev_cr::Float32,
-    prev_pr::Float32
+    prev_cp::Float32
     )
 
  
@@ -274,7 +274,7 @@ end
 
     #Set up the model ====================================================
 
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_pr)
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp)
     
     # Set the initial stock parameters
     animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
@@ -417,20 +417,20 @@ end
                 seed = Int8(42),
                 optimal_stock = Int16(273),
                 optimal_lactating = Int16(273),
-                treatment_prob = Float32(0.5),
+                treatment_prob = Float32(0),
                 treatment_length = Int8(3),
                 carrier_prob = Float32(0.01),
                 timestep = Int16(0),
-                density_lactating = Int8(6),
-                density_dry = Int8(7),
+                density_lactating = Int8(5),
+                density_dry = Int8(6),
                 density_calves = Int8(3),
                 date = Date(2021,7,2),
                 vacc_rate = Float32(0.0),
                 fpt_rate = Float32(0.0),
-                prev_r = Float32(0.05),
+                prev_r = Float32(0.02),
                 prev_p = Float32(0.01),
-                prev_cr = Float32(0.08),
-                prev_pr = Float32(0.01)
+                prev_cr = Float32(0.1),
+                prev_cp = Float32(0.02)
 );
 
 
@@ -487,7 +487,7 @@ Run the bacterial submodel for each animalModel
     bacteriaSubmodel.days_treated = animal.days_treated
     bacteriaSubmodel.days_exposed = animal.days_exposed
     bacteriaSubmodel.days_recovered = animal.days_recovered
-    bacteriaSubmodel.stress = animal.stress
+    #bacteriaSubmodel.stress = animal.stress
 
     
         animal.status == 0 && return
@@ -502,7 +502,9 @@ Run the bacterial submodel for each animalModel
           bact_step!(animal.bacteriaSubmodel, bacterialData)
         elseif animal.status == 1 || animal.status == 2
           bact_step!(animal.bacteriaSubmodel, bacterialData)
-        elseif animal.status == 4 || animal.status == 5
+        elseif (animal.status == 3 || animal.status == 4)
+          bact_step!(animal.bacteriaSubmodel, bacterialData)
+        elseif (animal.status == 5 || animal.status ==6) && animal.stress == true
           bact_step!(animal.bacteriaSubmodel, bacterialData)
         end
         
@@ -518,11 +520,12 @@ Determine animal mortality if infected
 """
 
   function animal_mortality!(animalModel, animal)
-    animal.status != 2 && animal.status != 1 && return
-    animal.stage != 0 && return
-    rand(animalModel.rng) > rand(animalModel.rng, 0.05:0.01:0.3) && return
-    cull!(animalModel, animal)
+    if animal.status == 1 || animal.status == 2
+    animal.stage == 0 && return
+    rand(animalModel.rng) > rand(animalModel.rng, 0.01:0.001:0.05) && return
+    cull!(animal, animalModel)
    # println("Mortality")
+    end
 end
 
 """
@@ -540,27 +543,43 @@ animal_recovery!(animal)
 Animals recover from infection
 """
 function animal_recovery!(animal, animalModel)
+  if animal.status == 1 || animal.status == 2
     animal.days_infected == 0 && return
     if animal.days_infected >= rand(animalModel.rng, 5:7)
-      if Float32(rand(animalModel.rng)) < animalModel.carrier_prob
-          animal.days_infected = 0
-          animal.days_recovered = 1
-          animal.bacteriaSubmodel.days_recovered = 1
-            if animal.status % 2 == 0
-              animal.status = animal.bacteriaSubmodel.total_status =  8
-            else
-              animal.status = animal.bacteriaSubmodel.total_status = 7
+      if rand(animalModel.rng) > animalModel.carrier_prob
+            if animal.status == 1
+              animal.days_infected = 0
+              animal.days_recovered = 1
+              animal.bacteriaSubmodel.days_recovered = 1
+              animal.status = animal.bacteriaSubmodel.total_status =  7
+              println("recovered r")
+              println(animal.status)
+            elseif animal.status == 2
+              animal.days_infected = 0
+              animal.days_recovered = 1
+              animal.bacteriaSubmodel.days_recovered = 1
+              animal.status = animal.bacteriaSubmodel.total_status = 8
+              println("recovered p")
+              println(animal.status)
             end
       else 
-        animal.days_infected = 0
-        animal.days_carrier = 1
-        animal.bacteriaSubmodel.days_carrier = 1
-          if animal.status % 2 == 0
+          if animal.status == 2
+            animal.days_infected = 0
+            animal.days_recovered = 1
+            animal.bacteriaSubmodel.days_recovered = 1
             animal.status = animal.bacteriaSubmodel.total_status = 6
-          else
+            println("carrier r")
+            println(animal.status)
+          elseif animal.status == 1
+            animal.days_infected = 0
+            animal.days_recovered = 1
+            animal.bacteriaSubmodel.days_recovered = 1
             animal.status = animal.bacteriaSubmodel.total_status =  5
+            println("carrier p")
+            println(animal.status)
           end
       end
+    end
     end
 
 #=     animal.days_infected == 0 && return
@@ -583,28 +602,29 @@ Transmit infection between animals.
 Only infected, recovering or carrier animals can transmit to their neighbours
 """
 function animal_transmission!(animal, animalModel)
-    animal.status == 0  && return
-    animal.days_recovered > 10 && return
-    pos = animal.pos
-    animal.neighbours = get_neighbours_animal(pos)
-    bernoulli = rand(animalModel.rng)
-    bernoulli < 0.5 && return
-    if animal.status % 2 == 0 #Resistant animals are even, sensitive animals are odd
-        bernoulli > animal.pop_r*animal.susceptibility && return
-    else
-        bernoulli > animal.pop_p*animal.susceptibility && return
-    end 
-    #The animal can now go on to infect its neighbours
-    for i in 1:length(animal.neighbours)
-        competing_neighbour = filter(x -> x.pos == animal.neighbours[i], animalModel.animals)
-        #println(competing_neighbour)
-        isempty(competing_neighbour) == true && continue
-        competing_neighbour = competing_neighbour[1]
-        competing_neighbour.status != 0  && continue
-        animal.status % 2 == 0 ? competing_neighbour.status = 4 : competing_neighbour.status = 3
-        competing_neighbour.days_exposed = 1
-        competing_neighbour.bacteriaSubmodel.days_exposed = 1
-       # println("transmission")
+    if animal.status == 1 || animal.status == 2 || animal.status == 5 || animal.status == 6
+      #animal.days_recovered > 5 && return
+      pos = animal.pos
+      animal.neighbours = get_neighbours_animal(pos)
+      # bernoulli < 0.5 && return
+      animal.status == 1 && rand(animalModel.rng) > animalModel.pop_p && return
+      animal.status == 2 && rand(animalModel.rng) > animalModel.pop_r && return
+      #The animal can now go on to infect its neighbours
+      for i in 1:length(animal.neighbours)
+          competing_neighbour = filter(x -> x.pos == animal.neighbours[i], animalModel.animals)
+          #println(competing_neighbour)
+          isempty(competing_neighbour) == true && continue
+          competing_neighbour = competing_neighbour[1]
+         # push!(competing_neighbour, empty_vec)
+          competing_neighbour.status != 0  && continue
+          #rand(animalModel.rng) < 0.5 && continue
+          animal.status % 2 == 0 ? competing_neighbour.status = 4 : competing_neighbour.status = 3
+          competing_neighbour.days_exposed = 1
+          competing_neighbour.bacteriaSubmodel.days_exposed = 1
+         println("transmission")
+         println(competing_neighbour.status)
+         println(competing_neighbour.id)
+      end
     end
 end
 
@@ -613,12 +633,28 @@ animal_shedding!(animal)
 Recrudescent infection from carrier animals
 """
 function animal_shedding!(animal)
-    animal.stress == false && return
-    animal.status != 5 && animal.status != 6 && return
-    animal.days_exposed = 1
-    animal.bacteriaSubmodel.days_exposed = 1
-    animal.status == 5 ? animal.status = 3 : animal.status = 4 #If carriers are stressed, they shed as though exposed again
-end
+    rand(animalModel.rng) < 0.5 && return
+    if (animal.status == 5 || animal.status == 6) && animal.stress == true
+    #animal.status != 5 || animal.status != 6 && return
+      if animal.status == 5
+        animal.bacteriaSubmodel.days_exposed = 1
+        animal.bacteriaSubmodel.total_status = 3
+      elseif animal.status == 6
+        animal.bacteriaSubmodel.days_exposed = 1
+        animal.bacteriaSubmodel.total_status = 4
+      end
+    elseif (animal.status == 5 || animal.status == 6) && animal.stress == false
+      if animal.status == 5
+        animal.bacteriaSubmodel.days_exposed = 0
+        animal.bacteriaSubmodel.total_status = 5
+        animal.bacteriaSubmodel.days_carrier = 1
+      elseif animal.status == 6
+        animal.bacteriaSubmodel.days_exposed = 0
+        animal.bacteriaSubmodel.total_status = 6
+        animal.bacteriaSubmodel.days_carrier = 1
+      end
+    end
+  end
 
 """
 animal_susceptiblility(animal, animalModel)
@@ -626,14 +662,16 @@ Animals return to susceptibility at a variable interval after recovery, simulate
 """
 
   function animal_susceptiblility!(animal, animalModel)
-    animal.days_recovered != 0 && return
-    animal.status != 7 && animal.status != 8 && return
-    animal.days_recovered < rand(animalModel.rng, 60:127) && return
-    animal.days_recovered = 0
-    animal.days_exposed = 0
-    animal.bacteriaSubmodel.days_exposed = 0
-    animal.status == 0 #Return to susceptible
-    animal.susceptibility = rand(animalModel.rng, 0.5:0.01:1)
+    #animal.days_recovered = 0 && return
+    if animal.status == 7 || animal.status == 8
+      if animal.days_recovered >= rand(animalModel.rng, 60:120)
+        animal.days_recovered = 0
+        animal.days_exposed = 0
+        animal.bacteriaSubmodel.days_exposed = 0
+        animal.status = 0 #Return to susceptible
+        animal.susceptibility = animal.vaccinated == true ?  rand(animalModel.rng, 0.5:0.01:1) : 1.0
+      end
+    end
 end
 
 """
@@ -643,12 +681,13 @@ Decide to treat animals
 
   function animal_treatment!(animal, animalModel)
     animal.treatment == true && return
-    animal.status != 1 && animal.status != 2 && return
-    bernoulli = rand(animalModel.rng)
-    bernoulli > animalModel.treatment_prob && return
-    animal.days_treated = 1
-    animal.treatment = true
-    #println("treatment")
+    if animal.status == 1 || animal.status == 2 
+      bernoulli = rand(animalModel.rng)
+      bernoulli > animalModel.treatment_prob && return
+      animal.days_treated = 1
+      animal.treatment = true
+      #println("treatment")
+    end
 end
 
 """
@@ -941,11 +980,12 @@ Create a calf
         days_recovered = Int8(0)
         days_treated = Int8(0)
         treatment = false
-        pop_p = animal.pop_p
-        pop_d = animal.pop_d
-        pop_r = animal.pop_r
+
         seed = animalModel.seed
         bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+        pop_p = bacteriaSubmodel.pop_p
+        pop_d = bacteriaSubmodel.pop_d
+        pop_r = bacteriaSubmodel.pop_r
         dic = 0
         dim = 0
         stress = false
@@ -1023,7 +1063,7 @@ Update the status of each animal depending on its bacterial population.
 """
 
   function animal_status!(animal)
-     animal.days_exposed == 0 && return
+     if animal.status == 3 || animal.status == 4
     if animal.pop_r ≥ 0.5
         animal.status = 2 
         animal.days_infected = 1
@@ -1033,6 +1073,7 @@ Update the status of each animal depending on its bacterial population.
         animal.days_infected = 1
         animal.days_exposed = 0
     end
+  end
 #=     animal.pop_p ≥ 0.5 ? (animal.status = 1; animal.days_infected = 1; animal.days_exposed = 0; println("ran")) : animal.status = animal.status
     animal.pop_r ≥ 0.5 ? (animal.status = 2; animal.days_infected = 1; animal.days_exposed = 0) : animal.status = animal.status =#
 end
@@ -1278,18 +1319,20 @@ end
 animal_stress!(animal,animalModel)
 """
 function animal_stress!(animal, animalModel)
-  if animal.dic >= 223 
-    animal.stress = true
-    animal.susceptibility = animal.susceptibility + rand(animalModel.rng, 0.05:0.01:0.1)
-  elseif animal.dim < 21
-    animal.stress = true
-    animal.susceptibility = animal.susceptibility + rand(animalModel.rng, 0.05:0.01:0.1)
-  elseif animal.age <= 2.5*365 && animal.stage == 5
-    animal.stress = true
-    animal.susceptibility = animal.susceptibility + rand(animalModel.rng, 0.05:0.01:0.1)
-  else
-    animal.stress = false
-    animal.susceptibility = animal.vaccinated == true ? rand(animalModel.rng. 0.3:0.01:0.5) : 1.0
+  if animal.stress == false
+    if animal.dic >= 223 
+      animal.stress = true
+      animal.susceptibility = animal.susceptibility + rand(animalModel.rng, 0.05:0.01:0.1)
+    elseif animal.dim < 21
+      animal.stress = true
+      animal.susceptibility = animal.susceptibility + rand(animalModel.rng, 0.05:0.01:0.1)
+    elseif animal.age <= 2.5*365 && animal.stage == 5
+      animal.stress = true
+      animal.susceptibility = animal.susceptibility + rand(animalModel.rng, 0.05:0.01:0.1)
+    else
+      animal.stress = false
+      animal.susceptibility = animal.vaccinated == true ? rand(animalModel.rng. 0.3:0.01:0.5) : 1.0
+    end
   end
 end
 
@@ -1485,13 +1528,3 @@ end
 
 
 
-
-@time animal_step!(animalModel, animalData)
-@profview animal_step!(animalModel, animalData)
-
-#@profview 
-@time [animal_step!(animalModel, animalData) for i in 1:30]
-
-@time export_animalData!(animalData)
-
-write_allData!(allData)

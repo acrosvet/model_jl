@@ -38,11 +38,15 @@ mutate(across(where(is.numeric), replace_na, replace = 0))
 statuses %>%
     plot_ly(x = ~date) %>%
     add_trace(y = ~`0`, name = 'susceptible') %>%
-    #add_trace(y = ~`5`, name = 'cp') %>%
-    add_trace(y = ~`6`, name = 'cr') %>%
-    add_trace(y = ~`2`, name = 'r') %>%
-    add_trace(y = ~`4`, name = 'er') %>%
-    add_trace(y = ~`8`, name = 'rr')
+    add_trace(y = ~`1`, name = 'infected pathogenic') %>%
+    add_trace(y = ~`5`, name = 'carrier pathogenic') %>%
+    add_trace(y = ~`6`, name = 'carrier resistant') %>%
+    add_trace(y = ~`2`, name = 'infected resistant') %>%
+    add_trace(y = ~`4`, name = 'exposed resistant') %>%
+    add_trace(y = ~`3`, name = 'exposed pathogenic') %>%
+    add_trace(y = ~`7`, name = 'recovered pathogenic') %>%
+
+    add_trace(y = ~`8`, name = 'recovered resistant')
     #Days exposed not incrementing
 
 de <- all_data %>%
