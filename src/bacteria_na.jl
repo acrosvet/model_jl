@@ -172,7 +172,7 @@ function initialiseBacteria(;
             pos = CartesianIndices(colonies)[i]
             status = i % 2 == 0 ? 2 : 0
             status = i % 200 == 0 ? 2 : status
-            fitness = rand(bacterialModel.rng, 0.98:0.001:0.99)
+            fitness = rand(bacterialModel.rng, 0.95:0.001:0.99)
             neighbours = get_neighbours(pos)
             processed = false
             colony = BacterialAgent(id, pos, status, fitness, neighbours, processed)
@@ -215,7 +215,7 @@ function bact_treatment!(bacterialModel, colony)
     bacterialModel.days_treated == 0 && return
     colony.status > 1 && return
     rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_treated/20) && return
-    rand(bacterialModel.rng) > 0.5 && return
+    #rand(bacterialModel.rng) > 0.5 && return
     colony.status = 10
     colony.fitness = 0
     colony.processed = true 
@@ -262,10 +262,12 @@ function bact_repopulate!(bacterialModel, colony)
             colony.status != 2 && return
             colony.status = 2
             colony.processed = true
+            colony.fitness = competing_neighbour.fitness
         elseif bacterialModel.days_treated == 0 && bacterialModel.total_status ≤ 1
             rand(bacterialModel.rng) ≥ 0.5 && return
             colony.status = competing_neighbour.status
             colony.processed = true
+            colony.fitness = competing_neighbour.fitness
         end
 
 end
@@ -304,10 +306,12 @@ function bact_carrier!(bacterialModel, colony)
             rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.30) && return 
             colony.status = 2
             colony.processed = true
+            colony.fitness = rand(bacterialModel.rng, 0.95:0.001:0.99)
     elseif total_status == 5
             rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.30) && return 
             colony.status = 1
             colony.processed = true
+            colony.fitness = rand(bacterialModel.rng, 0.98:0.001:0.99)
     end
 end
 
