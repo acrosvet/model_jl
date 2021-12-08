@@ -15,7 +15,7 @@ Step AnimalAgents through time
         recrudescence!(AnimalAgent, animalModel)#Recrudecent infection from carriers
         treatment!(AnimalAgent, animalModel)#Apply treatment
         endTreatment!(AnimalAgent, animalModel)#End treatment
-        run_submodel!(AnimalAgent, animalModel)
+       # run_submodel!(AnimalAgent, animalModel)
 
 
 # Move the agents, but only after the first time step
