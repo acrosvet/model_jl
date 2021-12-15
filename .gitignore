@@ -105,3 +105,24 @@ data
 data.jld
 .gitignore
 runs.jld
+export/plots/res_100sim.png
+export/plots/carrier_r_100sim.png
+export/plots/lactating_100sim.png
+export/plots/p_carriers_100sim.png
+export/plots/recovered_100sim.png
+export/plots/recovered_1000sim.png
+export/plots/res_1000sim.png
+export/plots/res_carriers_100sim.png
+export/plots/res_inc_1000sim.png
+export/plots/resistant - 10 sims 10 years.png
+export/plots/sens_100sim.png
+export/plots/suscep_inc_1000sim.png
+.vscode/configurationCache.log
+simrun_amu.jld2
+simrun_vacc.jld2
+simrun.jld2
+.vscode/dryrun.log
+.vscode/targets.log
+export/simrun.jld2
+pop_r_anim.gif
+Project.toml

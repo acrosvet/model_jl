@@ -2,7 +2,7 @@
 
   include("./bacteria_na.jl")
   using Dates
-  using JLD
+  using JLD2
 
 #Define agent ============================
 
@@ -532,15 +532,15 @@ function animal_recovery!(animal, animalModel)
               animal.days_recovered = 1
               animal.bacteriaSubmodel.days_recovered = 1
               animal.status = animal.bacteriaSubmodel.total_status =  7
-              println("recovered r")
-              println(animal.status)
+             # println("recovered r")
+              #println(animal.status)
             elseif animal.status == 2
               animal.days_infected = 0
               animal.days_recovered = 1
               animal.bacteriaSubmodel.days_recovered = 1
               animal.status = animal.bacteriaSubmodel.total_status = 8
-              println("recovered p")
-              println(animal.status)
+              #println("recovered p")
+              #println(animal.status)
             end
       else 
           if animal.status == 2
@@ -548,15 +548,15 @@ function animal_recovery!(animal, animalModel)
             animal.days_recovered = 1
             animal.bacteriaSubmodel.days_recovered = 1
             animal.status = animal.bacteriaSubmodel.total_status = 6
-            println("carrier r")
-            println(animal.status)
+            #println("carrier r")
+            #println(animal.status)
           elseif animal.status == 1
             animal.days_infected = 0
             animal.days_recovered = 1
             animal.bacteriaSubmodel.days_recovered = 1
             animal.status = animal.bacteriaSubmodel.total_status =  5
-            println("carrier p")
-            println(animal.status)
+            #println("carrier p")
+            #println(animal.status)
           end
       end
     end
@@ -590,7 +590,8 @@ function animal_transmission!(animal, animalModel)
       animal.status == 1 && rand(animalModel.rng) > animalModel.pop_p && return
       animal.status == 2 && rand(animalModel.rng) > animalModel.pop_r && return
       #The animal can now go on to infect its neighbours
-      for i in 1:length(animal.neighbours)
+      #transmitter = @task  begin Threads.@spawn 
+        for i in 1:length(animal.neighbours)
           competing_neighbour = filter(x -> x.pos == animal.neighbours[i], animalModel.animals)
           #println(competing_neighbour)
           isempty(competing_neighbour) == true && continue
@@ -602,12 +603,16 @@ function animal_transmission!(animal, animalModel)
                 animal.status % 2 == 0 ? competing_neighbour.status = 4 : competing_neighbour.status = 3
                 competing_neighbour.days_exposed = 1
                 competing_neighbour.bacteriaSubmodel.days_exposed = 1
-                println("transmission")
-                println(competing_neighbour.status)
-                println(competing_neighbour.id)
+                #println("transmission")
+                #println(competing_neighbour.status)
+                #println(competing_neighbour.id)
               end
           end
-      end
+      #end
+    end
+
+    #fetch(transmitter)
+
     end
 end
 
@@ -1333,10 +1338,9 @@ animal_step!
 Animal stepping function
 """
 
-  function animal_step!(animalModel, animalData)
+function animal_step!(animalModel, animalData)
 
-
-    for x in 1:length(animalModel.animals)
+ for x in 1:length(animalModel.animals)
          checkbounds(Bool, animalModel.animals, x) == false && continue   
             # !isassigned(animalModel.animals, animalModel.animals[position]) && continue
          #x > length(animalModel.animals) && continue
@@ -1377,10 +1381,12 @@ Animal stepping function
             get_neighbours_animal(animal.pos)
             update_animal!(animalModel, animal)
 
-            export_alldata!(animal, animalModel, allData)
+           # export_alldata!(animal, animalModel, allData)
 
      
     end
+  
+
 
     #Step global model vars
     animal_mstep!(animalModel, animalData)
@@ -1520,30 +1526,3 @@ end
 
 
 # Run the model -------------------------------------------------
-
-
-@time   animalModel = initialiseSpring(
-                farmno = Int8(1),
-                farm_status = Int8(2),
-                system = Int8(1),
-                msd = Date(2021,9,24),
-                seed = Int8(42),
-                optimal_stock = Int16(273),
-                optimal_lactating = Int16(273),
-                treatment_prob = Float32(0),
-                treatment_length = Int8(3),
-                carrier_prob = Float32(0.01),
-                timestep = Int16(0),
-                density_lactating = Int8(6),
-                density_dry = Int8(7),
-                density_calves = Int8(3),
-                date = Date(2021,7,2),
-                vacc_rate = Float32(0.7),
-                fpt_rate = Float32(0.0),
-                prev_r = Float32(0.01),
-                prev_p = Float32(0.01),
-                prev_cr = Float32(0.08),
-                prev_cp = Float32(0.02)
-);
-
-
