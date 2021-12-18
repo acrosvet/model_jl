@@ -1,7 +1,9 @@
-
+using Distributed
+addprocs(16)
  include("./animal_na.jl");
-nsims = 100
-nyears = 10
+ nruns = 1
+ nsims = 10
+ nyears = 10
 
 function gen_models!(i)
 
@@ -23,7 +25,7 @@ function gen_models!(i)
   density_dry = Int8(7),
   density_calves = Int8(3),
   date = Date(2021,7,2),
-  vacc_rate = Float32(0.85),
+  vacc_rate = Float32(1.0),
   fpt_rate = Float32(0.0),
   prev_r = Float32(0.01),
   prev_p = Float32(0.01),
@@ -43,7 +45,7 @@ end
 
 
 #@time [animal_step!(animalModel, animalData) for i in 1:365]
-function run_sims!(nsims, nyears)
+function run_sims!(nsims, nyears, runseq)
   models = Array{AnimalModel}(undef, nsims)
   modelData = Array{AnimalData}(undef, nsims)
 
@@ -77,7 +79,7 @@ schedule(t)
 fetch(t)
 
 while isassigned(runs, nsims) == true
-  @save "./vacc.jld2" runs
+  @save "vacc_$runseq.jld2" runs
   break
 end
 
@@ -86,5 +88,7 @@ end
 end
  #fetch(t)
 
-@time runs = run_sims!(nsims, nyears)
+@time for i in 1:nruns
+   run_sims!(nsims, nyears, i)
+end
 

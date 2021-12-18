@@ -3,88 +3,95 @@
 include("animal_na.jl")
 using Plots
 using JLD2
-@load "./export/simrun.jld2"
 
-# Gross numbers 
-plt = plot();
+@load "./tmp/hpc_run_mt/model/fpt_1.jld2" 
 
-for i in 1:length(runs)
-  plot!(plt, runs[i].pop_r,  linewidth = 0.5)
-end
-
-plot!(plt, title = "Infected resistant (1000 runs)", xlabel = "Model step (days)", ylabel = "Number of animals", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10, legend = false)
-savefig("./export/plots/res_1000sim.png")
+runtype = "(FPT @ 30%)"
+nruns = "(10 runs)"
 
 #as incidence 
 plt = plot();
 
-incvec =Array{Float64}(undef, 3651)
+incvec =Array{Float64}(undef, length(runs[1].pop_r))
 for i in 1:length(runs)
-  for j in 1:3651
-    dat = runs[i].pop_r[j]/(runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j])
+  for j in 1:length(runs[i].pop_r)
+    dat = (runs[i].pop_r[j] + runs[i].pop_p[j])/(runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j])
     incvec[j] = 100*dat
   end
-  plot!(plt, incvec,  linewidth = 0.5)
+  plot!(plt, incvec,  linewidth = 1)
 end
 
-plot!(plt, title = "Resistance incidence (1000 runs)", xlabel = "Model step (days)", ylabel = "Incidence (%)", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10,legend = false)
-savefig("./export/plots/res_inc_1000sim.png")
+plot!(plt, title = "Percentage infected $runtype $nruns", ylims = (0,20), xlabel = "Model step (days)", ylabel = "Infected (%)", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10,legend = false)
+savefig("./export/plots/Percentage infected $runtype $nruns.png")
 
 #as incidence susceptible
 plt = plot();
 
-incvec =Array{Float64}(undef, 3651)
+incvec =Array{Float64}(undef, length(runs[1].pop_r))
 for i in 1:length(runs)
-  for j in 1:3651
+  for j in 1:length(runs[i].pop_r)
     dat = (runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j] - runs[i].pop_r[j]- runs[i].pop_p[j]- runs[i].pop_er[j]- runs[i].pop_ep[j] - - runs[i].pop_car_r[j]- runs[i].pop_car_p[j]- runs[i].pop_rec_r[j]- runs[i].pop_rec_p[j])/(runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j])
     incvec[j] = 100*dat
   end
-  plot!(plt, incvec,  linewidth = 0.5)
+  plot!(plt, incvec,  linewidth = 1)
 end
 
-plot!(plt, title = "%Susceptible (1000 runs)", xlabel = "Model step (days)", ylabel = "Susceptible (%)", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10,legend = false)
-savefig("./export/plots/suscep_inc_1000sim.png")
+plot!(plt, title = "Percentage susceptible $runtype $nruns", ylims = (0,100), xlabel = "Model step (days)", ylabel = "Susceptible (%)", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10,legend = false)
+savefig("./export/plots/Percentage susceptible $runtype $nruns.png")
 
-
+incvec =Array{Float64}(undef, length(runs[1].pop_r))
 plt = plot()
-for i in 1:nsims
-  plot!(plt, runs[i].pop_p,  linewidth = 0.01)
+  for i in 1:length(runs)
+    for j in 1:length(runs[i].pop_r)
+    dat =  (runs[i].pop_rec_r[j] + runs[i].pop_rec_p[j])/(runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j])
+    incvec[j] = 100*dat
+  end
+plot!(plt, incvec,  linewidth = 1)
 end
 plt
-plot!(plt, title = "Infected sensitive (100 sims)", xlabel = "Model step", ylabel = "Number of animals", legend = false)
-savefig("./export/plots/sens_100sim.png")
+plot!(plt, title = "Recovered animals $runtype $nruns", ylims = (0,100), xlabel = "Model step (days)", ylabel = "Recovered (%)", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10, legend = false)
+savefig("./export/plots/Number recovered $runtype $nruns.png")
 
+# Years
 
-plt = plot()
+plt = plot();
+
+incvec =Array{Float64}(undef, length(runs[1].pop_r))
 for i in 1:length(runs)
-  plot!(plt, (runs[i].pop_rec_r + runs[i].pop_rec_p),  linewidth = 0.01)
+  for j in 1:length(runs[i].pop_r)
+    dat = (runs[i].pop_r[j] + runs[i].pop_p[j])/(runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j])
+    incvec[j] = 100*dat
+  end
+  plot!(plt, incvec[730:1095],  linewidth = 1)
 end
-plt
-plot!(plt, title = "Recovered (1000 sims)", xlabel = "Model step (days)", ylabel = "Number of animals", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10, legend = false)
-savefig("./export/plots/recovered_1000sim.png")
 
+plot!(plt, title = "Percentage infected (model year 3) $runtype $nruns", ylims = (0,20), xlabel = "Model step (days)", ylabel = "Infected (%)", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10,legend = false)
+savefig("./export/plots/Percentage infected y3 $runtype $nruns.png")
 
+#as incidence susceptible
+plt = plot();
 
-plt = plot()
+incvec =Array{Float64}(undef, length(runs[1].pop_r))
 for i in 1:length(runs)
-  plot!(plt, runs[i].pop_car_r,  linewidth = 0.01)
+  for j in 1:length(runs[i].pop_r)
+    dat = (runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j] - runs[i].pop_r[j]- runs[i].pop_p[j]- runs[i].pop_er[j]- runs[i].pop_ep[j] - - runs[i].pop_car_r[j]- runs[i].pop_car_p[j]- runs[i].pop_rec_r[j]- runs[i].pop_rec_p[j])/(runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j])
+    incvec[j] = 100*dat
+  end
+  plot!(plt, incvec[730:1095],  linewidth = 1)
 end
-plt
-plot!(plt, title = "Resistant carriers (100 sims)", xlabel = "Model step", ylabel = "Number of animals", legend = false)
-savefig("./export/plots/res_carriers_100sim.png")
 
-plt = plot()
-for i in 1:nsims
-  plot!(plt, runs[i].pop_car_p,  linewidth = 0.01)
-end
-plt
-plot!(plt, title = "Sensitive carriers (100 sims)", xlabel = "Model step", ylabel = "Number of animals", legend = false)
-savefig("./export/plots/p_carriers_100sim.png")
+plot!(plt, title = "Percentage susceptible (model year 3) $runtype $nruns", ylims = (0,100), xlabel = "Model step (days)", ylabel = "Susceptible (%)", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10,legend = false)
+savefig("./export/plots/Percentage susceptible y3 $runtype $nruns.png")
 
+incvec =Array{Float64}(undef, length(runs[1].pop_r))
 plt = plot()
-for i in 1:nsims
-  plot!(plt, runs[i].num_lactating,  linewidth = 0.01)
+  for i in 1:length(runs)
+    for j in 1:length(runs[i].pop_r)
+    dat =  (runs[i].pop_rec_r[j] + runs[i].pop_rec_p[j])/(runs[i].num_lactating[j] + runs[i].num_calves[j] + runs[i].num_dry[j] + runs[i].num_weaned[j] + runs[i].num_dh[j] + runs[i].num_heifers[j])
+    incvec[j] = 100*dat
+  end
+plot!(plt, incvec[730:1095],  linewidth = 1)
 end
 plt
-plot!(plt, title = "Lactating (100 sims)", xlabel = "Model step", ylabel = "Number of animals", legend = false)
-savefig("./export/plots/lactating_100sim.png")
+plot!(plt, title = "Recovered animals (model year 3) $runtype $nruns", ylims = (0,100), xlabel = "Model step (days)", ylabel = "Recovered (%)", titlefontsize = 10, xguidefontsize = 10, yguidefontsize = 10, legend = false)
+savefig("./export/plots/Number recovered y3 $runtype $nruns.png")

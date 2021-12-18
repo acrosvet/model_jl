@@ -1,9 +1,11 @@
-
+using Distributed
+addprocs(16)
  include("./animal_na.jl");
 
- nsims = 100
+ nruns = 1
+ nsims = 1
  nyears = 10
- 
+
 function gen_models!(i)
 
 
@@ -16,7 +18,7 @@ function gen_models!(i)
   seed = Int8(42),
   optimal_stock = Int16(273),
   optimal_lactating = Int16(273),
-  treatment_prob = Float32(0.5),
+  treatment_prob = Float32(1.0),
   treatment_length = Int8(3),
   carrier_prob = Float32(0.01),
   timestep = Int16(0),
@@ -44,7 +46,7 @@ end
 
 
 #@time [animal_step!(animalModel, animalData) for i in 1:365]
-function run_sims!(nsims, nyears)
+function run_sims!(nsims, nyears, runseq)
   models = Array{AnimalModel}(undef, nsims)
   modelData = Array{AnimalData}(undef, nsims)
 
@@ -78,7 +80,7 @@ schedule(t)
 fetch(t)
 
 while isassigned(runs, nsims) == true
-  @save "./amu.jld2" runs
+  @save "amu_$runseq.jld2" runs
   break
 end
 
@@ -86,5 +88,7 @@ end
 end
  #fetch(t)
 
-@time runs = run_sims!(nsims, nyears)
 
+@time for i in 1:nruns
+  runs = run_sims!(nsims, nyears, i)
+end

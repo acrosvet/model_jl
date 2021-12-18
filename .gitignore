@@ -126,3 +126,45 @@ simrun.jld2
 export/simrun.jld2
 pop_r_anim.gif
 Project.toml
+simrun_1.jld2
+simrun_2.jld2
+simrun_21.jld2
+simrun_hash(1).jld2
+export/plots/Number recovered (clinical treatment @100%, 5 days) (10 runs).png
+export/plots/Number recovered (FPT @ 30%) (10 runs).png
+export/plots/Number recovered (no parametrisation) (10 runs).png
+export/plots/Number recovered (vaccination @ 100%) (10 runs).png
+export/plots/Number recovered y3 (clinical treatment @100%, 5 days) (10 runs).png
+export/plots/Number recovered y3 (FPT @ 30%) (10 runs).png
+export/plots/Number recovered y3 (no parametrisation) (10 runs).png
+export/plots/Number recovered y3 (vaccination @ 100%) (10 runs).png
+export/plots/Percentage infected (clinical treatment @100%, 5 days) (10 runs).png
+export/plots/Percentage infected (FPT @ 30%) (10 runs).png
+export/plots/Percentage infected (no parametrisation) (10 runs).png
+export/plots/Percentage infected (vaccination @ 100%) (10 runs).png
+export/plots/Percentage infected y3 (clinical treatment @100%, 5 days) (10 runs).png
+export/plots/Percentage infected y3 (FPT @ 30%) (10 runs).png
+export/plots/Percentage infected y3 (no parametrisation) (10 runs).png
+export/plots/Percentage infected y3 (vaccination @ 100%) (10 runs).png
+export/plots/Percentage susceptible (clinical treatment @100%, 5 days) (10 runs).png
+export/plots/Percentage susceptible (FPT @ 30%) (10 runs).png
+export/plots/Percentage susceptible (no parametrisation) (10 runs).png
+export/plots/Percentage susceptible (vaccination @ 100%) (10 runs).png
+export/plots/Percentage susceptible y3 (clinical treatment @100%, 5 days) (10 runs).png
+export/plots/Percentage susceptible y3 (FPT @ 30%) (10 runs).png
+export/plots/Percentage susceptible y3 (no parametrisation) (10 runs).png
+export/plots/Percentage susceptible y3 (vaccination @ 100%) (10 runs).png
+tmp/archive/amu_1.jld2
+tmp/archive/amu_2.jld2
+tmp/archive/amu_3.jld2
+tmp/archive/amu_4.jld2
+tmp/archive/amu_5.jld2
+tmp/archive/amu_6.jld2
+tmp/archive/amu_7.jld2
+tmp/archive/amu_8.jld2
+tmp/archive/amu_9.jld2
+tmp/archive/amu_10.jld2
+tmp/
+amu_1.jld2
+.gitignore
+.amu_1.jld2
