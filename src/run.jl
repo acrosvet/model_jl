@@ -1,10 +1,10 @@
 #= using Distributed
 addprocs(16)
  =#
- include("./animal_na.jl");
+include("./animal_na.jl");
 
 nruns = 1
-nsims = 1
+nsims = 10
 nyears = 10
  
 function gen_models!(i)
@@ -64,9 +64,9 @@ function run_sims!(nsims, nyears, runseq)
     runs = Array{AnimalData}(undef,nsims)
   
     #write_allData!(allData)
-  #t = @task begin
+  t = @task begin
 
-    #Threads.@threads 
+    Threads.@threads 
     for i in 1:nsims
       animalData = modelData[i]
       animalModel = models[i]
@@ -76,15 +76,15 @@ function run_sims!(nsims, nyears, runseq)
 
 
 
-  #end
+  end
   #write("data", runs)
 
-  #schedule(t)
+  schedule(t)
 
-  #fetch(t)
+  fetch(t)
 
   while isassigned(runs, nsims) == true
-    @save "simrun_bacthread$runseq.jld2" runs
+    @save "simrun_unparm$runseq.jld2" runs
     break
   end
   
