@@ -66,8 +66,7 @@ function run_sims!(nsims, nyears, runseq)
     #write_allData!(allData)
   t = @task begin
 
-    Threads.@threads 
-    for i in 1:nsims
+    Threads.@threads for i in 1:nsims
       animalData = modelData[i]
       animalModel = models[i]
       [animal_step!(animalModel, animalData) for j in 1:nyears*365]

@@ -9,7 +9,7 @@
 
 module purge
 module load julia/1.6.3
-julia  --threads 16 /data/gpfs/projects/punim0549/acrosbie/model/spring_vacc.jl
+julia  --threads 16 /data/gpfs/projects/punim0549/acrosbie/model_main/spring_vacc.jl
 
 
 

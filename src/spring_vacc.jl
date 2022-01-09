@@ -29,8 +29,9 @@ function gen_models!(i)
   fpt_rate = Float32(0.0),
   prev_r = Float32(0.01),
   prev_p = Float32(0.01),
-  prev_cr = Float32(0.08),
-  prev_cp = Float32(0.02)
+  prev_cr = Float32(0.04),
+  prev_cp = Float32(0.04),
+  vacc_efficacy = Float32(0.1)
 )
 
   animalModel.rng = MersenneTwister(i)

@@ -3,7 +3,7 @@ addprocs(16)
  include("./animal_na.jl");
 
  nruns = 1
- nsims = 1
+ nsims = 10
  nyears = 10
 
 function gen_models!(i)
@@ -18,7 +18,7 @@ function gen_models!(i)
   seed = Int8(42),
   optimal_stock = Int16(273),
   optimal_lactating = Int16(273),
-  treatment_prob = Float32(1.0),
+  treatment_prob = Float32(0.5),
   treatment_length = Int8(3),
   carrier_prob = Float32(0.01),
   timestep = Int16(0),
@@ -30,8 +30,9 @@ function gen_models!(i)
   fpt_rate = Float32(0.0),
   prev_r = Float32(0.01),
   prev_p = Float32(0.01),
-  prev_cr = Float32(0.08),
-  prev_cp = Float32(0.02)
+  prev_cr = Float32(0.04),
+  prev_cp = Float32(0.04),
+  vacc_efficacy = Float32(0.1)
 )
 
   animalModel.rng = MersenneTwister(i)

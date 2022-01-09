@@ -397,9 +397,10 @@ bact_step!
 Update attributes over time
 """
 function bact_step!(bacterialModel, bacterialData)
-  stepper = @task begin
+  #stepper = @task begin
     
-    Threads.@spawn for x in 1:length(bacterialModel.colonies)
+  ##  Threads.@spawn 
+  for x in 1:length(bacterialModel.colonies)
         colony = bacterialModel.colonies[x]
         bact_processed!(colony)#Reset the processed counter
         colony.processed == true && continue 
@@ -410,9 +411,9 @@ function bact_step!(bacterialModel, bacterialData)
         bact_carrier!(bacterialModel, colony)#Set carrier status
         bact_fitness!(bacterialModel, colony)
     end
-end
-schedule(stepper)
-fetch(stepper)
+#end
+#schedule(stepper)
+#fetch(stepper)
 
     count_colonies!(bacterialModel)#Update the population
    # bact_export!(bacterialModel, bacterialData)#Export the bacterial data
