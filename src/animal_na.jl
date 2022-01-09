@@ -100,6 +100,7 @@ Type container for animal model
     prev_p::Float32
     prev_cr::Float32
     prev_cp::Float32
+    vacc_efficacy::Float32
 end
 
 
@@ -252,7 +253,8 @@ end
     prev_r::Float32,
     prev_p::Float32,
     prev_cr::Float32,
-    prev_cp::Float32
+    prev_cp::Float32,
+    vacc_efficacy::Float32
     )
 
  
@@ -273,7 +275,7 @@ end
 
     #Set up the model ====================================================
 
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp)
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy)
     
     # Set the initial stock parameters
     animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
@@ -315,7 +317,7 @@ end
         carryover = false
         fpt = false
         vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-        susceptibility = vaccinated == true ?  0.1 : 0.5
+        susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : 0.5
         animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
         push!(animalModel.animals, animal)
     end
@@ -355,7 +357,7 @@ end
         carryover = false
         fpt = false
         vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-        susceptibility = vaccinated == true ?  0.1 : 0.5
+        susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : 0.5
         animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
         push!(animalModel.animals, animal)
     end
@@ -395,7 +397,7 @@ end
         carryover = false 
         fpt = false
         vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-        susceptibility = vaccinated == true ?  0.1 : 0.5
+        susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : 0.5
         animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
         push!(animalModel.animals, animal)
     end
@@ -553,7 +555,7 @@ function animal_recovery!(animal, animalModel)
             #println(animal.status)
           elseif animal.status == 1
             animal.days_infected = 0
-            animal.days_recovered = 1transmission!
+            animal.days_recovered = 1
             animal.bacteriaSubmodel.days_recovered = 1
             animal.status = animal.bacteriaSubmodel.total_status =  5
             #println("carrier p")
@@ -698,7 +700,7 @@ function animal_fpt_vacc!(animal, animalModel)
 
   if animal.age == 60 && rand(animalModel.rng) < animalModel.vacc_rate
     animal.vaccinated = true
-    animal.susceptibility = 0.1
+    animal.susceptibility = animalModel.vacc_efficacy 
   end
 
 end
@@ -1337,7 +1339,7 @@ function animal_stress!(animal, animalModel)
       animal.susceptibility = rand(animalModel.rng, 0.5:0.01:0.55)
     else
       animal.stress = false
-      animal.susceptibility = animal.vaccinated == true ? 0.1 : animal.susceptibility
+      animal.susceptibility = animal.vaccinated == true ? animalModel.vacc_efficacy  : animal.susceptibility
     end
   end
 
