@@ -1,11 +1,11 @@
-using Distributed
+#= using Distributed
 addprocs(16)
-
+ =#
  include("./animal_na.jl");
 
 nruns = 1
 nsims = 1
-nyears = 1
+nyears = 10
  
 function gen_models!(i)
 
@@ -27,12 +27,13 @@ function gen_models!(i)
   density_dry = Int8(7),
   density_calves = Int8(3),
   date = Date(2021,7,2),
-  vacc_rate = Float32(0.3),
+  vacc_rate = Float32(0.0),
   fpt_rate = Float32(0.0),
   prev_r = Float32(0.01),
   prev_p = Float32(0.01),
   prev_cr = Float32(0.04),
-  prev_cp = Float32(0.04)
+  prev_cp = Float32(0.04),
+  vacc_efficacy = Float32(0.1)
 )
 
   animalModel.rng = MersenneTwister(i)
