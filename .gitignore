@@ -169,3 +169,31 @@ amu_1.jld2
 .gitignore
 .amu_1.jld2
 simrun_bacthread1.jld2
+runs/01_11_22/fpt_1.jld2
+runs/01_11_22/simrun_unparm1.jld2
+runs/01_11_22/vacc_1.jld2
+export/plots/Number recovered AMU @ 50% (10 runs).png
+export/plots/Number recovered FPT @ 50% (10 runs).png
+export/plots/Number recovered Unparametrised (10 runs).png
+export/plots/Number recovered Vaccination @ 100_80% (10 runs).png
+export/plots/Number recovered y3 AMU @ 50% (10 runs).png
+export/plots/Number recovered y3 FPT @ 50% (10 runs).png
+export/plots/Number recovered y3 Unparametrised (10 runs).png
+export/plots/Number recovered y3 Vaccination @ 100_80% (10 runs).png
+export/plots/Percentage infected AMU @ 50% (10 runs).png
+export/plots/Percentage infected FPT @ 50% (10 runs).png
+export/plots/Percentage infected resistant AMU @ 50% (10 runs).png
+export/plots/Percentage infected Unparametrised (10 runs).png
+export/plots/Percentage infected Vaccination @ 100_80% (10 runs).png
+export/plots/Percentage infected y3 AMU @ 50% (10 runs).png
+export/plots/Percentage infected y3 FPT @ 50% (10 runs).png
+export/plots/Percentage infected y3 Unparametrised (10 runs).png
+export/plots/Percentage infected y3 Vaccination @ 100_80% (10 runs).png
+export/plots/Percentage susceptible AMU @ 50% (10 runs).png
+export/plots/Percentage susceptible FPT @ 50% (10 runs).png
+export/plots/Percentage susceptible Unparametrised (10 runs).png
+export/plots/Percentage susceptible Vaccination @ 100_80% (10 runs).png
+export/plots/Percentage susceptible y3 AMU @ 50% (10 runs).png
+export/plots/Percentage susceptible y3 FPT @ 50% (10 runs).png
+export/plots/Percentage susceptible y3 Unparametrised (10 runs).png
+export/plots/Percentage susceptible y3 Vaccination @ 100_80% (10 runs).png
