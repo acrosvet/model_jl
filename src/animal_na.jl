@@ -101,6 +101,10 @@ Type container for animal model
     prev_cr::Float32
     prev_cp::Float32
     vacc_efficacy::Float32
+    current_autumn::Int16
+    optimal_autumn::Int16
+    current_spring::Int16
+    optimal_spring::Int16
 end
 
 
@@ -272,10 +276,11 @@ end
     id_counter = 0
     positions = Array{Array{Int}}[]
     processed = false
+    current_spring = current_autumn = optimal_spring = optimal_autumn = 0
 
     #Set up the model ====================================================
 
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy)
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring)
     
     # Set the initial stock parameters
     animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
@@ -412,6 +417,315 @@ end
 
 end
 
+
+"""
+initialiseSplit!(kwargs)
+Initialise a split calving system
+"""
+function initialiseSplit(;
+  farmno::Int8 = FarmAgent.id,
+  farm_status::Int8,
+  system::Int8,
+  msd::Date,
+  seed::Int8,
+  optimal_stock::Int16,
+  optimal_lactating::Int16,
+  treatment_prob::Float32,
+  treatment_length::Int8,
+  carrier_prob::Float32,
+  timestep::Int16,
+  density_lactating::Int8,
+  density_dry::Int8,
+  density_calves::Int8,
+  date::Date,
+  vacc_rate::Float32,
+  fpt_rate::Float32,
+  prev_r::Float32,
+  prev_p::Float32,
+  prev_cr::Float32,
+  prev_cp::Float32,
+  vacc_efficacy::Float32
+  )
+
+
+  #Agent space =======================================================
+  animals = Array{AnimalAgent}[]
+
+  #Create the initial model parameters ===============================
+  msd_2 = msd - Month(4)
+  msd_3 = msd_4 = Date(0)
+  current_stock = current_lactating = current_dry = current_heifers = current_dh = current_weaned = current_calves = 0
+  optimal_dry = optimal_heifers = optimal_dh = optimal_weaned = optimal_calves = 0
+  tradeable_stock = 0
+  sending = receiving = Array{AnimalAgent}(undef, 15)
+  rng = MersenneTwister(seed)
+  pop_p = pop_r = pop_s = pop_d = 0
+  id_counter = 0
+  positions = Array{Array{Int}}[]
+  processed = false
+
+  optimal_spring = optimal_autumn = floor(N*0.5)
+  current_spring = current_autumn = 0 
+
+  #Set up the model ====================================================
+
+  animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring)
+  
+  # Set the initial stock parameters
+  animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
+  
+
+  # Add the dry cows ---------------------------------------------
+  #Dry stage is 6, Dry plane is 6. Model opens on day before psc
+  animalModel.id_counter = 0
+   for cow in 1:floor(N*0.5*0.7)
+      animalModel.id_counter += 1
+      id = Int16(animalModel.id_counter)
+      stage = Int8(6)
+      pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_lactating)), 2)..., stage]
+       while pos in animalModel.positions == true
+          pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_lactating)), 2)..., stage]
+      end 
+      push!(animalModel.positions, pos)
+      status = Int8(initial_status!(animalModel))
+      days_infected = status == 1 || status == 2 ? 1 : 0
+      days_exposed = Int8(0)
+      days_carrier = status == 5 || status == 6 ? 1 : 0
+      days_recovered = Int8(0)
+      days_treated = Int8(0)
+      treatment = false
+      pop_d = Float32(0.0)
+      bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+      dic =  Int16(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 280)))) #Gives a 63% ICR for this rng
+      dim = Int16(0)
+      pop_p = Float32(bacteriaSubmodel.pop_p)
+      pop_r = Float32(bacteriaSubmodel.pop_r)
+      stress = false
+      sex = 1#Female
+      calving_season = 1#Split1
+      age = Int16(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
+      lactation= round(age/365) - 1
+      pregstat = 1#Pregnant
+      trade_status = 0#false
+      neighbours = get_neighbours_animal(pos)
+      carryover = false
+      fpt = false
+      vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
+      susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : 0.5
+      animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
+      push!(animalModel.animals, animal)
+  end
+
+# Add the heifers ---------------------------------------------
+#Heifers about to calve, heifer stage 4
+  for heifer in 1:floor(N*0.5*0.25)
+      animalModel.id_counter += 1
+      id = Int16(animalModel.id_counter)
+      stage = 4
+      pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_heifers)), 2)..., stage]
+      while pos in animalModel.positions == true
+          pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_heifers)), 2)..., stage]
+      end 
+      push!(animalModel.positions, pos)
+      status = Int8(initial_status!(animalModel))
+      days_infected = status == 1 || status == 2 ? 1 : 0
+      days_exposed = Int8(0)
+      days_carrier = status == 5 || status == 6 ? 1 : 0
+      days_recovered = Int8(0)
+      days_treated = Int8(0)
+      treatment = false
+      pop_p = Float32(0.0)
+      bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+      pop_p = Float32(bacteriaSubmodel.pop_p)
+      pop_r = Float32(bacteriaSubmodel.pop_r)
+      dic =  Int16(floor(rand(animalModel.rng, truncated(Rayleigh(240), 199, 280)))) #Gives a 63% ICR for this rng
+      dim = 0
+      stress = false
+      sex = 1#Female
+      calving_season = 1#Split1
+      age = Int16(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))) # Defined using initial age function
+      lactation= 0
+      pregstat = 1#Pregnant
+      trade_status = 0#false
+      neighbours = get_neighbours_animal(pos)
+      carryover = false
+      fpt = false
+      vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
+      susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : 0.5
+      animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
+      push!(animalModel.animals, animal)
+  end
+
+   #Add weaned animals
+
+  for weaned in 1:floor(N*0.5*0.25)
+      animalModel.id_counter += 1
+      id = Int16(animalModel.id_counter)
+      stage = 2
+      pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_weaned)), 2)..., stage]
+      while pos in animalModel.positions == true
+          pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_weaned)), 2)..., stage]
+      end 
+      push!(animalModel.positions, pos)
+      status = Int8(initial_status!(animalModel))
+      days_infected = status == 1 || status == 2 ? 1 : 0
+      days_exposed = Int8(0)
+      days_carrier = status == 5 || status == 6 ? 1 : 0
+      days_recovered = Int8(0)
+      days_treated = Int8(0)
+      treatment = false
+      pop_p = Float32(0.0)
+      bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+      pop_p = Float32(bacteriaSubmodel.pop_p)
+      pop_r = Float32(bacteriaSubmodel.pop_r)
+      dic =  Int16(0) #Gives a 63% ICR for this rng
+      dim = 0
+      stress = false
+      sex = 1#Female
+      calving_season = 1#Spring
+      age = Int16(floor(rand(truncated(Rayleigh(365),(295), (385))))) # Defined using initial age function
+      lactation= 0
+      pregstat = 0#Pregnant
+      trade_status = 0#false
+      neighbours = get_neighbours_animal(pos)
+      carryover = false 
+      fpt = false
+      vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
+      susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : 0.5
+      animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
+      push!(animalModel.animals, animal)
+  end
+
+
+#Calving period 2  ----------------
+
+ #Lactating autumn cows
+ for cow in 1:floor(N*0.5)
+    animalModel.id_counter += 1
+    id = Int16(animalModel.id_counter)
+    stage = Int8(6)
+    pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_lactating)), 2)..., stage]
+     while pos in animalModel.positions == true
+        pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_lactating)), 2)..., stage]
+    end 
+    push!(animalModel.positions, pos)
+    status = Int8(initial_status!(animalModel))
+    days_infected = status == 1 || status == 2 ? 1 : 0
+    days_exposed = Int8(0)
+    days_carrier = status == 5 || status == 6 ? 1 : 0
+    days_recovered = Int8(0)
+    days_treated = Int8(0)
+    treatment = false
+    pop_d = Float32(0.0)
+    bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+    dic =  0 #Gives a 63% ICR for this rng
+    dim = Int16(floor(rand(animalModel.rng, truncated(Rayleigh(100), 37, 121))))
+    pop_p = Float32(bacteriaSubmodel.pop_p)
+    pop_r = Float32(bacteriaSubmodel.pop_r)
+    stress = false
+    sex = 1#Female
+    calving_season = 2#Split2
+    age = Int16(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))) # Defined using initial age function
+    lactation= round(age/365) - 1
+    pregstat = 1#Pregnant
+    trade_status = 0#false
+    neighbours = get_neighbours_animal(pos)
+    carryover = false
+    fpt = false
+    vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
+    susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : 0.5
+    animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
+    push!(animalModel.animals, animal)
+end
+
+#Split 2 heifers ------------------
+
+for cow in 1:floor(N*0.5*0.25)
+  animalModel.id_counter += 1
+  id = Int16(animalModel.id_counter)
+  stage = Int8(4)
+  pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_lactating)), 2)..., stage]
+   while pos in animalModel.positions == true
+      pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_lactating)), 2)..., stage]
+  end 
+  push!(animalModel.positions, pos)
+  status = Int8(initial_status!(animalModel))
+  days_infected = status == 1 || status == 2 ? 1 : 0
+  days_exposed = Int8(0)
+  days_carrier = status == 5 || status == 6 ? 1 : 0
+  days_recovered = Int8(0)
+  days_treated = Int8(0)
+  treatment = false
+  pop_d = Float32(0.0)
+  bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+  dic =  Int16(floor(rand(truncated(Rayleigh(42),(1), (60))))) #Gives a 63% ICR for this rng
+  dim = 0
+  pop_p = Float32(bacteriaSubmodel.pop_p)
+  pop_r = Float32(bacteriaSubmodel.pop_r)
+  stress = false
+  sex = 1#Female
+  calving_season = 2#Split2
+  age = Int16(floor(rand(truncated(Rayleigh(2*365 - 4*30),(22*30 - 4*30), (25*30 - 4*30)))))# Defined using initial age function
+  lactation= round(age/365) - 1
+  pregstat = 1#Pregnant
+  trade_status = 0#false
+  neighbours = get_neighbours_animal(pos)
+  carryover = false
+  fpt = false
+  vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
+  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : 0.5
+  animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
+  push!(animalModel.animals, animal)
+end
+
+# Split2 weaned
+
+for cow in 1:floor(N*0.5*0.25)
+  animalModel.id_counter += 1
+  id = Int16(animalModel.id_counter)
+  stage = Int8(2)
+  pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_lactating)), 2)..., stage]
+   while pos in animalModel.positions == true
+      pos = [rand(animalModel.rng, 1:Int(floor(animalModel.density_dry*√animalModel.optimal_lactating)), 2)..., stage]
+  end 
+  push!(animalModel.positions, pos)
+  status = Int8(initial_status!(animalModel))
+  days_infected = status == 1 || status == 2 ? 1 : 0
+  days_exposed = Int8(0)
+  days_carrier = status == 5 || status == 6 ? 1 : 0
+  days_recovered = Int8(0)
+  days_treated = Int8(0)
+  treatment = false
+  pop_d = Float32(0.0)
+  bacteriaSubmodel = initialiseBacteria(animalno = Int16(id), nbact = Int16(33*33), total_status = Int8(status), days_treated = Int8(days_treated), days_exposed = Int8(days_exposed), days_recovered = Int8(days_recovered), stress = false, seed = Int8(seed))
+  dic =  0 #Gives a 63% ICR for this rng
+  dim = 0
+  pop_p = Float32(bacteriaSubmodel.pop_p)
+  pop_r = Float32(bacteriaSubmodel.pop_r)
+  stress = false
+  sex = 1#Female
+  calving_season = 2#Split2
+  age = Int16(floor(rand(animalModel.rng, truncated(Rayleigh(100), 37, 121))))# Defined using initial age function
+  lactation= round(age/365) - 1
+  pregstat = 1#Pregnant
+  trade_status = 0#false
+  neighbours = get_neighbours_animal(pos)
+  carryover = false
+  fpt = false
+  vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
+  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : 0.5
+  animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility)    
+  push!(animalModel.animals, animal)
+end
+
+
+  count_animals!(animalModel)
+
+
+  return animalModel
+
+
+end
 
 """
 update_animal!(animalModel)
