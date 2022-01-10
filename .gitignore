@@ -197,3 +197,5 @@ export/plots/Percentage susceptible y3 AMU @ 50% (10 runs).png
 export/plots/Percentage susceptible y3 FPT @ 50% (10 runs).png
 export/plots/Percentage susceptible y3 Unparametrised (10 runs).png
 export/plots/Percentage susceptible y3 Vaccination @ 100_80% (10 runs).png
+src/unparm_split.jl
+Split simrun_unparm_1.jld2
