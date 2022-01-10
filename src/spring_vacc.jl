@@ -1,7 +1,7 @@
 using Distributed
 addprocs(16)
  include("./animal_na.jl");
- nruns = 1
+ nruns = 10
  nsims = 10
  nyears = 10
 
