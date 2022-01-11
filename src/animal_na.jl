@@ -500,7 +500,8 @@ function initialiseBatch(;
                 Int(floor(rand(truncated(Rayleigh(420),372, 455)))),
                 Int(floor(rand(animalModel.rng, truncated(Rayleigh(55), 7, 90))))
                 ]
-    all_seasons = [3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6]
+    
+    all_seasons = [1,1,1,2,2,2,3,3,3,4,4,4]
 
 
     for i in 1:length(stocktype)
@@ -747,15 +748,11 @@ function animal_recovery!(animal, animalModel)
               animal.days_recovered = 1
               animal.bacteriaSubmodel.days_recovered = 1
               animal.status = animal.bacteriaSubmodel.total_status =  7
-             # println("recovered r")
-              #println(animal.status)
             elseif animal.status == 2
               animal.days_infected = 0
               animal.days_recovered = 1
               animal.bacteriaSubmodel.days_recovered = 1
               animal.status = animal.bacteriaSubmodel.total_status = 8
-              #println("recovered p")
-              #println(animal.status)
             end
       else 
           if animal.status == 2
@@ -763,15 +760,11 @@ function animal_recovery!(animal, animalModel)
             animal.days_recovered = 1
             animal.bacteriaSubmodel.days_recovered = 1
             animal.status = animal.bacteriaSubmodel.total_status = 6
-            #println("carrier r")
-            #println(animal.status)
           elseif animal.status == 1
             animal.days_infected = 0
             animal.days_recovered = 1
             animal.bacteriaSubmodel.days_recovered = 1
             animal.status = animal.bacteriaSubmodel.total_status =  5
-            #println("carrier p")
-            #println(animal.status)
           end
       end
     end
@@ -784,39 +777,50 @@ Transmit infection between animals.
 Only infected, recovering or carrier animals can transmit to their neighbours
 """
 function animal_transmission!(animal, animalModel)
-      animal.status == 0 && return
-      animal.status == 3 && return
-      animal.status == 4 && return      #animal.days_recovered > 5 && return
-      pos = animal.pos
-      animal.neighbours = get_neighbours_animal(pos)
-      # bernoulli < 0.5 && return
-      animal.status == 1 && rand(animalModel.rng) > animalModel.pop_p && return
-      animal.status == 2 && rand(animalModel.rng) > animalModel.pop_r && return
-      animal.status == 5 && rand(animalModel.rng) > animalModel.pop_p && return
-      animal.status == 6 && rand(animalModel.rng) > animalModel.pop_r && return
-      animal.status == 7 && rand(animalModel.rng) > animalModel.pop_p && return
-      animal.status == 8 && rand(animalModel.rng) > animalModel.pop_r && return
+  animal.status == 0 && return
+  animal.status == 3 && return
+  animal.status == 4 && return      #animal.days_recovered > 5 && return
+  pos = animal.pos
+  animal.neighbours = get_neighbours_animal(pos)
 
-      #The animal can now go on to infect its neighbours
-      #transmitter = @task  begin Threads.@spawn 
-        for i in 1:length(animal.neighbours)
-          competing_neighbour = filter(x -> x.pos == animal.neighbours[i], animalModel.animals)
-          isempty(competing_neighbour) == true && continue
-          competing_neighbour = competing_neighbour[1]
-          if competing_neighbour.status == 0 || competing_neighbour.status == 7 || competing_neighbour.status == 8
-              rand(animalModel.rng) < 0.5 && continue
-              if rand(animalModel.rng) < competing_neighbour.susceptibility
-                animal.status % 2 == 0 ? competing_neighbour.status = 4 : competing_neighbour.status = 3
-                competing_neighbour.days_exposed = 1
-                competing_neighbour.bacteriaSubmodel.days_exposed = 1
-              end
+  animal.status == 1 && rand(animalModel.rng) > animalModel.pop_p && return
+  animal.status == 2 && rand(animalModel.rng) > animalModel.pop_r && return
+  animal.status == 5 && rand(animalModel.rng) > animalModel.pop_p && return
+  animal.status == 6 && rand(animalModel.rng) > animalModel.pop_r && return
+  animal.status == 7 && rand(animalModel.rng) > animalModel.pop_p && return
+  animal.status == 8 && rand(animalModel.rng) > animalModel.pop_r && return
+
+
+  #The animal can now go on to infect its neighbours
+  #transmitter = @task  begin Threads.@spawn 
+    for i in 1:length(animal.neighbours) 
+        competing_neighbour = nothing
+        for x in 1:length(animalModel.animals)
+            if animalModel.animals[x].pos == animal.pos
+                competing_neighbour = animalModel.animals[x]
+                break
+            end
+        end
+
+      #  println(competing_neighbour)
+
+    competing_neighbour === nothing && return
+      if competing_neighbour.status == 0 || competing_neighbour.status == 7 || competing_neighbour.status == 8
+          rand(animalModel.rng) < 0.5 && continue
+          if rand(animalModel.rng) < competing_neighbour.susceptibility
+            animal.status % 2 == 0 ? competing_neighbour.status = 4 : competing_neighbour.status = 3
+            competing_neighbour.days_exposed = 1
+            competing_neighbour.bacteriaSubmodel.days_exposed = 1
           end
-      #end
-    end
+      end
+  #end
+end
 
-    #fetch(transmitter)
+#fetch(transmitter)
 
-    end
+end
+
+
 
 
 """
@@ -1225,14 +1229,42 @@ function join_split!(animal, animalModel)
   animal.pregstat != 0 && return
   animal.stage != 5 && return
   rand(animalModel.rng) ≤ 0.15 && return
-  animal.pregstat = 1
 
   if animal.calving_season == 1 && animalModel.date == (animalModel.msd + Month(3))
     animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84)))) 
+    animal.pregstat = 1
   elseif animal.calving_season == 2 && animalModel.date != (animalModel.msd_2 + Month(3))
     animal.dic =  Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+    animal.pregstat = 1
   end
 end 
+
+"""
+join_batch!(animal, animalModel)
+Join animals in batch calving systems 
+"""
+function join_batch!(animal, animalModel)
+
+  (animalModel.date != animalModel.msd + Month(3)) || (animalModel.date != animalModel.msd_2 - Year(1) + Month(3)) || (animalModel.date != animalModel.msd_3 + Month(3)) || (animalModel.date != animalModel.msd_4 + Month(3)) && return
+  animalModel.pregstat != 0 && return
+  animal.stage != 5 && return
+  rand(animalModel.rng) ≤ 0.15 && return
+
+  if animal.calving_season == 1 && (animalModel.date == animalModel.msd + Month(3))
+    animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+    animal.pregstat = 1
+  elseif animal.calving_season == 2 && (animalModel.date == animalModel.msd_2 - Year(1) + Month(3))
+    animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+    animal.pregstat = 1
+  elseif animal.calving_season == 3 && (animalModel.date == animalModel.msd_3 + Month(3))
+    animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+    animal.pregstat = 1
+  elseif animal.calving_season == 4 && (animalModel.date == animalModel.msd_4 + Month(3))
+    animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 84))))
+    animal.pregstat = 1
+  end
+
+end
 
 """
 animal_joining!(animal, animalModel)
@@ -1243,11 +1275,10 @@ animal_joining!(animal, animalModel)
     animal.stage != 5 && return
     if animalModel.system == 1
         join_seasonal!(animal, animalModel)
-        #println("joining")
     elseif animalModel.system == 2
        join_split!(animal, animalModel)
-    else
-       # join_batch!(animal, animalModel)
+    elseif animalModel.system == 3
+      join_batch!(animal, animalModel)
     end
 
 end
@@ -1294,7 +1325,6 @@ Wean calves to next lifestage
         move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.current_weaned)
     else 
         cull!(animal, animalModel)
-        #("calf cull")
     end
 end
 
@@ -1328,7 +1358,7 @@ Join heifers for seasonal systems
 """
 
   function join_heifer_seasonal!(animal, animalModel)
-    animalModel.system != 1 && return
+    animalModel.system == 1 && return
     if animalModel.date == (animalModel.msd + Day(42))
         heifer_pregnancy!(animal, animalModel)
     end
@@ -1362,7 +1392,7 @@ Join heifers in batch systems
         heifer_pregnancy!(animal, animalModel)
     elseif animal.calving_season == 3 && animalModel.date == (animalModel.msd_3 + Day(42))
         heifer_pregnancy!(animal, animalModel)
-    elseif animal.calving_season == 1 && animalModel.date == (animalModel.msd_4 + Day(42))
+    elseif animal.calving_season == 4 && animalModel.date == (animalModel.msd_4 + Day(42))
         heifer_pregnancy!(animal, animalModel)
     end
 end
@@ -1459,7 +1489,6 @@ Dryoff function for all calving systems
   function animal_dryoff!(animal, animalModel)
     animal.stage  != 5 && return
     animal.dim != 305 && return
-    #animal.dim <= rand(animalModel.rng, 290:315) && return
     dryoff_seasonal!(animal, animalModel)
     dryoff_batch!(animal, animalModel)
     dryoff_split!(animal, animalModel)
@@ -1542,8 +1571,7 @@ function animal_step!(animalModel, animalData)
   
 for x in 1:length(animalModel.animals)
          checkbounds(Bool, animalModel.animals, x) == false && continue   
-            # !isassigned(animalModel.animals, animalModel.animals[position]) && continue
-         #x > length(animalModel.animals) && continue
+
          animal = animalModel.animals[x]
          #Disease dynamics
             animal_fpt_vacc!(animal, animalModel)
