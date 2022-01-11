@@ -1,6 +1,6 @@
 
 
-  include("./bacteria_na.jl")
+  include("./bacteria_mt.jl")
   using Dates
   using JLD2
 
