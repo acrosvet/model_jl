@@ -14,7 +14,7 @@ function gen_models!(i)
   animalModel = initialiseSpring(
   farmno = Int8(1),
   farm_status = Int8(2),
-  system = Int8(1),
+  system = Int8(2),
   msd = Date(2021,9,24),
   seed = Int8(42),
   optimal_stock = Int16(273),
@@ -93,7 +93,7 @@ end
  #fetch(t)
 
 
-@time for i in 1:nruns
+@benchmark for i in 1:nruns
   run_sims!(nsims, nyears, i)
 end
 
@@ -104,3 +104,5 @@ end
 
 
 
+
+#@benchmark animal_step!(animalModel, animalData)
