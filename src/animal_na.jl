@@ -105,6 +105,14 @@ Type container for animal model
     optimal_autumn::Int16
     current_spring::Int16
     optimal_spring::Int16
+    current_b1::Int16
+    current_b2::Int16
+    current_b3::Int16
+    current_b4::Int16
+    optimal_b1::Int16
+    optimal_b2::Int16
+    optimal_b3::Int16
+    optimal_b4::Int16
 end
 
 
@@ -319,11 +327,11 @@ Function for generating system 1 farms (Spring calving)
     id_counter = 0
     positions = Array{Array{Int}}[]
     processed = false
-    current_spring = current_autumn = optimal_spring = optimal_autumn = 0
-
+    current_spring = current_autumn = optimal_spring = optimal_autumn = current_b1 = current_b2 = current_b3 = current_b4 = 0
+    optimal_b1 = optimal_b2 = optimal_b3 = optimal_b4 = 0
     #Set up the model ====================================================
 
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring)
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4)
     
     # Set the initial stock parameters
     animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
@@ -366,6 +374,158 @@ Function for generating system 1 farms (Spring calving)
 
 end
 
+
+"""
+initialiseBatch(;kwargs)
+Initialise a batch calving farm
+"""
+function initialiseBatch(;
+    farmno::Int8 = FarmAgent.id,
+    farm_status::Int8,
+    system::Int8,
+    msd::Date,
+    seed::Int8,
+    optimal_stock::Int16,
+    optimal_lactating::Int16,
+    treatment_prob::Float32,
+    treatment_length::Int8,
+    carrier_prob::Float32,
+    timestep::Int16,
+    density_lactating::Int8,
+    density_dry::Int8,
+    density_calves::Int8,
+    date::Date,
+    vacc_rate::Float32,
+    fpt_rate::Float32,
+    prev_r::Float32,
+    prev_p::Float32,
+    prev_cr::Float32,
+    prev_cp::Float32,
+    vacc_efficacy::Float32
+    )
+
+ 
+    #Agent space =======================================================
+    animals = Array{AnimalAgent}[]
+
+    #Create the initial model parameters ===============================
+    msd_2 = msd + Month(3)
+    msd_3 = msd - Month(6)
+    msd_4 = msd - Month(3)
+
+    current_stock = current_lactating = current_dry = current_heifers = current_dh = current_weaned = current_calves = 0
+    optimal_dry = optimal_heifers = optimal_dh = optimal_weaned = optimal_calves = 0
+    tradeable_stock = 0
+    sending = receiving = Array{AnimalAgent}(undef, 15)
+    rng = MersenneTwister(seed)
+    pop_p = pop_r = pop_s = pop_d = 0
+    id_counter = 0
+    positions = Array{Array{Int}}[]
+    processed = false
+    current_spring = current_autumn = optimal_spring = optimal_autumn = 0
+    current_b1 = current_b2 = current_b3 = current_b4 = 0
+
+    N = optimal_stock 
+    optimal_b1 = optimal_b2 = optimal_b3 = optimal_b4 = floor(0.25*N)
+    #Set up the model ====================================================
+
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4)
+    
+    # Set the initial stock parameters
+    animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
+    
+    # Add the dry cows ---------------------------------------------
+
+    animalModel.id_counter = 0
+
+    stocktype  = [:b1_dry, :b1_heifers, :b1_weaned, :b2_lac, :b2_heifers, :b2_weaned, :b3_lac, :b3_heifers, :b3_weaned, :b4_lac, :b4_heifers, :b4_calves]
+    all_stockno = [floor(0.25*0.7), floor(N*0.25*0.3), floor(N*0.25*0.25), floor(N*0.25), floor(N*0.25*0.25), floor(N*0.25*0.25), floor(N*0.25), floor(N*0.25*0.25), floor(N*0.25*0.25), floor(N*0.25), floor(N*0.25*0.25), floor(N*0.25*0.5)]
+    stages = [6, 4, 2, 5, 4, 2, 5, 4, 2, 5, 4, 1]
+    all_dim =   [
+                 0,
+                 0,
+                 0, 
+                 Int(floor(rand(animalModel.rng, truncated(Rayleigh(237), 189, 273)))), 
+                 0, 
+                 0, 
+                 Int(floor(rand(animalModel.rng, truncated(Rayleigh(145), 97, 180)))), 
+                 0, 
+                 0, 
+                 Int(floor(rand(animalModel.rng, truncated(Rayleigh(55), 7, 90)))),
+                 0,
+                 0
+                ]
+    
+    all_pregstat = [
+                    1, 
+                    1,
+                    0,  
+                    rand(animalModel.rng) < 0.85 ? 1 : 0, 
+                    1,
+                    0, 
+                    rand(animalModel.rng) < 0.85 ? 1 : 0, 
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                   ]
+
+    all_dic = [ Int(floor(rand(animalModel.rng, truncated(Rayleigh(262), 199, 283)))), 
+                Int(floor(rand(animalModel.rng, truncated(Rayleigh(272), 199, 283)))), 
+                0, 
+                all_pregstat[4] == 1 ? Int(floor(rand(animalModel.rng, truncated(Rayleigh(153), 85, 188)))) : 0,
+                Int(floor(rand(animalModel.rng, truncated(Rayleigh(174), 126, 209)))),
+                0,
+                all_pregstat[7] == 1 ? Int(floor(rand(animalModel.rng, truncated(Rayleigh(153), 85, 188)))) : 0,
+                Int(floor(rand(animalModel.rng, truncated(Rayleigh(82), 33, 117)))),
+                0,
+                0,
+                0,
+                0
+                ]
+                
+    all_age = [ Int(floor(rand(truncated(Rayleigh(5*365),(2*365), (8*365))))), 
+                Int(floor(rand(truncated(Rayleigh(2*365),(22*30), (25*30))))),
+                Int(floor(rand(truncated(Rayleigh(315),(281), (365))))),
+                Int(floor(rand(truncated(Rayleigh(4*365),(2*365), (8*365))))),
+                Int(floor(rand(truncated(Rayleigh(603),553, 638)))),
+                Int(floor(rand(animalModel.rng, truncated(Rayleigh(237), 189, 273)))),
+                Int(floor(rand(truncated(Rayleigh(4*365),(2*365), (8*365))))),
+                Int(floor(rand(truncated(Rayleigh(511),463, 546)))),
+                Int(floor(rand(animalModel.rng, truncated(Rayleigh(145), 97, 180)))),
+                Int(floor(rand(truncated(Rayleigh(4*365),(2*365), (8*365))))),
+                Int(floor(rand(truncated(Rayleigh(4*365),(2*365), (8*365))))),
+                Int(floor(rand(truncated(Rayleigh(420),372, 455)))),
+                Int(floor(rand(animalModel.rng, truncated(Rayleigh(55), 7, 90))))
+                ]
+    all_seasons = [3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6]
+
+
+    for i in 1:length(stocktype)
+        initial_animals!(
+            animalModel,
+            seed,
+            processed,
+            stockno = all_stockno[i],
+            stage = stages[i], 
+            dic = all_dic[i],
+            dim = all_dim[i],
+            age = all_age[i],
+            pregstat = all_pregstat[i],
+            calving_season = all_seasons[i]
+        )
+    end
+
+
+    count_animals!(animalModel)
+
+
+    return animalModel
+
+
+end
 
 """
 initialiseSplit!(kwargs)
@@ -416,9 +576,14 @@ function initialiseSplit(;
   optimal_spring = optimal_autumn = Int16(floor(N*0.5))
   current_spring = current_autumn = Int16(0) 
 
+  current_b1 = current_b2 = current_b3 = current_b4 = 0
+  optimal_b1 = optimal_b2 = optimal_b3 = optimal_b4 = 0
   #Set up the model ====================================================
 
-  animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring)
+  animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4)
+  
+  #Set up the model ====================================================
+
   
   # Set the initial stock parameters
   animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
@@ -611,19 +776,6 @@ function animal_recovery!(animal, animalModel)
       end
     end
     end
-
-#=     animal.days_infected == 0 && return
-    animal.status != 1 && animal.status != 2 && return
-    recovery_time = 5
-    animal.days_infected == recovery_time && return 
-    animal.days_infected = 0
-    if  animalModel.carrier_prob > rand(animalModel.rng)
-        animal.bacteriaSubmodel.days_carrier = animal.days_carrier = 1
-        animal.status == 1 ? animal.status = 5 : animal.status = 6
-    else
-        animal.status ==  1 ? animal.status = 7 : animal.status = 8
-        animal.bacteriaSubmodel.days_recovered = animal.days_recovered = 1
-    end =#
 end
 
 """
@@ -649,19 +801,14 @@ function animal_transmission!(animal, animalModel)
       #transmitter = @task  begin Threads.@spawn 
         for i in 1:length(animal.neighbours)
           competing_neighbour = filter(x -> x.pos == animal.neighbours[i], animalModel.animals)
-          #println(competing_neighbour)
           isempty(competing_neighbour) == true && continue
           competing_neighbour = competing_neighbour[1]
-         # push!(competing_neighbour, empty_vec)
           if competing_neighbour.status == 0 || competing_neighbour.status == 7 || competing_neighbour.status == 8
               rand(animalModel.rng) < 0.5 && continue
               if rand(animalModel.rng) < competing_neighbour.susceptibility
                 animal.status % 2 == 0 ? competing_neighbour.status = 4 : competing_neighbour.status = 3
                 competing_neighbour.days_exposed = 1
                 competing_neighbour.bacteriaSubmodel.days_exposed = 1
-                #println("transmission")
-                #println(competing_neighbour.status)
-                #println(competing_neighbour.id)
               end
           end
       #end
@@ -677,9 +824,7 @@ animal_shedding!(animal)
 Recrudescent infection from carrier animals
 """
 function animal_shedding!(animal)
-  # rand(animalModel.rng) < 0.5 && return
     if (animal.status == 5 || animal.status == 6) && animal.stress == true
-    #animal.status != 5 || animal.status != 6 && return
       if animal.status == 5
         animal.bacteriaSubmodel.days_exposed = 1
         animal.bacteriaSubmodel.total_status = 3
@@ -706,15 +851,7 @@ Animals return to susceptibility at a variable interval after recovery, simulate
 """
 
   function animal_susceptiblility!(animal, animalModel)
-    #animal.days_recovered = 0 && return
     if animal.status == 7 || animal.status == 8
-#=       if animal.days_recovered >= rand(animalModel.rng, 60:120)
-        animal.days_recovered = 0
-        animal.days_exposed = 0
-        animal.bacteriaSubmodel.days_exposed = 0
-        animal.status = 0 #Return to susceptible
-        animal.susceptibility = animal.vaccinated == true ?  rand(animalModel.rng, 0.5:0.01:1) : 1.0
-      end =#
       animal.susceptibility = ℯ^(-300/animal.days_recovered)
       animal.susceptibility >= 0.5 ? animal.status = 0 : return 
     end
@@ -732,7 +869,6 @@ Decide to treat animals
       animal.days_treated = 1
       animal.treatment = true
       animal.bacteriaSubmodel.days_treated = 1
-      #println("treatment")
     end
 end
 
@@ -795,8 +931,7 @@ Shuffle animals at each step
     deleteat!(animalModel.positions,ind)
 
     animal.pos = newpos
-   # animal.neighbours = get_neighbours_animal(animal.pos)
-    #splice!(animalModel.positions, oldpos)
+
     push!(animalModel.positions, newpos)
 end
 
@@ -863,7 +998,6 @@ Randomly move animals.
 """
 
   function animal_shuffle!(animal, animalModel)
-    #animal.status == 0 && return
     if animal.stage == 1
         move_calf!(animal, animalModel)
     elseif animal.stage == 2
@@ -901,7 +1035,6 @@ Move an animal to level 10, culled
     end
 
     deleteat!(animalModel.animals, findall(x -> x == animal, animalModel.animals))
-    #splice!(animalModel.animals, animal)
     deleteat!(animalModel.positions, findall(x -> x == animal.pos, animalModel.positions))
 
 
@@ -936,7 +1069,6 @@ age_cull!(animal)
   function age_cull!(animal, animalModel)
     animal.age ≤ Int(floor(rand(animalModel.rng, truncated(Rayleigh(7*365), 5*365, 7*365)))) && return
     cull!(animal, animalModel)
-    #println("age culled")
 end
 
 """
@@ -996,8 +1128,6 @@ Calve cows, create calf.
 """
 
   function calving!(animal, animalModel)
-    #animal.stage != 6 && animal.stage != 4 && return
-    #animal.dic < 273 && return
     animal.dic != 283  && return
         animal.pregstat = 0
         animal.dic = 0
@@ -1085,11 +1215,6 @@ Join animals in seasonal systems
             animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 93))))
         end
     end
-#=     animalModel.date != (animalModel.msd + Month(3)) && return
-    rand(animalModel.rng) > 0.85 && return
-        animal.pregstat = 1
-        animal.dic = Int(floor(rand(animalModel.rng, truncated(Rayleigh(63), 1, 93))))
-        #println("cow joined") =#
 end
 
 """
