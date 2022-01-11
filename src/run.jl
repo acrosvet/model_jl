@@ -3,8 +3,8 @@ addprocs(16)
 
 include("./animal_na.jl");
 
-nruns = 10
-nsims = 10
+nruns = 1
+nsims = 1
 nyears = 10
  
 function gen_models!(i)
