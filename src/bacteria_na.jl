@@ -236,12 +236,6 @@ function check_bounds(competing_neighbour, min, max)
     elseif competing_neighbour[2] > max
         false
     end
-
-
-#=     competing_neighbour[1] ≤ min ? false : true
-    competing_neighbour[2] ≤ min ? false : true
-    competing_neighbour[1] > max ? false : true
-    competing_neighbour[2] > max ? false : true  =#
 end
 
 
@@ -398,10 +392,10 @@ Update attributes over time
 """
 function bact_step!(bacterialModel, bacterialData)
   #stepper = @task begin
-    
-  ##  Threads.@spawn 
-  for x in 1:length(bacterialModel.colonies)
+  #  Threads.@threads 
+    for x in 1:length(bacterialModel.colonies)
         colony = bacterialModel.colonies[x]
+   #     bacterialModel.rng = MersenneTwister(hash(colony))
         bact_processed!(colony)#Reset the processed counter
         colony.processed == true && continue 
         bact_exposed!(bacterialModel, colony)
@@ -428,7 +422,7 @@ bacterialModel.total_status = 0
 bacterialModel.days_exposed = 0
 bacterialModel.days_recovered = 0
  =#
- #@profview bact_step!(bacterialModel, bacterialData)
+ #@@btime bact_step!(bacterialModel, bacterialData)
 
 
 #[bact_step!(bacterialModel, bacterialData) for i in 1:365]
