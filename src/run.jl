@@ -1,27 +1,28 @@
- using Distributed
-addprocs(16)
+#= using Distributed
+addprocs(16) =#
 
-include("./animal_na.jl");
+ include("./animal_na.jl");
+ using CUDA
 
 nruns = 1
 nsims = 1
 nyears = 10
- 
+
 function gen_models!(i)
 
 
   global animalModel 
-  animalModel = initialiseSpring(
+ @time animalModel = initialiseSpring(
   farmno = Int8(1),
   farm_status = Int8(2),
-  system = Int8(2),
+  system = Int8(1),
   msd = Date(2021,9,24),
   seed = Int8(42),
   optimal_stock = Int16(273),
   optimal_lactating = Int16(273),
   treatment_prob = Float32(0),
   treatment_length = Int8(3),
-  carrier_prob = Float32(0.05),
+  carrier_prob = Float32(0.01),
   timestep = Int16(0),
   density_lactating = Int8(6),
   density_dry = Int8(7),
@@ -31,10 +32,10 @@ function gen_models!(i)
   fpt_rate = Float32(0.0),
   prev_r = Float32(0.01),
   prev_p = Float32(0.01),
-  prev_cr = Float32(0.04),
-  prev_cp = Float32(0.04),
+  prev_cr = Float32(0.08),
+  prev_cp = Float32(0.02),
   vacc_efficacy = Float32(0.1)
-)
+);
 
   animalModel.rng = MersenneTwister(i)
 
@@ -66,7 +67,7 @@ function run_sims!(nsims, nyears, runseq)
     #write_allData!(allData)
   t = @task begin
 
-    Threads.@threads for i in 1:nsims
+   Threads.@spawn for i in 1:nsims
       animalData = modelData[i]
       animalModel = models[i]
       [animal_step!(animalModel, animalData) for j in 1:nyears*365]
@@ -76,14 +77,17 @@ function run_sims!(nsims, nyears, runseq)
 
 
   end
+
+
   #write("data", runs)
 
-  schedule(t)
+ schedule(t)
 
   fetch(t)
 
+
   while isassigned(runs, nsims) == true
-    @save "simrun_unparm$runseq.jld2" runs
+    @save "simrun_mainthread$runseq.jld2" runs
     break
   end
   
@@ -93,16 +97,18 @@ end
  #fetch(t)
 
 
-@benchmark for i in 1:nruns
+@time for i in 1:nruns
   run_sims!(nsims, nyears, i)
 end
 
+@time while isassigned(runs, nsims) == true
+  println("Complete")
+  break
+end
   
 
 
+using CUDA
 
 
 
-
-
-#@benchmark animal_step!(animalModel, animalData)
