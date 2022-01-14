@@ -49,39 +49,24 @@ mutable struct BacterialData
     pop_d::Array{Float16}
 end
 
-bacterialData = BacterialData([0],[0],[0.0],[0.0],[0.0],[0.0])
 #Utility ====================================================================================
 """
 count_colonies!
 Count the number of each type of bacterial colony in an animal host
 """
-function count_colonies!(bacterialModel)
+function count_colonies!(bacterialModel, colony )
 
-
-    pop_r = 0.0
-    pop_s = 0.0
-    pop_p = 0.0
-    pop_d = 0.0
-
-    for colony in 1:length(bacterialModel.colonies)
-        if bacterialModel.colonies[colony].status == 0
-            pop_s += 1
-        elseif bacterialModel.colonies[colony].status == 1
-            pop_p += 1
-        elseif  bacterialModel.colonies[colony].status == 2
-            pop_r += 1
-        elseif bacterialModel.colonies[colony].status == 10
-            pop_d += 1
+        if colony.status == 0
+            bacterialModel.pop_s += 1
+        elseif colony.status == 1
+            bacterialModel.pop_p += 1
+        elseif  colony.status == 2
+            bacterialModel.pop_r += 1
+        elseif colony.status == 10
+            bacterialModel.pop_d += 1
         end
-    end
     
-
-    total_pop = pop_p + pop_s + pop_r
-
-    bacterialModel.pop_p = pop_p/total_pop
-    bacterialModel.pop_r = pop_r/total_pop
-    bacterialModel.pop_s = pop_s/total_pop
-    bacterialModel.pop_d = pop_d
+    
 
 
 end
@@ -197,8 +182,20 @@ function initialiseBacteria(;
 
     #Determine the population proportions of each bacterial type
     
-        count_colonies!(bacterialModel)
+    bacterialModel.pop_r = 0
+    bacterialModel.pop_s = 0
+    bacterialModel.pop_p = 0
+    bacterialModel.pop_d = 0
+   
+    count_colonies!.(Ref(bacterialModel), bacterialModel.colonies)#Update the population
+   # bact_export!(bacterialModel, bacterialData)#Export the bacterial data
+    #bact_timestep!(bacterialModel)#Step through time
     
+    total_pop = bacterialModel.pop_r + bacterialModel.pop_s + bacterialModel.pop_p
+
+    bacterialModel.pop_p = bacterialModel.pop_p/total_pop
+    bacterialModel.pop_r = bacterialModel.pop_r/total_pop
+    bacterialModel.pop_s = bacterialModel.pop_s/total_pop
 
 return bacterialModel
 
@@ -212,6 +209,8 @@ bact_treatment!
 Bacteria respond to treatment
 """
 function bact_treatment!(bacterialModel, colony)
+    colony.processed == true && return
+
     bacterialModel.days_treated == 0 && return
     colony.status > 1 && return
     rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_treated/20) && return
@@ -244,11 +243,16 @@ bact_repopulate!
 Repopulate after treatment
 """
 function bact_repopulate!(bacterialModel, colony)
+    colony.processed == true && return
 
     bacterialModel.pop_d == 0 && return
     colony.status != 10 && return
     competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-    check_bounds(competing_neighbour, 1, 33) == false && return
+    competing_neighbour[1] < 1  && return
+    competing_neighbour[1] > 33 && return
+    competing_neighbour[2] < 1 && return
+    competing_neighbour[2] > 33 && return
+    #check_bounds(competing_neighbour, 1, 33) == false && return
     competing_neighbour = bacterialModel.colonies[competing_neighbour]
    # length(competing_neighbour) == 0 && return
         if bacterialModel.days_treated != 0 && bacterialModel.total_status ≤ 1
@@ -289,12 +293,10 @@ bact_carrier!
 Set the bacterial population of carrier animals
 """
 function bact_carrier!(bacterialModel, colony)
+    colony.processed == true && return
+
     total_status = bacterialModel.total_status
-
-    total_status != 5 && total_status != 6 && return
     bacterialModel.days_carrier != 1 && return
-    
-
 
     if total_status == 6
             rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.30) && return 
@@ -314,10 +316,16 @@ bact_fitness!
 Competition between bacterial colonies
 """
 function bact_fitness!(bacterialModel, colony)
+    colony.processed == true && return
     colony.status == 0 && return
     competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
 
-    check_bounds(competing_neighbour, 1, 33) == false && return
+    competing_neighbour[1] < 1  && return
+    competing_neighbour[1] > 33 && return
+    competing_neighbour[2] < 1 && return
+    competing_neighbour[2] > 33 && return
+
+    #check_bounds(competing_neighbour, 1, 33) == false && return
     #competing_neighbour = filter(x-> x.pos == competing_neighbour, bacterialModel.colonies)
    # competing_neighbour = bacterialModel.colonies[pos.==competing_neighbour]
    competing_neighbour = bacterialModel.colonies[competing_neighbour]
@@ -351,6 +359,8 @@ bact_exposed
 Bacterial colonies for exposed animals
 """
 function bact_exposed!(bacterialModel, colony)
+    colony.processed == true && return
+
     bacterialModel.total_status != 3 && bacterialModel.total_status != 4 && return
     
     if bacterialModel.days_exposed == 1 
@@ -366,7 +376,11 @@ function bact_exposed!(bacterialModel, colony)
         end
     elseif bacterialModel.days_exposed > 1
                 competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-                check_bounds(competing_neighbour, 1, 33) == false && return
+                competing_neighbour[1] < 1  && return
+                competing_neighbour[1] > 33 && return
+                competing_neighbour[2] < 1 && return
+                competing_neighbour[2] > 33 && return
+               # check_bounds(competing_neighbour, 1, 33) == false && return
                 competing_neighbour = bacterialModel.colonies[competing_neighbour]
                 colony.status != 1 && colony.status != 2 && return
                     competing_neighbour.status = colony.status
@@ -379,6 +393,7 @@ bact_recovery!(bacterialModel)
 Immune response to pathogenic bacteria
 """
 function bact_recovery!(bacterialModel, colony)
+    colony.processed == true && return
     bacterialModel.days_recovered == 0 && return
     colony.status != 7 && colony.status != 8 && return
     rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_recovered/20) && return
@@ -390,13 +405,23 @@ end
 bact_step!
 Update attributes over time
 """
-function bact_step!(bacterialModel, bacterialData)
+function bact_step!(bacterialModel)
   #stepper = @task begin
   #  Threads.@threads 
-    for x in 1:length(bacterialModel.colonies)
+  bact_processed!.(bacterialModel.colonies)
+
+  #[x.processed = true for x in bacterialModel.colonies]
+    bact_exposed!.(Ref(bacterialModel), bacterialModel.colonies)
+    bact_recovery!.(Ref(bacterialModel), bacterialModel.colonies)
+    bact_treatment!.(Ref(bacterialModel), bacterialModel.colonies)
+    bact_repopulate!.(Ref(bacterialModel), bacterialModel.colonies)
+    bact_carrier!.(Ref(bacterialModel), bacterialModel.colonies)
+    bact_fitness!.(Ref(bacterialModel), bacterialModel.colonies)
+    
+#=     for x in 1:length(bacterialModel.colonies)
         colony = bacterialModel.colonies[x]
    #     bacterialModel.rng = MersenneTwister(hash(colony))
-        bact_processed!(colony)#Reset the processed counter
+       #Reset the processed counter
         colony.processed == true && continue 
         bact_exposed!(bacterialModel, colony)
         bact_recovery!(bacterialModel, colony)#Recovery over time
@@ -404,15 +429,27 @@ function bact_step!(bacterialModel, bacterialData)
         bact_repopulate!(bacterialModel, colony)#Replace bacteria killed by treatment
         bact_carrier!(bacterialModel, colony)#Set carrier status
         bact_fitness!(bacterialModel, colony)
-    end
+    end =#
 #end
 #schedule(stepper)
 #fetch(stepper)
-
-    count_colonies!(bacterialModel)#Update the population
+    bacterialModel.pop_r = 0
+    bacterialModel.pop_s = 0
+    bacterialModel.pop_p = 0
+    bacterialModel.pop_d = 0
+   
+    count_colonies!.(Ref(bacterialModel), bacterialModel.colonies)#Update the population
    # bact_export!(bacterialModel, bacterialData)#Export the bacterial data
     #bact_timestep!(bacterialModel)#Step through time
     
+    total_pop = bacterialModel.pop_r + bacterialModel.pop_s + bacterialModel.pop_p
+
+    bacterialModel.pop_p = bacterialModel.pop_p/total_pop
+    bacterialModel.pop_r = bacterialModel.pop_r/total_pop
+    bacterialModel.pop_s = bacterialModel.pop_s/total_pop
+   # bacterialModel.pop_d = pop_d
+
+
 end
 
     
