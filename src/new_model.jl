@@ -52,12 +52,35 @@ Return the position of neighbouring animals on the same plane in a 3 dimensional
 """
 
   function get_neighbours_animal!(farm)
-    farm.neighbours.n1x = farm.neighbours.n7x = farm.neighbours.n8x .= farm.animals.x .-1 
-    farm.neighbours.n1y = farm.neighbours.n2y = farm.neighbours.n3y .= farm.animals.y .+ 1
-    farm.neighbours.n3x = farm.neighbours.n4x = farm.neighbours.n5x .= farm.animals.x .+ 1 
-    farm.neighbours.n5y = farm.neighbours.n6y = farm.neighbours.n7y .= farm.animals.y .- 1
 
-    farm.neighbours.n1 .= vec.(hcat.(farm.neighbours.n1x, farm.neighbours.n1y, farm.neighbours.n1z))
+   # neighbour = farm.neighbours
+
+   @. farm.neighbours.n1x .= farm.animals.x .- 1
+   @. farm.neighbours.n1y .= farm.animals.y .+ 1
+
+   @. farm.neighbours.n2x .= farm.animals.x
+   @. farm.neighbours.n2y .= farm.animals.y .+ 1
+
+   @. farm.neighbours.n3x .= farm.animals.x .+ 1
+   @. farm.neighbours.n3y .= farm.animals.y .+ 1
+
+   @. farm.neighbours.n4x .= farm.animals.x .+ 1
+   @. farm.neighbours.n4y .= farm.animals.y 
+
+   @. farm.neighbours.n5x .= farm.animals.x .+ 1
+   @. farm.neighbours.n5y .= farm.animals.y .- 1
+
+   @. farm.neighbours.n6x .= farm.animals.x
+   @. farm.neighbours.n6y .= farm.animals.y .- 1
+
+   @. farm.neighbours.n7x .= farm.animals.x .- 1
+   @. farm.neighbours.n7y .= farm.animals.y .- 1
+
+   @. farm.neighbours.n8x .= farm.animals.x .- 1
+   @. farm.neighbours.n8y .= farm.animals.y 
+
+
+     farm.neighbours.n1 .= vec.(hcat.(farm.neighbours.n1x, farm.neighbours.n1y, farm.neighbours.n1z))
     farm.neighbours.n2 .= vec.(hcat.(farm.neighbours.n2x, farm.neighbours.n2y, farm.neighbours.n2z))
     farm.neighbours.n3 .= vec.(hcat.(farm.neighbours.n3x, farm.neighbours.n3y, farm.neighbours.n3z))
     farm.neighbours.n4 .= vec.(hcat.(farm.neighbours.n4x, farm.neighbours.n4y, farm.neighbours.n4z))
@@ -66,6 +89,7 @@ Return the position of neighbouring animals on the same plane in a 3 dimensional
     farm.neighbours.n7 .= vec.(hcat.(farm.neighbours.n7x, farm.neighbours.n7y, farm.neighbours.n7z))
     farm.neighbours.n8 .= vec.(hcat.(farm.neighbours.n8x, farm.neighbours.n8y, farm.neighbours.n8z))
 
+     farm.animals.pos .= vec.(hcat.(farm.animals.x, farm.animals.y, farm.animals.z))
     
 end
 
@@ -119,7 +143,10 @@ function makeFarm(;
     prev_cp::Float32 = Float32(0.04),
     vacc_rate::Float32 = Float32(0.0),
     vacc_efficacy::Float32 = Float32(0.1),
-    fpt_rate::Float32 = Float32(0.0)
+    fpt_rate::Float32 = Float32(0.0),
+    treatment_prob::Float32 = Float32(0.5),
+    carrier_prob::Float32 = Float32(0.05),
+    treatment_length::Int = 5
         )
 
     rng = MersenneTwister(id)
@@ -143,11 +170,11 @@ function makeFarm(;
         days_carrier = fill(-1, maxanimals),
         days_treated =  fill(-1, maxanimals),
         days_recovered =  fill(-1, maxanimals),
-        treatment =   Vector{Union{Nothing, Bool}}(nothing,maxanimals),
+        treatment =   fill(false,maxanimals),
         
-        pop_p =   Vector{Union{Nothing, Float32}}(nothing,maxanimals),
-        pop_d =   Vector{Union{Nothing, Float32}}(nothing,maxanimals),
-        pop_r =   Vector{Union{Nothing, Float32}}(nothing,maxanimals),
+        pop_p =  fill(0.0,maxanimals),
+        pop_d =   fill(0.0,maxanimals),
+        pop_r =   fill(0.0,maxanimals),
         dic =   fill(-1, maxanimals),
         dim =   fill(-1, maxanimals),
         sex =   Vector{Union{Nothing, Int}}(nothing,maxanimals),
@@ -167,8 +194,7 @@ function makeFarm(;
         cullflag = fill(false, maxanimals),
         bacteria = Vector{Union{Nothing, BacterialModel}}(nothing, maxanimals),
 
-        neighbours = Vector{Union{Nothing, Int}}(nothing, maxanimals),
-        competing_neighbour = fill(Int(0), maxanimals)
+        neighbours = fill([0,0,0,0,0,0,0,0], maxanimals)
     )
 
     @. animals.cullpoint =  Int(floor(rand(truncated(Rayleigh(7*365), 5*365, 7*365))))
@@ -225,10 +251,14 @@ function makeFarm(;
     )
 
 
+
     varparms = DataFrame(
       vacc_rate = vacc_rate,
       vacc_efficacy = vacc_efficacy,
-      fpt_rate = fpt_rate
+      fpt_rate = fpt_rate,
+      treatment_prob = treatment_prob,
+      treatment_length = treatment_length,
+      carrier_prob = carrier_prob
     )
 
     sim = DataFrame(
@@ -260,7 +290,7 @@ function makeFarm(;
    farm.animals.days_exposed .= 0
    farm.animals.days_treated .= 0
    farm.animals.days_recovered .= 0
-   farm.animals.treatement .= false
+   farm.animals.treatment .= false
    farm.animals.stress .= false
    farm.animals.sex .= 1
    farm.animals.trade_status .= 0
@@ -343,15 +373,30 @@ Increment animal parameters
 
   function update_animal!(farm)
 
-   foreach(col -> col .= increment.(col), eachcol(farm.animals[!, [:dic, :dim, :days_infected, :days_treated, :days_carrier, :days_exposed, :days_recovered, :age, :day]]))
   
    farm.step += 1
    farm.animals.date .+= Day(1)
+
+   animals = findall(farm.animals.id .!= 0 .&& farm.animals.stage .!= 10)
+
+    for animal in animals
+    farm.animals.bacteria[animal].days_exposed = farm.animals.days_exposed[animal]
+    farm.animals.bacteria[animal].days_carrier = farm.animals.days_carrier[animal]
+    farm.animals.bacteria[animal].days_treated = farm.animals.days_treated[animal]
+    farm.animals.bacteria[animal].days_recovered = farm.animals.days_recovered[animal]
+    farm.animals.pop_r[animal] = farm.animals.bacteria[animal].pop_r
+    farm.animals.pop_p[animal] = farm.animals.bacteria[animal].pop_p
+   end 
+
+
+   foreach(col -> col .= increment.(col), eachcol(farm.animals[!, [:dic, :dim, :days_infected, :days_treated, :days_carrier, :days_exposed, :days_recovered, :age, :day]]))
+
 
    if Year(farm.sim.date[farm.step]) > Year(farm.msd.msd[1])
       farm.msd.msd[1] += Year(1)
    end
 
+  farm.animals.bernoulli .= rand.(farm.rng)
 end
 
 count_status!(col, status) = sum(col .== status)
@@ -432,7 +477,7 @@ function stress!(farm)
 
   farm.animals.stress[unstressed] .= false
 
-  for i in unstressed
+    for i in unstressed
    farm.animals.susceptibility[i] =  farm.animals.vaccinated[i] == true ?  farm.varparms.vacc_efficacy[1] : farm.animals.susceptibility[i]
   end
   
@@ -446,12 +491,12 @@ function spring_cull!(farm, inds)
   length(inds) == 0 && return
   
   if length(inds) <= farm.sim.surplus_spring[farm.step]
-    for i in 1:length(inds)
+       for i in 1:length(inds)
       do_cull!(farm, inds[i])
     end
   else
     inds = inds[1:Int(farm.sim.surplus_spring[farm.step])]
-    for i in 1:length(inds)
+      for i in 1:length(inds)
       do_cull!(farm, inds[i])
       #farm.animals.stage[inds[i]] = 10
     end
@@ -488,6 +533,18 @@ function do_cull!(farm, index)
 end
 
 
+function end_treatment!(farm)
+  finishedcourse = findall(farm.animals.treatment .== true .&& farm.animals.days_treated .> farm.varparms.treatment_length[1])
+
+  farm.animals.treatment[finishedcourse] .= false
+  farm.animals.days_treated[finishedcourse] .= 0
+  
+    for finished in finishedcourse
+    farm.animals.bacteria[finished].days_treated = 0
+  end
+
+
+end
 
 function calving!(farm)
   pregs = findall(farm.animals.dic .== 283)
@@ -503,16 +560,16 @@ function calving!(farm)
 
   #Move the dry into the lactating plane
   
-  for i in 1:length(pregs)
-      farm.animals.x[pregs]  = sample(1:Int(floor(farm.densities[5]*√length(pregs))), length(pregs))
-      farm.animals.y[pregs] = sample(1:Int(floor(farm.densities[5]*√length(pregs))), length(pregs))
-      farm.animals.z[pregs]  .= 5
+    for i in 1:length(pregs)
+      farm.animals.x[pregs] = sample(1:Int(floor(sqrt(farm.densities[5]*length(pregs)))), length(pregs))
+      farm.animals.y[pregs] = sample(1:Int(floor(sqrt(farm.densities[5]*length(pregs)))), length(pregs))
+      farm.animals.z[pregs] .= 5
   end
 
  # println(pregs)
   #Create the calves 
 
-for i in 1:length(pregs)
+    for i in 1:length(pregs)
     farm.uid += 1
     dam = farm.animals.id[pregs[i]]
     farm.animals.id[farm.uid] = farm.uid
@@ -541,17 +598,19 @@ function reshuffle!(farm)
  
   animals = Vector{Vector{Int}}(undef, 6)
 
-  for i in 1:length(animals)
+    for i in 1:length(animals)
     animals[i] = findall(farm.animals.stage .== i)
   end
 
   
-  for i in 1:length(animals)
+    for i in 1:length(animals)
     isempty(animals[i]) && continue
-    farm.animals.x[animals[i]]  = sample(1:Int(floor(farm.densities[i]*√length(animals[i]))), length(animals[i]))
-    farm.animals.y[animals[i]] = sample(1:Int(floor(farm.densities[i]*√length(animals[i]))), length(animals[i]))
+    farm.animals.x[animals[i]] = sample(1:Int(floor(sqrt(farm.densities[i]*length(animals[i])))), length(animals[i]))
+    farm.animals.y[animals[i]] = sample(1:Int(floor(sqrt(farm.densities[i]*length(animals[i])))), length(animals[i]))
     farm.animals.z[animals[i]]  .= i
   end
+
+  farm.animals.pos .= vec.(hcat.(farm.animals.x, farm.animals.y, farm.animals.z))
 
 end
 
@@ -572,9 +631,9 @@ function wean!(farm)
     #println(surplus)
     if surplus <= 0
       keep = calves[1:Int(floor(length(calves)))]
-      farm.animals.x[keep]  = sample(1:Int(floor(farm.densities[2]*√length(keep))), length(keep))
-      farm.animals.y[keep] = sample(1:Int(floor(farm.densities[2]*√length(keep))), length(keep))
-      farm.animals.z[keep]  = farm.animals.stage[keep] .= 2
+      farm.animals.x[keep] = sample(1:Int(floor(sqrt(farm.densities[2]*length(keep)))), length(keep))
+      farm.animals.y[keep] = sample(1:Int(floor(sqrt(farm.densities[2]*length(keep)))), length(keep))
+      farm.animals.z[keep] = farm.animals.stage[keep] .= 2
     else 
       surplus = surplus >= length(calves) ? length(calves) : surplus
       do_cull!.(Ref(farm), surplus)
@@ -587,15 +646,62 @@ function wean!(farm)
 end
 
 function contact_tracer!(transmitter, farm)
-    farm.animals.neighbours[transmitter][1] = findall(x -> x == farm.neighbours.n1[transmitter], farm.animals.pos)
+  farm.animals.neighbours[transmitter][1] = findfirst(isequal(farm.neighbours.n1[transmitter]), farm.animals.pos) === nothing ? 0 : findfirst(isequal(farm.neighbours.n1[transmitter]), farm.animals.pos)
+  farm.animals.neighbours[transmitter][2] = findfirst(isequal(farm.neighbours.n2[transmitter]), farm.animals.pos) === nothing ? 0 : findfirst(isequal(farm.neighbours.n2[transmitter]), farm.animals.pos)
+  farm.animals.neighbours[transmitter][3] = findfirst(isequal(farm.neighbours.n3[transmitter]), farm.animals.pos) === nothing ? 0 : findfirst(isequal(farm.neighbours.n3[transmitter]), farm.animals.pos)
+  farm.animals.neighbours[transmitter][4] = findfirst(isequal(farm.neighbours.n4[transmitter]), farm.animals.pos) === nothing ? 0 : findfirst(isequal(farm.neighbours.n4[transmitter]), farm.animals.pos)
+  farm.animals.neighbours[transmitter][5] = findfirst(isequal(farm.neighbours.n5[transmitter]), farm.animals.pos) === nothing ? 0 : findfirst(isequal(farm.neighbours.n5[transmitter]), farm.animals.pos)
+  farm.animals.neighbours[transmitter][6] = findfirst(isequal(farm.neighbours.n6[transmitter]), farm.animals.pos) === nothing ? 0 : findfirst(isequal(farm.neighbours.n6[transmitter]), farm.animals.pos)
+  farm.animals.neighbours[transmitter][7] = findfirst(isequal(farm.neighbours.n7[transmitter]), farm.animals.pos) === nothing ? 0 : findfirst(isequal(farm.neighbours.n7[transmitter]), farm.animals.pos)
+  farm.animals.neighbours[transmitter][8] = findfirst(isequal(farm.neighbours.n8[transmitter]), farm.animals.pos) === nothing ? 0 : findfirst(isequal(farm.neighbours.n8[transmitter]), farm.animals.pos)
 end
+
+
 
 function animal_transmission!(farm)
 
-  transmitters = findall(farm.animals.status .==1 .|| farm.animals.status .== 2 .|| farm.animals.status .== 7 .|| farm.animals.status .== 8)
-  
-  for transmitter in transmitters
+  transmitters = findall((farm.animals.status .== 1 .|| farm.animals.status .== 2) .|| (farm.animals.status .>= 5 .&& farm.animals.status .<= 8))
+
+    for transmitter in transmitters
     contact_tracer!(transmitter, farm)
+    for contact in farm.animals.neighbours[transmitter]
+        contact == 0 && continue
+        farm.animals.status[contact] ∉ [0,7,8] && continue
+        farm.animals.bernoulli[transmitter] < farm.animals.susceptibility[contact] && continue
+       # println("transmission")
+        farm.animals.status[transmitter] % 2 == 0 ? farm.animals.status[contact] = 4 : farm.animals.status[contact] = 3
+        farm.animals.status[transmitter] % 2 == 0 ? farm.animals.bacteria[contact].total_status = 4 : farm.animals.bacteria[contact].total_status = 3
+        farm.animals.days_exposed[contact] = 1
+        farm.animals.bacteria[contact].days_exposed = 1
+    end
+  end
+
+end
+
+function shed!(farm)
+
+  shedders = findall((farm.animals.status .== 5 .|| farm.animals.status .== 6) .&& farm.animals.stress .== true)
+
+    for shedder in shedders
+      farm.animals.bacteria[shedder].days_exposed = 1
+      farm.animals.status[shedder] % 2 == 0 ? farm.animals.bacteria[shedder].total_status = 4 : farm.animals.bacteria[shedder].total_status = 3
+  end
+
+  notshedders = findall((farm.animals.status .== 5 .|| farm.animals.status .== 6) .&& farm.animals.stress .== false)
+
+    for notshedder in notshedders
+    farm.animals.bacteria[notshedder].days_exposed = 0
+    farm.animals.bacteria[notshedder].days_carrier = 0
+  end
+
+end
+
+function susceptible!(farm)
+  susceptibles = findall(farm.animals.status .== 7 .|| farm.animals.status .== 8)
+
+    for susceptible in susceptibles
+    farm.animals.susceptibility[susceptible] = ℯ^(-300/farm.animals.days_recovered[susceptible])
+    farm.animals.susceptibility[susceptible] ≥ 0.5 ? farm.animals.status[susceptible] = 0 : continue
   end
 
 end
@@ -605,9 +711,9 @@ function heifers!(farm)
   heifers = findall(farm.animals.stage .== 2 .&& farm.animals.age .== 13*30)
 
   
-  farm.animals.x[heifers]  = sample(1:Int(floor(farm.densities[3]*√length(heifers))), length(heifers))
-  farm.animals.y[heifers] = sample(1:Int(floor(farm.densities[3]*√length(heifers))), length(heifers))
-  farm.animals.z[heifers]  = farm.animals.stage[heifers] .= 3
+  farm.animals.x[heifers] = sample(1:Int(floor(sqrt(farm.densities[3]*length(heifers)))), length(heifers))
+  farm.animals.y[heifers] = sample(1:Int(floor(sqrt(farm.densities[3]*length(heifers)))), length(heifers))
+  farm.animals.z[heifers] = farm.animals.stage[heifers] .= 3
 
 end
 
@@ -633,8 +739,8 @@ function set_dry!(farm, dryoffs)
 
   farm.animals.stage[dryoffs] .= 6
   farm.animals.dim[dryoffs] .= 0
-  farm.animals.x[dryoffs] = sample(1:Int(floor(farm.densities[6]*√length(dryoffs))), length(dryoffs))
-  farm.animals.y[dryoffs] = sample(1:Int(floor(farm.densities[6]*√length(dryoffs))), length(dryoffs))
+  farm.animals.x[dryoffs] = sample(1:Int(floor(sqrt(farm.densities[6]*length(dryoffs)))), length(dryoffs))
+  farm.animals.y[dryoffs] = sample(1:Int(floor(sqrt(farm.densities[6]*length(dryoffs)))), length(dryoffs))
   farm.animals.z[dryoffs] = farm.animals.stage[dryoffs] .= 6
 
 end
@@ -642,7 +748,7 @@ end
 function  run_submodel!(farm)
 subs = findall(farm.animals.bacteria .!== nothing .&& farm.animals.stage .!= 10 .&& farm.animals.status .!= 0)
 
-Threads.@threads for sub in subs
+ Threads.@threads for sub in subs
   bact_step!(farm.animals.bacteria[sub])
 end
 
@@ -656,23 +762,106 @@ function dryoff!(farm)
   end
 end
 
+function treatment!(farm)
+
+  treatme = findall((farm.animals.status .== 1 .|| farm.animals.status .== 2) .&& farm.animals.treatment .== false)
+
+    for treatment in treatme
+    farm.animals.bernoulli[treatment] > farm.varparms.treatment_prob[1] && continue
+    #println(treatment)
+    farm.animals.days_treated[treatment] = 1
+    farm.animals.treatment[treatment] = true
+    farm.animals.bacteria[treatment].days_treated = 1
+  end
+
+
+end
+
+function status!(farm)
+  exposures = findall(farm.animals.status .== 3 .|| farm.animals.status .== 4)
+
+    for exposed in exposures
+    if farm.animals.pop_r[exposed] ≥ 0.5
+      farm.animals.status[exposed] = 2
+      farm.animals.days_infected[exposed] = 1
+      farm.animals.days_exposed[exposed] = 0
+    elseif farm.animals.pop_p[exposed] >= 0.5
+      farm.animals.status[exposed] = 1
+      farm.animals.days_infected[exposed] = 1
+      farm.animals.days_exposed[exposed] = 0
+    end
+  end
+
+  infections = findall(farm.animals.status .== 1 .|| farm.animals.status .== 2)
+
+    for infection in infections
+    if farm.animals.pop_r[infection] >=  0.5
+      farm.animals.status[infection] = 2
+    elseif farm.animals.pop_p[infection] ≥ 0.5
+      farm.animals.status[infection] = 1
+    end
+  end
+end
+
+function recovery!(farm)
+
+  recoveries = findall((farm.animals.status .== 1 .|| farm.animals.status .== 2) .&& farm.animals.days_infected .> 0)
+
+    for recover in recoveries
+    farm.animals.days_infected[recover] < rand(farm.rng, 5:7) && continue
+    farm.animals.days_infected[recover] = 0
+    farm.animals.days_recovered[recover] = 1  
+    if farm.animals.bernoulli[recover] < farm.varparms.carrier_prob[1]
+      farm.animals.status[recover] % 2 == 0 ? farm.animals.status[recover] = 6 : farm.animals.status[recover] = 5
+      farm.animals.status[recover] % 2 == 0 ? farm.animals.bacteria[recover].total_status = 8 : farm.animals.bacteria[recover].total_status = 7
+    else
+      farm.animals.status[recover] % 2 == 0 ? farm.animals.status[recover] = 6 : farm.animals.status[recover] = 5
+      farm.animals.status[recover] % 2 == 0 ? farm.animals.bacteria[recover].total_status = 8 : farm.animals.bacteria[recover].total_status = 7
+    end
+  end
+
+end
+
+function fpt_vacc!(farm)
+
+  fpts = findall(farm.animals.fpt .== true .&& farm.animals.age .< 60)
+
+  farm.animals.fpt[fpts] = sample(0.9:0.01:1.0, length(fpts))
+
+  vaccinates = findall(farm.animals.age .== 60 .&& farm.animals.bernoulli .< farm.varparms.vacc_rate[1])
+  farm.animals.vaccinated[vaccinates] .= true
+  farm.animals.susceptibility[vaccinates] .= farm.varparms.vacc_efficacy[1]
+
+end
 
 function farm_step!(farm)
  # farm.animals[shuffle(axes(farm.animals, 1)), :]
   update_animal!(farm)
   
   calving!(farm)
+  fpt_vacc!(farm)
   join_seasonal!(farm)  
-  get_neighbours_animal!(farm)
   culls!(farm)
   wean!(farm)
   heifers!(farm)
   join_heifers!(farm)
   dryoff!(farm)
   stress!(farm)
-  run_submodel!(farm)
+  shed!(farm)
+  treatment!(farm)
+  end_treatment!(farm)
+  recovery!(farm)
+
+
   
   reshuffle!(farm)
+  get_neighbours_animal!(farm)
+
+  animal_transmission!(farm)
+
+  status!(farm)
+  run_submodel!(farm)
+
 
   count_animals!(farm)
 
@@ -682,7 +871,7 @@ end
 farm = makeFarm()
 @time farm_step!(farm)
 
-#= function runfarm!(farm)
+ function runfarm!(farm)
     [farm_step!(farm) for i in 1:3650]
 end
 
@@ -695,4 +884,4 @@ plot!(farm.sim.current_heifers, labels = "Heifers")
 plot!(farm.sim.current_dh, labels = "DH")
 
 
- =#
+ Plots.scatter3d(farm.animals.x, farm.animals.y, farm.animals.z)
