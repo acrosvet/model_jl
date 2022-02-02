@@ -1,8 +1,8 @@
 #= using Distributed
 addprocs(16) =#
 
+
  include("./animal_na.jl");
- using CUDA
 
 nruns = 1
 nsims = 1
@@ -65,9 +65,8 @@ function run_sims!(nsims, nyears, runseq)
     runs = Array{AnimalData}(undef,nsims)
   
     #write_allData!(allData)
-  t = @task begin
 
-   Threads.@spawn for i in 1:nsims
+for i in 1:nsims
       animalData = modelData[i]
       animalModel = models[i]
       [animal_step!(animalModel, animalData) for j in 1:nyears*365]
@@ -76,14 +75,12 @@ function run_sims!(nsims, nyears, runseq)
 
 
 
-  end
+
 
 
   #write("data", runs)
 
- schedule(t)
 
-  fetch(t)
 
 
   while isassigned(runs, nsims) == true
@@ -106,9 +103,3 @@ end
   break
 end
   
-
-
-using CUDA
-
-
-

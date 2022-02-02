@@ -22,7 +22,7 @@ mutable struct Farm
     
 end
 
-include("bacteria_na.jl")
+include("new_bacterial.jl")
 
 """
 initial_status!(herd_prev)
@@ -123,7 +123,18 @@ function initial_animals!(farm;stockno, stage, dic, dim, age, pregstat, calving_
     animals.pop_d[farm.uid] = animals.pop_p[farm.uid] = animals.pop_r[farm.uid] = 0
     animals.vaccinated[farm.uid] = rand(farm.rng) < farm.varparms.vacc_rate[1] ? true : false
     animals.susceptibility[farm.uid] = animals.vaccinated[farm.uid] == true ?  farm.varparms.vacc_efficacy[1] : 0.5
-    animals.bacteria[farm.uid] = initialiseBacteria(animalno = Int16(farm.uid), nbact = Int16(33*33), total_status = Int8(farm.animals.status[farm.uid]), days_treated = Int8(farm.animals.days_treated[farm.uid]), days_exposed = Int8(farm.animals.days_exposed[farm.uid]), days_recovered = Int8(farm.animals.days_recovered[farm.uid]), stress = false, seed = Int8(1))
+    animals.bacteria[farm.uid].id = farm.uid
+    animals.bacteria[farm.uid].status = animals.status[farm.uid]
+    animals.bacteria[farm.uid].days_treated = animals.days_treated[farm.uid]
+    animals.bacteria[farm.uid].days_exposed = animals.days_exposed[farm.uid]
+    animals.bacteria[farm.uid].days_recovered = animals.days_recovered[farm.uid]
+    animals.bacteria[farm.uid].stress = animals.stress[farm.uid]
+    
+    
+    
+    
+    #animals.bacteria[farm.uid] = makeAnimal(id = farm.uid, step = farm.step, status = farm.animals.status[farm.uid], days_treated = farm.animals.days_treated[farm.uid], days_exposed = farm.animals.days_exposed[farm.uid], days_recovered = farm.animals.days_recovered[farm.uid], stress = false, maxdays = length(farm.sim.date), bactcolonies = 33*33 )
+    #animals.bacteria[farm.uid] = initialiseBacteria(animalno = Int16(farm.uid), nbact = Int16(33*33),  status = Int8(farm.animals.status[farm.uid]), days_treated = Int8(farm.animals.days_treated[farm.uid]), days_exposed = Int8(farm.animals.days_exposed[farm.uid]), days_recovered = Int8(farm.animals.days_recovered[farm.uid]), stress = false, seed = Int8(1))
   end
 end
 
@@ -150,6 +161,8 @@ function makeFarm(;
         )
 
     rng = MersenneTwister(id)
+
+    animal = makeAnimal()
 
     densities = [density_calves, density_dry, density_dry, density_dry, density_lactating, density_dry]
 
@@ -192,7 +205,7 @@ function makeFarm(;
         susceptibility = Vector{Union{Nothing, Float32}}(nothing,maxanimals),
         cullpoint = fill(0, maxanimals),
         cullflag = fill(false, maxanimals),
-        bacteria = Vector{Union{Nothing, BacterialModel}}(nothing, maxanimals),
+        bacteria = fill(animal, maxanimals),
 
         neighbours = fill([0,0,0,0,0,0,0,0], maxanimals)
     )
@@ -588,8 +601,12 @@ function calving!(farm)
     farm.animals.fpt[farm.uid] = rand(farm.rng) < farm.varparms.fpt_rate[1] ? true : false
     farm.animals.vaccinated[farm.uid] = false
     farm.animals.susceptibility[farm.uid] = farm.animals.fpt[farm.uid] == true ? rand(farm.rng, 0.9:0.01: 1.0) : 0.5
-    farm.animals.bacteria[farm.uid] = initialiseBacteria(animalno = Int16(farm.uid), nbact = Int16(33*33), total_status = Int8(farm.animals.status[farm.uid]), days_treated = Int8(farm.animals.days_treated[farm.uid]), days_exposed = Int8(farm.animals.days_exposed[farm.uid]), days_recovered = Int8(farm.animals.days_recovered[farm.uid]), stress = false, seed = Int8(1))
-
+    farm.animals.bacteria[farm.uid].id = farm.uid
+    farm.animals.bacteria[farm.uid].status = farm.animals.status[farm.uid]
+    farm.animals.bacteria[farm.uid].days_treated = farm.animals.days_treated[farm.uid]
+    farm.animals.bacteria[farm.uid].days_exposed = farm.animals.days_exposed[farm.uid]
+    farm.animals.bacteria[farm.uid].days_recovered = farm.animals.days_recovered[farm.uid]
+    farm.animals.bacteria[farm.uid].stress = farm.animals.stress[farm.uid]
   end
 
 end
@@ -662,7 +679,7 @@ function animal_transmission!(farm)
 
   transmitters = findall((farm.animals.status .== 1 .|| farm.animals.status .== 2) .|| (farm.animals.status .>= 5 .&& farm.animals.status .<= 8))
 
-    for transmitter in transmitters
+  Threads.@threads for transmitter in transmitters
     contact_tracer!(transmitter, farm)
     for contact in farm.animals.neighbours[transmitter]
         contact == 0 && continue
@@ -670,7 +687,7 @@ function animal_transmission!(farm)
         farm.animals.bernoulli[transmitter] < farm.animals.susceptibility[contact] && continue
        # println("transmission")
         farm.animals.status[transmitter] % 2 == 0 ? farm.animals.status[contact] = 4 : farm.animals.status[contact] = 3
-        farm.animals.status[transmitter] % 2 == 0 ? farm.animals.bacteria[contact].total_status = 4 : farm.animals.bacteria[contact].total_status = 3
+        farm.animals.status[transmitter] % 2 == 0 ? farm.animals.bacteria[contact]. status = 4 : farm.animals.bacteria[contact]. status = 3
         farm.animals.days_exposed[contact] = 1
         farm.animals.bacteria[contact].days_exposed = 1
     end
@@ -684,7 +701,7 @@ function shed!(farm)
 
     for shedder in shedders
       farm.animals.bacteria[shedder].days_exposed = 1
-      farm.animals.status[shedder] % 2 == 0 ? farm.animals.bacteria[shedder].total_status = 4 : farm.animals.bacteria[shedder].total_status = 3
+      farm.animals.status[shedder] % 2 == 0 ? farm.animals.bacteria[shedder]. status = 4 : farm.animals.bacteria[shedder]. status = 3
   end
 
   notshedders = findall((farm.animals.status .== 5 .|| farm.animals.status .== 6) .&& farm.animals.stress .== false)
@@ -746,10 +763,9 @@ function set_dry!(farm, dryoffs)
 end
 
 function  run_submodel!(farm)
-subs = findall(farm.animals.bacteria .!== nothing .&& farm.animals.stage .!= 10 .&& farm.animals.status .!= 0)
-
- Threads.@threads for sub in subs
-  bact_step!(farm.animals.bacteria[sub])
+subs = findall( farm.animals.stage .!= 10 .&& farm.animals.status .> 0)
+for sub in subs
+  #animal_step!(farm.animals.bacteria[sub])
 end
 
 
@@ -813,10 +829,10 @@ function recovery!(farm)
     farm.animals.days_recovered[recover] = 1  
     if farm.animals.bernoulli[recover] < farm.varparms.carrier_prob[1]
       farm.animals.status[recover] % 2 == 0 ? farm.animals.status[recover] = 6 : farm.animals.status[recover] = 5
-      farm.animals.status[recover] % 2 == 0 ? farm.animals.bacteria[recover].total_status = 8 : farm.animals.bacteria[recover].total_status = 7
+      farm.animals.status[recover] % 2 == 0 ? farm.animals.bacteria[recover]. status = 8 : farm.animals.bacteria[recover]. status = 7
     else
       farm.animals.status[recover] % 2 == 0 ? farm.animals.status[recover] = 6 : farm.animals.status[recover] = 5
-      farm.animals.status[recover] % 2 == 0 ? farm.animals.bacteria[recover].total_status = 8 : farm.animals.bacteria[recover].total_status = 7
+      farm.animals.status[recover] % 2 == 0 ? farm.animals.bacteria[recover]. status = 8 : farm.animals.bacteria[recover]. status = 7
     end
   end
 
@@ -860,7 +876,7 @@ function farm_step!(farm)
   animal_transmission!(farm)
 
   status!(farm)
-  run_submodel!(farm)
+ # run_submodel!(farm)
 
 
   count_animals!(farm)
@@ -872,7 +888,7 @@ farm = makeFarm()
 @time farm_step!(farm)
 
  function runfarm!(farm)
-    [farm_step!(farm) for i in 1:3650]
+    [farm_step!(farm) for i in 1:3640]
 end
 
 @time runfarm!(farm)
