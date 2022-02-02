@@ -430,6 +430,5 @@ end
     
 
 
- @btime bact_step!(bacterialModel)
 
 

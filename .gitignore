@@ -250,3 +250,6 @@ src/runs/01_18_22/Split simrun_vacc_7.jld2
 src/runs/01_18_22/Split simrun_vacc_8.jld2
 src/runs/01_18_22/Split simrun_vacc_9.jld2
 src/runs/01_18_22/Split simrun_vacc_10.jld2
+src/neighbours.csv
+.gitignore
+src/sims.csv

@@ -30,7 +30,7 @@ end
 
 function makeAnimal(;
     id::Int = 1,
-    status::Int = 1,
+    status::Int = 0,
     step::Int = 0,
     days_exposed::Int = 0,
     days_treated::Int = 0,
@@ -173,16 +173,17 @@ function bact_repopulate!(animal)
 
     dead = findall(animal.colonies.status .== 10)
 
-    for i in dead
-        competing_neighbour = animal.colonies.competing_neighbour[i]
+  Threads.@threads  for i in dead
+        competing_neighbour = animal.colonies.neighbours[i][rand(1:length(animal.colonies.neighbours[i]))]
+
         animal.colonies.status[competing_neighbour] ==  10 && continue
-        if animal.days_treated != 0 && animal.total_status ≤ 1
+        if animal.days_treated != 0 && animal.status ≤ 1
             rand(animal.rng) < 0.5 && return
             animal.colonies.status[competing_neighbour] != 2 && return
             animal.colonies.status[i] = 2
             animal.colonies.processed[i] = true
             animal.colonies.fitness[i] = animal.colonies.fitness[competing_neighbour]
-        elseif animal.days_treated == 0 && animal.total_status ≤ 1
+        elseif animal.days_treated == 0 && animal.status ≤ 1
             rand(animal.rng) < 0.5 && return
             animal.colonies.status[i] = animal.colonies.status[competing_neighbour]
             animal.colonies.processed[i] = true
@@ -220,10 +221,10 @@ end
 
 function bact_fitness!(animal)
 
-   # fitness_competition = findall(animal.colonies.fitness .< animal.colonies.neighbour_fitness)
+    fitness_competition = findall(animal.colonies.fitness .< animal.colonies.neighbour_fitness)
 
     for competitor in fitness_competition
-        competing_neighbour = animal.colonies.competing_neighbour[competitor]
+        competing_neighbour = animal.colonies.neighbours[competitor][rand(1:length(animal.colonies.neighbours[competitor]))]
        animal.colonies.fitness[competitor] > animal.colonies.fitness[competing_neighbour] && continue
         animal.colonies.status[competitor] = animal.colonies.status[competing_neighbour]
         animal.colonies.fitness[competitor] = animal.colonies.fitness[competing_neighbour]
@@ -237,12 +238,15 @@ function bact_mstep!(animal)
     animal.colonies.processed .= false
     animal.step += 1
 
+  #   transform!(animal.colonies, [:competing_neighbour, :neighbours] => ByRow((a,b) -> a = b[rand(1:length(b))]))
+  #   transform!(animal.colonies, [:neighbour_fitness, :competing_neighbour] => ByRow((a,b)-> a =  b == 0 ? 0 : animal.colonies.fitness[b]))
 
 
-      for id in animal.colonies.id
-        animal.colonies.competing_neighbour[id] =  animal.colonies.neighbours[id][rand(1:length(animal.colonies.neighbours[id]))]
+
+#=        for id in eachindex(animal.colonies.id)
+        animal.colonies.competing_neighbour[id] = animal.colonies.neighbours[id][rand(1:length(animal.colonies.neighbours[id]))]
         animal.colonies.neighbour_fitness[id] = animal.colonies.fitness[animal.colonies.competing_neighbour[id]]
-       end
+       end    =#
 
 end
 
@@ -252,7 +256,7 @@ function bact_exposed!(animal)
     to_process = findall(animal.colonies.processed .== false)
 
     if animal.days_exposed == 1
-        for id  in to_process
+     Threads.@threads   for id  in to_process
             id % 3 != 0 && continue
             animal.colonies.processed[id] == true && continue
             if animal.status == 3
@@ -264,8 +268,8 @@ function bact_exposed!(animal)
             end
         end
     elseif animal.days_exposed > 1
-        for id in to_process
-            competing_neighbour = animal.colonies.competing_neighbour[id]
+      Threads.@threads  for id in to_process
+            competing_neighbour = animal.colonies.neighbours[id][rand(1:length(animal.colonies.neighbours[id]))]
             animal.colonies.status[id] != 1 || animal.colonies.status[id] != 2 && continue
             animal.colonies.processed[id] == true && continue
             animal.colonies.status[competing_neighbour] = animal.colonies.status[id]
@@ -280,9 +284,8 @@ function bact_recovery!(animal)
     animal.days_recovered == 0 && return
     animal.status != 7 || animal.status != 8 && return
 
-    recoveries = findall(animal.colonies.status .== 1 .|| animal.colonies.status .== 2)
-
-    for recovery in recoveries
+   # recoveries = 
+ Threads.@threads   for recovery in findall(animal.colonies.status .== 1 .|| animal.colonies.status .== 2)
         rand(animal.rng) > ℯ^(-animal.days_recovered/20) && continue
         animal.colonies.status[recovery] = 0
         animal.colonies.processed[recovery] = true
