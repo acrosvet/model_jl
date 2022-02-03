@@ -173,7 +173,7 @@ function bact_repopulate!(animal)
 
     dead = findall(animal.colonies.status .== 10)
 
-  Threads.@threads  for i in dead
+     for i in dead
         competing_neighbour = animal.colonies.neighbours[i][rand(1:length(animal.colonies.neighbours[i]))]
 
         animal.colonies.status[competing_neighbour] ==  10 && continue
@@ -251,12 +251,12 @@ function bact_mstep!(animal)
 end
 
 function bact_exposed!(animal)
-    animal.status != 3 || animal.status != 4 && return
+    animal.status != 3 && animal.status != 4 && return
     animal.days_exposed == 0 && return
     to_process = findall(animal.colonies.processed .== false)
 
     if animal.days_exposed == 1
-     Threads.@threads   for id  in to_process
+         for id  in to_process
             id % 3 != 0 && continue
             animal.colonies.processed[id] == true && continue
             if animal.status == 3
@@ -268,7 +268,7 @@ function bact_exposed!(animal)
             end
         end
     elseif animal.days_exposed > 1
-      Threads.@threads  for id in to_process
+         for id in to_process
             competing_neighbour = animal.colonies.neighbours[id][rand(1:length(animal.colonies.neighbours[id]))]
             animal.colonies.status[id] != 1 || animal.colonies.status[id] != 2 && continue
             animal.colonies.processed[id] == true && continue
@@ -285,7 +285,7 @@ function bact_recovery!(animal)
     animal.status != 7 || animal.status != 8 && return
 
    # recoveries = 
- Threads.@threads   for recovery in findall(animal.colonies.status .== 1 .|| animal.colonies.status .== 2)
+     for recovery in findall(animal.colonies.status .== 1 .|| animal.colonies.status .== 2)
         rand(animal.rng) > ℯ^(-animal.days_recovered/20) && continue
         animal.colonies.status[recovery] = 0
         animal.colonies.processed[recovery] = true
@@ -295,13 +295,13 @@ function bact_recovery!(animal)
 end
 
 
-function animal_step!(animal)
+function bact_step!(animal)
     bact_mstep!(animal)
+    bact_exposed!(animal)
     bact_treatment!(animal)
     bact_recovery!(animal)
     bact_repopulate!(animal)
     bact_carrier!(animal)
     bact_fitness!(animal)
-    bact_exposed!(animal)
     count_colonies!(animal)
 end

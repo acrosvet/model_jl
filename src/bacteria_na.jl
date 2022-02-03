@@ -391,7 +391,7 @@ Immune response to pathogenic bacteria
 function bact_recovery!(bacterialModel, colony)
     colony.processed == true && return
     bacterialModel.days_recovered == 0 && return
-    colony.status != 7 && colony.status != 8 && return
+    colony.status ∉ [7,8] && return
     rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_recovered/20) && return
     colony.status = 0
     colony.processed = true
