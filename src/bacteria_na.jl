@@ -157,7 +157,7 @@ function initialiseBacteria(;
             pos = CartesianIndices(colonies)[i]
             status = i % 2 == 0 ? 2 : 0
             status = i % 200 == 0 ? 2 : status
-            fitness = rand(bacterialModel.rng, 0.95:0.001:0.99)
+            fitness = rand(bacterialModel.rng, 0.97:0.001:0.99)
             neighbours = get_neighbours(pos)
             processed = false
             colony = BacterialAgent(id, pos, status, fitness, neighbours, processed)
@@ -299,12 +299,12 @@ function bact_carrier!(bacterialModel, colony)
     bacterialModel.days_carrier != 1 && return
 
     if total_status == 6
-            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.30) && return 
+            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.10) && return 
             colony.status = 2
             colony.processed = true
             colony.fitness = rand(bacterialModel.rng, 0.95:0.001:0.99)
     elseif total_status == 5
-            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.30) && return 
+            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.10) && return 
             colony.status = 1
             colony.processed = true
             colony.fitness = rand(bacterialModel.rng, 0.98:0.001:0.99)
@@ -360,8 +360,8 @@ Bacterial colonies for exposed animals
 """
 function bact_exposed!(bacterialModel, colony)
     colony.processed == true && return
-
-    bacterialModel.total_status != 3 && bacterialModel.total_status != 4 && return
+    bacterialModel.total_status ∉ [3,4] && return
+    #bacterialModel.total_status != 3 || bacterialModel.total_status != 4 && return
     
     if bacterialModel.days_exposed == 1 
         #3 = exposed pathogenic
@@ -382,7 +382,8 @@ function bact_exposed!(bacterialModel, colony)
                 competing_neighbour[2] > 33 && return
                # check_bounds(competing_neighbour, 1, 33) == false && return
                 competing_neighbour = bacterialModel.colonies[competing_neighbour]
-                colony.status != 1 && colony.status != 2 && return
+                colony.status ∉ [1,2] && return
+               # colony.status != 1 && colony.status != 2 && return
                     competing_neighbour.status = colony.status
                     competing_neighbour.processed = true
     end
@@ -395,7 +396,8 @@ Immune response to pathogenic bacteria
 function bact_recovery!(bacterialModel, colony)
     colony.processed == true && return
     bacterialModel.days_recovered == 0 && return
-    colony.status != 7 && colony.status != 8 && return
+    colony.status ∉ [1,2] && return
+    #colony.status != 1 || colony.status != 2 && return
     rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_recovered/20) && return
     colony.status = 0
     colony.processed = true
