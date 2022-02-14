@@ -299,12 +299,12 @@ function bact_carrier!(bacterialModel, colony)
     bacterialModel.days_carrier != 1 && return
 
     if total_status == 6
-            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.10) && return 
+            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.01:0.01:0.10) && return 
             colony.status = 2
             colony.processed = true
             colony.fitness = rand(bacterialModel.rng, 0.95:0.001:0.99)
     elseif total_status == 5
-            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.1:0.01:0.10) && return 
+            rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.01:0.01:0.10) && return 
             colony.status = 1
             colony.processed = true
             colony.fitness = rand(bacterialModel.rng, 0.98:0.001:0.99)
@@ -366,7 +366,7 @@ function bact_exposed!(bacterialModel, colony)
     if bacterialModel.days_exposed == 1 
         #3 = exposed pathogenic
         #4 = exposed resistant
-        colony.id % 3 != 0 && return
+        colony.id % 20 != 0 && return
         if bacterialModel.total_status == 3 
                     colony.status = 1
                     colony.processed = true
@@ -375,17 +375,23 @@ function bact_exposed!(bacterialModel, colony)
                     colony.processed = true
         end
     elseif bacterialModel.days_exposed > 1
-                competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-                competing_neighbour[1] < 1  && return
-                competing_neighbour[1] > 33 && return
-                competing_neighbour[2] < 1 && return
-                competing_neighbour[2] > 33 && return
+        for neighbour in colony.neighbours
+                colony.status ∉ [1,2] && continue
+                competing_neighbour = neighbour
+                competing_neighbour[1] < 1  && continue
+                competing_neighbour[1] > 33 && continue
+                competing_neighbour[2] < 1 && continue
+                competing_neighbour[2] > 33 && continue
                # check_bounds(competing_neighbour, 1, 33) == false && return
                 competing_neighbour = bacterialModel.colonies[competing_neighbour]
-                colony.status ∉ [1,2] && return
+                
+                competing_neighbour.status != 0 && continue
+                colony.fitness < competing_neighbour.fitness && continue
+                #rand(bacterialModel.rng) < 0.5 && continue
                # colony.status != 1 && colony.status != 2 && return
                     competing_neighbour.status = colony.status
                     competing_neighbour.processed = true
+        end
     end
 end
 
@@ -398,7 +404,7 @@ function bact_recovery!(bacterialModel, colony)
     bacterialModel.days_recovered == 0 && return
     colony.status ∉ [1,2] && return
     #colony.status != 1 || colony.status != 2 && return
-    rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_recovered/20) && return
+    rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_recovered/2) && return
     colony.status = 0
     colony.processed = true
 end

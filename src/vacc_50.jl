@@ -18,20 +18,20 @@ Threads.@threads for i in 1:times
     optimal_lactating = Int16(273),
     treatment_prob = Float32(0.0),
     treatment_length = Int8(3),
-    carrier_prob = Float32(0.05),
+    carrier_prob = Float32(0.01),
     timestep = Int16(0),
-    density_lactating = Int8(10),
-    density_dry = Int8(15),
+    density_lactating = Int8(6),
+    density_dry = Int8(7),
     density_calves = Int8(3),
     date = Date(2021,7,2),
-    vacc_rate = Float32(0.0),
+    vacc_rate = Float32(0.5),
     fpt_rate = Float32(0.0),
     prev_r = Float32(0.01),
     prev_p = Float32(0.01),
     prev_cr = Float32(0.05),
     prev_cp = Float32(0.05),
     vacc_efficacy = Float32(0.1)
-  );
+  )
 
   [animal_step!(animalModel) for j in 1:days]
   results[i] = animalModel.sim
@@ -47,4 +47,4 @@ nthreads = Threads.nthreads()
 
 println("Ran a hundred times on $nthreads threads !")
 
-@save "unparm_1000.jld2" runs
+@save "vacc_1000.jld2" runs

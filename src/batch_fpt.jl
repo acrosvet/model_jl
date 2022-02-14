@@ -1,6 +1,6 @@
 include("./animal_na.jl");
 
-runtype = "split_vacc_50_1000"
+runtype = "batch_fpt_50_1000"
 
 function run_sims!(times, days)
 
@@ -10,8 +10,8 @@ results = Array{AnimalData}(undef, times)
 
 Threads.@threads for i in 1:times
 	
-animalModel = initialiseSplit(
-  farmno = Int16(1),
+animalModel = initialiseBatch(
+  farmno = Int8(1),
   farm_status = Int8(2),
   system = Int8(2),
   msd = Date(2021,9,24),
@@ -27,7 +27,7 @@ animalModel = initialiseSplit(
   density_calves = Int8(3),
   date = Date(2021,7,2),
   vacc_rate = Float32(0.0),
-  fpt_rate = Float32(0.0),
+  fpt_rate = Float32(0.5),
   prev_r = Float32(0.01),
   prev_p = Float32(0.01),
   prev_cr = Float32(0.04),

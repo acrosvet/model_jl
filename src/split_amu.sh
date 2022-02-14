@@ -1,20 +1,19 @@
 #!/bin/bash
-#SBATCH -p physical
-#SBATCH --time=06:30:00
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
+#SBATCH -N 1 
+#SBATCH -n 1 
+#SBATCH -p snowy
+#SBATCH --threads-per-core=1
 #SBATCH --cpus-per-task=16
+#SBATCH --time=10:10:00
+#SBATCH --mem=250G
 
 
 
 module purge
 module load julia/1.6.3
-julia  --threads 16 /data/gpfs/projects/punim0549/acrosbie/model_main/split_amu.jl
 
+export JULIA_NUM_THREADS=16
 
-
-
-
-
+julia /data/gpfs/projects/punim0549/acrosbie/model_main/split_amu.jl
 
 

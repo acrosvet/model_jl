@@ -201,3 +201,56 @@ src/unparm_split.jl
 Split simrun_unparm_1.jld2
 simrun_unparm1.jld2
 simrun_mainthread1.jld2
+src/neighbours.csv
+src/sims.csv
+src/export/plots/Number recovered Split (amu) (10 runs).png
+src/export/plots/Number recovered Split (unparm) (10 runs).png
+src/export/plots/Number recovered Split (vacc) (10 runs).png
+src/export/plots/Number recovered y3 Split (amu) (10 runs).png
+src/export/plots/Number recovered y3 Split (unparm) (10 runs).png
+src/export/plots/Number recovered y3 Split (vacc) (10 runs).png
+src/export/plots/Percentage infected Split (amu) (10 runs).png
+src/export/plots/Percentage infected Split (unparm) (10 runs).png
+src/export/plots/Percentage infected Split (vacc) (10 runs).png
+src/export/plots/Percentage infected y3 Split (amu) (10 runs).png
+src/export/plots/Percentage infected y3 Split (unparm) (10 runs).png
+src/export/plots/Percentage infected y3 Split (vacc) (10 runs).png
+src/export/plots/Percentage susceptible Split (amu) (10 runs).png
+src/export/plots/Percentage susceptible Split (unparm) (10 runs).png
+src/export/plots/Percentage susceptible Split (vacc) (10 runs).png
+src/export/plots/Percentage susceptible y3 Split (amu) (10 runs).png
+src/export/plots/Percentage susceptible y3 Split (unparm) (10 runs).png
+src/export/plots/Percentage susceptible y3 Split (vacc) (10 runs).png
+src/runs/01_11_22/fpt_1.jld2
+src/runs/01_11_22/vacc_1.jld2
+src/runs/01_18_22/simrun_mainthread2.jld2
+src/runs/01_18_22/simrun_mainthread3.jld2
+src/runs/01_18_22/simrun_mainthread4.jld2
+src/runs/01_18_22/simrun_mainthread5.jld2
+src/runs/01_18_22/simrun_mainthread6.jld2
+src/runs/01_18_22/simrun_mainthread7.jld2
+src/runs/01_18_22/simrun_mainthread8.jld2
+src/runs/01_18_22/simrun_mainthread9.jld2
+src/runs/01_18_22/simrun_mainthread10.jld2
+src/runs/01_18_22/Split simrun_amu_1.jld2
+src/runs/01_18_22/Split simrun_amu_2.jld2
+src/runs/01_18_22/Split simrun_amu_3.jld2
+src/runs/01_18_22/Split simrun_amu_4.jld2
+src/runs/01_18_22/Split simrun_amu_5.jld2
+src/runs/01_18_22/Split simrun_amu_6.jld2
+src/runs/01_18_22/Split simrun_amu_7.jld2
+src/runs/01_18_22/Split simrun_amu_8.jld2
+src/runs/01_18_22/Split simrun_amu_9.jld2
+src/runs/01_18_22/Split simrun_amu_10.jld2
+src/runs/01_18_22/Split simrun_vacc_1.jld2
+src/runs/01_18_22/Split simrun_vacc_2.jld2
+src/runs/01_18_22/Split simrun_vacc_3.jld2
+src/runs/01_18_22/Split simrun_vacc_4.jld2
+src/runs/01_18_22/Split simrun_vacc_5.jld2
+src/runs/01_18_22/Split simrun_vacc_6.jld2
+src/runs/01_18_22/Split simrun_vacc_7.jld2
+src/runs/01_18_22/Split simrun_vacc_8.jld2
+src/runs/01_18_22/Split simrun_vacc_9.jld2
+src/runs/01_18_22/Split simrun_vacc_10.jld2
+src/output/vacc_1000.jld2
+output/vacc_1000.jld2

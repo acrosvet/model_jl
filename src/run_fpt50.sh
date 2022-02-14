@@ -4,8 +4,8 @@
 #SBATCH -p snowy
 #SBATCH --threads-per-core=1
 #SBATCH --cpus-per-task=16
-#SBATCH --time=10:10:00
-#SBATCH --mem=250G
+#SBATCH --time=14:10:00
+#SBATCH --mem=200G
 
 
 
@@ -14,6 +14,12 @@ module load julia/1.6.3
 
 export JULIA_NUM_THREADS=16
 
-julia /data/gpfs/projects/punim0549/acrosbie/model_main/split_vacc.jl
+julia /data/gpfs/projects/punim0549/acrosbie/model_main/fpt_50.jl
+
+
+
+
+
+
 
 
