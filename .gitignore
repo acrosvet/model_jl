@@ -7,6 +7,7 @@ export/.~lock.animal_model_run.csv#
 export/animal_model_run.csv
 export/farm_1-animal_model_run.csv
 export/heifers.csv
+
 export/archived_runs/100921_animal_model_run.csv
 export/split_model_run.csv
 export/batch_model_run.csv
@@ -254,3 +255,33 @@ src/runs/01_18_22/Split simrun_vacc_9.jld2
 src/runs/01_18_22/Split simrun_vacc_10.jld2
 src/output/vacc_1000.jld2
 output/vacc_1000.jld2
+src/sensitivity_spring.csv
+src/unparm_1000.jld2
+src/vacc_1000.jld2
+src/export/.~lock.transmissions.csv#
+src/export/transmissions.csv
+src/export/plots/2022-02-18 Number recovered Spring, P(FPT) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Number recovered Spring, P(VACC) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Number recovered Spring, unparametrised (1000 runs).png
+src/export/plots/2022-02-18 Percentage car p Spring, P(FPT) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage car p Spring, P(VACC) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage car p Spring, unparametrised (1000 runs).png
+src/export/plots/2022-02-18 Percentage car r  Spring, P(FPT) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage car r  Spring, P(VACC) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage car r  Spring, unparametrised (1000 runs).png
+src/export/plots/2022-02-18 Percentage carrier Spring, P(FPT) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage carrier Spring, P(VACC) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage carrier Spring, unparametrised (1000 runs).png
+src/export/plots/2022-02-18 Percentage infected Spring, P(FPT) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage infected Spring, P(VACC) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage infected Spring, unparametrised (1000 runs).png
+src/export/plots/2022-02-18 Percentage pathogenic Spring, P(FPT) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage pathogenic Spring, P(VACC) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage pathogenic Spring, unparametrised (1000 runs).png
+src/export/plots/2022-02-18 Percentage resistant Spring, P(FPT) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage resistant Spring, P(VACC) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage resistant Spring, unparametrised (1000 runs).png
+src/export/plots/2022-02-18 Percentage susceptible Spring, P(FPT) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage susceptible Spring, P(VACC) = 0.5 (1000 runs).png
+src/export/plots/2022-02-18 Percentage susceptible Spring, unparametrised (1000 runs).png
+src/fpt_1000.jld2
