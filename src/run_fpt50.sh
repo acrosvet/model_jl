@@ -4,7 +4,7 @@
 #SBATCH -p snowy
 #SBATCH --threads-per-core=1
 #SBATCH --cpus-per-task=16
-#SBATCH --time=14:10:00
+#SBATCH --time=24:10:00
 #SBATCH --mem=200G
 
 

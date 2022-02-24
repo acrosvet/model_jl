@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH -N 1 
 #SBATCH -n 1 
-#SBATCH -p snowy
+#SBATCH -p physical
 #SBATCH --threads-per-core=1
 #SBATCH --cpus-per-task=16
-#SBATCH --time=14:10:00
+#SBATCH --time=24:10:00
 #SBATCH --mem=250G
 
 

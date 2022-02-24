@@ -9,20 +9,20 @@ results = Array{AnimalData}(undef, times)
 Threads.@threads for i in 1:times
 	
   animalModel = initialiseSpring(
-    farmno = Int8(1),
-    farm_status = Int8(2),
-    system = Int8(1),
+    farmno = Int(1),
+    farm_status = Int(2),
+    system = Int(1),
     msd = Date(2021,9,24),
-    seed = Int8(42),
-    optimal_stock = Int16(273),
-    optimal_lactating = Int16(273),
+    seed = Int(42),
+    optimal_stock = Int(273),
+    optimal_lactating = Int(273),
     treatment_prob = Float32(0.5),
-    treatment_length = Int8(3),
-    carrier_prob = Float32(0.01),
-    timestep = Int16(0),
-    density_lactating = Int8(6),
-    density_dry = Int8(7),
-    density_calves = Int8(3),
+    treatment_length = Int(4),
+    carrier_prob = Float32(0.15),
+    timestep = Int(0),
+    density_lactating = 50,
+    density_dry = 250,
+    density_calves = 3,
     date = Date(2021,7,2),
     vacc_rate = Float32(0.0),
     fpt_rate = Float32(0.0),
@@ -31,7 +31,8 @@ Threads.@threads for i in 1:times
     prev_cr = Float32(0.05),
     prev_cp = Float32(0.05),
     vacc_efficacy = Float32(0.1)
-  )
+  );
+
 
   [animal_step!(animalModel) for j in 1:days]
   results[i] = animalModel.sim
