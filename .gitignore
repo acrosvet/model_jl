@@ -1285,3 +1285,10 @@ src/sense/sensitivity_run997.csv
 src/sense/sensitivity_run998.csv
 src/sense/sensitivity_run999.csv
 src/sense/sensitivity_run1000.csv
+src/export/10run.jld2
+src/export/complete_sims_1.jld2
+src/export/complete_sims_2.jld2
+src/export/complete_sims.jld2
+src/export/complete_transmissions_1.jld2
+src/export/complete_transmissions_2.jld2
+src/export/complete_transmissions.jld2
