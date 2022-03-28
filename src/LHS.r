@@ -35,18 +35,23 @@ lhs_design$density_calves = round(lhs_design$density_calves)
 lhs_design$optimal_stock = round(rtruncnorm(runs, a = 80, b = 1500, mean = 273, sd = 500))
 lhs_design$pen_decon = replicate(runs, ifelse(runif(1) < 0.5, TRUE, FALSE))
 lhs_design$status = replicate(runs, ifelse(runif(1)<0.05, 2, 1))
-lhs_design$calving_system = replicate(runs,
-      case_when(
-        runif(1) < 0.05 ~ 3,
-        runif(1) < 0.3 ~ 1,
-        runif(1) > 0.35 ~ 2
-      )
-      )
-lhs_design$calving_system = replace_na(lhs_design$calving_system, 2)
+lhs_design$calving_system = 2
 
-sensitivity_args <- as_tibble(lhs_design) %>% mutate(run = row_number()) %>% mutate(id = row_number())
 
-write_csv(sensitivity_args, "./sensitivity_spring.csv")
+sensitivity_args <- as_tibble(lhs_design) %>% 
+mutate(run = row_number()) %>% 
+mutate(id = row_number()) %>%
+mutate(prev_r = ifelse(status == 2, 0.01, 0.00),
+       prev_p = ifelse(status == 1, 0.02, 0.01),
+       prev_cr = ifelse(status == 2, 0.05, 0.00),
+       prev_cp = ifelse(status == 1, 0.10, 0.05),
+       density_dry = 250,
+       density_lactating = 50,
+       vacc_efficacy = 0.1
+        ) %>% 
+mutate(seq = row_number())
+
+write_csv(sensitivity_args, "./sensitivity_split.csv")
 
 read_csv("./sensitivity_spring.csv")
 
@@ -68,3 +73,5 @@ trans %>%
   add_trace(x = ~step, y = ~mm, type = 'bar', name = 'milking') %>%
   add_trace(x = ~step, y = ~ee, type = 'bar', name = 'environmental')%>%
   layout(barmode = 'stack')  
+
+read_csv("./sensitivity_spring.csv") %>% mutate(seq = row_number()) %>% write_csv(., "./sensitivity_spring.csv")

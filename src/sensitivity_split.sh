@@ -14,6 +14,6 @@ module load julia/1.6.3
 
 export JULIA_NUM_THREADS=16
 
-julia /data/gpfs/projects/punim0549/acrosbie/model_main/sensitivity_spring.jl
+julia /data/gpfs/projects/punim0549/acrosbie/model_main/sensitivity_split.jl
 
 

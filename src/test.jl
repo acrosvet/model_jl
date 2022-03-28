@@ -40,8 +40,7 @@ function initialiseFarms(;
  
     numfarms = length(svars.optimal_stock)
 
-    #space = DataFrame(collect(edges(static_scale_free(250,1000,3))))
-    space = DataFrame(CSV.File("./network_structure.csv"))
+    space = DataFrame(collect(edges(static_scale_free(numfarms,numfarms,3))))
     
     movements = DataFrame(
         date = Date(0),
@@ -165,8 +164,8 @@ function initialiseFarms(;
 
 
      function day_trader!(farmModel)
-        farmModel.timestep % 50 != 0 && return
-        rand(farmModel.rng) > 0.5 && return
+        farmModel.timestep % 7 != 0 && return
+        rand(farmModel.rng) > 0.05 && return
        
         #Broker trades
 
@@ -220,7 +219,7 @@ function initialiseFarms(;
     end
 
      function farm_step!(farmModel)
-        for farm in farmModel.farms
+        Threads.@threads for farm in farmModel.farms
             farm.traded = false
             farm.trades_from = []
             farm.trades_to = []
@@ -232,9 +231,11 @@ function initialiseFarms(;
 
         day_trader!(farmModel)
 
-        Threads.@threads for farm in farmModel.farms
-          animal_step!(farm.herd)
-        end
+        #animal_step!.(farmModel.farms.herd)
+
+         Threads.@threads for farm in farmModel.farms
+           animal_step!(farm.herd)
+        end 
 
         export_statuses!(farmModel)
 
@@ -246,10 +247,10 @@ function initialiseFarms(;
     end
 
 function sensitivity(numruns, numdays)
-     for i in 1:10
+     for i in 1:numruns
         time = i 
-        svars = DataFrame(CSV.File("./sense/sensitivity_args_$time.csv"))
-        #svars = first(DataFrame(CSV.File("./sense/sensitivity_args_1.csv")),10)
+        #svars = DataFrame(CSV.File("./sense/sensitivity_args_$time.csv"))
+        svars = DataFrame(CSV.File("./sense/sensitivity_args_1.csv"))
         @time farmModel = initialiseFarms(svars = svars, run = i);
 
         @time [farm_step!(farmModel) for i in 1:numdays]
@@ -264,10 +265,11 @@ function sensitivity(numruns, numdays)
 end
 
 
-@time farmModel = sensitivity(100,3651)    
+@benchmark sensitivity(1,3651)    
 
 
 
     
+
 
 

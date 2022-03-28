@@ -1,6 +1,7 @@
 # Define agent =====================================================================================
 
 using Random: MersenneTwister
+
 #using FLoops
 
 
@@ -8,11 +9,12 @@ using Random: MersenneTwister
 Agent type - BacterialAgent
 """
 mutable struct BacterialAgent 
-    id::Int
-    pos::CartesianIndex{2}
-    status::Int # 0 = Susceptible, 1 = Pathogenic, 2 = Resistant, 3 = Exposed pathogenic, 4 = Exposed resistant, 5 = Carrier pathogenic, 6 = Carrier resistant, 7 =  Recovered pathogenic, 8 = Recovered resistant
+    id::Int16
+    #pos::CartesianIndex{2}
+    status::Int8 # 0 = Susceptible, 1 = Pathogenic, 2 = Resistant, 3 = Exposed pathogenic, 4 = Exposed resistant, 5 = Carrier pathogenic, 6 = Carrier resistant, 7 =  Recovered pathogenic, 8 = Recovered resistant
     fitness::Float16
-    neighbours::Array{CartesianIndex}
+    #neighbours::SVector
+    neighbours::Vector{Int16}
     processed::Bool
 end
 
@@ -20,30 +22,29 @@ end
 Container for model
 """
 mutable struct BacterialModel
-    id::Int
-    timestep::Int
     pop_r::Float16
     pop_s::Float16
     pop_p::Float16
     pop_d::Float16
-    nbact::Int
-    colonies::Array{BacterialAgent}
-    total_status::Int
-    days_treated::Int
-    days_exposed::Int
-    days_recovered::Int
-    days_carrier::Int
+    colonies::Vector{BacterialAgent}
+    total_status::Int16
+    days_treated::Int16
+    days_exposed::Int16
+    days_recovered::Int16
+    days_carrier::Int16
     stress::Bool
-    seed::Int
+    seed::Int16
     rng::MersenneTwister
     clinical::Bool
+    #positions::Array{CartesianIndex}
+    #neighbourhood::Array{Vector{Int16}}
 end
 
 # Container for data
 
-mutable struct BacterialData
-    id::Array{Int}
-    timestep::Array{Int}
+ struct BacterialData
+    id::Array{Int16}
+    timestep::Array{Int16}
     pop_r::Array{Float16}
     pop_s::Array{Float16}
     pop_p::Array{Float16}
@@ -77,20 +78,24 @@ end
 get_neighbours()
 return neighbouring elements in a matrix 
 """
-function get_neighbours(pos)
+function get_neighbours(pos, positions)
 
-    surrounding = Array{CartesianIndex}(undef, 8)    
+    surrounding = Array{Union{Int16, Nothing}}(nothing, 8)    
 
-    surrounding[1] = pos + CartesianIndex(-1,1)
-    surrounding[2] = pos + CartesianIndex(0,1)
-    surrounding[3] = pos + CartesianIndex(1,1)
-    surrounding[4] = pos + CartesianIndex(1,0)
-    surrounding[5] = pos + CartesianIndex(1,-1)
-    surrounding[6] = pos + CartesianIndex(0,-1)
-    surrounding[7] = pos + CartesianIndex(-1,-1)
-    surrounding[8] = pos + CartesianIndex(-1,0)
+    surrounding[1] = findfirst(isequal(pos + CartesianIndex(-1,1)), positions)
+    surrounding[2] = findfirst(isequal(pos + CartesianIndex(0,1)), positions)
+    surrounding[3] = findfirst(isequal(pos + CartesianIndex(1,1)), positions)
+    surrounding[4] = findfirst(isequal(pos + CartesianIndex(1,0)), positions)
+    surrounding[5] = findfirst(isequal(pos + CartesianIndex(1,-1)), positions)
+    surrounding[6] = findfirst(isequal(pos + CartesianIndex(0,-1)), positions)
+    surrounding[7] = findfirst(isequal(pos + CartesianIndex(-1,-1)), positions)
+    surrounding[8] = findfirst(isequal(pos + CartesianIndex(-1,0)), positions)
 
-
+    surrounding = surrounding[surrounding.!=nothing]
+    #surrounding = Tuple(surrounding)
+   # @info surrounding
+    #surrounding = SVector(surrounding)
+    #@info typeof(surrounding)
     return surrounding
    
 end
@@ -98,89 +103,88 @@ end
 # Initialise agents ==================================================================================
 
 function initialiseBacteria(;
-    animalno::Int = AnimalAgent.id,
-    nbact::Int = Int(1000),
-    total_status::Int = Int(0),
-    days_treated::Int = Int(0),
-    days_exposed::Int = Int(0),
-    days_recovered::Int = Int(0),
+    total_status::Int16 = Int16(0),
+    days_treated::Int16 = Int16(0),
+    days_exposed::Int16 = Int16(0),
+    days_recovered::Int16 = Int16(0),
     stress::Bool = false,
-    seed::Int = Int(42),
-    timestep::Int = Int(0),
+    seed::Int16 = Int16(42),
     rng::MersenneTwister = MersenneTwister(seed))
 
 
     # Agent space =========================================================================================
 
+    neighbourhood = Vector{Int16}(undef, 8) 
+    neighbourhood = fill(neighbourhood, 33*33)
 
-
-    colonies = Array{BacterialAgent}(undef, 33,33)
+    colonies = Vector{BacterialAgent}(undef, 33*33)
 
     #Create the initial model properties ==========================================================================
 
-    pop_r = 0.0
-    pop_s = 0.0
-    pop_p = 0.0
-    pop_d = 0.0 
+    pop_r = Float16(0.0)
+    pop_s = Float16(0.0)
+    pop_p = Float16(0.0)
+    pop_d = Float16(0.0)
     days_carrier = 0
 
 
-    id = animalno
+
 
     clinical = false
-
     #Set up the model
-   bacterialModel = BacterialModel(id, timestep, pop_r, pop_s, pop_p, pop_d, nbact, colonies, total_status, days_treated, days_exposed, days_recovered, days_carrier, stress, seed, rng, clinical)
      
     # Set bacterial fitnesses --------------------------------
-
+    positions3d = CartesianIndices(zeros(33,33))
+    positions = positions3d[:]
 
 # Set up the initial state of the model  
 
     #For pathogenic animals --------------------------
 
-    if bacterialModel.total_status == 1
+    if total_status == 1
         for i in 1:length(colonies)
             id = i
-            pos = CartesianIndices(colonies)[i]
+            pos = CartesianIndices(positions3d)[i]
             status = i % 2 == 0 ? 1 : 0
             status = i % 200 == 0 ? 2 : status
-            fitness = rand(bacterialModel.rng, 0.98:0.001:0.99)
-            neighbours = get_neighbours(pos)
+            fitness = rand(rng, 0.98:0.001:0.99)
+            neighbours = get_neighbours(pos, positions)
             processed = false
-            colony = BacterialAgent(id, pos, status, fitness, neighbours, processed)
+            colony = BacterialAgent(id, status, fitness, neighbours, processed)
             colonies[i] = colony
         end
-
     #For resistant animals ----------------------------
-    elseif bacterialModel.total_status == 2
+    elseif total_status == 2
         for i in 1:length(colonies)
             id = i
-            pos = CartesianIndices(colonies)[i]
+            pos = CartesianIndices(positions3d)[i]
             status = i % 2 == 0 ? 2 : 0
             status = i % 200 == 0 ? 2 : status
-            fitness = rand(bacterialModel.rng, 0.97:0.001:0.99)
-            neighbours = get_neighbours(pos)
+            fitness = Float16(rand(rng, 0.97:0.001:0.99))
+            neighbours = get_neighbours(pos, positions)
             processed = false
-            colony = BacterialAgent(id, pos, status, fitness, neighbours, processed)
+            colony = BacterialAgent(id, status, fitness, neighbours, processed)
             colonies[i] = colony
         end
     else 
         for i in 1:length(colonies)
             id = i
-            pos = CartesianIndices(colonies)[i]
+            pos = CartesianIndices(positions3d)[i]
             status = 0
-            fitness = rand(bacterialModel.rng, 0.98:0.001:0.99)
-            neighbours = get_neighbours(pos)
+            fitness = rand(rng, 0.98:0.001:0.99)
+            neighbours = get_neighbours(pos, positions)
             processed = false
-            colony = BacterialAgent(id, pos, status, fitness, neighbours, processed)
+            colony = BacterialAgent(id, status, fitness, neighbours, processed)
             colonies[i] = colony
         end
     end
 
+    #colonies = Tuple(colonies)
+    #colonies = SVector(colonies)
+    bacterialModel = BacterialModel( pop_r, pop_s, pop_p, pop_d, colonies, total_status, days_treated, days_exposed, days_recovered, days_carrier, stress, seed, rng, clinical)
 
 
-    bacterialModel.colonies = colonies
+    #bacterialModel.colonies = colonies
 
     #Determine the population proportions of each bacterial type
     
@@ -201,7 +205,7 @@ return bacterialModel
 
 end
 
-@time bacterialModel =  initialiseBacteria(animalno = Int(100), nbact = Int(33*33), total_status = Int(2), days_treated = Int(0), days_exposed = Int(0), days_recovered = Int(0), stress = false, seed = Int(42))
+@time bacterialModel =  initialiseBacteria(total_status = Int16(2), days_treated = Int16(0), days_exposed = Int16(0), days_recovered = Int16(0), stress = false, seed = Int16(42));
 
 
 """
@@ -246,11 +250,7 @@ function bact_repopulate!(bacterialModel, colony)
 
     bacterialModel.pop_d == 0 && return
     colony.status != 10 && return
-    competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-    competing_neighbour[1] < 1  && return
-    competing_neighbour[1] > 33 && return
-    competing_neighbour[2] < 1 && return
-    competing_neighbour[2] > 33 && return
+    competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:length(colony.neighbours))]
     competing_neighbour = bacterialModel.colonies[competing_neighbour]
         if bacterialModel.days_treated != 0 && bacterialModel.total_status ≤ 1
             rand(bacterialModel.rng) ≥ 0.5 && return
@@ -315,15 +315,8 @@ Competition between bacterial colonies
 function bact_fitness!(bacterialModel, colony)
     colony.processed == true && return
     colony.status == 0 && return
-    competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:8)]
-
-    competing_neighbour[1] < 1  && return
-    competing_neighbour[1] > 33 && return
-    competing_neighbour[2] < 1 && return
-    competing_neighbour[2] > 33 && return
-
-
-   competing_neighbour = bacterialModel.colonies[competing_neighbour]
+    competing_neighbour = colony.neighbours[rand(bacterialModel.rng,1:length(colony.neighbours))]
+    competing_neighbour = bacterialModel.colonies[competing_neighbour]
 
         colony.fitness > competing_neighbour.fitness && return
         rand(bacterialModel.rng) ≥ 0.5 && return
@@ -370,12 +363,7 @@ function bact_exposed!(bacterialModel, colony)
         for neighbour in colony.neighbours
                 rand(bacterialModel.rng) < 0.5 && continue
                 colony.status ∉ [1,2] && continue
-                competing_neighbour = neighbour
-                competing_neighbour[1] < 1  && continue
-                competing_neighbour[1] > 33 && continue
-                competing_neighbour[2] < 1 && continue
-                competing_neighbour[2] > 33 && continue
-                competing_neighbour = bacterialModel.colonies[competing_neighbour]
+                competing_neighbour = bacterialModel.colonies[neighbour]
                 
                 competing_neighbour.status != 0 && continue
                 colony.fitness < competing_neighbour.fitness && continue
@@ -406,12 +394,7 @@ function bact_subclinical!(bacterialModel, colony)
         for neighbour in colony.neighbours
                 rand(bacterialModel.rng) < 0.25 && continue
                 colony.status ∉ [1,2] && continue
-                competing_neighbour = neighbour
-                competing_neighbour[1] < 1  && continue
-                competing_neighbour[1] > 33 && continue
-                competing_neighbour[2] < 1 && continue
-                competing_neighbour[2] > 33 && continue
-                competing_neighbour = bacterialModel.colonies[competing_neighbour]
+                competing_neighbour = bacterialModel.colonies[neighbour]
                 
                 competing_neighbour.status != 0 && continue
                 colony.fitness < competing_neighbour.fitness && continue

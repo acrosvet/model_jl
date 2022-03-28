@@ -6,17 +6,17 @@ using CSV
 using DataFrames
 using Distributed, SlurmClusterManager 
 addprocs(SlurmManager())
-sensitivity_args = DataFrame(CSV.File("./sensitivity_spring.csv"))
+sensitivity_args = DataFrame(CSV.File("./sensitivity_split.csv"))
 #sensitivity_args = first(sensitivity_args,1)
 
 
 function run_it!(optimal_stock, treatment_prob, density_calves, vacc_rate, fpt_rate, vacc_efficacy, pen_decon, run)
 
 	
-  animalModel = initialiseSpring(
+  animalModel = initialiseSplit(
     farmno = Int16(1),
     farm_status = Int16(2),
-    system = Int16(1),
+    system = Int16(2),
     msd = Date(2021,9,24),
     seed = Int16(42),
     optimal_stock = Int16(optimal_stock),
@@ -75,7 +75,7 @@ function run_it!(optimal_stock, treatment_prob, density_calves, vacc_rate, fpt_r
     current_b3= animalModel.sim.current_b3,
     current_b4= animalModel.sim.current_b4
   )
-  CSV.write("./export/spr_sense $seq.csv", data)
+  CSV.write("./export/split_sense $seq.csv", data)
   
   return animalModel.sim 
   #return animalModel
@@ -111,4 +111,4 @@ nthreads = Threads.nthreads()
 
 println("Ran a sensitivity analysis!")
 
-@save "sensitivityp_1000.jld2" runs
+@save "sensitivitysplit_1000.jld2" runs

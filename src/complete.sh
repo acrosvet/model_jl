@@ -1,11 +1,10 @@
 #!/bin/bash
-#SBATCH -N 1 
-#SBATCH -n 1 
-#SBATCH -p snowy
+#SBATCH --ntasks=1
+#SBATCH -p physical
 #SBATCH --threads-per-core=1
 #SBATCH --cpus-per-task=16
-#SBATCH --time=2:10:00
-#SBATCH --mem=250G
+#SBATCH --time=100:10:00
+#SBATCH --mem=350G
 
 module purge
 module load julia/1.6.3

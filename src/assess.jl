@@ -1,12 +1,16 @@
 
 
-exposed = findall(x-> x.status == 7, animalModel.animals)
+exposed = findall(x-> x.status == 3, animalModel.animals)
 exposed = animalModel.animals[exposed]
 for exposed in exposed
+    exposed.bacteriaSubmodel !== nothing && continue
     #println(exposed.days_infected)
     println(exposed.id)
     println(exposed.pop_p)
     println(exposed.susceptibility)
+    println(exposed.bacteriaSubmodel)
+    @info exposed.days_recovered
+    #end
 end
 
 
@@ -55,3 +59,8 @@ end
 
 
 countmap(carryover.calving_season)
+
+for animal in animalModel.animals
+    @info animalModel.contam_type[animal.pos[3]][animal.pos[1], animal.pos[2]]
+
+end
