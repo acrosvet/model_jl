@@ -4146,3 +4146,12 @@ src/sense/sensitivity_args_1000.csv
 src/sensitivity_batch.csv
 .gitignore
 src/sensitivity_split.csv
+src/export/batch_example.csv
+src/export/batch_infections.csv
+src/export/batch_transmissions.csv
+src/export/split_example.csv
+src/export/split_infections.csv
+src/export/split_transmissions.csv
+src/export/spring_example.csv
+src/export/spring_infections.csv
+src/export/spring_transmissions.csv
