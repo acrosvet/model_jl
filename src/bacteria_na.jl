@@ -217,6 +217,7 @@ function bact_treatment!(bacterialModel, colony)
 
     bacterialModel.days_treated == 0 && return
     colony.status > 1 && return
+    #FIX ---------------------------------------------------------------------
     rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_treated/20) && return
     colony.status = 10
     colony.fitness = 0
@@ -413,7 +414,9 @@ function bact_recovery!(bacterialModel, colony)
     colony.processed == true && return
     bacterialModel.days_recovered == 0 && return
     colony.status ∉ [1,2] && return
-    rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_recovered) && return
+    #rand(bacterialModel.rng)  > ℯ^(-bacterialModel.days_recovered) && return
+    #Change
+    rand(bacterialModel.rng) > rand(bacterialModel.rng, 0.8:0.01:1)/bacterialModel.days_recovered
     colony.status = 0
     colony.processed = true
 end

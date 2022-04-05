@@ -16,6 +16,25 @@
 
 
 """
+Infection
+"""
+
+mutable struct Infections
+  id::Array{Int16}
+  status::Array{Int8}
+  step::Array{Int}
+  stage::Array{Int8}
+  clin::Array{Bool}
+  death::Array{Bool}
+  days_inf::Array{Int}
+  days_exposed::Array{Int}
+  vaccinated::Array{Bool}
+  fpt::Array{Bool}
+  age::Array{Int}
+end
+
+
+"""
 Agent type - AnimalAgent
 """
 
@@ -55,7 +74,8 @@ end
 
 mutable struct Transmissions
   step::Array{Int16}
-  id::Array{Int16}
+  from_id::Array{Int16}
+  to_id::Array{Int16}
   stage::Array{Int16}
   from::Array{Int16}
   to::Array{Int16}
@@ -177,6 +197,7 @@ Type container for animal model
     calf_pen::Int16 
     pen_decon::Bool
     transmissions::Transmissions
+    infections::Infections
 end
 
 
@@ -353,9 +374,10 @@ Function for generating system 1 farms (Spring calving)
     [contam_type[i] = spzeros(250,250) for i in 1:25]
     pen_counter = 0
     calf_pen = 8
-    transmission = Transmissions([0],[0], [0], [0], [0], [:none])
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission)
-    
+    transmission = Transmissions([0],[0], [0], [0], [0], [0], [:none])
+    infections = Infections([0], [0], [0], [0], [false], [false],[0], [0], [false], [false], [0] )
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
+  
     # Set the initial stock parameters
     animalModel.optimal_heifers = animalModel.optimal_dry = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
     
@@ -638,9 +660,10 @@ function initialiseBatch(;
     [contam_type[i] = spzeros(250,250) for i in 1:25]
     pen_counter = 0
     calf_pen = 8
-    transmission = Transmissions([0],[0], [0], [0], [0], [:none])
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission)
-    
+    transmission = Transmissions([0],[0], [0], [0], [0], [0], [:none])
+    infections = Infections([0], [0], [0], [0], [false], [false],[0], [0], [false], [false], [0] )
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
+  
     # Set the initial stock parameters
     animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = animalModel.optimal_dry = floor(0.3*animalModel.optimal_lactating)
     
@@ -1290,9 +1313,10 @@ function initialiseSplit(;
     [contam_type[i] = spzeros(250,250) for i in 1:25]
     pen_counter = 0
     calf_pen = 8
-    transmission = Transmissions([0],[0], [0], [0], [0], [:none])
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission)
-    
+    transmission = Transmissions([0],[0], [0], [0], [0], [0], [:none])
+    infections = Infections([0], [0], [0], [0], [false], [false],[0], [0], [false], [false], [0] )
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
+   
   #Set up the model ====================================================
 
   
@@ -1696,9 +1720,9 @@ Run the bacterial submodel for each animalModel
           bact_step!(animal.bacteriaSubmodel)
         elseif animal.status == 6 && animal.days_exposed == 0 
           bact_step!(animal.bacteriaSubmodel)
-        elseif animal.status == 7 && animal.days_recovered < 55
+        elseif animal.status == 7 && animal.days_recovered < 15
           bact_step!(animal.bacteriaSubmodel)
-        elseif animal.status == 8 && animal.days_recovered < 55
+        elseif animal.status == 8 && animal.days_recovered < 15
           bact_step!(animal.bacteriaSubmodel)
         elseif animal.status == 1 || animal.status == 2
           bact_step!(animal.bacteriaSubmodel)
@@ -1708,7 +1732,7 @@ Run the bacterial submodel for each animalModel
           bact_step!(animal.bacteriaSubmodel)
         end
         
-        if animal.days_recovered >= 55
+        if animal.days_recovered >= 14
           animal.bacteriaSubmodel = nothing
         end
         
@@ -1834,7 +1858,7 @@ function environmental_transmission!(animal, animalModel)
     if animal.bacteriaSubmodel === nothing
     @info animal.bacteriaSubmodel
     end =#
-    record_transmission!(animalModel, animal.id, animal.stage, 999, animal.status, :ee)
+    record_transmission!(animalModel, 999, animal.id, animal.stage, 999, animal.status, :ee)
   elseif contam_type != 0 && contam_type % 2 != 0
     if animal.stage == 1
       rand(animalModel.rng) < rand(0.6:1.0) ? animal.clinical = true : animal.clinical = false
@@ -1851,7 +1875,7 @@ function environmental_transmission!(animal, animalModel)
     if animal.bacteriaSubmodel === nothing
       @info animal.bacteriaSubmodel
       end =#
-    record_transmission!(animalModel, animal.id, animal.stage, 999, animal.status, :ee)
+    record_transmission!(animalModel, 999, animal.id, animal.stage, 999, animal.status, :ee)
   end
 end
 
@@ -1884,7 +1908,7 @@ function calfeteria!(animalModel, sex)
         atrisk.bacteriaSubmodel.total_status = atrisk.status
         atrisk.bacteriaSubmodel.clinical = atrisk.clinical
         bact_step!(atrisk.bacteriaSubmodel)
-        record_transmission!(animalModel, atrisk.id, atrisk.stage, transmitter.status, atrisk.status, :cc)
+        record_transmission!(animalModel, transmitter.id, atrisk.id, atrisk.stage, transmitter.status, atrisk.status, :cc)
 
         #@info "Infection at feeding"
       end
@@ -1961,7 +1985,7 @@ function animal_transmission!(animal, animalModel)
               bact_step!(competing_neighbour.bacteriaSubmodel)
               competing_neighbour.processed = true
 
-              record_transmission!(animalModel, competing_neighbour.id, competing_neighbour.stage, animal.status, competing_neighbour.status, :aa)
+              record_transmission!(animalModel, animal.id, competing_neighbour.id, competing_neighbour.stage, animal.status, competing_neighbour.status, :aa)
              #=  if animal.status == 5 || animal.status == 6
                 #@info "Carrier transmission"
               end
@@ -1971,16 +1995,31 @@ function animal_transmission!(animal, animalModel)
           end
     end
 
-function record_transmission!(animalModel, id, stage, from, to, type)
+function record_transmission!(animalModel, from_id, to_id, stage, from, to, type)
   push!(animalModel.transmissions.step, animalModel.timestep)
-  push!(animalModel.transmissions.id, id)
+  push!(animalModel.transmissions.from_id, from_id)
+  push!(animalModel.transmissions.to_id, to_id)
   push!(animalModel.transmissions.stage, stage)
   push!(animalModel.transmissions.from, from)
   push!(animalModel.transmissions.to, to)
   push!(animalModel.transmissions.type, type)
 end
 
+function record_infections!(animalModel, animal, dead)
 
+  push!(animalModel.infections.id, animal.id)
+  push!(animalModel.infections.status, animal.status)
+  push!(animalModel.infections.step, animalModel.timestep)
+  push!(animalModel.infections.stage, animal.stage)
+  push!(animalModel.infections.clin, animal.clinical)
+  push!(animalModel.infections.death, dead)
+  push!(animalModel.infections.days_inf, animal.days_infected)
+  push!(animalModel.infections.days_exposed, animal.days_exposed)
+  push!(animalModel.infections.vaccinated, animal.vaccinated)
+  push!(animalModel.infections.fpt, animal.fpt)
+  push!(animalModel.infections.age, animal.age)
+
+end
 
 """
 animal_shedding!(animal)
@@ -2365,7 +2404,7 @@ function milking!(animalModel)
         atrisk.bacteriaSubmodel.clinical = atrisk.clinical
         bact_step!(atrisk.bacteriaSubmodel)
         #@info "Infection at milking"
-        record_transmission!(animalModel, atrisk.id, atrisk.stage, transmitter.status, atrisk.status, :mm)
+        record_transmission!(animalModel, transmitter.id, atrisk.id, atrisk.stage, transmitter.status, atrisk.status, :mm)
 
       end
     end
@@ -2873,6 +2912,8 @@ Update some parameters once per day
     animalData = animalModel.sim
     animal_export!(animalModel,animalData)
 
+    
+
     if  (animalModel.date == animalModel.msd_4 + Month(3))
       #@info "b4"
     elseif (animalModel.date == animalModel.msd_3 + Month(3))
@@ -3012,6 +3053,7 @@ function animal_step!(animalModel)
             animal_shuffle!(animal, animalModel)
             get_neighbours_animal(animal.pos)
             update_animal!(animalModel, animal)
+            record_infections!(animalModel, animal, 0)
 
            # export_alldata!(animal, animalModel, allData)
 #=           if animal.stage == 1
