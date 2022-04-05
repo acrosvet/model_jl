@@ -2676,7 +2676,7 @@ Wean calves to next lifestage
 
   function animal_wean!(animal, animalModel)
     animal.stage != 1 && return
-    animal.age <= rand(animalModel.rng, 55:65) && return
+    animal.age <= rand(animalModel.rng, 56:90) && return
     if rand(animalModel.rng) < 0.5 && animalModel.current_weaned < rand(animalModel.rng, 0.95:0.1:1.1)*animalModel.optimal_weaned
         animal.stage = 2
         move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.current_weaned)
