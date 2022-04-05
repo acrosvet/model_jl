@@ -1751,7 +1751,7 @@ Determine animal mortality if infected
   function animal_mortality!(animalModel, animal)
     animal.status ∉ [1,2] && return
     #if animal.status == 1 || animal.status == 2
-    animal.stage == 0 && return
+    #animal.stage == 0 && return
     if animal.stage == 1 
       if animal.clinical == false && rand(animalModel.rng) < rand(animalModel.rng, 0.01:0.001:0.05)
         cull!(animal, animalModel)
