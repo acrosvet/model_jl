@@ -8,10 +8,16 @@ library(network)
 #Import the movement data ------------------------------------------------------
 
 farm_movements <- read_csv("./export/sensitivity/full/farm_run_movements_1.csv")
+farm_movements_2 <- read_csv("./export/sensitivity/full/farm_run_movements_2.csv")
+
+farm_movements <- bind_rows(farm_movements, farm_movements_2)
 
 #Import the transmissions file--------------------------------------------------
 
-farm_transmissions <- read_csv("./export/sensitivity/full/farm_run_statuses_1.csv")
+farm_transmissions <- read_csv("./export/sensitivity/full/farm_run_statuses_1.csv") %>% mutate(farm = paste0(farm, "run1"))
+farm_transmissions_2 <- read_csv("./export/sensitivity/full/farm_run_statuses_2.csv")%>% mutate(farm = paste0(farm, "run2"))
+
+farm_transmissions <- bind_rows(farm_transmissions, farm_transmissions_2)
 
 #Create a numeric days elapsed variable ----------------------------------------
 
@@ -23,6 +29,7 @@ first_resistance <- farm_transmissions %>%
 #Import the parameter file -----------------------------------------------------
 
 params <- read_csv("./export/sensitivity/full/parameters/sensitivity_args_1.csv") %>% rename(original_status = status)
+params_2 <- read_csv("./export/sensitivity/full/parameters/sensitivity_args_2.csv") %>% rename(original_status = status)
 
 #Append this to the transmission data
 
@@ -42,6 +49,9 @@ first_resistance$farm = as.factor(first_resistance$farm)
 resist_surv <- Surv(time = first_resistance$day, event = first_resistance$status == 2)
 summary(resist_surv)
 
+carrier_r.km <- survfit(Surv(time = first_resistance$day, event = first_resistance$status == 2), conf.type = "none", type =
+                          "kaplan-meier", data = first_resistance)
+plot(carrier_r.km, xlab = "Model day", ylab = "S(t)", main = "Days to first resistance")
 
 kmfit <- survfit(resist_surv ~ complete_transmissions$calving_system)
 
