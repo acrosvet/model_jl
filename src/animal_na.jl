@@ -2092,9 +2092,9 @@ function animal_fpt_vacc!(animal, animalModel)
     end
   end
 
-  if animal.fpt == false && animal.age <= 10
+  if animal.fpt == false && animal.age <= rand(animalModel.rng, 14:28)
     animal.susceptibility = (animal.susceptibility*(1+0.05))^animal.age
-  elseif animal.fpt == true && animal.age > 10
+  elseif animal.fpt == true && animal.age > 28
     animal.vaccinated == true && return
     animal.susceptibility = rand(0.45:0.01:0.55)
   end
