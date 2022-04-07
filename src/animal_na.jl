@@ -2085,9 +2085,7 @@ Adapt animal susceptibility based on vaccination status
 function animal_fpt_vacc!(animal, animalModel)
   animal.stage != 1 && return
   if animal.fpt == true && animal.age <= 10
-    if animal.age == 1
-      animal.susceptibility = rand(animalModel.rng, 0.9:0.01:1.0)
-    elseif animal.age >1 
+    if animal.age >1 
       animal.susceptibility = (animal.susceptibility*(1-0.05))^animal.age
     end
   end
@@ -2101,7 +2099,7 @@ function animal_fpt_vacc!(animal, animalModel)
 
   if animal.age == 54 && rand(animalModel.rng) < animalModel.vacc_rate
     animal.vaccinated = true
-    animal.susceptibility = animalModel.vacc_efficacy*rand(0.95:0.01:1.05)
+    animal.susceptibility = rand(0.55:0.01:0.65)*0.5
     #@info "Vaccinated!"
   end
 
@@ -2520,8 +2518,8 @@ Create a calf
         processed = true
         carryover = false
         fpt = rand(animalModel.rng) < animalModel.fpt_rate ? true : false
-        vaccinated = animal.vaccinated
-        susceptibility = fpt == true ? rand(animalModel.rng, 0.9:0.01: 1.0) : animal.status != 0 ? rand(0.35:0.01:0.45) : rand(0.55:0.01:0.65)
+        vaccinated = false
+        susceptibility = fpt == true ? rand(animalModel.rng, 0.9:0.01: 1.0) : animal.status != 0 ? rand(0.35:0.01:0.45) : animal.vaccinated == true ? rand(0.55:0.01:0.65)*rand(0.55:0.01:0.65) : rand(0.55:0.01:0.65)
         clinical = false
         pen = 0
         calf = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)    
