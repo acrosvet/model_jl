@@ -421,7 +421,7 @@ Function for generating system 1 farms (Spring calving)
         carryover = false
         fpt = false
         vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-        susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : rand(0.45:0.01:0.55)
+        susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5 : rand(0.45:0.01:0.55)
         clinical = false
         pen = 0
         animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)    
@@ -464,7 +464,7 @@ Function for generating system 1 farms (Spring calving)
         carryover = false
         fpt = false
         vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-        susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : rand(0.45:0.01:0.55)
+        susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5 : rand(0.45:0.01:0.55)
         clinical = false
         pen = 0
         animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)    
@@ -507,7 +507,7 @@ Function for generating system 1 farms (Spring calving)
         carryover = false 
         fpt = false
         vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-        susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+        susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
         clinical = false
         pen = 0
         animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)    
@@ -705,7 +705,7 @@ function initialiseBatch(;
       carryover = false 
       fpt = false
       vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-      susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+      susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
       clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -747,7 +747,7 @@ function initialiseBatch(;
     carryover = false 
     fpt = false
     vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-    susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+    susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
     clinical = false
     pen = 0
     animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -789,7 +789,7 @@ for b1weaned in 1:floor(N*0.25*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -830,7 +830,7 @@ for b2lac in 1:floor(N*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -871,7 +871,7 @@ for b2dheifers in 1:floor(N*0.25*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -912,7 +912,7 @@ for b2weaned in 1:floor(N*0.25*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -954,7 +954,7 @@ for b3lac in 1:floor(N*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -995,7 +995,7 @@ for b3heifers in 1:floor(N*0.25*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -1036,7 +1036,7 @@ for b3weaned in 1:floor(N*0.25*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -1078,7 +1078,7 @@ for b4lac in 1:floor(N*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -1119,7 +1119,7 @@ for b4dheifers in 1:floor(N*0.25*0.25)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -1161,7 +1161,7 @@ for b4calves in 1:floor(N*0.25*0.5)
   carryover = false 
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
   clinical = false
       pen = 8
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -1362,7 +1362,7 @@ function initialiseSplit(;
       carryover = false
       fpt = false
       vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-      susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : rand(0.45:0.01:0.55)
+      susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5 : rand(0.45:0.01:0.55)
       clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen)       
@@ -1406,7 +1406,7 @@ function initialiseSplit(;
       carryover = false
       fpt = false
       vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-      susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : rand(0.45:0.01:0.55)
+      susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5 : rand(0.45:0.01:0.55)
       clinical = false
       pen = 0
       animal = AnimalAgent(id, pos, status, stage, days_infected, days_exposed, days_carrier, days_recovered, days_treated, treatment, pop_p, pop_d, pop_r, bacteriaSubmodel, dic, dim, stress, sex, calving_season, age, lactation, pregstat, trade_status, neighbours, processed, carryover, fpt, vaccinated, susceptibility, clinical, pen) 
@@ -1449,7 +1449,7 @@ function initialiseSplit(;
       carryover = false 
       fpt = false
       vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-      susceptibility = vaccinated == true ?  animalModel.vacc_efficacy  : rand(0.45:0.01:0.55)
+      susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5  : rand(0.45:0.01:0.55)
       
       clinical = false
       pen = 0
@@ -1495,7 +1495,7 @@ function initialiseSplit(;
     carryover = false
     fpt = false
     vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-    susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : rand(0.45:0.01:0.55)
+    susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5 : rand(0.45:0.01:0.55)
 
 
     clinical = false
@@ -1541,7 +1541,7 @@ for cow in 1:floor(animalModel.optimal_autumn*0.25)
   carryover = false
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5 : rand(0.45:0.01:0.55)
 
   clinical = false
   pen = 0
@@ -1585,7 +1585,7 @@ for cow in 1:floor(animalModel.optimal_autumn*0.25)
   carryover = false
   fpt = false
   vaccinated = rand(animalModel.rng) < animalModel.vacc_rate ? true : false
-  susceptibility = vaccinated == true ?  animalModel.vacc_efficacy : rand(0.45:0.01:0.55)
+  susceptibility = vaccinated == true ?  rand(0.55:0.01:0.65)*0.5 : rand(0.45:0.01:0.55)
 
   clinical = false
   pen = 0
@@ -1787,7 +1787,7 @@ function animal_recovery!(animal, animalModel)
   #animal.status ∉ [1,2] && return
   if animal.status == 1 || animal.status == 2
     animal.days_infected == 0 && return
-    if animal.days_infected >= rand(3:7)
+    if animal.days_infected >= animal.vaccinated == false ? rand(animalModel.rng, 3:7) : floor(rand(animalModel.rng, 3:7)*rand(animalModel.rng(0.55:0.01:0.65)))
       if rand(animalModel.rng) > animalModel.carrier_prob
             if animal.status == 1
               animal.days_infected = 0
@@ -1822,7 +1822,7 @@ end
 function contamination!(animal, animalModel)
   animal.status ∉ [1,2,5,6,7,8] && return
   #if animal.status in [1,2]
-    animalModel.contamination[animal.pos[3]][animal.pos[1], animal.pos[2]] = exp(animal.pop_r + animal.pop_p)/10
+    animalModel.contamination[animal.pos[3]][animal.pos[1], animal.pos[2]] = ifelse(animal.vaccinated == false, exp(animal.pop_r + animal.pop_p)/10, exp(animal.pop_r + animal.pop_p)/10*rand(animalModel.rng, 0.45:0.01:0.55))
     animalModel.contam_time[animal.pos[3]][animal.pos[1], animal.pos[2]] = 1
     animalModel.contam_type[animal.pos[3]][animal.pos[1], animal.pos[2]] = ifelse(animal.status % 2 == 0, 2, 1)
   #else
@@ -1888,6 +1888,7 @@ function calfeteria!(animalModel, sex)
       transmitter = animalModel.animals[calf]
       transmitter.status ∉ [1,2,5,6,7,8] && continue
       transmitter.clinical == false && rand(animalModel.rng) < 0.5 && continue
+      transmitter.vaccinated == true && rand(animalModel.rng) < rand(animalModel.rng, 0.45:0.01:0.55) && continue
 
       buddies = sample(calves,rand(0:4))
       while calf in buddies
@@ -1967,6 +1968,7 @@ function animal_transmission!(animal, animalModel)
 
             if competing_neighbour.susceptibility > rand(animalModel.rng)
               animal.clinical == false && rand(animalModel.rng) < 0.5 && continue
+              animal.vaccinated == true && rand(animalModel.rng) < rand(animalModel.rng, 0.45:0.01:0.55) && continue
               if animal.stage == 1
                 rand(animalModel.rng) < rand(0.3:0.6) ? competing_neighbour.clinical = true : competing_neighbour.clinical = false
               else
@@ -2382,6 +2384,7 @@ function milking!(animalModel)
       transmitter.processed == true && continue   
       transmitter.status ∉ [1,2,5,6,7,8] && continue
       transmitter.clinical == false && rand(animalModel.rng) < 0.5 && continue
+      transmitter.vaccinated == true && rand(animalModel.rng) < rand(animalModel.rng, 0.45:0.01:0.55) && continue
 
       buddies = sample(milkers,rand(0:2))
       while milker in buddies
@@ -2930,7 +2933,7 @@ function animal_stress!(animal, animalModel)
       animal.susceptibility = rand(animalModel.rng, 0.65:0.01:0.75)
     else
       animal.stress = false
-      animal.susceptibility = animal.vaccinated == true ? animalModel.vacc_efficacy  : animal.susceptibility
+      animal.susceptibility = animal.vaccinated == true ? rand(0.55:0.01:0.65)*0.5  : animal.susceptibility
     end
   end
 
