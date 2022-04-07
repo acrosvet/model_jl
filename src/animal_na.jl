@@ -176,7 +176,6 @@ Type container for animal model
     prev_p::Float16
     prev_cr::Float16
     prev_cp::Float16
-    vacc_efficacy::Float16
     current_autumn::Int16
     optimal_autumn::Int16
     current_spring::Int16
@@ -343,7 +342,6 @@ Function for generating system 1 farms (Spring calving)
     prev_p::Float16,
     prev_cr::Float16,
     prev_cp::Float16,
-    vacc_efficacy::Float16,
     pen_decon::Bool = false
     )
 
@@ -376,7 +374,7 @@ Function for generating system 1 farms (Spring calving)
     calf_pen = 8
     transmission = Transmissions([0],[0], [0], [0], [0], [0], [:none])
     infections = Infections([0], [0], [0], [0], [false], [false],[0], [0], [false], [false], [0] )
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp,   current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
   
     # Set the initial stock parameters
     animalModel.optimal_heifers = animalModel.optimal_dry = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = floor(0.3*animalModel.optimal_lactating)
@@ -607,7 +605,7 @@ function initialiseBatch(;
     prev_p::Float16,
     prev_cr::Float16,
     prev_cp::Float16,
-    vacc_efficacy::Float16,
+     
     pen_decon::Bool
     )
 
@@ -662,7 +660,7 @@ function initialiseBatch(;
     calf_pen = 8
     transmission = Transmissions([0],[0], [0], [0], [0], [0], [:none])
     infections = Infections([0], [0], [0], [0], [false], [false],[0], [0], [false], [false], [0] )
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp,   current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
   
     # Set the initial stock parameters
     animalModel.optimal_heifers = animalModel.optimal_weaned = animalModel.optimal_calves = animalModel.optimal_dh = animalModel.optimal_heifers = animalModel.optimal_dry = floor(0.3*animalModel.optimal_lactating)
@@ -1266,7 +1264,7 @@ function initialiseSplit(;
   prev_p::Float16,
   prev_cr::Float16,
   prev_cp::Float16,
-  vacc_efficacy::Float16, 
+    
   pen_decon::Bool
   )
   
@@ -1315,7 +1313,7 @@ function initialiseSplit(;
     calf_pen = 8
     transmission = Transmissions([0],[0], [0], [0], [0], [0], [:none])
     infections = Infections([0], [0], [0], [0], [false], [false],[0], [0], [false], [false], [0] )
-    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp, vacc_efficacy, current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
+    animalModel = AnimalModel(farmno, animals, timestep, date, rng, system, msd, msd_2, msd_3, msd_4, seed, farm_status, optimal_stock, treatment_prob, treatment_length, carrier_prob, current_stock, current_lactating, optimal_lactating, current_heifers, optimal_heifers, current_calves, optimal_calves, current_weaned, optimal_weaned, current_dh, optimal_dh, current_dry, optimal_dry, tradeable_stock, sending, receiving, density_lactating, density_calves, density_dry, positions, pop_r, pop_s, pop_p, pop_d, id_counter, vacc_rate, fpt_rate, prev_r, prev_p, prev_cr, prev_cp,   current_autumn, optimal_autumn, current_spring, optimal_spring, current_b1, current_b2, current_b3, current_b4, optimal_b1, optimal_b2, optimal_b3, optimal_b4, sim, contamination, contam_time,contam_type, pen_counter, calf_pen, pen_decon, transmission, infections)
    
   #Set up the model ====================================================
 
@@ -1750,23 +1748,27 @@ Determine animal mortality if infected
 
   function animal_mortality!(animalModel, animal)
     animal.status ∉ [1,2] && return
-    #if animal.status == 1 || animal.status == 2
-    #animal.stage == 0 && return
     if animal.stage == 1 
-      if animal.clinical == false && rand(animalModel.rng) < rand(animalModel.rng, 0.01:0.001:0.05)
-        cull!(animal, animalModel)
-        #@info "Calf mortality!"
-      elseif animal.clinical == false && rand(animalModel.rng) < rand(animalModel.rng, 0.01:0.001:0.15)
-        cull!(animal, animalModel)
-        #@info "Calf mortality!"
+      if animal.clinical == true
+        if animal.days_treated == 0
+          rand(animalModel.rng) > rand(animalModel.rng, 0.10:0.001:0.12) && return
+          cull!(animal, animalModel)
+        else
+          rand(animalModel.rng) > rand(animalModel.rng, 0.6:0.001:0.72) && return
+          cull!(animal, animalModel)
+        end
       end
-    elseif rand(animalModel.rng) < rand(animalModel.rng, 0.0001:0.0001:0.001)
-      cull!(animal, animalModel)
-      #@info "Cow mortality!"
+    elseif animal.stage != 1
+      if animal.clinical == true
+        if animal.days_treated == 0 
+          rand(animalModel.rng) > rand(animalModel.rng, 0.04:0.001:0.05) && return
+          cull!(animal, animalModel)
+        else
+          rand(animalModel.rng) > rand(animalModel.rng, 0.024:0.001:0.03) && return
+          cull!(animal, animalModel)
+        end
+      end
     end
-    
-   # println("Mortality")
-    
 end
 
 """
@@ -1822,7 +1824,7 @@ end
 function contamination!(animal, animalModel)
   animal.status ∉ [1,2,5,6,7,8] && return
   #if animal.status in [1,2]
-    animalModel.contamination[animal.pos[3]][animal.pos[1], animal.pos[2]] = ifelse(animal.vaccinated == false, exp(animal.pop_r + animal.pop_p)/10, exp(animal.pop_r + animal.pop_p)/10*rand(animalModel.rng, 0.45:0.01:0.55))
+    animalModel.contamination[animal.pos[3]][animal.pos[1], animal.pos[2]] = ifelse(animal.vaccinated == false, exp(animal.pop_r + animal.pop_p)/10, exp(animal.pop_r + animal.pop_p)/10*rand(animalModel.rng, 0.55:0.01:0.65))
     animalModel.contam_time[animal.pos[3]][animal.pos[1], animal.pos[2]] = 1
     animalModel.contam_type[animal.pos[3]][animal.pos[1], animal.pos[2]] = ifelse(animal.status % 2 == 0, 2, 1)
   #else
