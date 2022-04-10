@@ -1718,9 +1718,9 @@ Run the bacterial submodel for each animalModel
           bact_step!(animal.bacteriaSubmodel)
         elseif animal.status == 6 && animal.days_exposed == 0 
           bact_step!(animal.bacteriaSubmodel)
-        elseif animal.status == 7 && animal.days_recovered < 15
+        elseif animal.status == 7 && animal.days_recovered < 55
           bact_step!(animal.bacteriaSubmodel)
-        elseif animal.status == 8 && animal.days_recovered < 15
+        elseif animal.status == 8 && animal.days_recovered < 55
           bact_step!(animal.bacteriaSubmodel)
         elseif animal.status == 1 || animal.status == 2
           bact_step!(animal.bacteriaSubmodel)
@@ -1730,7 +1730,7 @@ Run the bacterial submodel for each animalModel
           bact_step!(animal.bacteriaSubmodel)
         end
         
-        if animal.days_recovered >= 14
+        if animal.days_recovered > 55
           animal.bacteriaSubmodel = nothing
         end
         
@@ -1789,7 +1789,8 @@ function animal_recovery!(animal, animalModel)
   #animal.status ∉ [1,2] && return
   if animal.status == 1 || animal.status == 2
     animal.days_infected == 0 && return
-    if animal.days_infected >= animal.vaccinated == false ? rand(animalModel.rng, 3:7) : floor(rand(animalModel.rng, 3:7)*rand(animalModel.rng(0.55:0.01:0.65)))
+    rec_test = animal.vaccinated == false ? rand(animalModel.rng, 3:10) : floor(rand(animalModel.rng, 3:10)*rand(animalModel.rng(0.55:0.01:0.65)))
+    if animal.days_infected >= rec_test
       if rand(animalModel.rng) > animalModel.carrier_prob
             if animal.status == 1
               animal.days_infected = 0
@@ -2063,7 +2064,7 @@ Animals return to susceptibility at a variable interval after recovery, simulate
 
   function animal_susceptiblility!(animal, animalModel)
       animal.status ∉ [7,8] && return
-      animal.susceptibility = ℯ^(-4500/animal.days_recovered)   
+      animal.susceptibility = ℯ^(-365/animal.days_recovered)/2   
 end
 
 """
@@ -2680,12 +2681,14 @@ Wean calves to next lifestage
   function animal_wean!(animal, animalModel)
     animal.stage != 1 && return
     animal.age <= rand(animalModel.rng, 56:90) && return
-    if rand(animalModel.rng) < 0.5 && animalModel.current_weaned < rand(animalModel.rng, 0.95:0.1:1.1)*animalModel.optimal_weaned
+    animal.stage = 2
+    move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.current_weaned)
+   #=  if rand(animalModel.rng) < 0.5 && animalModel.current_weaned < rand(animalModel.rng, 0.95:0.1:1.1)*animalModel.optimal_weaned
         animal.stage = 2
         move_animal!(animal, animalModel, 2, animalModel.density_dry, animalModel.current_weaned)
     else 
         cull!(animal, animalModel)
-    end
+    end =#
 end
 
 """
