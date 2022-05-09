@@ -2,6 +2,7 @@
 library(tidyverse)
 library(plotly)
 library(ggpubr)
+library(kableExtra)
 
 # Spring herds --------------------------------------------------
 
@@ -26,110 +27,85 @@ batch_example <- read_csv("./export/batch_example.csv") %>%
 
 examples <- reduce(list(spring_example, split_example, batch_example), dplyr::bind_rows)
 
-calves <- ggplot(aes(x = step, y = num_calves), data = spring_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Calves") + xlab("") + ggtitle("Calves")
-weaned <- ggplot(aes(x = step, y = num_weaned), data = spring_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Weaned") + xlab("") + ggtitle("Weaned")
-heifers <- ggplot(aes(x = step, y = num_heifers), data = spring_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Heifers") + xlab("") + ggtitle("Heifers")
-dry_heifers <- ggplot(aes(x = step, y = num_dh), data = spring_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Pregnant heifers") + xlab("") + ggtitle("Pregnant heifers")
-lactating <- ggplot(aes(x = step, y = num_lactating), data = spring_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Lactating") + xlab("") + ggtitle("Lactating")
-dry <- ggplot(aes(x = step, y = num_dry), data = spring_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Dry") + xlab("") + ggtitle("Dry")
+calves = examples %>% 
+  ggplot(aes(x = step, y = num_calves, linetype = season)) +
+  geom_line() +
+  ylim(0,600) + 
+  theme_minimal() + ylab("") + 
+  xlab("") + 
+  ggtitle("Calves") +
+  theme(plot.title = element_text(size=22)) +
+  labs(color="Calving system")
 
-spring_dyno <- ggarrange(calves, weaned, heifers, dry_heifers, lactating, dry) + rremove("x.text")
 
-spring_dyno <- annotate_figure(spring_dyno,
-                top = text_grob("Spring-calving herds", face = "bold", size = 20),
+
+weaned = examples %>% 
+  ggplot(aes(x = step, y = num_weaned, linetype = season)) +
+  geom_line() +
+  ylim(0,600) + 
+  theme_minimal() + ylab("") + 
+  xlab("") + 
+  ggtitle("Weaned")+
+  theme(plot.title = element_text(size=22)) +
+  labs(color="Calving system")
+  
+
+heifers = examples %>% 
+  ggplot(aes(x = step, y = num_heifers, linetype = season)) +
+  geom_line() +
+  ylim(0,600) + 
+  theme_minimal() + ylab("") + 
+  xlab("") + 
+  ggtitle("Heifers") +
+  theme(plot.title = element_text(size=22)) +
+  labs(color="Calving system")
+
+pregnant_heifers = examples %>% 
+  ggplot(aes(x = step, y = num_dh, linetype = season)) +
+  geom_line() +
+  ylim(0,600) + 
+  theme_minimal() + ylab("") + 
+  xlab("") + 
+  ggtitle("Pregnant heifers") +
+  theme(plot.title = element_text(size=22)) +
+  labs(color="Calving system")
+
+lactating = examples %>% 
+  ggplot(aes(x = step, y = num_lactating, linetype = season)) +
+  geom_line() +
+  ylim(0,600) + 
+  theme_minimal() + ylab("") + 
+  xlab("") + 
+  ggtitle("Lactating") +
+  theme(plot.title = element_text(size=22)) +
+  labs(color="Calving system")
+
+dry = examples %>% 
+  ggplot(aes(x = step, y = num_dry, linetype = season)) +
+  geom_line() +
+  ylim(0,600) + 
+  theme_minimal() + ylab("") + 
+  xlab("") + 
+  ggtitle("Dry") +
+  theme(plot.title = element_text(size=22)) +
+  labs(color="Calving system")
+
+
+
+
+
+
+dyno <- ggarrange(calves, weaned, heifers, pregnant_heifers, lactating, dry, common.legend=TRUE) + rremove("x.text") + rremove("y.text")
+
+dyno <- annotate_figure(dyno,
+                top = text_grob("Population dynamics by herd calving system", face = "bold", size = 28),
                 
-                left = text_grob("Number of animals", face = "bold", size = 20, rot = 90),
-                bottom = text_grob("Model step", face = "bold", size = 20),
+                left = text_grob("Number of animals", face = "bold", size = 28, rot = 90),
+                bottom = text_grob("Model step", face = "bold", size = 28),
                 
                 )
 
 
-# Split herds --------------------------------------------------
-
-split_example <- read_csv("./export/split_example.csv") %>% 
-  filter(timestep != "0-01-01") %>% 
-  mutate(step = row_number()) %>% 
-  filter(step > 365*2)
-
-# Create a plot of population dynamics
-
-
-calves <- ggplot(aes(x = step, y = num_calves), data = split_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Calves") + xlab("") + ggtitle("Calves")
-weaned <- ggplot(aes(x = step, y = num_weaned), data = split_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Weaned") + xlab("") + ggtitle("Weaned")
-heifers <- ggplot(aes(x = step, y = num_heifers), data = split_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Heifers") + xlab("") + ggtitle("Heifers")
-dry_heifers <- ggplot(aes(x = step, y = num_dh), data = split_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Pregnant heifers") + xlab("") + ggtitle("Pregnant heifers")
-lactating <- ggplot(aes(x = step, y = num_lactating), data = split_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Lactating") + xlab("") + ggtitle("Lactating")
-dry <- ggplot(aes(x = step, y = num_dry), data = split_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Dry") + xlab("") + ggtitle("Dry")
-
-split_dyno <- ggarrange(calves, weaned, heifers, dry_heifers, lactating, dry) + rremove("x.text")
-
-split_dyno <- annotate_figure(split_dyno,
-                              top = text_grob("Split-calving herds", face = "bold", size = 20),
-                              
-                              left = text_grob("Number of animals", face = "bold", size = 20, rot = 90),
-                              bottom = text_grob("Model step",  size = 12),
-)
-
-
-
-# Batch herds --------------------------------------------------
-
-spring_example <- read_csv("./export/spring_example.csv") %>% 
-  filter(timestep != "0-01-01") %>% 
-  mutate(step = row_number()) %>% 
-  filter(step > 365*2)
-
-# Create a plot of population dynamics
-
-
-
-calves <- ggplot(aes(x = step, y = num_calves), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Calves") + xlab("") + ggtitle("Calves")
-weaned <- ggplot(aes(x = step, y = num_weaned), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Weaned") + xlab("") + ggtitle("Weaned")
-heifers <- ggplot(aes(x = step, y = num_heifers), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Heifers") + xlab("") + ggtitle("Heifers")
-dry_heifers <- ggplot(aes(x = step, y = num_dh), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Pregnant heifers") + xlab("") + ggtitle("Pregnant heifers")
-lactating <- ggplot(aes(x = step, y = num_lactating), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Lactating") + xlab("") + ggtitle("Lactating")
-dry <- ggplot(aes(x = step, y = num_dry), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Dry") + xlab("") + ggtitle("Dry")
-
-spring_dyno <- ggarrange(calves, weaned, heifers, dry_heifers, lactating, dry) + rremove("x.text")
-
-spring_dyno <- annotate_figure(spring_dyno,
-                               top = text_grob("Batch-calving herds", face = "bold", size = 20),
-                               
-                               left = text_grob("Number of animals", face = "bold", size = 20, rot = 90),
-                               bottom = text_grob("Model step",  size = 12),
-                               
-)
-
-
-# Batch herds --------------------------------------------------
-
-batch_example <- read_csv("./export/batch_example.csv") %>% 
-  filter(timestep != "0-01-01") %>% 
-  mutate(step = row_number()) %>% 
-  filter(step > 365*2)
-
-# Create a plot of population dynamics
-
-
-calves <- ggplot(aes(x = step, y = num_calves), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Calves") + xlab("")
-weaned <- ggplot(aes(x = step, y = num_weaned), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Weaned") + xlab("")
-heifers <- ggplot(aes(x = step, y = num_heifers), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Heifers") + xlab("")
-dry_heifers <- ggplot(aes(x = step, y = num_dh), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Pregnant heifers") + xlab("")
-lactating <- ggplot(aes(x = step, y = num_lactating), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Lactating") + xlab("")
-dry <- ggplot(aes(x = step, y = num_dry), data = batch_example) + geom_line() + ylim(0,300) + theme_minimal() + ylab("Dry") + xlab("")
-
-batch_dyno <- ggarrange(calves, weaned, heifers, dry_heifers, lactating, dry) + rremove("x.text")
-
-batch_dyno <- annotate_figure(batch_dyno,
-                              top = text_grob("Batch-calving herds", face = "bold", size = 20),
-                              
-                              left = text_grob("Number of animals", face = "bold", size = 20, rot = 90),
-                              bottom = text_grob("Model step",  size = 12),
-                              
-)
-
-
-dyno_max <-ggarrange(spring_dyno, split_dyno, batch_dyno, ncol = 1)
 
 # Create plots of infection dynamics -----------------------------
 #spring
@@ -137,120 +113,54 @@ dyno_max <-ggarrange(spring_dyno, split_dyno, batch_dyno, ncol = 1)
 
 prev <- examples %>% 
   rowwise() %>% 
-  mutate(animals = sum(num_calves, num_weaned, num_heifers, num_dh, num_lactating, num_dry)) %>% 
+  mutate(animals = num_calves + num_weaned + num_heifers + num_dh + num_lactating + num_dry) %>% 
   mutate(prev_r = 100*pop_r/animals,
          prev_s = 100*pop_s/animals,
          prev_p = 100*pop_p/animals,
-         #prev_rec = 100*((pop_rec_r+pop_rec_p)/animals),
+         prev_rec = 100*((pop_rec_r+pop_rec_p)/animals),
          prev_car_p = 100*pop_car_p/animals,
-         prev_car_r = 100*pop_car_r/animals) %>%
-  select(step, season, prev_r, prev_s, prev_p, prev_car_p, prev_car_r
-         #, prev_rec
+         prev_car_r = 100*pop_car_r/animals,
+         prev_clin = 100*clinical/animals) %>%
+  select(step, season, prev_r, prev_s, prev_p, prev_car_p, prev_car_r, prev_clin
+         , prev_rec
          ) %>% 
-  pivot_longer(cols = c(prev_r, prev_s, prev_p, 
+  pivot_longer(cols = c(
+                        prev_r, 
+                        prev_s, 
+                        prev_p, 
                         #prev_rec,
-                        prev_car_p, prev_car_r), names_to = "prev", values_to = "prev_perc")%>% 
+                        prev_car_p, 
+                        prev_car_r, 
+                        #prev_clin
+                        ), names_to = "prev", values_to = "prev_perc")%>% 
   mutate(prev = case_when(
     prev == "prev_car_p" ~ "Carrier" ,
     prev == "prev_car_r" ~ "Resistant carrier",
     prev == "prev_p" ~ "Infected",
     prev == "prev_r" ~ "Resistant infected",
-    prev == "prev_s" ~ "Susceptible"
-  ))
+    prev == "prev_s" ~ "Susceptible"#,
+    #prev == "prev_rec" ~"Recovered"
+  )) 
 
 
 prev_plot <- prev %>% 
   ggplot(aes(x = step, y = prev_perc, colour = prev)) +
-  geom_col() +
+  geom_line() +
   facet_grid(vars(season)) +
   theme_minimal() +
-  scale_colour_viridis_d(option = "inferno") +
+  scale_colour_manual(values = c("#7ACCD7", "#BA2F00", "#BAC4C2", "#1AFF03", "#976533")) +
   xlab("Model step") +
   ylab("Point prevalence") +
+    
   ggtitle("Infection dynamics by calving system") +
+  theme(text = element_text(size = 28))  + 
   labs(colour = "Type of infection")
   
 
-#split
-
-
-
-split_prev <- split_example %>% 
-  rowwise() %>% 
-  mutate(animals = sum(num_calves, num_weaned, num_heifers, num_dh, num_lactating, num_dry)) %>% 
-  mutate(prev_r = 100*pop_r/animals,
-         prev_s = 100*pop_s/animals,
-         prev_p = 100*pop_p/animals,
-         #prev_rec = 100*((pop_rec_r+pop_rec_p)/animals),
-         prev_car_p = 100*pop_car_p/animals,
-         prev_car_r = 100*pop_car_r/animals) %>%
-  select(step, prev_r, prev_s, prev_p, prev_car_p, prev_car_r
-         #, prev_rec
-  ) %>% 
-  pivot_longer(cols = c(prev_r, prev_s, prev_p, 
-                        #prev_rec,
-                        prev_car_p, prev_car_r), names_to = "prev", values_to = "prev_perc") %>% 
-  mutate(prev = case_when(
-     prev == "prev_car_p" ~ "Carrier" ,
-     prev == "prev_car_r" ~ "Resistant carrier",
-     prev == "prev_p" ~ "Infected",
-     prev == "prev_r" ~ "Resistant infected",
-     prev == "prev_s" ~ "Susceptible"
-  ))
-
-split_prev_plot <- split_prev %>% 
-  filter(step > 365*2) %>% 
-  ggplot(aes(x = step, y = prev_perc, fill = prev)) +
-  geom_col(position = "dodge") +
-  theme_minimal() +
-  xlab("Model step") +
-  ylab("Point prevalence") +
-  ggtitle("split-calving herd") +
-  labs(fill = "Type of infection") +
-  ylim(0,15)
 
 
 #split
 
-
-
-#batch
-
-
-
-batch_prev <- batch_example %>% 
-  rowwise() %>% 
-  mutate(animals = sum(num_calves, num_weaned, num_heifers, num_dh, num_lactating, num_dry)) %>% 
-  mutate(prev_r = 100*pop_r/animals,
-         prev_s = 100*pop_s/animals,
-         prev_p = 100*pop_p/animals,
-         #prev_rec = 100*((pop_rec_r+pop_rec_p)/animals),
-         prev_car_p = 100*pop_car_p/animals,
-         prev_car_r = 100*pop_car_r/animals) %>%
-  select(step, prev_r, prev_s, prev_p, prev_car_p, prev_car_r
-         #, prev_rec
-  ) %>% 
-  pivot_longer(cols = c(prev_r, prev_s, prev_p, 
-                        #prev_rec,
-                        prev_car_p, prev_car_r), names_to = "prev", values_to = "prev_perc")%>% 
-  mutate(prev = case_when(
-    prev == "prev_car_p" ~ "Carrier" ,
-    prev == "prev_car_r" ~ "Resistant carrier",
-    prev == "prev_p" ~ "Infected",
-    prev == "prev_r" ~ "Resistant infected",
-    prev == "prev_s" ~ "Susceptible"
-  ))
-
-
-batch_prev_plot <- batch_prev %>% 
-  ggplot(aes(x = step, y = prev_perc, colour = prev)) +
-  geom_col() +
-  theme_minimal() +
-  xlab("Model step") +
-  ylab("Point prevalence") +
-  ggtitle("batch-calving herd") +
-  labs(colour = "Type of infection") + 
-  ylim(0,15)
 
 #Within life stage infection dynamics 
 #Spring
@@ -350,40 +260,55 @@ batch_transmissions <- read_csv("./export/batch_transmissions.csv") %>%
 
 
 
-transmissions <- purrr::reduce(list(spring_transmissions, split_transmissions, batch_transmissions), dplyr::bind_rows)
+transmissions <- purrr::reduce(list(spring_transmissions, split_transmissions, batch_transmissions), dplyr::bind_rows) %>% filter(step > 365*2)
 
 secondaries <- transmissions %>% 
   filter(type != "ee") %>% 
   group_by(season, from_id) %>% 
   summarise(infections = n_distinct(to_id)) %>% 
-  ggplot(aes(x = infections)) +
-  geom_histogram(bins = 10) +
+  ggplot(aes(y = infections, group = "season")) +
+  geom_boxplot() +
   facet_wrap(vars(season)) +
   theme_minimal() +
-  xlab("Number of secondary infections per animal") +
-  ylab("Frequency") +
-  ggtitle("Secondary animal-to-animal transmissions per case")
+  ylab("Number of secondary infections") +
+  ggtitle("Secondary animal-to-animal infections per case") +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  scale_y_continuous(breaks = seq(0:10))
 
-
+library(ggpattern)
+library(magick)
 trans_types <- transmissions %>% 
   group_by(season, type) %>% 
   summarise(count = n()) %>% 
+  group_by(season) %>% 
+  mutate(pct_of_trans = 100*count/sum(count)) %>% 
   mutate(
-    type = case_when(
+    "Infection mode" = case_when(
       type == "aa" ~ "Animal to animal",
       type == "cc" ~ "Calf feeding",
       type == "ee" ~"Environmental",
       type == "mm" ~ "Milking" 
     )
   ) %>% 
-  ggplot(aes(x = type, y = count)) +
-  geom_col() +
-  facet_wrap(vars(season)) +
+  ggplot(aes(x = season, y = pct_of_trans)) +
+  geom_col_pattern(
+    aes(
+      pattern = `Infection mode`, 
+      pattern_angle = `Infection mode`
+    ), 
+    fill            = 'white', 
+    colour          = 'black',
+    pattern_spacing = 0.01
+  ) +
+  #facet_wrap(vars(season)) +
   theme_minimal() +
   theme(axis.text.x=element_text(angle=45,hjust=1)) +
-  xlab("Transmission type") +
+  xlab("Calving system") +
   ylab("Number of transmission events") +
-  ggtitle("Breakdown of transmission types per calving system")
+  ggtitle("Types of transmission by calving system") 
+  
 
 
 
@@ -406,10 +331,22 @@ ls_types <- transmissions %>%
       stage == 6 ~ "Dry"
     )
   ) %>% 
+  mutate(stage = as.factor(stage)) %>% 
+  mutate(stage = fct_relevel(stage, "Calf", "Weaned", "Heifer", "Pregnant heifer", "Lactating", "Dry")) %>% 
   group_by(season, stage, type) %>% 
   summarise(count = n()) %>% 
-  ggplot(aes(x = as.factor(stage), y = count, fill = type)) +
-  geom_col() +
+  mutate(pct_trans = 100*count/sum(count)) %>% 
+  rename('Infection mode' = type) %>% 
+  ggplot(aes(x = as.factor(stage), y = count)) +
+  geom_col_pattern(
+    aes(
+      pattern = `Infection mode`, 
+      pattern_angle = `Infection mode`
+    ), 
+    fill            = 'white', 
+    colour          = 'black',
+    pattern_spacing = 0.02
+  ) +
   facet_wrap(vars(season)) +
   theme_minimal() +
   scale_fill_viridis_d() +
@@ -421,19 +358,287 @@ ls_types <- transmissions %>%
 
 
 # Detailed infection dynamics
+#Estimate r0 using simple method as age at infection over average life expectancy
 
+spring_infections <- read_csv("./export/spring_infections.csv") %>% mutate(season = "spring")
+split_infections <- read_csv("./export/split_infections.csv") %>% mutate(season = "split")
+batch_infections <- read_csv("./export/batch_infections.csv") %>% mutate(season = "batch")
 
-all_status <- read_csv("./export/spring_infections.csv")
+all_infections <- reduce(list(spring_infections, split_infections, batch_infections), bind_rows) %>% 
+  mutate(id = paste0(id,season)) %>% filter(step > 365*2 & step <= 2555)
 
-infectious_period <- all_status %>%  
-                        filter(status == 1 | status == 2) %>% 
-                        group_by(id) %>% 
-                        summarise(first_inf = min(step),
-                                 inf_days = 
-                                 ) %>% 
-                        mutate(duration = last_inf - first_inf)
+alive_at_end <- all_infections %>% filter(step == max(step))
+`%notin%` <- Negate(`%in%`)
 
-fpt_inf <- all_status %>% 
-              filter(status ==1 | status ==2) %>% 
-              group_by(fpt) %>% 
-              summarise(count = n())
+# culled_in_model <- all_infections %>% 
+#   filter(age != 0) %>% 
+#   group_by(id) %>% 
+#   mutate(age_at_cull = max(age)) %>% 
+#   filter(id %notin% alive_at_end$id ) %>% 
+#   distinct(id, season, age_at_cull) %>% 
+#   # exclude bobby calves
+#   filter(age_at_cull > 5)
+
+culled_in_model <- all_infections %>% 
+                      filter(!is.na(cull_reason)) %>% 
+                      mutate(age_at_cull = age) %>% 
+                      filter(cull_reason != "bobby") %>% 
+                      distinct(id, season, age_at_cull)
+
+average_life_expectancy =   culled_in_model %>% group_by(season) %>% summarise(life_expectancy = median(age_at_cull))
+
+# Determine average age at infection
+
+age_at_inf <- all_infections %>% 
+                filter(status == 1 | status == 2) %>% 
+               # filter(clin == TRUE) %>% 
+                group_by(season, id) %>% 
+                mutate(age_at_infection = min(age)) %>%  
+                filter(stage != 1) %>% 
+                select(season, id, age_at_infection)
+
+average_age_at_infection = age_at_inf %>% group_by(season) %>% summarise(age_at_inf = mean(age_at_infection))
+
+rnought = left_join(average_life_expectancy, average_age_at_infection, by = 'season') %>% 
+            mutate(r0 = life_expectancy/age_at_inf) %>% 
+            mutate(life_expectancy = round(life_expectancy)) %>% 
+            mutate(age_at_inf = round(age_at_inf)) %>% 
+            mutate(r0 = round(r0, digits =2)) %>% 
+            kable(format = "latex")
+
+#By stock group
+
+rnought = function(stage){
+  
+  tar <- all_status %>% 
+    filter(stage == !!stage) %>% 
+    group_by(id) %>% 
+    summarise(entered = min(age),
+              left = max(age)) %>% 
+    mutate(tar = left - entered) %>% 
+    filter(tar != 3) %>% 
+    distinct(id, tar)
+  
+  average_tar = mean(tar$tar)
+  
+  age_at_inf <- all_status %>% 
+    filter(status == 1 | status == 2) %>% 
+    group_by(id) %>% 
+    mutate(age_at_infection = min(age)) %>%  
+    filter(stage == !!stage) %>% 
+    distinct(id, age_at_infection)
+  
+  average_age_at_infection = mean(age_at_inf$age_at_infection)
+  
+  rnought = average_life_expectancy/average_tar
+  
+  return(rnought)
+  
+  
+}
+
+# Determine culling per stock group
+
+all_infections %>% 
+  filter(age !=0) %>% 
+  filter(id %notin% alive_at_end$id) %>% 
+  group_by(season, id) %>% 
+  mutate(age_at_cull = max(age)) %>% 
+  distinct(id, season, status, age_at_cull, stage) %>% 
+  filter(age_at_cull > 100) %>% 
+  group_by(season, stage) %>% 
+  summarise(count = n()) %>% 
+  group_by(season) %>% 
+  mutate(count = 100*count/sum(count)) %>% 
+  ggplot(aes(x = season, y = count, fill = as.factor(stage))) +
+  geom_col() +
+  theme_minimal() +
+  scale_fill_viridis_d() +
+  xlab("Calving system") +
+  theme(axis.text.x=element_text(angle=45,hjust=1)) +
+  ylab("Percentage of culls and mortalities") +
+  ggtitle("Culling and mortality by calving system") +
+  labs(fill = "Life stage")
+
+all_infections %>% 
+  filter(status == 1 | status ==2) %>% 
+  filter(clin == TRUE ) %>% 
+  filter(stage >= 3) %>% 
+  group_by(season, step) %>% 
+  summarise(count = n()) %>% 
+  ggplot(aes(x = step, y = count)) + 
+  geom_col() +
+  facet_wrap(vars(season))
+    
+
+# Average duration of infection
+
+days_infected <- all_infections %>% 
+  filter(days_inf != 0) %>% 
+  group_by(id) %>% 
+  filter(days_inf == max(days_inf))
+
+# Determine beta
+
+# For animal to animal transmissions
+
+all_animal <-  transmissions %>% 
+       # rowwise() %>% 
+        mutate(tid = paste0(step, from_id, to_id, season)) %>% 
+        group_by(tid) %>% 
+        mutate(nobs = length(tid)) %>% 
+        mutate(duplicate = ifelse(nobs > 1 & effective == FALSE, "cull", "keep")) %>% 
+        filter(duplicate == "keep") %>% 
+        mutate(type = ifelse(type == "cc" | type == "aa" | type == "mm", "aa", type)) %>% 
+        group_by(type, effective) %>% 
+        summarise(count = n()) %>% 
+        pivot_wider(
+          names_from = effective, 
+          values_from = count,
+          id_cols = type
+        ) %>% 
+    mutate(transmission_prob = `TRUE`/(`TRUE`+`FALSE`))
+
+clinical <- transmissions %>% 
+  # rowwise() %>% 
+  mutate(tid = paste0(step, from_id, to_id, season)) %>% 
+  group_by(tid) %>% 
+  mutate(nobs = length(tid)) %>% 
+  mutate(duplicate = ifelse(nobs > 1 & effective == FALSE, "cull", "keep")) %>% 
+  filter(duplicate == "keep") %>% 
+  mutate(type = ifelse(type == "cc" | type == "aa" | type == "mm", "aa", type)) %>% 
+  filter(type == "aa" & clinical == "TRUE") %>% 
+  group_by(type, effective) %>% 
+  summarise(count = n()) %>% 
+  pivot_wider(
+    names_from = effective, 
+    values_from = count,
+    id_cols = type
+  ) %>% 
+  mutate(transmission_prob = `TRUE`/(`TRUE`+`FALSE`))
+
+subclinical <- transmissions %>% 
+  # rowwise() %>% 
+  filter(type != "ee") %>% 
+  mutate(tid = paste0(step, from_id, to_id, season)) %>% 
+  group_by(tid) %>% 
+  mutate(nobs = length(tid)) %>% 
+  mutate(duplicate = ifelse(nobs > 1 & effective == FALSE, "cull", "keep")) %>% 
+  filter(duplicate == "keep") %>% 
+  mutate(type = ifelse(type == "cc" | type == "aa" | type == "mm", "aa", type)) %>% 
+  filter(type == "aa" & clinical == "FALSE") %>% 
+  group_by(type, effective) %>% 
+  summarise(count = n()) %>% 
+  pivot_wider(
+    names_from = effective, 
+    values_from = count,
+    id_cols = type
+  ) %>% 
+  mutate(transmission_prob = `TRUE`/(`TRUE`+`FALSE`))
+
+# Rates of resistance
+
+# Resist system
+
+ examples %>% 
+   rowwise() %>% 
+   mutate(animals = num_calves + num_weaned + num_heifers + num_dh + num_lactating + num_dry) %>% 
+   mutate(prev_r = 100*(pop_r + pop_car_r)/animals) %>% 
+   select(season, prev_r) %>% 
+   ggplot(aes(y = prev_r)) +
+   geom_boxplot() +
+   facet_wrap(vars(season)) +
+   theme_minimal() +
+   ylab("Point prevalence (%)") +
+   ggtitle("Daily point prevalence of resistant infections by calving system") +
+   theme(axis.title.x=element_blank(),
+         axis.text.x=element_blank(),
+         axis.ticks.x=element_blank())
+
+   
+# Resist ls
+ 
+ all_infections %>% 
+   select(step, season, stage, status) %>% 
+   group_by(step, season, stage, status) %>%
+   summarise(count = n()) %>% 
+   group_by(step, season, stage) %>% 
+   mutate(animals = sum(count)) %>% 
+   mutate(resist = sum(count[which(status == 2 | status == 6)])) %>% 
+   distinct(step, season, animals, resist) %>% 
+   mutate(prev_resist = 100*resist/animals) %>% 
+   mutate(stagename = case_when(
+     stage == 1 ~ "Calves",
+     stage == 2 ~ "Weaned",
+     stage == 3 ~ "Heifers",
+     stage == 4 ~ "Pregnant heifers",
+     stage == 5 ~ "Lactating",
+     stage == 6 ~ "Dry"
+   )) %>% 
+   #mutate(stage = fct_relevel(stage, c("Calves", "Weaned", "Heifers", "Pregnant heifers", "Lactating", "Dry"))) %>% 
+   ggplot(aes(y = prev_resist)) +
+    geom_boxplot() +
+    facet_wrap(vars(fct_reorder(stagename, stage)))  +
+   theme_minimal() +
+   ylab("Point prevalence (%)") +
+   ggtitle("Point prevalence of resistance by life stage") +
+   theme(axis.title.x=element_blank(),
+         axis.text.x=element_blank(),
+         axis.ticks.x=element_blank())
+   
+ #Prop resist system
+ 
+ all_infections %>% 
+   select(step, season, status) %>% 
+   group_by(step, season, status) %>%
+   summarise(count = n()) %>% 
+   group_by(step, season) %>% 
+   mutate(infected = sum(count[which(status == 2 | status == 6 | status == 1 | status == 5)])) %>% 
+   mutate(resist = sum(count[which(status == 2 | status == 6)])) %>% 
+   distinct(step, season, infected, resist) %>% 
+   mutate(perc_resist = 100*resist/infected) %>% 
+   mutate(season = case_when(
+     season == "batch" ~ "Batch",
+     season == "split" ~ "Split",
+     season == "spring" ~ "Spring"
+   )) %>% 
+   ggplot(aes(y = perc_resist)) +
+   geom_boxplot() +
+   facet_wrap(vars(season))  +
+   theme_minimal() +
+   ylab("Percentage of infections resistant") +
+   ggtitle("Percentage of resistant infections by calving system") +
+   theme(axis.title.x=element_blank(),
+         axis.text.x=element_blank(),
+         axis.ticks.x=element_blank())
+ 
+ all_infections %>% 
+   select(step, season, status) %>% 
+   group_by(step, season, status) %>%
+   summarise(count = n()) %>% 
+   group_by(step, season) %>% 
+   mutate(infected = sum(count[which(status == 2 | status == 6 | status == 1 | status == 5)])) %>% 
+   mutate(resist = sum(count[which(status == 2 | status == 6)])) %>% 
+   distinct(step, season, infected, resist) %>% 
+   mutate(perc_resist = 100*resist/infected) %>% 
+   ungroup() %>% 
+   summary(perc_resist)
+
+ 
+ # Median prevalence of samlmonella
+
+  examples %>% 
+   rowwise() %>% 
+   mutate(animals = num_calves + num_weaned + num_heifers + num_dh + num_lactating + num_dry) %>% 
+   mutate(prev_r = 100*pop_r/animals,
+          prev_s = 100*pop_s/animals,
+          prev_p = 100*pop_p/animals,
+          prev_rec = 100*((pop_rec_r+pop_rec_p)/animals),
+          prev_car_p = 100*pop_car_p/animals,
+          prev_car_r = 100*pop_car_r/animals,
+          prev_clin = 100*clinical/animals,
+          prev = 100*(pop_r+pop_p+pop_car_r+pop_car_p)/animals,
+          prev_all_r = 100*(pop_r+pop_car_r)/animals,
+          prev_res_inf = 100*(pop_r+pop_car_r)/(pop_p+pop_car_p+pop_r+pop_car_r)) %>% 
+    summary(prev)
+  

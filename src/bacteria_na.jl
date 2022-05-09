@@ -434,7 +434,7 @@ function bact_step!(bacterialModel)
     bact_recovery!.(Ref(bacterialModel), bacterialModel.colonies)
     bact_treatment!.(Ref(bacterialModel), bacterialModel.colonies)
     bact_repopulate!.(Ref(bacterialModel), bacterialModel.colonies)
-    bact_carrier!.(Ref(bacterialModel), bacterialModel.colonies, rand(10:100))
+    bact_carrier!.(Ref(bacterialModel), bacterialModel.colonies, rand(50:100))
     bact_fitness!.(Ref(bacterialModel), bacterialModel.colonies)
   
     bacterialModel.pop_r = 0

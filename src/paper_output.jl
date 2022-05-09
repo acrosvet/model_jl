@@ -16,7 +16,7 @@ spring_example = initialiseSpring(
     optimal_lactating = Int16(500),
     treatment_prob = Float16(0.9),
     treatment_length = Int16(5),
-    carrier_prob = Float16(0.1),
+    carrier_prob = Float16(0.03),
     timestep = Int16(0),
     density_lactating = Int16(50),
     density_dry = Int16(250),
@@ -24,11 +24,10 @@ spring_example = initialiseSpring(
     date = Date(2021,7,2),
     vacc_rate = Float16(0.0),
     fpt_rate = Float16(0.3),
-    prev_r = Float16(0.01),
-    prev_p = Float16(0.01),
-    prev_cr = Float16(0.05),
-    prev_cp = Float16(0.05),
-    vacc_efficacy = Float16(0.1),
+    prev_r = Float16(0.005),
+    prev_p = Float16(0.005),
+    prev_cr = Float16(0.015),
+    prev_cp = Float16(0.015),
     pen_decon = false
   );
 @time [animal_step!(spring_example) for i in 1:2555]
@@ -74,7 +73,9 @@ spring_transmissions = DataFrame(
     stage = spring_example.transmissions.stage,
     from = spring_example.transmissions.from,
     to = spring_example.transmissions.to,
-    type = spring_example.transmissions.type
+    type = spring_example.transmissions.type,
+    effective = spring_example.transmissions.effective, 
+    clinical = spring_example.transmissions.clinical
 )
 
 
@@ -92,7 +93,8 @@ spring_infections = DataFrame(
     days_exposed = spring_example.infections.days_exposed,
     vaccinated = spring_example.infections.vaccinated,
     fpt = spring_example.infections.fpt,
-    age = spring_example.infections.age
+    age = spring_example.infections.age,
+    cull_reason = spring_example.infections.cull_reason
 )
 
 CSV.write("./export/spring_infections.csv", spring_infections)
@@ -110,7 +112,7 @@ CSV.write("./export/spring_infections.csv", spring_infections)
         optimal_lactating = Int16(500),
         treatment_prob = Float16(0.9),
         treatment_length = Int16(5),
-        carrier_prob = Float16(0.1),
+        carrier_prob = Float16(0.03),
         timestep = Int16(0),
         density_lactating = Int16(50),
         density_dry = Int16(250),
@@ -118,11 +120,10 @@ CSV.write("./export/spring_infections.csv", spring_infections)
         date = Date(2021,7,2),
         vacc_rate = Float16(0.0),
         fpt_rate = Float16(0.3),
-        prev_r = Float16(0.01),
-        prev_p = Float16(0.01),
-        prev_cr = Float16(0.05),
-        prev_cp = Float16(0.05),
-        vacc_efficacy = Float16(0.1),
+        prev_r = Float16(0.005),
+        prev_p = Float16(0.005),
+        prev_cr = Float16(0.015),
+        prev_cp = Float16(0.015),
         pen_decon = false
     );
     @time [animal_step!(split_example) for i in 1:2555]
@@ -169,7 +170,9 @@ CSV.write("./export/spring_infections.csv", spring_infections)
         stage = split_example.transmissions.stage,
         from = split_example.transmissions.from,
         to = split_example.transmissions.to,
-        type = split_example.transmissions.type
+        type = split_example.transmissions.type,
+        effective = split_example.transmissions.effective, 
+        clinical = split_example.transmissions.clinical
     )
     
     CSV.write("./export/split_transmissions.csv", split_transmissions)
@@ -187,7 +190,8 @@ split_infections = DataFrame(
     days_exposed = split_example.infections.days_exposed,
     vaccinated = split_example.infections.vaccinated,
     fpt = split_example.infections.fpt,
-    age = split_example.infections.age
+    age = split_example.infections.age,
+    cull_reason = split_example.infections.cull_reason
 )
 
 CSV.write("./export/split_infections.csv", split_infections)
@@ -203,7 +207,7 @@ batch_example = initialiseBatch(
     optimal_lactating = Int16(500),
     treatment_prob = Float16(0.9),
     treatment_length = Int16(5),
-    carrier_prob = Float16(0.1),
+    carrier_prob = Float16(0.03),
     timestep = Int16(0),
     density_lactating = Int16(50),
     density_dry = Int16(250),
@@ -211,11 +215,10 @@ batch_example = initialiseBatch(
     date = Date(2021,7,2),
     vacc_rate = Float16(0.0),
     fpt_rate = Float16(0.3),
-    prev_r = Float16(0.01),
-    prev_p = Float16(0.01),
-    prev_cr = Float16(0.05),
-    prev_cp = Float16(0.05),
-    vacc_efficacy = Float16(0.1),
+    prev_r = Float16(0.005),
+    prev_p = Float16(0.005),
+    prev_cr = Float16(0.015),
+    prev_cp = Float16(0.015),
     pen_decon = false
   );
 @time [animal_step!(batch_example) for i in 1:2555]
@@ -262,7 +265,9 @@ batch_transmissions = DataFrame(
     stage = batch_example.transmissions.stage,
     from = batch_example.transmissions.from,
     to = batch_example.transmissions.to,
-    type = batch_example.transmissions.type
+    type = batch_example.transmissions.type,
+    effective = batch_example.transmissions.effective, 
+    clinical = batch_example.transmissions.clinical
 )
 
 CSV.write("./export/batch_transmissions.csv", batch_transmissions)
@@ -279,7 +284,8 @@ batch_infections = DataFrame(
     days_exposed = batch_example.infections.days_exposed,
     vaccinated = batch_example.infections.vaccinated,
     fpt = batch_example.infections.fpt,
-    age = batch_example.infections.age
+    age = batch_example.infections.age,
+    cull_reason = batch_example.infections.cull_reason
 )
 
 CSV.write("./export/batch_infections.csv", batch_infections)

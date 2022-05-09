@@ -31,7 +31,6 @@ using Plots
       prev_p = Float16(0.01),
       prev_cr = Float16(0.05),
       prev_cp = Float16(0.05),
-      vacc_efficacy = Float16(0.1),
       pen_decon = false
     );
 @time [animal_step!(animalModel) for i in 1:3651]
